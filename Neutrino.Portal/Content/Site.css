@@ -1,0 +1,99 @@
+﻿.fragmentWrapper {
+    overflow: hidden;
+}
+
+.fragment {
+    position: relative;
+    -moz-transition-property: left;
+    -o-transition-property: left;
+    -webkit-transition-property: left;
+    transition-property: left;
+    -moz-transition-duration: 0.1s;
+    -o-transition-duration: 0.1s;
+    -webkit-transition-duration: 0.1s;
+    transition-duration: 0.1s;
+}
+
+    .fragment:not(.active) {
+        left: 540px;
+    }
+
+    .fragment.active {
+        left: 0px;
+    }
+
+.btn span {
+    margin-right: 8px;
+}
+
+uib-tab-heading span {
+    margin-right: 6px;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.grid-expandIcon {
+    text-align: center;
+    cursor: pointer;
+}
+
+
+.percent-sticky {
+    min-height: 50px;
+    padding: 10px;
+    color: #565656;
+    left: 20px !important;
+    top: 10px !important;
+    -webkit-box-shadow: 0 10px 20px 0 rgba(0,0,0,.4);
+    box-shadow: 0 10px 20px 0 rgba(0,0,0,.4);
+    background-color: #e1e1e1;
+}
+
+.itemView-Body {
+    min-height: 300px;
+}
+
+.dir-ltr {
+    direction: ltr;
+}
+
+.forbidden {
+    margin: 20% auto;
+    text-align: center;
+}
+
+ul.checkbox {
+    margin: 0;
+    /*padding: 0;*/
+    /*margin-left: 20px;*/
+    list-style: none;
+}
+
+    ul.checkbox li input {
+        margin-right: .25em;
+    }
+
+    ul.checkbox li {
+        border: 1px transparent solid;
+        display: inline-block;
+        width: 9em;
+    }
+
+.bold {
+    font-weight: bold;
+}
+
+.vertical-middle {
+    vertical-align: middle !important;
+}
+
