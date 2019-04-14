@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{02298FDD-EE84-47B1-97E9-11CF68B03ADC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Neutrino.Business</RootNamespace>
+    <AssemblyName>Neutrino.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.1.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Espresso.BusinessService, Version=2018.10.16.562, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\New Espresso\build\Espresso.BusinessService.dll</HintPath>
+    </Reference>
+    <Reference Include="Espresso.Core, Version=2018.10.16.288, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\New Espresso\build\Espresso.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Espresso.DataAccess, Version=2018.10.16.437, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\New Espresso\build\Espresso.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Espresso.Entites, Version=2018.10.16.306, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\New Espresso\build\Espresso.Entites.dll</HintPath>
+    </Reference>
+    <Reference Include="Espresso.Identity">
+      <HintPath>..\..\..\..\New Espresso\build\Espresso.Identity.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.7.5.0\lib\net45\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Logging, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Extensions.Logging.3.3.0\lib\net45\Ninject.Extensions.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Logging.NLog4, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Extensions.Logging.NLog4.3.3.0\lib\net45\Ninject.Extensions.Logging.NLog4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.5.8\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.ComponentModel.Primitives, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Primitives.4.3.0\lib\net45\System.ComponentModel.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Z.EntityFramework.Plus.EF6, Version=1.7.14.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Plus.EF6.1.7.14\lib\net45\Z.EntityFramework.Plus.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BranchReceiptGoalPercent\BranchReceiptGoalPercentBS.cs" />
+    <Compile Include="BranchReceiptGoalPercent\BranchReceiptGoalPercentBR.cs" />
+    <Compile Include="BranchReceipt\BranchReceiptBS.cs" />
+    <Compile Include="BranchSales\BranchSalesBS.cs" />
+    <Compile Include="GeneralBusinessService\GeneralEntityCounter.cs" />
+    <Compile Include="GeneralBusinessService\GeneralEntityListByPagingLoader.cs" />
+    <Compile Include="GeneralBusinessService\GeneralEntityListLoader.cs" />
+    <Compile Include="GeneralBusinessService\GeneralEntityLoader.cs" />
+    <Compile Include="GeneralBusinessService\SimpleEntityCreator.cs" />
+    <Compile Include="GeneralBusinessService\SimpleEntityEraser.cs" />
+    <Compile Include="GeneralBusinessService\SimpleEntityModifer.cs" />
+    <Compile Include="GoalNonFulfillment\GoalNonFulfillmentPercentBR.cs" />
+    <Compile Include="GoalNonFulfillment\GoalNonFulfillmentPercentBS.cs" />
+    <Compile Include="NeutrinoBusinessService.cs" />
+    <Compile Include="OrgStructure\OrgStructureBS.cs" />
+    <Compile Include="Promotion\PromotionBR.cs" />
+    <Compile Include="Promotion\PromotionBS.cs" />
+    <Compile Include="FulfillmentPromotionCondition\FulfillmentPromotionConditionBR.cs" />
+    <Compile Include="FulfillmentPromotionCondition\TotalFulfillPromotionPercentBS.cs" />
+    <Compile Include="Goal\GoalBS.cs" />
+    <Compile Include="MemberPayroll\MemberPayrollBS.cs" />
+    <Compile Include="MemberReceipt\MemberReceiptBS.cs" />
+    <Compile Include="QuantityCondition\QuantityConditionBS.cs" />
+    <Compile Include="QuantityCondition\QuantityConditionBR.cs" />
+    <Compile Include="FulfillmentPercent\FulfillmentPercentBR.cs" />
+    <Compile Include="Invoice\InvoiceBS.cs" />
+    <Compile Include="FulfillmentPercent\FulfillmentPercentBS.cs" />
+    <Compile Include="CostCoefficient\CostCoefficientBS.cs" />
+    <Compile Include="CostCoefficient\CostCoefficientBusinessRules.cs" />
+    <Compile Include="OrgStructureShare\OrgStructureShareDTOBR.cs" />
+    <Compile Include="OrgStructureShare\OrgStructureShareBS.cs" />
+    <Compile Include="OrgStructure\OrgStructureBR.cs" />
+    <Compile Include="Permission\PermissionBS.cs" />
+    <Compile Include="UserAccount\UserBusinessRules.cs" />
+    <Compile Include="UserAccount\NeutrinoRoleBS.cs" />
+    <Compile Include="UserAccount\NeutrinoUserBS.cs" />
+    <Compile Include="BranchGoal\BranchGoalBS.cs" />
+    <Compile Include="BranchGoal\BranchGoalBR.cs" />
+    <Compile Include="GoalStep\GoalStepItemInfoRules.cs" />
+    <Compile Include="GoalStep\GoalStepBusinessRules.cs" />
+    <Compile Include="Goal\GoalBR.cs" />
+    <Compile Include="GoalGoodsCategory\GoalGoodsCategoryBR.cs" />
+    <Compile Include="NeutrinoValidator.cs" />
+    <Compile Include="GoalGoodsCategory\GoalGoodsCategoryBS.cs" />
+    <Compile Include="GoalStep\GoalStepBS.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Neutrino.Business.Entities\Neutrino.Entities.csproj">
+      <Project>{223c1caf-caa4-4ffd-8e22-11566858a8fb}</Project>
+      <Name>Neutrino.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neutrino.DataAccess\Neutrino.Data.EntityFramework.csproj">
+      <Project>{f58dba9d-0b74-4ac6-b3c8-be32769d2d7f}</Project>
+      <Name>Neutrino.Data.EntityFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neutrino.Interfaces\Neutrino.Interfaces.csproj">
+      <Project>{d0e43a2b-7e07-4ff8-b2cb-6b3ba58ccf47}</Project>
+      <Name>Neutrino.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
