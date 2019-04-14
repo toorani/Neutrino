@@ -1,0 +1,865 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F58DBA9D-0B74-4AC6-B3C8-BE32769D2D7F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Neutrino.Data.EntityFramework</RootNamespace>
+    <AssemblyName>Neutrino.Data.EntityFramework</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.1.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.BulkInsert, Version=6.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.BulkInsert-ef6-ext.6.0.3.1\lib\net45\EntityFramework.BulkInsert.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.MappingAPI, Version=6.1.0.10, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.MappingAPI.6.1.0.10\lib\net45\EntityFramework.MappingAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Espresso.Core">
+      <HintPath>..\..\..\..\New Espresso\build\Espresso.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Espresso.DataAccess">
+      <HintPath>..\..\..\..\New Espresso\build\Espresso.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Espresso.Entites">
+      <HintPath>..\..\..\..\New Espresso\build\Espresso.Entites.dll</HintPath>
+    </Reference>
+    <Reference Include="Espresso.Identity">
+      <HintPath>..\..\..\..\New Espresso\build\Espresso.Identity.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Z.EntityFramework.Plus.EF6, Version=1.7.14.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Plus.EF6.1.7.14\lib\net45\Z.EntityFramework.Plus.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommandInterceptor.cs" />
+    <Compile Include="DataServices\BranchGoalDataService.cs" />
+    <Compile Include="DataServices\BranchReceiptGoalPercentDataService.cs" />
+    <Compile Include="DataServices\GoalNonFulfillmentPercentDataService.cs" />
+    <Compile Include="DataServices\GoalGoodsCategoryDataService.cs" />
+    <Compile Include="DataServices\QuantityConditionDataService.cs" />
+    <Compile Include="DataServices\BranchReceiptDataService.cs" />
+    <Compile Include="DataServices\MemberReceiptDataService.cs" />
+    <Compile Include="DataServices\MemberPayrollDataService.cs" />
+    <Compile Include="DataServices\InvoiceDataService.cs" />
+    <Compile Include="DataServices\BranchSalesDataService.cs" />
+    <Compile Include="DataServices\CostCoefficientDataService.cs" />
+    <Compile Include="DataServices\OrgStructureShareDataService.cs" />
+    <Compile Include="DataServices\GoalStepDataService.cs" />
+    <Compile Include="DataServices\GoalDataService.cs" />
+    <Compile Include="DataServices\PermissionDataService.cs" />
+    <Compile Include="DataServices\FulfillmentPercentDataService.cs" />
+    <Compile Include="DataServices\RoleDataService.cs" />
+    <Compile Include="DataServices\UserDataService.cs" />
+    <Compile Include="Migrations\201709142010061_InitialDb.cs" />
+    <Compile Include="Migrations\201709142010061_InitialDb.Designer.cs">
+      <DependentUpon>201709142010061_InitialDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709142012068_Rename_AppMenu.cs" />
+    <Compile Include="Migrations\201709142012068_Rename_AppMenu.Designer.cs">
+      <DependentUpon>201709142012068_Rename_AppMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709142054075_UpAppMenu.cs" />
+    <Compile Include="Migrations\201709142054075_UpAppMenu.Designer.cs">
+      <DependentUpon>201709142054075_UpAppMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709151056320_UpdateDateCreated.cs" />
+    <Compile Include="Migrations\201709151056320_UpdateDateCreated.Designer.cs">
+      <DependentUpon>201709151056320_UpdateDateCreated.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710021946511_Alter_GoodsCategory.cs" />
+    <Compile Include="Migrations\201710021946511_Alter_GoodsCategory.Designer.cs">
+      <DependentUpon>201710021946511_Alter_GoodsCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710050645223_AddIconToMenu.cs" />
+    <Compile Include="Migrations\201710050645223_AddIconToMenu.Designer.cs">
+      <DependentUpon>201710050645223_AddIconToMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710051122217_Alter_GoalStep.cs" />
+    <Compile Include="Migrations\201710051122217_Alter_GoalStep.Designer.cs">
+      <DependentUpon>201710051122217_Alter_GoalStep.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710051127422_Alter_GoalStep_Add_CondemnationInfoId.cs" />
+    <Compile Include="Migrations\201710051127422_Alter_GoalStep_Add_CondemnationInfoId.Designer.cs">
+      <DependentUpon>201710051127422_Alter_GoalStep_Add_CondemnationInfoId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710060535189_GoalStep_StepItem_Alter_Columns.cs" />
+    <Compile Include="Migrations\201710060535189_GoalStep_StepItem_Alter_Columns.Designer.cs">
+      <DependentUpon>201710060535189_GoalStep_StepItem_Alter_Columns.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710060616108_AlterRelation_GoalStep_StepItem.cs" />
+    <Compile Include="Migrations\201710060616108_AlterRelation_GoalStep_StepItem.Designer.cs">
+      <DependentUpon>201710060616108_AlterRelation_GoalStep_StepItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710120618264_GoalStep_Item_OneToMany.cs" />
+    <Compile Include="Migrations\201710120618264_GoalStep_Item_OneToMany.Designer.cs">
+      <DependentUpon>201710120618264_GoalStep_Item_OneToMany.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710121221037_alterAmountColumn.cs" />
+    <Compile Include="Migrations\201710121221037_alterAmountColumn.Designer.cs">
+      <DependentUpon>201710121221037_alterAmountColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710130750596_CasecadeDelete_GoalStep_GoalStepInfo.cs" />
+    <Compile Include="Migrations\201710130750596_CasecadeDelete_GoalStep_GoalStepInfo.Designer.cs">
+      <DependentUpon>201710130750596_CasecadeDelete_GoalStep_GoalStepInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710191226345_addBenefit_Branch.cs" />
+    <Compile Include="Migrations\201710191226345_addBenefit_Branch.Designer.cs">
+      <DependentUpon>201710191226345_addBenefit_Branch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710230357474_addGoalTypeInGoal.cs" />
+    <Compile Include="Migrations\201710230357474_addGoalTypeInGoal.Designer.cs">
+      <DependentUpon>201710230357474_addGoalTypeInGoal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710241846018_RemoveSupplierGoal.cs" />
+    <Compile Include="Migrations\201710241846018_RemoveSupplierGoal.Designer.cs">
+      <DependentUpon>201710241846018_RemoveSupplierGoal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710261251170_add.cs" />
+    <Compile Include="Migrations\201710261251170_add.Designer.cs">
+      <DependentUpon>201710261251170_add.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710311731065_inheritUserRoleFromEntityBase.cs" />
+    <Compile Include="Migrations\201710311731065_inheritUserRoleFromEntityBase.Designer.cs">
+      <DependentUpon>201710311731065_inheritUserRoleFromEntityBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710312141168_createNeutrinoUserRole.cs" />
+    <Compile Include="Migrations\201710312141168_createNeutrinoUserRole.Designer.cs">
+      <DependentUpon>201710312141168_createNeutrinoUserRole.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711011646044_addAppSetting.cs" />
+    <Compile Include="Migrations\201711011646044_addAppSetting.Designer.cs">
+      <DependentUpon>201711011646044_addAppSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711071938222_addIsActiveGoalStep.cs" />
+    <Compile Include="Migrations\201711071938222_addIsActiveGoalStep.Designer.cs">
+      <DependentUpon>201711071938222_addIsActiveGoalStep.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711072008061_AddGoalType_GoodsCategory.cs" />
+    <Compile Include="Migrations\201711072008061_AddGoalType_GoodsCategory.Designer.cs">
+      <DependentUpon>201711072008061_AddGoalType_GoodsCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711111918247_addOrgStructure.cs" />
+    <Compile Include="Migrations\201711111918247_addOrgStructure.Designer.cs">
+      <DependentUpon>201711111918247_addOrgStructure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711161904497_AddPersonelShare.cs" />
+    <Compile Include="Migrations\201711161904497_AddPersonelShare.Designer.cs">
+      <DependentUpon>201711161904497_AddPersonelShare.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711171509500_NuallablePersonelValues.cs" />
+    <Compile Include="Migrations\201711171509500_NuallablePersonelValues.Designer.cs">
+      <DependentUpon>201711171509500_NuallablePersonelValues.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711181337486_CostCoefficient.cs" />
+    <Compile Include="Migrations\201711181337486_CostCoefficient.Designer.cs">
+      <DependentUpon>201711181337486_CostCoefficient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712011910355_AddAppAction.cs" />
+    <Compile Include="Migrations\201712011910355_AddAppAction.Designer.cs">
+      <DependentUpon>201712011910355_AddAppAction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712052026362_AlterAppAction.cs" />
+    <Compile Include="Migrations\201712052026362_AlterAppAction.Designer.cs">
+      <DependentUpon>201712052026362_AlterAppAction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712061923494_AlterAppAction_ServiceUrl.cs" />
+    <Compile Include="Migrations\201712061923494_AlterAppAction_ServiceUrl.Designer.cs">
+      <DependentUpon>201712061923494_AlterAppAction_ServiceUrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712072108273_AddPermisson.cs" />
+    <Compile Include="Migrations\201712072108273_AddPermisson.Designer.cs">
+      <DependentUpon>201712072108273_AddPermisson.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712151127405_AddActionType.cs" />
+    <Compile Include="Migrations\201712151127405_AddActionType.Designer.cs">
+      <DependentUpon>201712151127405_AddActionType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801161941441_Add_UserRole_Table.cs" />
+    <Compile Include="Migrations\201801161941441_Add_UserRole_Table.Designer.cs">
+      <DependentUpon>201801161941441_Add_UserRole_Table.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801211937285_ServiceLog.cs" />
+    <Compile Include="Migrations\201801211937285_ServiceLog.Designer.cs">
+      <DependentUpon>201801211937285_ServiceLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801291701153_AlterServiceLog.cs" />
+    <Compile Include="Migrations\201801291701153_AlterServiceLog.Designer.cs">
+      <DependentUpon>201801291701153_AlterServiceLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801301919527_AlterCompany.cs" />
+    <Compile Include="Migrations\201801301919527_AlterCompany.Designer.cs">
+      <DependentUpon>201801301919527_AlterCompany.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801311716399_AddRefId.cs" />
+    <Compile Include="Migrations\201801311716399_AddRefId.Designer.cs">
+      <DependentUpon>201801311716399_AddRefId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802010635324_AddMember.cs" />
+    <Compile Include="Migrations\201802010635324_AddMember.Designer.cs">
+      <DependentUpon>201802010635324_AddMember.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802010755210_AddPostionType.cs" />
+    <Compile Include="Migrations\201802010755210_AddPostionType.Designer.cs">
+      <DependentUpon>201802010755210_AddPostionType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802020648501_RenameGoodsCategory.cs" />
+    <Compile Include="Migrations\201802020648501_RenameGoodsCategory.Designer.cs">
+      <DependentUpon>201802020648501_RenameGoodsCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802020854550_AddGoodsCat-GoodsCatType.cs" />
+    <Compile Include="Migrations\201802020854550_AddGoodsCat-GoodsCatType.Designer.cs">
+      <DependentUpon>201802020854550_AddGoodsCat-GoodsCatType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802021941362_AlterGoodsCat-GoodsCatType.cs" />
+    <Compile Include="Migrations\201802021941362_AlterGoodsCat-GoodsCatType.Designer.cs">
+      <DependentUpon>201802021941362_AlterGoodsCat-GoodsCatType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802032107228_AddRefIdsToGoods.cs" />
+    <Compile Include="Migrations\201802032107228_AddRefIdsToGoods.Designer.cs">
+      <DependentUpon>201802032107228_AddRefIdsToGoods.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802032227443_AlterMember_GoodsCat_ForeignKey.cs" />
+    <Compile Include="Migrations\201802032227443_AlterMember_GoodsCat_ForeignKey.Designer.cs">
+      <DependentUpon>201802032227443_AlterMember_GoodsCat_ForeignKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802171614376_AddRefIdToMember.cs" />
+    <Compile Include="Migrations\201802171614376_AddRefIdToMember.Designer.cs">
+      <DependentUpon>201802171614376_AddRefIdToMember.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802172001326_addgoalPercent.cs" />
+    <Compile Include="Migrations\201802172001326_addgoalPercent.Designer.cs">
+      <DependentUpon>201802172001326_addgoalPercent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802200504376_addIsAllGoalGoods.cs" />
+    <Compile Include="Migrations\201802200504376_addIsAllGoalGoods.Designer.cs">
+      <DependentUpon>201802200504376_addIsAllGoalGoods.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802201636061_renameGoodsCatToGoalGoods.cs" />
+    <Compile Include="Migrations\201802201636061_renameGoodsCatToGoalGoods.Designer.cs">
+      <DependentUpon>201802201636061_renameGoodsCatToGoalGoods.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802201912487_AlterRelationBranchBenefit_GoalGoodsCat.cs" />
+    <Compile Include="Migrations\201802201912487_AlterRelationBranchBenefit_GoalGoodsCat.Designer.cs">
+      <DependentUpon>201802201912487_AlterRelationBranchBenefit_GoalGoodsCat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802201952120_RelationGoalAndBranchBenefit.cs" />
+    <Compile Include="Migrations\201802201952120_RelationGoalAndBranchBenefit.Designer.cs">
+      <DependentUpon>201802201952120_RelationGoalAndBranchBenefit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802211940483_changeScalePercent.cs" />
+    <Compile Include="Migrations\201802211940483_changeScalePercent.Designer.cs">
+      <DependentUpon>201802211940483_changeScalePercent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803010604336_generalGoal.cs" />
+    <Compile Include="Migrations\201803010604336_generalGoal.Designer.cs">
+      <DependentUpon>201803010604336_generalGoal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803160829110_AddInvoiceAndOther.cs" />
+    <Compile Include="Migrations\201803160829110_AddInvoiceAndOther.Designer.cs">
+      <DependentUpon>201803160829110_AddInvoiceAndOther.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803232019437_addGoalFullfilment.cs" />
+    <Compile Include="Migrations\201803232019437_addGoalFullfilment.Designer.cs">
+      <DependentUpon>201803232019437_addGoalFullfilment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803270944258_addDrugScore.cs" />
+    <Compile Include="Migrations\201803270944258_addDrugScore.Designer.cs">
+      <DependentUpon>201803270944258_addDrugScore.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803300532277_addPharmacyReport.cs" />
+    <Compile Include="Migrations\201803300532277_addPharmacyReport.Designer.cs">
+      <DependentUpon>201803300532277_addPharmacyReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803310951364_addSalesAndStock.cs" />
+    <Compile Include="Migrations\201803310951364_addSalesAndStock.Designer.cs">
+      <DependentUpon>201803310951364_addSalesAndStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804011356137_addUploadFile.cs" />
+    <Compile Include="Migrations\201804011356137_addUploadFile.Designer.cs">
+      <DependentUpon>201804011356137_addUploadFile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805061619549_DeleteDrugGeneralNameFromGoods.cs" />
+    <Compile Include="Migrations\201805061619549_DeleteDrugGeneralNameFromGoods.Designer.cs">
+      <DependentUpon>201805061619549_DeleteDrugGeneralNameFromGoods.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807012023368_addDataSync.cs" />
+    <Compile Include="Migrations\201807012023368_addDataSync.Designer.cs">
+      <DependentUpon>201807012023368_addDataSync.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807091413539_changeFailtoTryinDataSyncStatusTable.cs" />
+    <Compile Include="Migrations\201807091413539_changeFailtoTryinDataSyncStatusTable.Designer.cs">
+      <DependentUpon>201807091413539_changeFailtoTryinDataSyncStatusTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810050558410_add_quantityCondition.cs" />
+    <Compile Include="Migrations\201810050558410_add_quantityCondition.Designer.cs">
+      <DependentUpon>201810050558410_add_quantityCondition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810172020417_generalGoal_quantity.cs" />
+    <Compile Include="Migrations\201810172020417_generalGoal_quantity.Designer.cs">
+      <DependentUpon>201810172020417_generalGoal_quantity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810191634043_alter_quantityCond.cs" />
+    <Compile Include="Migrations\201810191634043_alter_quantityCond.Designer.cs">
+      <DependentUpon>201810191634043_alter_quantityCond.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810260820512_addVisibleToGoalCategory.cs" />
+    <Compile Include="Migrations\201810260820512_addVisibleToGoalCategory.Designer.cs">
+      <DependentUpon>201810260820512_addVisibleToGoalCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810261907169_requiredEndDate_goal.cs" />
+    <Compile Include="Migrations\201810261907169_requiredEndDate_goal.Designer.cs">
+      <DependentUpon>201810261907169_requiredEndDate_goal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810271858238_Receipt_General_Amount_Goal.cs" />
+    <Compile Include="Migrations\201810271858238_Receipt_General_Amount_Goal.Designer.cs">
+      <DependentUpon>201810271858238_Receipt_General_Amount_Goal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810311924330_alterGoalFullfilment.cs" />
+    <Compile Include="Migrations\201810311924330_alterGoalFullfilment.Designer.cs">
+      <DependentUpon>201810311924330_alterGoalFullfilment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811021030429_alterBrnachBenefit_removeGoalGoodsCat.cs" />
+    <Compile Include="Migrations\201811021030429_alterBrnachBenefit_removeGoalGoodsCat.Designer.cs">
+      <DependentUpon>201811021030429_alterBrnachBenefit_removeGoalGoodsCat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811041917068_addCommission.cs" />
+    <Compile Include="Migrations\201811041917068_addCommission.Designer.cs">
+      <DependentUpon>201811041917068_addCommission.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811060514299_alterCommission_renameStatusId.cs" />
+    <Compile Include="Migrations\201811060514299_alterCommission_renameStatusId.Designer.cs">
+      <DependentUpon>201811060514299_alterCommission_renameStatusId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811071756539_addYearMonth_Commission_addStartEndDate_Inputs.cs" />
+    <Compile Include="Migrations\201811071756539_addYearMonth_Commission_addStartEndDate_Inputs.Designer.cs">
+      <DependentUpon>201811071756539_addYearMonth_Commission_addStartEndDate_Inputs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811081743134_rename_branchbenefit_branchgoal.cs" />
+    <Compile Include="Migrations\201811081743134_rename_branchbenefit_branchgoal.Designer.cs">
+      <DependentUpon>201811081743134_rename_branchbenefit_branchgoal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811090608329_addCommissionId_Goal.cs" />
+    <Compile Include="Migrations\201811090608329_addCommissionId_Goal.Designer.cs">
+      <DependentUpon>201811090608329_addCommissionId_Goal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811151311068_renameGeneral_totalsales.cs" />
+    <Compile Include="Migrations\201811151311068_renameGeneral_totalsales.Designer.cs">
+      <DependentUpon>201811151311068_renameGeneral_totalsales.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811151726440_rename_remove_isactive.cs" />
+    <Compile Include="Migrations\201811151726440_rename_remove_isactive.Designer.cs">
+      <DependentUpon>201811151726440_rename_remove_isactive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811151758500_change_dateTOyear_month_goalfulfillment.cs" />
+    <Compile Include="Migrations\201811151758500_change_dateTOyear_month_goalfulfillment.Designer.cs">
+      <DependentUpon>201811151758500_change_dateTOyear_month_goalfulfillment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812031807247_addBranchSales_totalNo.cs" />
+    <Compile Include="Migrations\201812031807247_addBranchSales_totalNo.Designer.cs">
+      <DependentUpon>201812031807247_addBranchSales_totalNo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812061646533_addLastUpdated.cs" />
+    <Compile Include="Migrations\201812061646533_addLastUpdated.Designer.cs">
+      <DependentUpon>201812061646533_addLastUpdated.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812062034311_addBranchRefId_member.cs" />
+    <Compile Include="Migrations\201812062034311_addBranchRefId_member.Designer.cs">
+      <DependentUpon>201812062034311_addBranchRefId_member.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812062100023_dateCreated_nullable.cs" />
+    <Compile Include="Migrations\201812062100023_dateCreated_nullable.Designer.cs">
+      <DependentUpon>201812062100023_dateCreated_nullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812121643433_rename_commission_poromotion.cs" />
+    <Compile Include="Migrations\201812121643433_rename_commission_poromotion.Designer.cs">
+      <DependentUpon>201812121643433_rename_commission_poromotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812140820280_addQuantity_GoodsQuantityCondition.cs" />
+    <Compile Include="Migrations\201812140820280_addQuantity_GoodsQuantityCondition.Designer.cs">
+      <DependentUpon>201812140820280_addQuantity_GoodsQuantityCondition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901031708000_addAmount_branchGoal.cs" />
+    <Compile Include="Migrations\201901031708000_addAmount_branchGoal.Designer.cs">
+      <DependentUpon>201901031708000_addAmount_branchGoal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901110706135_add_branchReceiptGoalPercent.cs" />
+    <Compile Include="Migrations\201901110706135_add_branchReceiptGoalPercent.Designer.cs">
+      <DependentUpon>201901110706135_add_branchReceiptGoalPercent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901251041533_addBranchQuntityGoal.cs" />
+    <Compile Include="Migrations\201901251041533_addBranchQuntityGoal.Designer.cs">
+      <DependentUpon>201901251041533_addBranchQuntityGoal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902090942092_rename_commision_Promotion.cs" />
+    <Compile Include="Migrations\201902090942092_rename_commision_Promotion.Designer.cs">
+      <DependentUpon>201902090942092_rename_commision_Promotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902091237037_addPromotionAggregate.cs" />
+    <Compile Include="Migrations\201902091237037_addPromotionAggregate.Designer.cs">
+      <DependentUpon>201902091237037_addPromotionAggregate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903211625497_alterOrgStruct.cs" />
+    <Compile Include="Migrations\201903211625497_alterOrgStruct.Designer.cs">
+      <DependentUpon>201903211625497_alterOrgStruct.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903221233411_alterBranchReciept.cs" />
+    <Compile Include="Migrations\201903221233411_alterBranchReciept.Designer.cs">
+      <DependentUpon>201903221233411_alterBranchReciept.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903271833420_alterGoal.cs" />
+    <Compile Include="Migrations\201903271833420_alterGoal.Designer.cs">
+      <DependentUpon>201903271833420_alterGoal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903281221219_alterBranchPromotion.cs" />
+    <Compile Include="Migrations\201903281221219_alterBranchPromotion.Designer.cs">
+      <DependentUpon>201903281221219_alterBranchPromotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903281852151_alterBranchPromotion_addTotalSalesSpecifiedAmount.cs" />
+    <Compile Include="Migrations\201903281852151_alterBranchPromotion_addTotalSalesSpecifiedAmount.Designer.cs">
+      <DependentUpon>201903281852151_alterBranchPromotion_addTotalSalesSpecifiedAmount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903282042321_alterScaleDecimal.cs" />
+    <Compile Include="Migrations\201903282042321_alterScaleDecimal.Designer.cs">
+      <DependentUpon>201903282042321_alterScaleDecimal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903291403528_addOrderToBrnach.cs" />
+    <Compile Include="Migrations\201903291403528_addOrderToBrnach.Designer.cs">
+      <DependentUpon>201903291403528_addOrderToBrnach.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903300542538_ranmeTotalRange_Totalfulfill.cs" />
+    <Compile Include="Migrations\201903300542538_ranmeTotalRange_Totalfulfill.Designer.cs">
+      <DependentUpon>201903300542538_ranmeTotalRange_Totalfulfill.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903310723155_addGoalGoodsCategory.cs" />
+    <Compile Include="Migrations\201903310723155_addGoalGoodsCategory.Designer.cs">
+      <DependentUpon>201903310723155_addGoalGoodsCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904031320536_alterBranchPromotion_addSalesPromotion.cs" />
+    <Compile Include="Migrations\201904031320536_alterBranchPromotion_addSalesPromotion.Designer.cs">
+      <DependentUpon>201904031320536_alterBranchPromotion_addSalesPromotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904091903110_alterOrgShare_addPrivateReceipt.cs" />
+    <Compile Include="Migrations\201904091903110_alterOrgShare_addPrivateReceipt.Designer.cs">
+      <DependentUpon>201904091903110_alterOrgShare_addPrivateReceipt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904101606372_addMinMaxPromotion_OrgSturctShare.cs" />
+    <Compile Include="Migrations\201904101606372_addMinMaxPromotion_OrgSturctShare.Designer.cs">
+      <DependentUpon>201904101606372_addMinMaxPromotion_OrgSturctShare.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904101944073_addGoalNonFulfillment.cs" />
+    <Compile Include="Migrations\201904101944073_addGoalNonFulfillment.Designer.cs">
+      <DependentUpon>201904101944073_addGoalNonFulfillment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904101949274_alterGoalNonFulfillment.cs" />
+    <Compile Include="Migrations\201904101949274_alterGoalNonFulfillment.Designer.cs">
+      <DependentUpon>201904101949274_alterGoalNonFulfillment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904111602456_alterTotalfulfillment.cs" />
+    <Compile Include="Migrations\201904111602456_alterTotalfulfillment.Designer.cs">
+      <DependentUpon>201904111602456_alterTotalfulfillment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904120713451_alterGoalFulfillment.cs" />
+    <Compile Include="Migrations\201904120713451_alterGoalFulfillment.Designer.cs">
+      <DependentUpon>201904120713451_alterGoalFulfillment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904120908243_addApprovePromotionType.cs" />
+    <Compile Include="Migrations\201904120908243_addApprovePromotionType.Designer.cs">
+      <DependentUpon>201904120908243_addApprovePromotionType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904121443503_addQuantityConditionTypeId_alterQuantityCondition.cs" />
+    <Compile Include="Migrations\201904121443503_addQuantityConditionTypeId_alterQuantityCondition.Designer.cs">
+      <DependentUpon>201904121443503_addQuantityConditionTypeId_alterQuantityCondition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="NeutrinoRepositoryBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="NeutrinoContext.cs" />
+    <Compile Include="UnitOfWork.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Neutrino.Business.Entities\Neutrino.Entities.csproj">
+      <Project>{223c1caf-caa4-4ffd-8e22-11566858a8fb}</Project>
+      <Name>Neutrino.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neutrino.Interfaces\Neutrino.Interfaces.csproj">
+      <Project>{d0e43a2b-7e07-4ff8-b2cb-6b3ba58ccf47}</Project>
+      <Name>Neutrino.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201709142010061_InitialDb.resx">
+      <DependentUpon>201709142010061_InitialDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709142012068_Rename_AppMenu.resx">
+      <DependentUpon>201709142012068_Rename_AppMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709142054075_UpAppMenu.resx">
+      <DependentUpon>201709142054075_UpAppMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709151056320_UpdateDateCreated.resx">
+      <DependentUpon>201709151056320_UpdateDateCreated.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710021946511_Alter_GoodsCategory.resx">
+      <DependentUpon>201710021946511_Alter_GoodsCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710050645223_AddIconToMenu.resx">
+      <DependentUpon>201710050645223_AddIconToMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710051122217_Alter_GoalStep.resx">
+      <DependentUpon>201710051122217_Alter_GoalStep.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710051127422_Alter_GoalStep_Add_CondemnationInfoId.resx">
+      <DependentUpon>201710051127422_Alter_GoalStep_Add_CondemnationInfoId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710060535189_GoalStep_StepItem_Alter_Columns.resx">
+      <DependentUpon>201710060535189_GoalStep_StepItem_Alter_Columns.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710060616108_AlterRelation_GoalStep_StepItem.resx">
+      <DependentUpon>201710060616108_AlterRelation_GoalStep_StepItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710120618264_GoalStep_Item_OneToMany.resx">
+      <DependentUpon>201710120618264_GoalStep_Item_OneToMany.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710121221037_alterAmountColumn.resx">
+      <DependentUpon>201710121221037_alterAmountColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710130750596_CasecadeDelete_GoalStep_GoalStepInfo.resx">
+      <DependentUpon>201710130750596_CasecadeDelete_GoalStep_GoalStepInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710191226345_addBenefit_Branch.resx">
+      <DependentUpon>201710191226345_addBenefit_Branch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710230357474_addGoalTypeInGoal.resx">
+      <DependentUpon>201710230357474_addGoalTypeInGoal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710241846018_RemoveSupplierGoal.resx">
+      <DependentUpon>201710241846018_RemoveSupplierGoal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710261251170_add.resx">
+      <DependentUpon>201710261251170_add.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710311731065_inheritUserRoleFromEntityBase.resx">
+      <DependentUpon>201710311731065_inheritUserRoleFromEntityBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710312141168_createNeutrinoUserRole.resx">
+      <DependentUpon>201710312141168_createNeutrinoUserRole.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711011646044_addAppSetting.resx">
+      <DependentUpon>201711011646044_addAppSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711071938222_addIsActiveGoalStep.resx">
+      <DependentUpon>201711071938222_addIsActiveGoalStep.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711072008061_AddGoalType_GoodsCategory.resx">
+      <DependentUpon>201711072008061_AddGoalType_GoodsCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711111918247_addOrgStructure.resx">
+      <DependentUpon>201711111918247_addOrgStructure.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711161904497_AddPersonelShare.resx">
+      <DependentUpon>201711161904497_AddPersonelShare.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711171509500_NuallablePersonelValues.resx">
+      <DependentUpon>201711171509500_NuallablePersonelValues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711181337486_CostCoefficient.resx">
+      <DependentUpon>201711181337486_CostCoefficient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712011910355_AddAppAction.resx">
+      <DependentUpon>201712011910355_AddAppAction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712052026362_AlterAppAction.resx">
+      <DependentUpon>201712052026362_AlterAppAction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712061923494_AlterAppAction_ServiceUrl.resx">
+      <DependentUpon>201712061923494_AlterAppAction_ServiceUrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712072108273_AddPermisson.resx">
+      <DependentUpon>201712072108273_AddPermisson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712151127405_AddActionType.resx">
+      <DependentUpon>201712151127405_AddActionType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801161941441_Add_UserRole_Table.resx">
+      <DependentUpon>201801161941441_Add_UserRole_Table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801211937285_ServiceLog.resx">
+      <DependentUpon>201801211937285_ServiceLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801291701153_AlterServiceLog.resx">
+      <DependentUpon>201801291701153_AlterServiceLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801301919527_AlterCompany.resx">
+      <DependentUpon>201801301919527_AlterCompany.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801311716399_AddRefId.resx">
+      <DependentUpon>201801311716399_AddRefId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802010635324_AddMember.resx">
+      <DependentUpon>201802010635324_AddMember.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802010755210_AddPostionType.resx">
+      <DependentUpon>201802010755210_AddPostionType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802020648501_RenameGoodsCategory.resx">
+      <DependentUpon>201802020648501_RenameGoodsCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802020854550_AddGoodsCat-GoodsCatType.resx">
+      <DependentUpon>201802020854550_AddGoodsCat-GoodsCatType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802021941362_AlterGoodsCat-GoodsCatType.resx">
+      <DependentUpon>201802021941362_AlterGoodsCat-GoodsCatType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802032107228_AddRefIdsToGoods.resx">
+      <DependentUpon>201802032107228_AddRefIdsToGoods.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802032227443_AlterMember_GoodsCat_ForeignKey.resx">
+      <DependentUpon>201802032227443_AlterMember_GoodsCat_ForeignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802171614376_AddRefIdToMember.resx">
+      <DependentUpon>201802171614376_AddRefIdToMember.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802172001326_addgoalPercent.resx">
+      <DependentUpon>201802172001326_addgoalPercent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802200504376_addIsAllGoalGoods.resx">
+      <DependentUpon>201802200504376_addIsAllGoalGoods.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802201636061_renameGoodsCatToGoalGoods.resx">
+      <DependentUpon>201802201636061_renameGoodsCatToGoalGoods.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802201912487_AlterRelationBranchBenefit_GoalGoodsCat.resx">
+      <DependentUpon>201802201912487_AlterRelationBranchBenefit_GoalGoodsCat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802201952120_RelationGoalAndBranchBenefit.resx">
+      <DependentUpon>201802201952120_RelationGoalAndBranchBenefit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802211940483_changeScalePercent.resx">
+      <DependentUpon>201802211940483_changeScalePercent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803010604336_generalGoal.resx">
+      <DependentUpon>201803010604336_generalGoal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803160829110_AddInvoiceAndOther.resx">
+      <DependentUpon>201803160829110_AddInvoiceAndOther.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803232019437_addGoalFullfilment.resx">
+      <DependentUpon>201803232019437_addGoalFullfilment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803270944258_addDrugScore.resx">
+      <DependentUpon>201803270944258_addDrugScore.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803300532277_addPharmacyReport.resx">
+      <DependentUpon>201803300532277_addPharmacyReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803310951364_addSalesAndStock.resx">
+      <DependentUpon>201803310951364_addSalesAndStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804011356137_addUploadFile.resx">
+      <DependentUpon>201804011356137_addUploadFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805061619549_DeleteDrugGeneralNameFromGoods.resx">
+      <DependentUpon>201805061619549_DeleteDrugGeneralNameFromGoods.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807012023368_addDataSync.resx">
+      <DependentUpon>201807012023368_addDataSync.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807091413539_changeFailtoTryinDataSyncStatusTable.resx">
+      <DependentUpon>201807091413539_changeFailtoTryinDataSyncStatusTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810050558410_add_quantityCondition.resx">
+      <DependentUpon>201810050558410_add_quantityCondition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810172020417_generalGoal_quantity.resx">
+      <DependentUpon>201810172020417_generalGoal_quantity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810191634043_alter_quantityCond.resx">
+      <DependentUpon>201810191634043_alter_quantityCond.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810260820512_addVisibleToGoalCategory.resx">
+      <DependentUpon>201810260820512_addVisibleToGoalCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810261907169_requiredEndDate_goal.resx">
+      <DependentUpon>201810261907169_requiredEndDate_goal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810271858238_Receipt_General_Amount_Goal.resx">
+      <DependentUpon>201810271858238_Receipt_General_Amount_Goal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810311924330_alterGoalFullfilment.resx">
+      <DependentUpon>201810311924330_alterGoalFullfilment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811021030429_alterBrnachBenefit_removeGoalGoodsCat.resx">
+      <DependentUpon>201811021030429_alterBrnachBenefit_removeGoalGoodsCat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811041917068_addCommission.resx">
+      <DependentUpon>201811041917068_addCommission.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811060514299_alterCommission_renameStatusId.resx">
+      <DependentUpon>201811060514299_alterCommission_renameStatusId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811071756539_addYearMonth_Commission_addStartEndDate_Inputs.resx">
+      <DependentUpon>201811071756539_addYearMonth_Commission_addStartEndDate_Inputs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811081743134_rename_branchbenefit_branchgoal.resx">
+      <DependentUpon>201811081743134_rename_branchbenefit_branchgoal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811090608329_addCommissionId_Goal.resx">
+      <DependentUpon>201811090608329_addCommissionId_Goal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811151311068_renameGeneral_totalsales.resx">
+      <DependentUpon>201811151311068_renameGeneral_totalsales.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811151726440_rename_remove_isactive.resx">
+      <DependentUpon>201811151726440_rename_remove_isactive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811151758500_change_dateTOyear_month_goalfulfillment.resx">
+      <DependentUpon>201811151758500_change_dateTOyear_month_goalfulfillment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812031807247_addBranchSales_totalNo.resx">
+      <DependentUpon>201812031807247_addBranchSales_totalNo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812061646533_addLastUpdated.resx">
+      <DependentUpon>201812061646533_addLastUpdated.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812062034311_addBranchRefId_member.resx">
+      <DependentUpon>201812062034311_addBranchRefId_member.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812062100023_dateCreated_nullable.resx">
+      <DependentUpon>201812062100023_dateCreated_nullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812121643433_rename_commission_poromotion.resx">
+      <DependentUpon>201812121643433_rename_commission_poromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812140820280_addQuantity_GoodsQuantityCondition.resx">
+      <DependentUpon>201812140820280_addQuantity_GoodsQuantityCondition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901031708000_addAmount_branchGoal.resx">
+      <DependentUpon>201901031708000_addAmount_branchGoal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901110706135_add_branchReceiptGoalPercent.resx">
+      <DependentUpon>201901110706135_add_branchReceiptGoalPercent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901251041533_addBranchQuntityGoal.resx">
+      <DependentUpon>201901251041533_addBranchQuntityGoal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902090942092_rename_commision_Promotion.resx">
+      <DependentUpon>201902090942092_rename_commision_Promotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902091237037_addPromotionAggregate.resx">
+      <DependentUpon>201902091237037_addPromotionAggregate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903211625497_alterOrgStruct.resx">
+      <DependentUpon>201903211625497_alterOrgStruct.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903221233411_alterBranchReciept.resx">
+      <DependentUpon>201903221233411_alterBranchReciept.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903271833420_alterGoal.resx">
+      <DependentUpon>201903271833420_alterGoal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903281221219_alterBranchPromotion.resx">
+      <DependentUpon>201903281221219_alterBranchPromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903281852151_alterBranchPromotion_addTotalSalesSpecifiedAmount.resx">
+      <DependentUpon>201903281852151_alterBranchPromotion_addTotalSalesSpecifiedAmount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903282042321_alterScaleDecimal.resx">
+      <DependentUpon>201903282042321_alterScaleDecimal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903291403528_addOrderToBrnach.resx">
+      <DependentUpon>201903291403528_addOrderToBrnach.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903300542538_ranmeTotalRange_Totalfulfill.resx">
+      <DependentUpon>201903300542538_ranmeTotalRange_Totalfulfill.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903310723155_addGoalGoodsCategory.resx">
+      <DependentUpon>201903310723155_addGoalGoodsCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904031320536_alterBranchPromotion_addSalesPromotion.resx">
+      <DependentUpon>201904031320536_alterBranchPromotion_addSalesPromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904091903110_alterOrgShare_addPrivateReceipt.resx">
+      <DependentUpon>201904091903110_alterOrgShare_addPrivateReceipt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904101606372_addMinMaxPromotion_OrgSturctShare.resx">
+      <DependentUpon>201904101606372_addMinMaxPromotion_OrgSturctShare.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904101944073_addGoalNonFulfillment.resx">
+      <DependentUpon>201904101944073_addGoalNonFulfillment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904101949274_alterGoalNonFulfillment.resx">
+      <DependentUpon>201904101949274_alterGoalNonFulfillment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904111602456_alterTotalfulfillment.resx">
+      <DependentUpon>201904111602456_alterTotalfulfillment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904120713451_alterGoalFulfillment.resx">
+      <DependentUpon>201904120713451_alterGoalFulfillment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904120908243_addApprovePromotionType.resx">
+      <DependentUpon>201904120908243_addApprovePromotionType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904121443503_addQuantityConditionTypeId_alterQuantityCondition.resx">
+      <DependentUpon>201904121443503_addQuantityConditionTypeId_alterQuantityCondition.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
