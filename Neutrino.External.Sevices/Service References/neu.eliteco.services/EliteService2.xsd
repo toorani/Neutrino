@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Elite.Neutrino.Services" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Elite.Neutrino.Services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://neu.eliteco.ir:7082/EliteService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="ArrayOfCompanyInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CompanyInfo" nillable="true" type="tns:CompanyInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCompanyInfo" nillable="true" type="tns:ArrayOfCompanyInfo" />
+  <xs:complexType name="CompanyInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EnName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FaName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CompanyInfo" nillable="true" type="tns:CompanyInfo" />
+  <xs:complexType name="ArrayOfGoodsInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="GoodsInfo" nillable="true" type="tns:GoodsInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfGoodsInfo" nillable="true" type="tns:ArrayOfGoodsInfo" />
+  <xs:complexType name="GoodsInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Brand" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompanyId" type="xs:int" />
+      <xs:element minOccurs="0" name="ConsumerPrice" type="xs:decimal" />
+      <xs:element minOccurs="0" name="EnName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FaName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Generic" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="GenericCode" type="xs:int" />
+      <xs:element minOccurs="0" name="GoodsCode" type="xs:int" />
+      <xs:element minOccurs="0" name="HasExtraCharge" type="xs:boolean" />
+      <xs:element minOccurs="0" name="HasTaxable" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="IsTechnicalApproved" type="xs:boolean" />
+      <xs:element minOccurs="0" name="OfficalCode" type="xs:int" />
+      <xs:element minOccurs="0" name="PackageCount" type="xs:int" />
+      <xs:element minOccurs="0" name="ProducerId" type="xs:int" />
+      <xs:element minOccurs="0" name="PurchasePrice" type="xs:decimal" />
+      <xs:element minOccurs="0" name="SalesPrice" type="xs:decimal" />
+      <xs:element minOccurs="0" name="SupplierId" type="xs:int" />
+      <xs:element minOccurs="0" name="SupplierType" type="tns:SupplierTypes" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GoodsInfo" nillable="true" type="tns:GoodsInfo" />
+  <xs:simpleType name="SupplierTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Domestic" />
+      <xs:enumeration value="Foreign" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="SupplierTypes" nillable="true" type="tns:SupplierTypes" />
+  <xs:complexType name="ArrayOfGoodsCat">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="GoodsCat" nillable="true" type="tns:GoodsCat" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfGoodsCat" nillable="true" type="tns:ArrayOfGoodsCat" />
+  <xs:complexType name="GoodsCat">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="GoodsId" type="xs:int" />
+      <xs:element minOccurs="0" name="GroupId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GoodsCat" nillable="true" type="tns:GoodsCat" />
+  <xs:complexType name="ArrayOfGoodsCatType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="GoodsCatType" nillable="true" type="tns:GoodsCatType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfGoodsCatType" nillable="true" type="tns:ArrayOfGoodsCatType" />
+  <xs:complexType name="GoodsCatType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="GroupId" type="xs:int" />
+      <xs:element minOccurs="0" name="GroupName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GoodsCatType" nillable="true" type="tns:GoodsCatType" />
+  <xs:complexType name="ArrayOfBranchInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BranchInfo" nillable="true" type="tns:BranchInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBranchInfo" nillable="true" type="tns:ArrayOfBranchInfo" />
+  <xs:complexType name="BranchInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CityName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Level" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Zone" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BranchInfo" nillable="true" type="tns:BranchInfo" />
+  <xs:complexType name="ArrayOfMemberInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MemberInfo" nillable="true" type="tns:MemberInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMemberInfo" nillable="true" type="tns:ArrayOfMemberInfo" />
+  <xs:complexType name="MemberInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BranchId" type="xs:int" />
+      <xs:element minOccurs="0" name="Code" type="xs:int" />
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MemberId" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NationalCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Position" type="tns:Positions" />
+      <xs:element minOccurs="0" name="ccgoroh" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ccpost" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MemberInfo" nillable="true" type="tns:MemberInfo" />
+  <xs:simpleType name="Positions">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ViceCEO">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1000</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="HRManager">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1001</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="HREmployee">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1002</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CommercialManager">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1003</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CommercialEmployee">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1004</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ITManager">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1005</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ITEmployee">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1006</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="FinancialManager">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1007</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="FinancialEmployee">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1008</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SalesManager_ZoneOne">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1009</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SalesEmployee_ZoneOne">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1010</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SalesManager_ZoneTwo">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1011</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SalesEmployee_ZoneTwo">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1012</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Seller">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1013</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SalesSupervisor">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1014</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SalesOperator">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1015</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Accountant">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1016</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="AccountantSupervisor">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1017</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BranchManager">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1018</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="AccountantEmployee">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1019</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="OperationResponsible">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1020</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Officer">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1021</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="StoreSupervisor">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1022</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Storekeeper">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1023</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="StorekeeperAssistance">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1024</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Storeworker">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1025</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="StoreOperator">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1026</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Driver">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1027</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Carrier">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1028</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Servant">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1029</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Gguard">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1030</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Other">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1031</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Positions" nillable="true" type="tns:Positions" />
+  <xs:complexType name="ArrayOfBranchSalesInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BranchSalesInfo" nillable="true" type="tns:BranchSalesInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBranchSalesInfo" nillable="true" type="tns:ArrayOfBranchSalesInfo" />
+  <xs:complexType name="BranchSalesInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BranchId" type="xs:int" />
+      <xs:element minOccurs="0" name="GoodsId" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalAmount" type="xs:double" />
+      <xs:element minOccurs="0" name="TotalTedad" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BranchSalesInfo" nillable="true" type="tns:BranchSalesInfo" />
+  <xs:complexType name="ArrayOfInvoiceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="InvoiceInfo" nillable="true" type="tns:InvoiceInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfInvoiceInfo" nillable="true" type="tns:ArrayOfInvoiceInfo" />
+  <xs:complexType name="InvoiceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="GoodsId" type="xs:int" />
+      <xs:element minOccurs="0" name="SellerId" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalAmount" type="xs:double" />
+      <xs:element minOccurs="0" name="TotalCount" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvoiceInfo" nillable="true" type="tns:InvoiceInfo" />
+  <xs:complexType name="ArrayOfPayroll">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Payroll" nillable="true" type="tns:Payroll" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPayroll" nillable="true" type="tns:ArrayOfPayroll" />
+  <xs:complexType name="Payroll">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MemberId" type="xs:int" />
+      <xs:element minOccurs="0" name="Payment" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Payroll" nillable="true" type="tns:Payroll" />
+  <xs:complexType name="ArrayOfMandehFaktor">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MandehFaktor" nillable="true" type="tns:MandehFaktor" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMandehFaktor" nillable="true" type="tns:ArrayOfMandehFaktor" />
+  <xs:complexType name="MandehFaktor">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Codemoshtary" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NameMoshtary" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ShomarehFaktor" type="xs:int" />
+      <xs:element minOccurs="0" name="TarikhFaktor" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ccForoshandeh" type="xs:int" />
+      <xs:element minOccurs="0" name="ccafrad" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ccmarkazpakhsh" type="xs:int" />
+      <xs:element minOccurs="0" name="mablaghmandehmoshtary" nillable="true" type="xs:double" />
+      <xs:element minOccurs="0" name="namegoroh" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MandehFaktor" nillable="true" type="tns:MandehFaktor" />
+  <xs:complexType name="ArrayOfMemberReceiptInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MemberReceiptInfo" nillable="true" type="tns:MemberReceiptInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMemberReceiptInfo" nillable="true" type="tns:ArrayOfMemberReceiptInfo" />
+  <xs:complexType name="MemberReceiptInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MemberId" type="xs:int" />
+      <xs:element minOccurs="0" name="ReceiptAmount" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MemberReceiptInfo" nillable="true" type="tns:MemberReceiptInfo" />
+  <xs:complexType name="ArrayOfBranchReceiptInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BranchReceiptInfo" nillable="true" type="tns:BranchReceiptInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBranchReceiptInfo" nillable="true" type="tns:ArrayOfBranchReceiptInfo" />
+  <xs:complexType name="BranchReceiptInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BranchId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ReceiptAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ReceiptAmountKho" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BranchReceiptInfo" nillable="true" type="tns:BranchReceiptInfo" />
+</xs:schema>

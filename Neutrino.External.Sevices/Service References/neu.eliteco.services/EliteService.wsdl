@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="EliteService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://neu.eliteco.ir:7082/EliteService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://neu.eliteco.ir:7082/EliteService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://neu.eliteco.ir:7082/EliteService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Elite.Neutrino.Services" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IEliteService_GetCompanies_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanies" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetCompanies_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompaniesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetGoods_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetGoods" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetGoods_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetGoodsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetGoodsCategory_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetGoodsCategory" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetGoodsCategory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetGoodsCategoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetGoodsCategoryType_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetGoodsCategoryType" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetGoodsCategoryType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetGoodsCategoryTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetBranches_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBranches" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetBranches_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBranchesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetMembers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMembers" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetMembers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMembersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetBranchSales_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBranchSales" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetBranchSales_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBranchSalesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetInvoices_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetInvoices" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetInvoices_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetInvoicesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetPayroll_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPayroll" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetPayroll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPayrollResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetMandeDar_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMandeDar" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetMandeDar_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMandeDarResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetMemberReceipts_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMemberReceipts" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetMemberReceipts_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMemberReceiptsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetBranchReceipts_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBranchReceipts" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetBranchReceipts_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBranchReceiptsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IEliteService">
+    <wsdl:operation name="GetCompanies">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetCompanies" message="tns:IEliteService_GetCompanies_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetCompaniesResponse" message="tns:IEliteService_GetCompanies_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGoods">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetGoods" message="tns:IEliteService_GetGoods_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetGoodsResponse" message="tns:IEliteService_GetGoods_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGoodsCategory">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetGoodsCategory" message="tns:IEliteService_GetGoodsCategory_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetGoodsCategoryResponse" message="tns:IEliteService_GetGoodsCategory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGoodsCategoryType">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetGoodsCategoryType" message="tns:IEliteService_GetGoodsCategoryType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetGoodsCategoryTypeResponse" message="tns:IEliteService_GetGoodsCategoryType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBranches">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetBranches" message="tns:IEliteService_GetBranches_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetBranchesResponse" message="tns:IEliteService_GetBranches_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMembers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetMembers" message="tns:IEliteService_GetMembers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetMembersResponse" message="tns:IEliteService_GetMembers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBranchSales">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetBranchSales" message="tns:IEliteService_GetBranchSales_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetBranchSalesResponse" message="tns:IEliteService_GetBranchSales_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetInvoices">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetInvoices" message="tns:IEliteService_GetInvoices_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetInvoicesResponse" message="tns:IEliteService_GetInvoices_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPayroll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetPayroll" message="tns:IEliteService_GetPayroll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetPayrollResponse" message="tns:IEliteService_GetPayroll_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMandeDar">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetMandeDar" message="tns:IEliteService_GetMandeDar_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetMandeDarResponse" message="tns:IEliteService_GetMandeDar_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMemberReceipts">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetMemberReceipts" message="tns:IEliteService_GetMemberReceipts_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetMemberReceiptsResponse" message="tns:IEliteService_GetMemberReceipts_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBranchReceipts">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetBranchReceipts" message="tns:IEliteService_GetBranchReceipts_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetBranchReceiptsResponse" message="tns:IEliteService_GetBranchReceipts_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IEliteService" type="tns:IEliteService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetCompanies">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetCompanies" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGoods">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetGoods" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGoodsCategory">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetGoodsCategory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGoodsCategoryType">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetGoodsCategoryType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBranches">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetBranches" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMembers">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetMembers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBranchSales">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetBranchSales" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetInvoices">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetInvoices" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPayroll">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetPayroll" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMandeDar">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetMandeDar" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMemberReceipts">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetMemberReceipts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBranchReceipts">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetBranchReceipts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EliteService">
+    <wsdl:port name="BasicHttpBinding_IEliteService" binding="tns:BasicHttpBinding_IEliteService">
+      <soap:address location="http://neu.eliteco.ir:7082/EliteService.svc/IEliteService" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="3e8d3489-9c63-4c12-ad30-3e905f65c3d7" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>false</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://neu.eliteco.ir:7082/EliteService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="EliteService.xsd" MetadataType="Schema" ID="b8cb09e7-de83-4630-bb73-4ab85862d609" SourceId="1" SourceUrl="http://neu.eliteco.ir:7082/EliteService.svc?xsd=xsd1" />
+    <MetadataFile FileName="EliteService.disco" MetadataType="Disco" ID="761831ff-06b7-45f4-9e8f-3cd8e6ad6594" SourceId="1" SourceUrl="http://neu.eliteco.ir:7082/EliteService.svc?disco" />
+    <MetadataFile FileName="EliteService.wsdl" MetadataType="Wsdl" ID="e5c462b5-ef96-4d9b-852c-f2347f4c9b9a" SourceId="1" SourceUrl="http://neu.eliteco.ir:7082/EliteService.svc?wsdl" />
+    <MetadataFile FileName="EliteService1.xsd" MetadataType="Schema" ID="e79f7a79-1372-473a-ae9f-92c93b6eae23" SourceId="1" SourceUrl="http://neu.eliteco.ir:7082/EliteService.svc?xsd=xsd0" />
+    <MetadataFile FileName="EliteService2.xsd" MetadataType="Schema" ID="2c6bdcd9-0aca-4a3e-8c11-f0fa8683e9ac" SourceId="1" SourceUrl="http://neu.eliteco.ir:7082/EliteService.svc?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
