@@ -1,0 +1,309 @@
+﻿
+@using System.Security.Claims;
+@using Microsoft.AspNet.Identity.Owin;
+@using Neutrino.Portal.Models
+@using Neutrino.Business;
+@using Neutrino.Entities;
+@using Espresso.Core;
+@using System.Threading.Tasks;
+@using Neutrino.Core.SecurityManagement;
+@using Espresso.Utilities.Interfaces;
+@using Espresso.BusinessService.Interfaces;
+@using Espresso.Core.Ninject.Http;
+@using Neutrino.Data.EntityFramework;
+    @{
+        var version = typeof(MvcApplication).Assembly.GetName().Version.ToString();
+        string baseUrl = System.Configuration.ConfigurationManager.AppSettings["BaseUrl"].ToString();
+    }
+
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+
+        <!-- Viewport metatags -->
+        <meta name="HandheldFriendly" content="true" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+        <!-- iOS webapp metatags -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+        <title>Neutrino Project</title>
+
+        @Styles.Render("~/Content/css")
+        @Styles.Render("~/Content/plugins")
+        <link rel="stylesheet" href="~/Content/plugins/pace/pace-rtl.css">
+        @Styles.Render("~/Content/validation")
+        <link rel="stylesheet" href="~/Content/plugins/icheck/angular-icheck.css" />
+        <base href="@baseUrl" />
+
+
+    </head>
+    <body ng-app="neutrinoProject" ng-controller="layoutController" ng-init="initializeController()" class="">
+        <toast></toast>
+        <nav class="navigation">
+            <div class="container-fluid">
+                <!--Logo text start-->
+                <div class="header-logo">
+                    @{
+                        var claimsPrincipal = Context.User as ClaimsPrincipal;
+                        int userId = 0;
+                        if (claimsPrincipal.HasClaim(x => x.Type == ClaimTypes.NameIdentifier))
+                        {
+                            userId = Convert.ToInt32(claimsPrincipal.FindFirst(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                            ApplicationUserManager userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                            var appUser = userManager.FindByNameAsync(claimsPrincipal.Identity.Name).Result;
+                            var fullName = appUser.UserName;
+                            if (!String.IsNullOrWhiteSpace(appUser.Name))
+                            {
+                                fullName = appUser.Name + " " + appUser.LastName;
+                            }
+
+                            <h1>
+                                @fullName
+                            </h1>
+                        }
+                        else
+                        {
+                            <h1>
+                                @claimsPrincipal.Identity.Name
+                            </h1>
+                        }
+
+
+
+                    }
+                </div>
+                <!--Logo text End-->
+                <div class="top-navigation">
+                    <!--Collapse navigation menu icon start -->
+                    <div class="menu-control hidden-xs ">
+                        <a href="javascript:void(0)">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+
+                    <!--Collapse navigation menu icon end -->
+                    <!--Top Navigation Start-->
+                    <ul>
+                        <li>
+                            <a href="/">
+                                <i class="fa fa-lock"></i>
+                            </a>
+                        </li>
+                        <li ng-click="logOff()">
+                            <a href="">
+                                <i class="fa fa-power-off"></i>
+                            </a>
+                        </li>
+                        <li class="hidden-xs">
+                            <a class="right-sidebar-setting" href="javascript:void(0)">
+                                <i class="fa fa-cogs"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!--Top Navigation End-->
+                </div>
+            </div>
+        </nav>
+        <section id="main-container">
+            <!--Left navigation section start-->
+            <section id="left-navigation">
+                <!--Left navigation user details start-->
+                <div class="user-image">
+                    <img src="~/Content/fickle/images/avatar-80.png" alt="" />
+                    <div class="user-online-status"><span class="user-status is-online  "></span> </div>
+                    
+                </div>
+                <!--Left navigation user details end-->
+                <!--Left navigation start-->
+                <ul class="mainNav">
+
+                    @{
+                        IPermissionManager permissionManager = NinjectHttpContainer.Resolve<PermissionManager>();
+                        List<Permission> userAccess = permissionManager.GetUserAccess(userId);
+                        IEntityListLoader<AppMenu> businessService = NinjectHttpContainer.Resolve<IEntityListLoader<AppMenu>>();
+
+                        var items = new List<AppMenu>();
+                        bool? checkAccess = true;
+                        var appSettingManager = NinjectHttpContainer.Resolve<IAppSettingManager>();
+                        checkAccess = appSettingManager.GetValue<bool>("checkAccess");
+                        checkAccess = checkAccess == null ? true : checkAccess.Value;
+                        if (checkAccess.Value == false)
+                        {
+                            IBusinessResultValue<List<AppMenu>> entities = businessService.LoadList(
+                                                orderBy: Utilities.GetOrderBy<AppMenu>("OrderId", "asc")
+                                                , includes: x => new { x.ChildItems }
+                                                , where: x => x.ParentId == null);
+
+                            items = entities.ResultValue;
+                        }
+                        else
+                        {
+                            IBusinessResultValue<List<AppMenu>> entities = Task.Run(() =>
+                                            businessService.LoadListAsync(
+                                            orderBy: Utilities.GetOrderBy<AppMenu>("OrderId", "asc")
+                                            , includes: x => new { x.ChildItems }
+                                            )).Result;
+                            items = entities.ResultValue
+                                            .Where(x => userAccess.Any(y => y.ApplicationAction.HtmlUrl == x.Url && y.ApplicationAction.HtmlUrl != null))
+                                            .ToList();
+                            var parentItems = items.Where(y => y.ParentId != null).ToList();
+
+                            items.AddRange(entities.ResultValue.Where(x => parentItems.Select(y => y.ParentId).Contains(x.Id)));
+                            items.RemoveAll(x => parentItems.Select(y => y.Id).Contains(x.Id));
+
+                        }
+                        foreach (AppMenu item in items)
+                        {
+                            <li>
+                                <a href="@item.Url">
+                                    @if (String.IsNullOrEmpty(item.Icon))
+                                    {
+                                        <i class="fa fa-list-alt"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="@item.Icon"></i>
+                                    }
+                                    <span>@item.Title</span>
+                                </a>
+                                @if (item.ChildItems.Count != 0)
+                                {
+                                    <ul>
+                                        @foreach (AppMenu childItem in item.ChildItems.OrderBy(x => x.OrderId))
+                                        {
+                                            <li>
+                                                <a href="@childItem.Url">
+                                                    @if (String.IsNullOrEmpty(childItem.Icon))
+                                                    {
+                                                        <i class="fa fa-list-alt"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="@childItem.Icon"></i>
+                                                    }
+                                                    <span>@childItem.Title</span>
+                                                </a>
+                                            </li>
+
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    }
+
+
+                </ul>
+                <!--Left navigation end-->
+            </section>
+            <!--Left navigation section end-->
+            <!--Phone Navigation Menu icon start-->
+            <div class="phone-nav-box visible-xs">
+                <a class="phone-logo" href="/" title="">
+                    <h1>Neutrino</h1>
+                </a>
+                <a class="phone-nav-control" href="javascript:void(0)">
+                    <span class="fa fa-bars"></span>
+                </a>
+                <div class="clearfix"></div>
+            </div>
+            <!--Phone Navigation Menu icon start-->
+            <section id="min-wrapper">
+                <div id="main-content">
+                    <div class="container-fluid ">
+                        @Html.AntiForgeryToken()
+                        @RenderBody()
+                    </div>
+                </div>
+            </section>
+        </section>
+
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/fickle")
+
+        @Scripts.Render("~/bundles/angular")
+        @Scripts.Render("~/bundles/validation")
+        @Scripts.Render("~/bundles/jDataTables")
+
+        @Scripts.Render("~/bundles/jPlugins")
+        <script src="/Scripts/plugins/pace/pace.min.js"></script>
+
+
+
+        @if (HttpContext.Current.IsDebuggingEnabled)
+        {
+
+            @Scripts.RenderFormat("<script type =\"text/javascript\" src=\"{0}?ver =" + @version + "\"></script>", "~/bundles/shared")
+        }
+        else
+        {
+            @Scripts.Render("~/bundles/shared")
+        }
+
+        <script>
+            var app = angular.module('neutrinoProject');
+            app.provider('applicationConfiguration', function () {
+                var _version;
+                var _bundles;
+                var _baseURL;
+                var _checkAccess;
+                return {
+                    setVersion: function (version) {
+                        _version = version;
+                    },
+                    setBundles: function (bundles) {
+                        _bundles = bundles;
+                    },
+                    getVersion: function () {
+                        return _version;
+                    },
+                    getBundles: function () {
+                        return _bundles;
+                    },
+
+                    getBaseURL: function () {
+                        return _baseURL;
+                    },
+                    getCheckAccess: function () {
+                        return _checkAccess
+
+                    },
+                    setCheckAccess: function (checkAccess) {
+                        _checkAccess = checkAccess;
+                    },
+                    setBaseURL: function (baseURL) {
+                        _baseURL = baseURL;
+
+                    }, $get: function () {
+                        return {
+                            version: _version,
+                            bundles: _bundles,
+                            checkAccess: _checkAccess
+                        }
+                    }
+                }
+            });
+            app.config(function (applicationConfigurationProvider) {
+                applicationConfigurationProvider.setCheckAccess('@checkAccess');
+                applicationConfigurationProvider.setBaseURL('@baseUrl');
+                applicationConfigurationProvider.setVersion('@version');
+            });
+
+
+        </script>
+        @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?ver =" + @version + "\"></script>", "~/bundles/routing-debug")
+        
+
+    </body>
+</html>

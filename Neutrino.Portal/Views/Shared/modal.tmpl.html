@@ -1,0 +1,22 @@
+﻿<div class="modal-header breadcrumb">
+    <button type="button" class="close" ng-click="modalOptions.close()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4>{{modalOptions.headerText}}</h4>
+</div>
+<div class="modal-body">
+    <p ng-bind-html="modalOptions.bodyText"></p>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary"
+            data-ng-click="modalOptions.ok();">
+        <i class="{{modalOptions.actionButtonIcon}}"></i>
+        <span>{{modalOptions.actionButtonText}}</span>
+        
+    </button>
+    <button type="button" class="btn"
+            data-ng-click="modalOptions.close()">
+        <i class="fa fa-close"></i>
+        <span>{{modalOptions.closeButtonText}}</span>
+        
+    </button>
+    
+</div>
