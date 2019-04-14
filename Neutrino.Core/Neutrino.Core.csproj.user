@@ -3,4 +3,7 @@
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
+  <PropertyGroup>
+    <ReferencePath>I:\Projects\Repo\build\</ReferencePath>
+  </PropertyGroup>
 </Project>

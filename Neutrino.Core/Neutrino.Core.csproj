@@ -30,19 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Espresso.Core">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Espresso.DataAccess">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.DataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="Espresso.Utilities">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.Utilities.dll</HintPath>
-    </Reference>
-    <Reference Include="Neutrino.Interfaces, Version=2018.10.26.745, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Neutrino.Portal\bin\Neutrino.Interfaces.dll</HintPath>
-    </Reference>
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -82,16 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Neutrino.Business.Entities\Neutrino.Entities.csproj">
-      <Project>{223C1CAF-CAA4-4FFD-8E22-11566858A8FB}</Project>
-      <Name>Neutrino.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Neutrino.DataAccess\Neutrino.Data.EntityFramework.csproj">
-      <Project>{f58dba9d-0b74-4ac6-b3c8-be32769d2d7f}</Project>
-      <Name>Neutrino.Data.EntityFramework</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

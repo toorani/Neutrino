@@ -30,11 +30,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Espresso.Entites">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.Entites.dll</HintPath>
+    <Reference Include="Espresso.Entites, Version=2019.4.9.344, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\build\Espresso.Entites.dll</HintPath>
     </Reference>
-    <Reference Include="Espresso.Identity">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.Identity.dll</HintPath>
+    <Reference Include="Espresso.Identity, Version=2019.4.9.292, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\build\Espresso.Identity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
