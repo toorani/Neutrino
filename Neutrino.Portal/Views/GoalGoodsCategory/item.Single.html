@@ -1,0 +1,95 @@
+﻿<script type="text/ng-template" id="companyTemplate.html">
+    <a>
+        نام : <strong><span ng-bind-html="match.model.faName | uibTypeaheadHighlight:query"></span></strong>
+        <div class="ls_divider"></div>
+    </a>
+</script>
+
+<div ng-controller="goalGoodsCategory.itemSingleController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form novalidate role="form" esp-validate-complete="submit()"
+                          esp-validate-options="{promptPosition:'bottomLeft',scroll: false,autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                          class="form-horizontal ls_form" name="form">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                نام تامین کننده
+                            </label>
+                            <div class="col-md-10">
+                                <ui-select ng-model="viewModel.companySelected"
+                                           disableAnimate
+                                           refresh-delay="0"
+                                           on-select="onCompanySelected($item)">
+                                    <ui-select-match placeholder="تامین کننده را انتخاب کنید" allow-clear="true">
+                                        <span ng-bind="$select.selected.faName"></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in (companies | filter: $select.search) track by item.id">
+                                        <span ng-bind="item.faName"></span>
+                                    </ui-select-choices>
+                                    <ui-select-no-choice>
+                                        موردی یافت نشد
+                                    </ui-select-no-choice>
+                                </ui-select>
+                            </div>
+                            
+                        </div>
+                        <div class="form-group">
+
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                نام دارو
+                            </label>
+                            <div class="col-md-10">
+
+
+                                <ui-select ng-model="viewModel.goodsSelected">
+                                    <ui-select-match placeholder="دارو را انتخاب کنید" allow-clear="true">
+                                        <span ng-bind="$select.selected.faName"></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in goodsCollection | propsFilter: {goodsCode: $select.search, enName: $select.search,faName:$select.search} ">
+                                        <div ng-bind-html="item.faName | highlight: $select.search" title="{{item.faName}}"></div>
+                                        <small>
+                                            <span ng-bind-html="item.enName | highlight: $select.search" title="{{item.enName}}"></span>
+                                            <span class="row ls_divider"></span>
+                                            کد : <span ng-bind-html="item.goodsCode | highlight: $select.search"></span>
+                                        </small>
+                                        <div class="row ls_divider"></div>
+                                    </ui-select-choices>
+                                    <ui-select-no-choice>
+                                        موردی یافت نشد
+                                    </ui-select-no-choice>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" name="Add" class="btn btn-success">
+                                <i class="fa fa-check"></i>
+                                <span>ثبت</span>
+                            </button>
+                            <button type="button" class="btn btn-default" data-ng-click="cancel()">
+                                <i class="fa fa-mail-forward"></i>
+                                <span>بازگشت</span>
+                            </button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

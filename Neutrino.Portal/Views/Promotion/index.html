@@ -1,0 +1,94 @@
+﻿<div ng-controller="promotion.indexController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <script type="text/ng-template" id="addPromotion.html">
+        <div class="modal-content">
+            <div class="modal-header breadcrumb">
+                <button type="button" class="close"  ng-click="$dismiss()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">محاسبه پورسانت</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <form novalidate role="form" esp-validate-complete="submit()"
+                                      esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                                      class="form-horizontal ls_form" name="form">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">
+                                            سال
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                                    ng-options="item for item in years"
+                                                    ng-model="viewModel.year"></select>
+
+                                        </div>
+                                        <label class="col-md-2 control-label">
+                                            ماه
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                                    ng-options="item.id as item.name for item in months"
+                                                    ng-model="viewModel.month"></select>
+
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="modal-footer">
+                                        <button type="submit"
+                                                class="btn btn-success">
+                                            <i class="fa fa-check"></i>
+                                            <span>ثبت</span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" data-ng-click="$dismiss()">
+                                            <i class="fa fa-close"></i>
+                                            <span>انصراف</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </script>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row form-box">
+                        <div class="col-md-6">
+                            <div class="ls-button-group">
+                                <button type="button"
+                                        ng-click="newEntity()"
+                                        class="btn ls-light-blue-btn">
+                                    <i class="fa fa-plus-circle"></i>
+                                    <span>محاسبه پورسانت </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--fn-RowCallback="dataTableRowCallback(rowDetail)"
+                    fn-Drawcallback="dataTableDrawCallback()"-->
+                    <div class="ls-editable-table table-responsive ls-table ">
+                        <esp.ng.datatable columns="dataColumns"
+                                          server-Url="{{serverUrl}}">
+                        </esp.ng.datatable>
+                    </div>
+                    <!--Table Wrapper Finish-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,160 @@
+﻿<div ng-controller="penalty.indexController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="itemView-Body col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <form novalidate role="form" esp-validate-complete="submit()"
+                                      esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                                      class="form-horizontal ls_form" name="form">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">
+                                            سال
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                                    ng-options="item for item in years"
+                                                    ng-model="viewModel.year">
+                                                <option value="" selected>[ انتخاب کنید ]</option>
+
+                                            </select>
+                                        </div>
+                                        <label class="col-md-2 control-label">
+                                            ماه
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                                    ng-options="item.id as item.name for item in months"
+                                                    ng-model="viewModel.month">
+                                                <option value="" selected>[ انتخاب کنید ]</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">
+                                            <i class="red fa fa-asterisk"></i>
+                                            نام مرکز
+                                        </label>
+                                        <div class="col-md-10">
+                                            <ui-select ng-model="viewModel.branch"
+                                                       class="validate[funcCall[ifUiSelectNotEmpty]]">
+                                                <ui-select-match placeholder="نام مرکز را انتخاب کنید" allow-clear="true">
+                                                    <span ng-bind="$select.selected.name"></span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="item in (branches | filter: $select.search) track by item.id">
+                                                    <span ng-bind="item.name"></span>
+                                                </ui-select-choices>
+                                                <ui-select-no-choice>
+                                                    موردی یافت نشد
+                                                </ui-select-no-choice>
+                                            </ui-select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" ng-click="getData()"
+                                                class="btn btn-info">
+                                            <i class="fa fa-filter"></i>
+                                            <span>دریافت اطلاعات</span>
+                                        </button>
+                                        <button type="submit" name="Add"
+                                                ng-if="viewModel.penalties.length != 0"
+                                                class="btn btn-success">
+                                            <i class="fa fa-check"></i>
+                                            <span>ثبت</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="ls-editable-table table-responsive ls-table " ng-if="viewModel.penalties.length != 0">
+                                        <table class="display responsive nowrap dataTable " cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <td class="align-center"><i class="blue fa fa-search fa-2x"></i></td>
+                                                    <td class="align-center"><input type="text" ng-model="src_employeeCode" class="form-control" /></td>
+                                                    <td class="align-center"><input type="text" ng-model="src_employeeName" class="form-control" /></td>
+                                                    <td class="align-center"><input type="text" ng-model="src_position" class="form-control" /></td>
+                                                </tr>
+                                            </thead>
+                                            <thead>
+                                                <tr>
+                                                    <td class="align-center">#</td>
+                                                    <td class="align-center">شماره پرسنلی</td>
+                                                    <td class="align-center">نام</td>
+                                                    <td class="align-center">پست سازمانی</td>
+                                                    <td class="align-center">پورسانت فروش</td>
+                                                    <td class="align-center">پورسانت وصول</td>
+                                                    <td class="align-center">مانده جرائم</td>
+                                                    <td class="align-center">جرائم ماه</td>
+                                                    <td class="align-center">کسورات ماه</td>
+                                                    <td class="align-center">مطالبات</td>
+                                                </tr>
+                                            </thead>
+                                            <tr ng-repeat="record in viewModel.penalties | filter :{employeeCode: src_employeeCode,employeeName :src_employeeName,position:src_position}  ">
+                                                <td class="text-center">
+                                                    {{$index + 1}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{record.employeeCode}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{record.employeeName}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{record.position}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{record.salesPromotion}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{record.receiptPromotion}}
+                                                </td>
+                                                <td class="align-center">
+                                                    <input type="text" class="form-control dir-ltr"
+                                                           ng-model="record.penaltyRemain"
+                                                           ng-trim=false
+                                                           awnum="price">
+                                                </td>
+                                                <td class="align-center">
+                                                    <input type="text" class="form-control dir-ltr"
+                                                           ng-model="record.penalty"
+                                                           ng-trim=false
+                                                           awnum="price">
+                                                </td>
+                                                <td class="align-center">
+                                                    <input type="text" class="form-control dir-ltr"
+                                                           ng-model="record.deduction"
+                                                           ng-trim=false
+                                                           awnum="price">
+                                                </td>
+                                                <td class="align-center">
+                                                    <input type="text" class="form-control dir-ltr"
+                                                           ng-model="record.credit"
+                                                           ng-trim=false
+                                                           awnum="price">
+                                                </td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

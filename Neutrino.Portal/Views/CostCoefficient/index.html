@@ -1,0 +1,59 @@
+﻿<div ng-controller="costCoefficient.indexController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form novalidate role="form" esp-validate-complete="submit()"
+                          esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                          class="form-horizontal ls_form" name="form">
+                        <div class="ls-editable-table table-responsive ls-table ">
+                            <table class="display responsive nowrap dataTable no-footer dtr-" cellspacing="0" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <td class="align-center">
+                                            نوع محصول
+                                        </td>
+                                        <td class="align-center">
+                                            ضریب هزینه
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="record in viewModel.records">
+                                        <td class="align-center">
+                                            {{record.goodsCategoryName}}
+                                        </td>
+                                        <td class="align-center">
+                                            <input type="number"
+                                                   ng-model="record.coefficient"
+                                                   placeholder="ضریب هزینه را وارد کنید"
+                                                   class="form-control"
+                                                   min="0" max="100">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--Table Wrapper Finish-->
+                        <div class="modal-footer">
+                            <button type="submit" 
+                                    ng-if="checkActionUrlPermissionByHtmlUrl('api/costCoefficientService/add')"
+                                    name="Add" class="btn btn-success">
+                                <i class="fa fa-check"></i>
+                                <span>ثبت</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

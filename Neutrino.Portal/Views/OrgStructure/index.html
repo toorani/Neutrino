@@ -1,0 +1,40 @@
+﻿<div ng-controller="orgStructure.indexController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row form-box">
+                        <div class="col-md-6">
+                            <div class="ls-button-group">
+                                <button type="button"
+                                        ng-if="checkActionUrlPermission('api/orgStructureService/add')"
+                                        ng-click="newEntity()"
+                                        class="btn ls-light-blue-btn">
+                                    <i class="fa fa-plus-circle"></i>
+                                    <span>تعریف پست سازمانی </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ls-editable-table table-responsive ls-table ">
+                        <esp.ng.datatable columns="dataColumns"
+                                          server-Url="{{serverUrl}}"
+                                          by-grouping="positionType.description"
+                                          grouping-start-render="groupingStartOrder()"
+                                          order-Value="[1,'asc']&[0,'asc']">
+                        </esp.ng.datatable>
+                    </div>
+                    <!--Table Wrapper Finish-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

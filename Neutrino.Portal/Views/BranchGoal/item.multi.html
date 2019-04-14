@@ -1,0 +1,97 @@
+﻿<div ng-controller="item.multiController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form novalidate role="form" esp-validate-complete="submit()"
+                      esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                      class="form-horizontal ls_form" name="form">
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                دسته دارویی
+                            </label>
+                            <div class="col-md-5">
+                                <multiple-autocomplete ng-model="viewModel.goodsCategories"
+                                                       class="validate[funcCall[ifSelectMultiSelectNotEmpty]]"
+                                                       object-property="name"
+                                                       suggestions-arr="goodsCategories">
+                                </multiple-autocomplete>
+
+                            </div>
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                مرکز
+                            </label>
+                            <div class="col-md-3">
+                                <ui-select ng-model="viewModel.branch" class="validate[funcCall[ifUiSelectNotEmpty]]"
+                                           >
+                                    <ui-select-match placeholder="مرکز را انتخاب کنید" allow-clear="true">
+                                        <span ng-bind="$select.selected.name"></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in (branches | filter: $select.search) track by item.id">
+                                        <span ng-bind="item.name"></span>
+                                    </ui-select-choices>
+                                    <ui-select-no-choice>
+                                        موردی یافت نشد
+                                    </ui-select-no-choice>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label"> 
+                                <i class="red fa fa-asterisk"></i>
+                                درصد سهم مرکز
+                            </label>
+                            <div class="col-md-10">
+                                <input type="number" 
+                                       ng-model="viewModel.percent"
+                                       placeholder="درصد سهم را وارد کنید"
+                                       class="form-control validate[]"
+                                       min="0" max="100">
+                                <rzslider rz-slider-model="viewModel.percent" 
+                                          rz-slider-options="percentSlider.options"></rzslider>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2"></div>
+                                <div class="col-md-10">
+                                    
+                                </div>
+
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="Add" class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            <span>ثبت</span>
+                        </button>
+                        <button type="button" class="btn btn-danger" ng-show="viewModel.id != 0"
+                                data-ng-click="delete()">
+                            <i class="fa fa-trash-o"></i>
+                            <span>حذف</span>
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="cancel()">
+                            <i class="fa fa-close"></i>
+                            <span>بازگشت</span>
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

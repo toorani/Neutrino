@@ -1,0 +1,114 @@
+﻿<div ng-controller="aggregation.itemController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="alert alert-warning" ng-if="goal.isUsed">
+        <strong>توجه!</strong> هدف برای محاسبه پورسانت استفاده شده است و امکان تغییر اطلاعات هدف وجود ندارد.
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form novalidate role="form" esp-validate-complete="submit()"
+                          esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                          class="form-horizontal ls_form" name="form">
+                        <div class="row ls_divider">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">
+                                    <i class="red fa fa-asterisk"></i>
+                                    سال
+
+                                </label>
+                                <div class="col-md-4">
+                                    <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                            ng-options="item for item in years"
+                                            ng-change="getAggregationValue()"
+                                            ng-model="goal.year"></select>
+
+                                </div>
+                                <label class="col-md-2 control-label">
+                                    <i class="red fa fa-asterisk"></i>
+                                    ماه
+                                </label>
+                                <div class="col-md-4">
+                                    <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                            ng-options="item.id as item.name for item in months"
+                                            ng-change="getAggregationValue()"
+                                            ng-model="goal.month">
+                                        <option value="">[ انتخاب کنید ] </option>
+
+                                    </select>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row ls_divider">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">
+                                    مبلغ تجمیعی تا ماه قبل
+                                </label>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control dir-ltr"
+                                           ng-model="aggregationValue "
+                                           ng-trim=false
+                                           awnum="price"
+                                           readonly
+                                           >
+
+                                </div>
+                                <label class="col-md-2 control-label">
+                                    <i class="red fa fa-asterisk"></i>
+                                    مبلغ هدف تجمیعی
+                                </label>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control validate[required] dir-ltr"
+                                           ng-model="goal.amount"
+                                           ng-trim=false
+                                           awnum="price"
+                                           placeholder="مبلغ هدف تجمیعی را وارد کنید">
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"
+                                    ng-if="((checkActionUrlPermissionByHtmlUrl('/api/GoalService/add') && goal.id == 0) || ( goal.id != 0 && checkActionTypePermission(3))) && !goal.isUsed"
+                                    name="Add"
+                                    class="btn btn-success">
+                                <i class="fa fa-check"></i>
+                                <span>ثبت</span>
+                            </button>
+                            <button type="button"
+                                    ng-if="goal.id != 0 && goal.goalSteps.length != 0 && goal.goalSteps[0].id != 0"
+                                    ng-click="branchGoal_onlick()"
+                                    class="btn btn-primary">
+                                <i class="fa fa-sliders"></i>
+                                <span>تعریف سهم مراکز</span>
+                            </button>
+                            <button type="button" class="btn btn-danger"
+                                    ng-if="goal.id != 0 && checkActionUrlPermissionByHtmlUrl('/api/GoalService/delete') && !goal.isUsed"
+                                    data-ng-click="onDeleteGoal()">
+                                <i class="fa fa-trash-o"></i>
+                                <span>حذف</span>
+                            </button>
+                            <button type="button" class="btn btn-default" ng-click="cancel()">
+                                <i class="fa fa-mail-forward"></i>
+                                <span>بازگشت</span>
+                            </button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

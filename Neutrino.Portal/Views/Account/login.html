@@ -1,0 +1,48 @@
+﻿<div ng-controller="loginController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="content">
+        <h4 class="title">{{title}}</h4>
+        <form novalidate role="form" esp-validate-complete="login()"
+              esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+              class="form-horizontal ls_form" name="form">
+
+            <div class="form-group">
+                <div class="col-md-10" style="padding-top:20px;">
+                    <div class="input-group ls-group-input">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <input type="text" class="form-control validate[required] dir-ltr"
+                               ng-model="vm.userName"
+                               placeholder="نام کاربری را وارد کنید">
+                    </div>
+                    <div class="input-group ls-group-input">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                        <input type="password" class="form-control validate[required] dir-ltr"
+                               ng-model="vm.password"
+                               placeholder="رمز عبور را وارد کنید">
+                    </div>
+                    <div class="input-group ls-group-input">
+                        <div class="remember-me">
+                            <label>
+                                <input type="checkbox" ng-model="vm.rememberMe">
+                                مرا بخاطر بسپار
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" ng-disabled="isLoging"
+                            class="btn btn-primary">
+                        <i ng-show="!isLoging" class="fa fa-key"></i>
+                        <i ng-show="isLoging" class="fa fa-spinner"></i>
+                        <span style="padding-right:5px;">
+                            ورود به سیستم
+                            
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+

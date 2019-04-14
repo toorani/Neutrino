@@ -1,0 +1,135 @@
+﻿<div ng-controller="fulfillmentPromotionCondition.itemController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+
+    <div class="itemView-Body col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form novalidate role="form" esp-validate-complete="submit()"
+                      esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                      class="form-horizontal ls_form" name="form">
+
+                    <div class="ls-editable-table table-responsive ls-table ">
+                        <table id="tblGeneralGoalPercent" class="table table-striped table-bordered">
+                            <thead class="bold">
+                                <tr>
+                                    <td colspan="3" class="align-center">
+                                        درصد تحقق
+                                    </td>
+                                    <td colspan="2" class="align-center">
+                                        درصد پورسانت
+                                    </td>
+                                    <td class="align-center vertical-middle" rowspan="2">
+                                        عملیات
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-center">
+                                        کل
+                                    </td>
+                                    <td class="align-center">
+                                        وصول کل
+                                    </td>
+                                    <td class="align-center">
+                                        وصول خصوصی
+                                    </td>
+                                    <td hidden class="align-center">
+                                        تجمیعی
+                                    </td>
+                                    <td class="align-center">
+                                        رئیس و سرپرست
+                                    </td>
+                                    <td class="align-center">
+                                        فروشنده
+                                    </td>
+                                    <td hidden class="align-center">
+                                        تجمیعی
+                                    </td>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in totalFulfillPromotions">
+                                    <td class="align-center">
+
+                                        <input type="text" class="form-control dir-ltr"
+                                               ng-trim="false"
+                                               ng-model="item.totalSalesFulfilledPercent"
+                                               awnum="percent">
+                                    </td>
+                                    <td class="align-center">
+                                        <input type="text" class="form-control dir-ltr"
+                                               ng-trim="false"
+                                               ng-model="item.totalReceiptFulfilledPercent"
+                                               awnum="percent">
+                                    </td>
+                                    <td class="align-center">
+                                        <input type="text" class="form-control dir-ltr"
+                                               ng-trim="false"
+                                               ng-model="item.privateReceiptFulfilledPercent"
+                                               awnum="percent">
+                                    </td>
+                                    <td hidden class="align-center">
+                                        <input type="text" class="form-control dir-ltr"
+                                               ng-trim="false"
+                                               ng-model="item.aggregateFulfilledPercent"
+                                               awnum="percent">
+                                    </td>
+                                    <td class="align-center">
+                                        <input type="text" class="form-control dir-ltr"
+                                               ng-trim="false"
+                                               ng-model="item.managerPromotion"
+                                               awnum="percent">
+                                    </td>
+                                    <td class="align-center">
+                                        <input type="text" class="form-control dir-ltr"
+                                               ng-trim="false"
+                                               ng-model="item.sellerPromotion"
+                                               awnum="percent">
+                                    </td>
+                                    <td hidden class="align-center">
+                                        <input type="text" class="form-control dir-ltr"
+                                               ng-trim="false"
+                                               ng-model="item.promotionAggregate"
+                                               awnum="percent">
+                                    </td>
+                                    <td>
+                                        <button type="button"
+                                                ng-if="totalFulfillPromotions.length == $index +1"
+                                                ng-click="new_totalFulfillPromotion()"
+                                                class="btn ls-light-blue-btn">
+                                            <i class="fa fa-plus-circle"></i>
+                                            <span>جدید</span>
+                                        </button>
+                                        <button class="btn btn-danger" type="button"
+                                                ng-click="totalFulfillPromotionDelete($index)">
+                                            <i class="fa fa-trash-o"></i>
+                                        </button>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit"
+                                ng-if="totalFulfillPromotions.length != 0"
+                                name="Add"
+                                class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            <span>ثبت</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,157 @@
+﻿<div ng-controller="branchReceiptGoalPercent.itemController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="alert alert-warning" ng-if="viewModel.goal.isUsed">
+        <strong>توجه!</strong> هدف برای محاسبه پورسانت استفاده شده است و امکان تغییر اطلاعات هدف وجود ندارد.
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                تاریخ هدف
+                            </label>
+                            <div class="col-md-2">
+                                <input type="text"
+                                       class="form-control"
+                                       ng-model="viewModel.goalDate"
+                                       disabled>
+                            </div>
+                            <label class="col-md-2 control-label">
+                                مبلغ هدف
+                            </label>
+                            <div class="col-md-2">
+                                <input type="text"
+                                       class="form-control dir-ltr"
+                                       ng-model="viewModel.goalAmount"
+                                       ng-trim=false
+                                       awnum="price"
+                                       disabled>
+                            </div>
+                            <label class="col-md-2 control-label">
+                                نوع هدف وصول
+                            </label>
+                            <div class="col-md-2">
+                                <input type="text"
+                                       class="form-control"
+                                       ng-model="viewModel.goalGoodsCategoryName"
+                                       ng-trim=false
+                                       disabled>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" ng-click="cancel()">
+                            <i class="fa fa-mail-forward"></i>
+                            <span>بازگشت</span>
+                        </button>
+                    </div>
+                    <br />
+
+                    <div class="col-md-6" ng-repeat="item in viewModel.items">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"> درصد مراکز</h3>
+                                <ul class="panel-control">
+                                    <li><a class="minus" ng-href="#" ng-click="removeBranchPercentItem(item)"><i class="fa fa-minus"></i></a></li>
+                                    <li><a class="plus" ng-href="#" ng-click="addBranchPercentItem()"><i class="fa fa-plus"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="panel-body">
+                                <form novalidate role="form" esp-validate-complete="submit(item)"
+                                      esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                                      class="form-horizontal ls_form" name="form">
+                                    <div class="row ls_divider">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">
+                                                رسیدن به هدف
+                                            </label>
+                                            <div class="col-md-3">
+                                                <input type="number"
+                                                       class="form-control"
+                                                       min="0" max="100"
+                                                       ng-model="item.reachedPercent"
+                                                       step="0.000001">
+
+                                            </div>
+                                            <label class="col-md-3 control-label">
+                                                نرسیدن به هدف
+                                            </label>
+                                            <div class="col-md-3">
+                                                <input type="number"
+                                                       class="form-control"
+                                                       min="0" max="100"
+                                                       ng-model="item.notReachedPercent"
+                                                       step="0.000001">
+                                            </div>
+                                          
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="col-md-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title"><i class="blue fa-check fa-2x"></i> </h3>
+                                                <ul class="panel-control checkbox">
+                                                    <li>
+                                                        <input type="checkbox"
+                                                               value=""
+                                                               id="selectAll"
+                                                               ng-checked="item.branches.length == branches.length"
+                                                               ng-click="batchToggleCheck(item,'selectAll')" /><label for="selectAll">انتخاب همه</label>
+
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox"
+                                                               value=""
+                                                               id="deSelectAll"
+                                                               ng-checked="item.deselectedBranches.length == branches.length"
+                                                               ng-click="batchToggleCheck(item,'deSelectAll')" /><label for="deSelectAll">حذف همه انتخاب ها</label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="panel-body">
+                                                <ul class="checkbox">
+
+                                                    <li ng-repeat="branch in branches">
+                                                        <input type="checkbox"
+                                                               value="{{branch.name}}"
+                                                               id="{{branch.id}}"
+                                                               ng-checked="item.branches.indexOf(branch.id) != -1"
+                                                               ng-click="toggleCheck(item,branch)" /><label for="{{branch.id}}">{{branch.name}}</label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" name="Add"
+                                                ng-if="checkActionUrlPermissionByHtmlUrl('api/branchBenefitService/batchUpdate') && !viewModel.isGoalUsed"
+                                                class="btn btn-success">
+                                            <i class="fa fa-check"></i>
+                                            <span>ثبت</span>
+                                        </button>
+                                    </div>
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,190 @@
+﻿<div ng-controller="item.singleController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        تاریخ شروع هدف
+                    </label>
+                    <div class="col-md-2">
+                        <input type="text"
+                               ng-model="generalGoal.startDate"
+                               disabled>
+                    </div>
+                    <label class="col-md-2 control-label">
+                        تاریخ پایان هدف
+                    </label>
+                    <div class="col-md-2">
+                        <input type="text"
+                               ng-model="generalGoal.endDate"
+                               disabled>
+                    </div>
+                    <label class="col-md-2 control-label">
+                        دسته دارویی
+                    </label>
+                    <div class="col-md-2">
+
+                        <input type="text"
+                               ng-model="generalGoal.generalAmount"
+                               ng-trim=false
+                               awnum="price"
+                               disabled>
+
+                    </div>
+                </div>
+            </div>
+            <div class="ls_divider"></div>
+            <div class="panel-body">
+                <form novalidate role="form" esp-validate-complete="submit()"
+                      esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                      class="form-horizontal ls_form" name="form">
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                دسته دارویی
+                            </label>
+                            <div class="col-md-4">
+                                <ui-select ng-model="viewModel.goalGoodsCategory" 
+                                            ng-change="onChangeGoalGoodsCategory()"
+                                           ng-disabled="isEditMode"
+                                           class="validate[funcCall[ifUiSelectNotEmpty]]">
+                                    <ui-select-match placeholder="دسته دارویی را انتخاب کنید" allow-clear="true">
+                                        <span ng-bind="$select.selected.name"></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in (goalGoodsCategories | filter: $select.search) track by item.id">
+                                        <span ng-bind="item.name"></span>
+                                    </ui-select-choices>
+                                    <ui-select-no-choice>
+                                        موردی یافت نشد
+                                    </ui-select-no-choice>
+                                </ui-select>
+
+                            </div>
+                            <div sticky sticky-class="percent-sticky" class="col-md-4" >
+                                <label class="control-label ">
+                                    جمع درصد مشخص شده
+                                    <span style="margin-right:10px;">
+                                        {{totalPercent}}
+                                        <i class="red fa fa-percent"></i>
+                                    </span>
+                                </label>
+                                
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer"  ng-show="goalSteps.length != 0" >
+                        <button type="submit" name="Add"
+                                ng-if="checkActionUrlPermissionByHtmlUrl('api/branchBenefitService/batchUpdate')"
+                                class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            <span>ثبت</span>
+                        </button>
+                        <button type="button" class="btn btn-danger"
+                                ng-if="checkActionUrlPermissionByHtmlUrl('api/branchBenefitService/delete') && viewModel.id != 0"
+                                data-ng-click="delete()">
+                            <i class="fa fa-trash-o"></i>
+                            <span>حذف</span>
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="cancel()">
+                            <i class="fa fa-close"></i>
+                            <span>بازگشت</span>
+                        </button>
+
+                    </div>
+                    <div class="table-responsive ls-table" ng-show="goalSteps.length != 0">
+                        <table class="table table-bordered table-striped " cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <td class="align-center">نام مرکز</td>
+                                    <td class="align-center">درصد سهم</td>
+                                    <td class="align-center" ng-repeat="step in goalSteps track by step.id">
+                                        <div class="col-sm-12">
+                                            <span>
+                                                پله شماره
+                                                {{$index + 1}}
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-12 ls_divider"></div>
+                                        <div class="col-sm-12">
+                                            <span>
+                                                سهم مرکز
+                                            </span>
+                                        </div>
+                                        
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tr ng-repeat="record in viewModel.items">
+                                <td class="text-center">
+                                    {{record.branchName}}
+                                </td>
+                                <td class="align-center">
+                                    <input type="number"
+                                           ng-model="record.percent"
+                                           placeholder="تا سه رقم اعشار وارد کنید"
+                                           class="form-control"
+                                           ng-change="calculateTotalPercent()"
+                                           min="0" max="100"
+
+                                           step="0.001"
+                                           >
+
+                                </td>
+                                <td class="align-center" ng-repeat="step in goalSteps track by step.id">
+                                    <div class="col-sm-12">
+                                        <span >
+                                            {{step.computingValue | number}}
+                                        </span>
+                                    </div>
+                                    <div class="col-sm-12 ls_divider"></div>
+                                    <div class="col-sm-12">
+                                        <span class="yellow">
+                                            {{step.computingValue * record.percent / 100 | number}}
+                                        </span>
+                                    </div>
+
+                                    <!--<span>
+                                        {{step.computingValue + (step.computingValue * record.percent / 100) | number}}
+                                    </span>-->
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="Add" 
+                                ng-if="goalSteps.length != 0 && checkActionUrlPermissionByHtmlUrl('api/branchBenefitService/batchUpdate')"
+                                class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            <span>ثبت</span>
+                        </button>
+                        <button type="button" class="btn btn-danger" 
+                                ng-if="goalSteps.length != 0 && checkActionUrlPermissionByHtmlUrl('api/branchBenefitService/delete') && viewModel.id != 0"
+                                data-ng-click="delete()">
+                            <i class="fa fa-trash-o"></i>
+                            <span>حذف</span>
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="cancel()">
+                            <i class="fa fa-mail-forward"></i>
+                            <span>بازگشت</span>
+                        </button>
+
+                    </div>
+                </form>
+                
+                
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,32 @@
+﻿<div ng-controller="index.distributorController" ng-init="initializeController()">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+
+    <div class="row" >
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row form-box">
+                        <div class="col-md-12">
+                            <div class="ls-button-group">
+                                <button type="button" ng-click="newGoal()" class="btn ls-light-blue-btn">
+                                    <i class="fa fa-plus-circle"></i>
+                                    <span >هدف جدید</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ls-editable-table table-responsive ls-table">
+                        <esp.ng.datatable columns="dataColumns" server-Url="{{serverUrl}}"></esp.ng.datatable>
+                    </div>
+                    <!--Table Wrapper Finish-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

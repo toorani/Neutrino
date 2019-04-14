@@ -1,0 +1,69 @@
+﻿<div ng-controller="orgStructure.itemController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form novalidate role="form" esp-validate-complete="submit()"
+                      esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                      class="form-horizontal ls_form" name="form">
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                پست سازمانی
+                            </label>
+                            <div class="col-md-4">
+                                <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                        ng-options="item.eId as item.description for item in positionTypes"
+                                        ng-change="onchange_positionTypeId()"
+                                        ng-model="viewModel.positionTypeId">
+                                    <option value="" selected>[ انتخاب کنید ]</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ls_divider">
+                        <div class="col-md-12">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">مراکز</h3>
+                                    <ul class="panel-control">
+                                        <li>
+                                            <i-check click="onclick_selectAll()" ng-model="selectAll">انتخاب همه</i-check>
+
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="panel-body">
+                                    <ul class="checkbox">
+                                        <li ng-repeat="branch in branches">
+                                            <i-check id="{{branch.id}}" ng-model="branchChecked[branch.id]">{{branch.name}}</i-check>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                  
+                    <div class="modal-footer">
+                        <button type="submit" 
+                                class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            <span>ثبت</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

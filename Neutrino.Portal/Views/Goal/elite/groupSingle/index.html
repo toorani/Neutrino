@@ -1,0 +1,50 @@
+﻿<div ng-controller="groupSingle.indexController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row form-box">
+                        <div class="col-md-6">
+                            <div class="ls-button-group">
+                                <button type="button"
+                                        ng-if="checkActionUrlPermissionByPassHtmlUrl('/api/GoalService/add','goal/distributor/item')"
+                                        ng-click="newGoal()" class="btn ls-light-blue-btn">
+                                    <i class="fa fa-plus-circle"></i>
+                                    <span>هدف جدید</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <uib-tabset>
+                        <uib-tab index="$index" ng-repeat="tab in goalTabs track by $index" select="tabSelected($index)">
+                            <uib-tab-heading>
+                                <span>
+                                    {{tab.title}}
+                                </span>
+                            </uib-tab-heading>
+
+                            <div class="ls-editable-table table-responsive ls-table " ng-if="activeTab==$index">
+                                <esp.ng.datatable columns="dataColumns"
+                                                  server-Url="{{serverUrl}}"
+                                                  server-Params="{{tab.filter}}"
+                                                  by-grouping="startDate"
+                                                  order-Value="[2,'asc']">
+                                </esp.ng.datatable>
+                            </div>
+
+                        </uib-tab>
+                    </uib-tabset>
+
+                    <!--Table Wrapper Finish-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

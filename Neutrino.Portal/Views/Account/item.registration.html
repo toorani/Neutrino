@@ -1,0 +1,135 @@
+﻿<div ng-controller="item.registrationController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form novalidate role="form" esp-validate-complete="submit()"
+                      esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                      class="form-horizontal ls_form" name="form">
+
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                نام کاربری
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]"
+                                       ng-model="user.userName"
+                                       ng-disabled="user.id != 0"
+                                       placeholder="نام کاربری را وارد کنید">
+
+                            </div>
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                نقش کاربری
+                            </label>
+                            <div class="col-md-4">
+                                <multiple-autocomplete ng-model="user.roles"
+                                                       class="validate[funcCall[ifSelectMultiSelectNotEmpty]]"
+                                                       object-property="faName"
+                                                       suggestions-arr="roles">
+                                </multiple-autocomplete>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ls_divider" ng-if="user.id == 0">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                رمز عبور
+                            </label>
+                            <div class="col-md-4">
+                                <input type="password" class="form-control validate[required]"
+                                       ng-model="user.password"
+                                       name="password"
+                                       id="password"
+                                       placeholder="رمز عبور را وارد کنید">
+                            </div>
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                تایید رمز عبور
+                            </label>
+                            <div class="col-md-4">
+                                <input type="password" class="form-control validate[required,equals[password]]"
+                                       ng-model="user.confirmPassword"
+                                       placeholder="رمز عبور را وارد کنید">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                نام
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]"
+                                       ng-model="user.name"
+                                       placeholder="نام را وارد کنید">
+                            </div>
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                نام خانوادگی
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]"
+                                       ng-model="user.lastName"
+                                       placeholder="نام خانوادگی را وارد کنید">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                آدرس ایمیل
+                            </label>
+                            <div class="col-md-4">
+                                <input type="email" class="form-control validate[required,custom[email]]"
+                                       ng-model="user.email"
+                                       placeholder="ادرس ایمیل را وارد کنید">
+                            </div>
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                شماره موبایل
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required,custom[phone]]"
+                                       ng-model="user.mobileNumber"
+                                       ng-trim=false
+                                       awnum="phone"
+                                       placeholder="شماره موبایل را وارد کنید">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="Add" class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            <span>ثبت</span>
+                        </button>
+                        <button type="button" class="btn btn-danger" ng-show="user.id != 0"
+                                data-ng-click="delete()">
+                            <i class="fa fa-trash-o"></i>
+                            <span>حذف</span>
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="cancel()">
+                            <i class="fa fa-close"></i>
+                            <span>بازگشت</span>
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

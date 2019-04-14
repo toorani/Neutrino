@@ -1,0 +1,213 @@
+﻿
+<div ng-controller="quantityConditions.indexController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+
+    <div class="itemView-Body col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form novalidate role="form" esp-validate-complete="submit()"
+                      esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                      class="form-horizontal ls_form" name="form">
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                نام هدف
+                            </label>
+                            <div class="col-md-4">
+                                <label class="control-label">
+                                    {{quantityCondition.goalCategoryName}}
+                                </label>
+
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                تعداد آیتم
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required] dir-ltr"
+                                       ng-model="quantityCondition.quantity"
+                                       ng-trim=false
+                                       awnum="numb"
+                                       placeholder="تعداد آیتم را وارد کنید">
+                            </div>
+                            <label class="col-md-2 control-label" ng-if="quantityCondition.quantityConditionTypeId == 1">
+                                <i class="red fa fa-asterisk"></i>
+                                درصد پاداش اضافی
+                            </label>
+                                                
+                            <div class="col-md-4" ng-if="quantityCondition.quantityConditionTypeId == 1">
+
+                                <input type="text" class="form-control validate[required] dir-ltr"
+                                       ng-model="quantityCondition.extraEncouragePercent"
+                                       ng-trim=false
+                                       awnum="percent"
+                                       placeholder="درصد پاداش اضافی را وارد کنید">
+                            </div>
+                        </div>
+                        <div class="form-group" ng-if="quantityCondition.quantityConditionTypeId == 1">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                درصد نزده
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required] dir-ltr"
+                                       ng-model="quantityCondition.notReachedPercent"
+                                       ng-trim=false
+                                       awnum="percent"
+                                       placeholder="درصد نزده را وارد کنید">
+                            </div>
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                درصد حالت چهارم
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required] dir-ltr"
+                                       ng-model="quantityCondition.forthCasePercent"
+                                       ng-trim=false
+                                       awnum="percent"
+                                       placeholder="درصد حالت چهارم را وارد کنید">
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="row">
+                        <!--sticky sticky-class="percent-sticky"-->
+                        <label class="control-label col-md-1">
+                            جستجو
+                        </label>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" ng-model="searchExp"
+                                   placeholder="نام / کد دارو">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="btn-group row">
+                                <label class="btn btn-default">
+                                    <input type="radio" ng-model="selection"  name="options" value="all" />
+                                    <span>همه محصولات</span>
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" ng-model="selection" name="options" value="withQ" />
+                                    <span>با هدف تعدادی</span>
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" ng-model="selection" name="options" value="withoutQ" />
+                                    <span>بدون هدف تعدادی</span>
+                                </label>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">
+                                    <div class="panel-title">
+                                        تعداد محصول در هدف  : {{quantityCondition.goodsQuantityConditions.length}}
+                                        <br />
+                                        تعداد هدف  مشخص شده: {{getGoodsQuantityDeclarationCount()}}
+                                    </div>
+                                </div>
+                                <div class="panel-body" style="max-height: 500px;overflow-y: scroll;">
+                                    <div ng-class="getClassName(goods)" ng-repeat="goods in quantityCondition.goodsQuantityConditions | filter :goodsListFilter">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">
+                                                {{goods.faName}}
+                                            </h3>
+
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="col-md-4">
+                                                کد  : {{goods.code}}
+                                            </div>
+                                            <div class="col-md-6">
+                                                جمع هدف تعدادی :
+                                                <label class="control-label dir-ltr"> {{goods.quantity | number}}</label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="button" class="btn ls-red-btn btn-round" ng-click="onclick_goodsSelected(goods)">
+                                                    <i class="fa fa-list-ol"></i>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-7">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <h3 class="panel-title">
+                                                {{goodsSelected.faName}}
+                                                <span ng-if="goodsSelected==null">نام دارو : نامشخص</span>
+                                            </h3>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h3 class="panel-title">
+                                                {{goodsSelected.code}}
+                                                <span ng-if="goodsSelected==null">کد دارو : نامشخص</span>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-lg-4" ng-repeat="branch in goodsSelected.branchQuantityConditions track by $index">
+                                        {{branch.branchName}}
+                                        <input type="text"
+                                               ng-trim=false awnum="price"
+                                               ng-change="getGoodsQuantity(goodsSelected)"
+                                               class="form-control validate[required] dir-ltr" ng-model="branch.quantity">
+                                    </div>
+                                    <div ng-if="goodsSelected==null">
+                                        <h3 class="panel-title">
+                                            دارویی انتخاب نشده است
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="panel-heading" ng-if="goodsSelected != null">
+                                    جمع هدف تعدادی  :
+                                    <label class="control-label dir-ltr"> {{goodsSelected.quantity | number}}</label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit"
+                                    ng-if="quantityCondition.goodsQuantityConditions.length != 0 && checkActionUrlPermission('api/quantityConditionService/addOrUpdate')"
+                                    name="Add"
+                                    class="btn btn-success">
+                                <i class="fa fa-check"></i>
+                                <span>ثبت</span>
+                            </button>
+                            <button type="button" class="btn btn-default" ng-click="cancel()">
+                                <i class="fa fa-mail-forward"></i>
+                                <span>بازگشت</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>

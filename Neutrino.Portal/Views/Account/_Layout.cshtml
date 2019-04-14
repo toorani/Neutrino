@@ -1,0 +1,113 @@
+﻿@{
+    var version = typeof(MvcApplication).Assembly.GetName().Version.ToString();
+    string baseUrl = System.Configuration.ConfigurationManager.AppSettings["BaseUrl"].ToString();
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <title>Neutrino Project</title>
+
+    <link href="/Content/fickle/bootstrap-rtl.css" rel="stylesheet" />
+    <link href="/Content/fickle/style-rtl.css" rel="stylesheet" />
+    <link href="/Content/fickle/responsive-rtl.css" rel="stylesheet" />
+    <link href="/Content/angular/angular-ui.min.css" rel="stylesheet" />
+    <link href="/Content/angular/angular-block-ui.min.css" rel="stylesheet" />
+    <link href="/Content/bootstrap/font-awesome.css" rel="stylesheet" />
+    <link href="/Content/ngToast/ngToast.css" rel="stylesheet" />
+    <link href="~/Content/account.css" rel="stylesheet" />
+    <link href="/Content/validation/bootstrapValidator-rtl.css" rel="stylesheet" />
+    <link href="/Content/validation/validationEngine.jquery-rtl.css" rel="stylesheet" />
+
+    <base href="@baseUrl" />
+</head>
+<body ng-app="neutrinoProject">
+    <toast></toast>
+    <div class="login-container">
+        <div class="login-container">
+            <div class="middle-login">
+                <div class="block-web">
+                    <div class="head">
+                        <h3 class="text-center">Neutrino</h3>
+                    </div>
+                    <div style="background:#fff">
+
+                        @RenderBody()
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/validation")
+    <script type="text/javascript" src="/Scripts/plugins/ngToast/ngToast.min.js"></script>
+    
+    <script type="text/javascript" src="/Views/account/anonymousBootstrap.js?ver=@version"></script>
+    <script type="text/javascript" src="/Views/Shared/neutrinoDirectives.js?ver=@version"></script>
+    <script type="text/javascript" src="~/Views/Shared/neutrinoServices.js?ver=@version"></script>
+    <script type="text/javascript" src="~/Views/Shared/neutrinoFactories.js?ver=@version"></script>
+
+    <script>
+
+        (function () {
+
+            var NeutrinoApplication = angular.module('neutrinoProject');
+            NeutrinoApplication.provider('applicationConfiguration', function () {
+                var _version;
+                var _bundles;
+                var _baseURL;
+                return {
+                    setVersion: function (version) {
+                        _version = version;
+                    },
+                    setBundles: function (bundles) {
+                        _bundles = bundles;
+                    },
+                    getVersion: function () {
+                        return _version;
+                    },
+                    getBundles: function () {
+                        return _bundles;
+                    },
+
+                    getBaseURL: function () {
+                        return _baseURL;
+
+                    },
+                    setBaseURL: function (baseURL) {
+                        _baseURL = baseURL;
+
+                    }, $get: function () {
+                        return {
+                            version: _version,
+                            bundles: _bundles
+                        }
+                    }
+                }
+            });
+
+            NeutrinoApplication.config(function (applicationConfigurationProvider) {
+                applicationConfigurationProvider.setBaseURL('@baseUrl');
+                applicationConfigurationProvider.setVersion('@version');
+            });
+
+
+
+        })();
+
+    </script>
+
+    <script type="text/javascript" src="~/Views/Account/loginController.js?ver=@version"></script>
+    
+    
+</body>
+</html>

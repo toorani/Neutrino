@@ -1,0 +1,134 @@
+﻿<div ng-controller="branchGoal.item.receiptController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="alert alert-warning" ng-if="viewModel.goal.isUsed">
+        <strong>توجه!</strong> هدف برای محاسبه پورسانت استفاده شده است و امکان تغییر اطلاعات هدف وجود ندارد.
+    </div>
+    <div class="itemView-Body col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">
+                            تاریخ شروع هدف
+                        </label>
+                        <div class="col-md-2">
+                            <input type="text"
+                                   ng-model="viewModel.goal.startDate"
+                                   disabled>
+                        </div>
+                        <label class="col-md-2 control-label">
+                            تاریخ پایان هدف
+                        </label>
+                        <div class="col-md-2">
+                            <input type="text"
+                                   ng-model="viewModel.goal.endDate"
+                                   disabled>
+                        </div>
+                        <label class="col-md-2 control-label">
+                            نوع هدف
+                        </label>
+                        <div class="col-md-2">
+                            <input type="text"
+                                   ng-model="viewModel.goal.goalGoodsCategory.name"
+                                   ng-trim=false
+                                   disabled>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="ls_divider"></div>
+                <div class="row form-group">
+                    <label class="col-md-8 control-label">
+
+                    </label>
+                    <div sticky sticky-class="percent-sticky" class="col-md-4">
+                        <label class="control-label ">
+                            مبلغ هدف 
+                            <label style="margin-right:10px;" class="dir-ltr">
+                                {{computingValue | number}}
+                            </label>
+                        </label>
+                        <br />
+                        <label class="control-label ">
+                            جمع مبالغ مراکز
+                            <label style="margin-right:10px;" class="dir-ltr">
+                                {{totalAmount | number}}
+                            </label>
+                        </label>
+
+                    </div>
+                </div>
+                <div class="ls_divider"></div>
+                <form novalidate role="form" esp-validate-complete="submit()"
+                      esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                      class="form-horizontal ls_form" name="form">
+                    <div class="modal-footer" ng-if="computingValue != 0 ">
+                        <button type="submit" name="Add"
+                                ng-if="checkActionUrlPermissionByHtmlUrl('api/branchBenefitService/batchUpdate') && !viewModel.goal.isUsed"
+                                class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            <span>ثبت</span>
+                        </button>
+
+                        <button type="button" class="btn btn-default" ng-click="cancel()">
+                            <i class="fa fa-mail-forward"></i>
+                            <span>بازگشت</span>
+                        </button>
+
+                    </div>
+                    <div class="ls-editable-table table-responsive ls-table " ng-show="computingValue != 0">
+                        <table class="display responsive nowrap dataTable  " cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <td class="align-center">#</td>
+                                    <td class="align-center">نام مرکز</td>
+                                    <td class="align-center" style="min-width:85px;">مبلغ سهم</td>
+                                </tr>
+                            </thead>
+                            <tr ng-repeat="record in viewModel.items">
+                                <td class="text-center">
+                                    {{$index + 1}}
+                                </td>
+                                <td class="text-center">
+                                    {{record.branchName}}
+                                </td>
+                                <td class="align-center">
+                                    <input type="text" class="form-control dir-ltr"
+                                           ng-model="record.amount"
+                                           ng-trim=false
+                                           awnum="price"
+                                           ng-change="calculateTotalAmount()">
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="Add"
+                                ng-if="computingValue != 0 && checkActionUrlPermissionByHtmlUrl('api/branchBenefitService/batchUpdate') && !viewModel.goal.isUsed"
+                                class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            <span>ثبت</span>
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="cancel()">
+                            <i class="fa fa-mail-forward"></i>
+                            <span>بازگشت</span>
+                        </button>
+
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>

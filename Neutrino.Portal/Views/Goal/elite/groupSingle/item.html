@@ -1,0 +1,363 @@
+﻿<div ng-controller="groupSingle.itemController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="alert alert-warning" ng-if="goal.isUsed">
+        <strong>توجه!</strong> هدف برای محاسبه پورسانت استفاده شده است و امکان تغییر اطلاعات هدف وجود ندارد.
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form novalidate role="form" esp-validate-complete="submit()"
+                          esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                          class="form-horizontal ls_form" name="form">
+                        <div class="row ls_divider">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">
+                                    <i class="red fa fa-asterisk"></i>
+                                    نوع هدف گذاری
+                                </label>
+                                <div class="col-md-4">
+                                    <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                            ng-options="item.id as item.description for item in goalGoodsCategoryTypes "
+                                            data-ng-change="onGoalGoodsCategoryTypeChanged()"
+                                            ng-disabled="goal.id !=0"
+                                            ng-model="goal.goalGoodsCategoryTypeId"></select>
+
+                                </div>
+                                <div>
+                                    <label class="col-md-2 control-label">
+                                        <i class="red fa fa-asterisk"></i>
+                                        نام دسته دارویی
+                                    </label>
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                                    ng-options="item.id as item.name for item in goalGoodsCategories "
+                                                    ng-model="goal.goalGoodsCategoryId">
+                                                <option value="" selected>[ انتخاب کنید ]</option>
+                                            </select>
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn ls-blue-btn" ng-click="addGoalGoodsCategory()"
+                                                        ng-if="!goal.isUsed">
+                                                    <i class="fa fa-plus-circle"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+
+                                        <span class="help_text">
+                                            <i class="yellow fa fa-star "></i>
+                                            در صورتیکه دسته دارویی مورد نظر شما وجود ندارد با زدن کلید <i class="blue fa fa-plus-circle"></i> دسته دارویی مورد نظر خود را اضافه کنید
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row ls_divider">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">
+                                    <i class="red fa fa-asterisk"></i>
+                                    از تاریخ
+                                </label>
+                                <div class="col-md-4">
+                                    <adm-dtp full-data="startDate_detail"
+                                             class="validate[funcCall[ifDateNotEmpty]]"
+                                             ng-model='goal.startDate'></adm-dtp>
+                                </div>
+                                <label class="col-md-2 control-label">
+                                    <i class="red fa fa-asterisk"></i>
+                                    تا تاریخ
+                                </label>
+                                <div class="col-md-4">
+                                    <adm-dtp disable='{{!goal.startDate}}'
+                                             class="validate[funcCall[ifDateNotEmpty]]"
+                                             mindate="{{startDate_detail.unix + 1}}"
+                                             ng-model='goal.endDate'></adm-dtp>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row ls_divider">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">
+                                    <i class="red fa fa-asterisk"></i>
+                                    نحوه مقداری دهی
+                                </label>
+                                <div class="col-md-4">
+                                    <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                            ng-options="item.id as item.name for item in computingTypes "
+                                            ng-disabled="goal.id !=0"
+                                            ng-model="goal.computingTypeId">
+                                        <option value="" selected>[ انتخاب کنید ]</option>
+
+                                    </select>
+                                </div>
+                                <label class="col-md-2 control-label">
+                                    <i class="red fa fa-asterisk"></i>
+                                    نوع محاسبه هدف
+                                </label>
+                                <div class="col-md-4">
+                                    <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                            ng-options="item.id as item.name for item in approvePromotionType"
+                                            ng-model="goal.approvePromotionTypeId">
+                                        <option value="">[ انتخاب کنید ]</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit"
+                                    ng-if="((checkActionUrlPermissionByHtmlUrl('/api/GoalService/add') && goal.id == 0) || ( goal.id != 0 && checkActionTypePermission(3))) && !goal.isUsed"
+                                    name="Add"
+                                    ng-disabled=""
+                                    class="btn btn-success">
+                                <i class="fa fa-check"></i>
+                                <span>ثبت</span>
+                            </button>
+                            <div class="btn-group" ng-if="(goal.id != 0 && !goal.isUsed) && (goal.goalSteps.length != 0 && goal.goalSteps[0].id != 0)">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-gear"></i> تنظیمات هدف <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a ng-click="branchBenefit_onlick()">
+                                            <i class="fa fa-sliders"></i>
+                                            <span>تعریف سهم مراکز</span>
+                                        </a>
+
+                                    </li>
+                                    <li>
+                                        <a ng-click="goalNonfulfillment_onlick()">
+                                            <i class="fa fa-sliders"></i>
+                                            <span>تعریف سهم مراکز در صورت عدم تحقق </span>
+                                        </a>
+                                    </li>
+
+                                    <li ng-if="goal.computingTypeId == 2 || goal.computingTypeId == 3">
+                                        <a ng-click="quantityCondition_onclick(1)">
+                                            <i class="fa fa-question-circle"></i>
+                                            <span> تعریف هدف تعدادی مشروط</span>
+                                        </a>
+                                    </li>
+                                    <li ng-if="goal.computingTypeId == 2 || goal.computingTypeId == 3">
+                                        <a ng-click="quantityCondition_onclick(2)">
+                                            <i class="fa fa-bullseye"></i>
+                                            <span> تعریف هدف تعدادی</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+
+                            <button type="button" class="btn btn-danger"
+                                    ng-if="goal.id != 0 && checkActionUrlPermissionByHtmlUrl('/api/GoalService/delete') && !goal.isUsed"
+                                    data-ng-click="onDeleteGoal()">
+                                <i class="fa fa-trash-o"></i>
+                                <span>حذف</span>
+                            </button>
+                            <button type="button" class="btn btn-default" ng-click="cancel()">
+                                <i class="fa fa-mail-forward"></i>
+                                <span>بازگشت</span>
+                            </button>
+
+                        </div>
+                    </form>
+
+                    <div class="panel panel-info" ng-show="goal.id != 0">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">پله های هدف</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <uib-tabset active="activeTabIndex" id="goalStepTabs">
+                                    <uib-tab index="$index" ng-repeat="step in goal.goalSteps track by $index" ng-init="stepIndex=$index">
+                                        <uib-tab-heading>
+
+                                            <i ng-show="step.id != 0" class='green fa fa fa-save'></i>
+                                            <i ng-show="step.id == 0" class="green fa fa-pencil"></i>
+                                            <span>
+                                                پله شماره
+                                                {{$index + 1}}
+                                            </span>
+                                        </uib-tab-heading>
+
+
+                                        <form novalidate role="form" esp-validate-complete="goalStep_submit($index,step.id)"
+                                              esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true,autoHidePrompt:true
+
+                                              }"
+                                              class="form-horizontal ls_form" name="goalStepform">
+                                            <div class="row ls_divider">
+                                                <div class="form-group">
+                                                    <label class="col-md-2 control-label">
+                                                        مقدار پایه
+                                                    </label>
+                                                    <div class="col-md-3">
+                                                        <input type="text" class="form-control validate[required] dir-ltr"
+                                                               name="computingValue"
+                                                               ng-model="step.computingValue"
+                                                               ng-trim=false
+                                                               awnum="price"
+                                                               placeholder="مقدار پایه را وارد کنید">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row ls_divider">
+                                                <div class="col-md-8">
+                                                    <div class="panel panel-light-blue">
+                                                        <div class="panel-heading">
+                                                            <h3 class="panel-title">جوایز و پاداش</h3>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="col-md-12">
+                                                                <div class="radio" ng-repeat="rewardType in rewardTypes">
+                                                                    <label class="col-1">
+                                                                    </label>
+
+                                                                    <input type="radio"
+                                                                           ng-model="step.rewardTypeId" name="rewardType_options"
+                                                                           value="{{rewardType.eId}}"
+                                                                           ng-checked="{{rewardType.eId == step.rewardTypeId}}" />
+                                                                    <span>{{rewardType.description}}</span>
+
+                                                                    <div class="input-group-btn" ng-show="rewardType.code == 1">
+                                                                        <input type="text" class="form-control validate[required] dir-ltr"
+                                                                               ng-disabled="!isDisable(rewardType.eId,step.rewardTypeId)"
+                                                                               ng-model="step.rewardInfo[rewardType.eId + '_amount']"
+                                                                               ng-trim="false"
+                                                                               awnum="percent"
+                                                                               placeholder="مقدار {{rewardType.description}} را وارد کنید">
+
+                                                                    </div>
+
+                                                                    <div class="form-group" ng-show="rewardType.code == 2">
+                                                                        <div class="col-md-3">
+                                                                            <select class="form-control "
+                                                                                    ng-options="item.id as item.name for item in computingTypes "
+                                                                                    ng-disabled="!isDisable(rewardType.eId,step.rewardTypeId)"
+                                                                                    ng-model="step.rewardInfo[rewardType.eId + '_computingTypeId']">
+                                                                                <option value="" selected>[ انتخاب کنید ]</option>
+
+                                                                            </select>
+
+                                                                        </div>
+
+                                                                        <label class="col-md-1 control-label">
+                                                                            هر
+                                                                        </label>
+                                                                        <div class="col-md-3">
+                                                                            <div class="input-group">
+                                                                                <input type="text" class="form-control validate[required] dir-ltr" name="name"
+                                                                                       ng-model="step.rewardInfo[rewardType.eId + '_eachValue']"
+                                                                                       ng-trim=false
+                                                                                       awnum="price"
+                                                                                       ng-disabled="!isDisable(rewardType.eId,step.rewardTypeId)">
+                                                                            </div>
+                                                                        </div>
+                                                                        <label class="col-md-1 control-label">
+                                                                            مبلغ
+                                                                        </label>
+                                                                        <div class="col-md-4">
+                                                                            <div class="input-group">
+                                                                                <input type="text" class="form-control validate[required] dir-ltr" name="name"
+                                                                                       ng-disabled="!isDisable(rewardType.eId,step.rewardTypeId)"
+                                                                                       ng-model="step.rewardInfo[rewardType.eId + '_amount']"
+                                                                                       ng-trim=false
+                                                                                       awnum="price"
+                                                                                       placeholder="مبلغ را وارد کنید">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group" ng-show="rewardType.code == 3">
+                                                                        <div class="col-md-6">
+                                                                            <select class="form-control"
+                                                                                    ng-options="item.eId as item.description for item in otherRewardTypes "
+                                                                                    ng-disabled="!isDisable(rewardType.eId,step.rewardTypeId)"
+                                                                                    ng-model="step.rewardInfo[rewardType.eId + '_choiceValueId']">
+                                                                                <option value="" selected>[ انتخاب کنید ]</option>
+                                                                            </select>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="panel panel-light-blue">
+                                                        <div class="panel-heading">
+                                                            <h3 class="panel-title">جرایم</h3>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="col-md-12">
+                                                                <div class="radio" ng-repeat="condemnationType in condemnationTypes">
+                                                                    <label>
+                                                                    </label>
+                                                                    <input type="radio"
+                                                                           data-ng-model="step.condemnationTypeId" name="condemnationType_options"
+                                                                           value="{{condemnationType.eId}}"
+                                                                           ng-checked="{{condemnationType.eId == step.condemnationTypeId}}" />
+                                                                    <span>{{condemnationType.description}}</span>
+                                                                    <div class="input-group-btn">
+                                                                        <input type="text" class="form-control validate[required] dir-ltr" name="name"
+                                                                               ng-model="step.condemnationInfo[condemnationType.eId + '_amount']"
+                                                                               ng-disabled="!isDisable(condemnationType.eId,step.condemnationTypeId)"
+                                                                               ng-trim=false
+                                                                               awnum="price"
+                                                                               placeholder="مقدار {{condemnationType.description}} را وارد کنید">
+
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit"
+                                                        ng-if="((checkActionUrlPermissionByHtmlUrl('/api/GoalService/add') && goal.id == 0) || ( goal.id != 0 && checkActionUrlPermissionByHtmlUrl('/api/GoalService/edit'))) && !step.isUsed"
+                                                        name="Add" class="btn btn-success">
+                                                    <i class="fa fa-check"></i>
+                                                    <span>ثبت</span>
+                                                </button>
+
+                                                <button class="btn btn-danger" type="button"
+                                                        ng-click="goalStepDelete(step.id,$index)"
+                                                        ng-if="goal.id != 0 && checkActionUrlPermissionByHtmlUrl('/api/GoalService/delete') && !step.isUsed">
+                                                    <i class="fa fa-trash-o"></i>
+                                                    <span>حذف</span>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </uib-tab>
+                                </uib-tabset>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

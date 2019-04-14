@@ -1,0 +1,177 @@
+﻿<div ng-controller="goalGoodsCategory.ItemGroupController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form novalidate role="form" esp-validate-complete="submit()"
+                          esp-validate-options="{promptPosition:'bottomLeft',scroll: false,autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                          class="form-horizontal ls_form" name="form">
+                        <div class="form-group">
+
+                            <label class="col-md-3 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                نام دسته دارویی
+                            </label>
+
+                            <div class="col-md-8">
+                                <ui-select ng-model="titleSelected.item"
+                                           reset-search-input="false" required="true"
+                                           on-select="ontitleSelected_selected($item)"
+                                           >
+                                    <ui-select-match placeholder="نام دسته دارویی را انتخاب کنید">
+                                        <span>
+                                            {{$select.selected.name || $select.search}}
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in (goalGoodsCategories | filter: $select.search) track by item.id"
+                                                       refresh="newCategoryTitle($select)"
+                                                       refresh-delay="0">
+                                        <span ng-bind="item.name">
+
+                                        </span>
+                                    </ui-select-choices>
+                                    <!--<ui-select-no-choice>
+                                        موردی یافت نشد
+                                    </ui-select-no-choice>-->
+                                </ui-select>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12 ls_divider">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">انتخاب دارو</h3>
+                                </div>
+                                <div class="panel-body" ng-show="!viewModel.isGeneralGoal">
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">
+                                            <i class="red fa fa-asterisk"></i>
+                                            نام تامین کننده
+                                        </label>
+                                        <div class="col-md-9">
+                                            <ui-select ng-model="goodsSelection.company"
+                                                       disableAnimate
+                                                       ng-disabled="viewModel.isGeneralGoal"
+                                                       refresh-delay="0"
+                                                       on-select="onCompanySelected($item)">
+                                                <ui-select-match placeholder="تامین کننده را انتخاب کنید" allow-clear="true">
+                                                    <span ng-bind="$select.selected.faName"></span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="item in (companies | filter: $select.search) track by item.id">
+                                                    <span ng-bind="item.faName"></span>
+                                                </ui-select-choices>
+                                                <ui-select-no-choice>
+                                                    موردی یافت نشد
+                                                </ui-select-no-choice>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">
+                                            <i class="red fa fa-asterisk"></i>
+                                            نام دارو (ها)
+                                        </label>
+                                        <div class="col-md-9">
+                                            <ui-select multiple ng-model="goodsSelection.goodsList"
+                                                       ng-disabled="goodsSelection.company == null || isSelectAllCompanyGoods"
+                                                       reset-search-input="true">
+                                                <ui-select-match placeholder="دارو(ها) را انتخاب کنید" allow-clear="true">
+                                                    <span ng-bind="$item.faName"></span>
+                                                    <span ng-bind="$item.goodsCode"></span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="item in goodsCollection | propsFilter: {goodsCode: $select.search, enName: $select.search,faName:$select.search} ">
+                                                    <div ng-bind-html="item.faName | highlight: $select.search" title="{{item.faName}}"></div>
+                                                    <small>
+                                                        <span ng-bind-html="item.enName | highlight: $select.search" title="{{item.enName}}"></span>
+                                                        <span class="row ls_divider"></span>
+                                                        کد : <span ng-bind-html="item.goodsCode | highlight: $select.search"></span>
+                                                    </small>
+                                                    <div class="row ls_divider"></div>
+                                                </ui-select-choices>
+                                                <ui-select-no-choice>
+                                                    موردی یافت نشد
+                                                </ui-select-no-choice>
+                                            </ui-select>
+                                        </div>
+                                        <label class="col-md-3 control-label">
+                                        </label>
+                                        <input type="checkbox"
+                                               ng-disabled="goodsSelection.company == null"
+                                               ng-change="onSelectAllCompanyGoodsChecked()"
+                                               ng-model="isSelectAllCompanyGoods" />
+                                        تمام داروهای شرکت
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" ng-click="onAddGoodsSelected()"
+                                                ng-disabled="viewModel.isGeneralGoal"
+                                                class="btn btn-success">
+
+                                            <i class="fa fa-plus-circle"></i>
+                                            <span>اضافه کردن دارو(ها)</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12 ls_divider" ng-show="!viewModel.isGeneralGoal">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">دارو های انتخاب شده</h3>
+                                    <ul class="panel-control">
+                                        <li>
+                                            <a class="editor" ng-href="javascript:void(0)"
+                                               ng-click="onEditGoods()">
+                                                <i class="blue fa fa-edit fa-2x"></i>
+                                            </a>
+
+                                        </li>
+                                        <li>
+                                            <a class="editor" ng-href="javascript:void(0)"
+                                               ng-click="onRemoveGoods()">
+                                                <i class="blue fa fa-remove fa-2x"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <div style="overflow: auto; height:180px;">
+                                            <js-tree id="treeGoods"
+                                                     tree-data="scope"
+                                                     tree-model="treeDataSource"
+                                                     tree-events="changed:onChangedTreeNode">
+                                            </js-tree>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row"></div>
+                        <div class="modal-footer ">
+                            <button type="submit" name="Add" class="btn btn-success">
+                                <i class="fa fa-check"></i>
+                                <span>ثبت</span>
+                            </button>
+                            <button type="button" class="btn btn-default" data-ng-click="cancel()">
+                                <i class="fa fa-mail-forward"></i>
+                                <span>بازگشت</span>
+                            </button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
