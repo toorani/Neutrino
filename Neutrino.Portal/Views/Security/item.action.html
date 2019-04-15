@@ -1,0 +1,110 @@
+﻿<div ng-controller="item.actionController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form novalidate role="form" esp-validate-complete="submit()"
+                      esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                      class="form-horizontal ls_form" name="form">
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                نوع فعالیت
+                            </label>
+                            <div class="col-md-4">
+                                <select ng-model="viewModel.actionTypeId"
+                                        class="form-control"
+                                        ng-options="item.id as item.title for item in appActionTypes">
+                                    <option selected value="" > !-- انتخاب کنید --! </option>
+                                </select>
+                            </div>
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                درخت فعالیت ها
+                            </label>
+                            <div class="col-md-4">
+                                <div style="overflow: auto; height:170px;">
+                                    <js-tree tree-data="scope"
+                                             tree-model="treeModel"
+                                             tree-plugins="wholerow"
+                                             tree-events="changed:changedActionTreeNode"></js-tree>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                عنوان فارسی فعالیت
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control validate[required]" name="computingValue"
+                                       ng-model="viewModel.faTitle"
+                                       placeholder="عنوان فارسی فعالیت را وارد کنید">
+                            </div>
+                            <label class="col-md-2 control-label">
+                                عنوان انگلیسی فعالیت
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control dir-ltr" name="computingValue"
+                                       ng-model="viewModel.title"
+                                       placeholder="عنوان انگلیسی فعالیت را وارد کنید">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                Html Url
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control dir-ltr" name="computingValue"
+                                       ng-model="viewModel.htmlUrl"
+                                       placeholder="Enter html url">
+                            </div>
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                Action Url
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control dir-ltr"
+                                       ng-model="viewModel.actionUrl"
+                                       placeholder="Enter action url">
+                            </div>
+                        </div>
+
+                    </div>
+                   
+                    <div class="modal-footer">
+                        <button type="submit" name="Add" class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            <span>ثبت</span>
+                        </button>
+                        <button type="button" class="btn btn-danger" ng-show="viewModel.id != 0"
+                                data-ng-click="delete()">
+                            <i class="fa fa-trash-o"></i>
+                            <span>حذف</span>
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="cancel()">
+                            <i class="fa fa-close"></i>
+                            <span>بازگشت</span>
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
