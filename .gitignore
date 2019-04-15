@@ -8,3 +8,7 @@ bin
 obj
 packages
 build
+angular
+jquery
+bootstrap
+
