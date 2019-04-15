@@ -36,8 +36,8 @@ namespace Neutrino.Business
         #region [ Constructor(s) ]
         public BranchGoalBatchRules()
         {
-            RuleFor(entity => entity.Items)
-               .SetCollectionValidator(x => new BranchGoalBatchItemRules());
+            RuleForEach(entity => entity.Items)
+               .SetValidator(x => new BranchGoalBatchItemRules());
             RuleFor(entity => entity.Items)
                 .Must(x => CheckTotalPercent(x))
                 .WithMessage("جمع درصد سهام وارد شده برای مراکز نباید بیشتر از 100 باشد");

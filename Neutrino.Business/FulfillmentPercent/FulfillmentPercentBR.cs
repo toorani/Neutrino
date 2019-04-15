@@ -64,8 +64,8 @@ namespace Neutrino.Business
         #region [ Constructor(s) ]
         public FulfillmentPercentRules(NeutrinoUnitOfWork unitOfWork)
         {
-            RuleFor(entity => entity)
-               .SetCollectionValidator(x => new FulfillmentPercentBR(unitOfWork));
+            RuleForEach(entity => entity)
+               .SetValidator(x => new FulfillmentPercentBR(unitOfWork));
 
         }
         #endregion

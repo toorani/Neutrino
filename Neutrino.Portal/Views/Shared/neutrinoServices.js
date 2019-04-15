@@ -135,7 +135,7 @@ function ($http, $location, $window, blockUI, envService) {
             content: messageBox
             , className: 'alert alert-danger'
             , dismissButton: true
-            ,timeout : 8000
+            ,timeout : 4000
             , animation: 'fade'
             , horizontalPosition: 'right'
             , verticalPosition: 'top'

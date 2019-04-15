@@ -56,6 +56,7 @@ namespace Neutrino.Data.EntityFramework
         public IEntityRepository<GoodsCategory> GoodsCategoryDataService { get; private set; }
         public IEntityRepository<GoalNonFulfillmentPercent> GoalNonFulfillmentPercentDataService { get; private set; }
         public IEntityRepository<GoalNonFulfillmentBranch> GoalNonFulfillmentBranchDataService { get; private set; }
+        public IEntityRepository<GoalGoodsCategoryGoods> GoalGoodsCategoryGoodsDataService { get; private set; }
 
         #endregion
 
@@ -95,6 +96,7 @@ namespace Neutrino.Data.EntityFramework
             , IEntityRepository<GoodsCategory> goodsCategoryDS
             , IEntityRepository<GoalNonFulfillmentPercent> goalNonFulfillmentPercentDS
             , IEntityRepository<GoalNonFulfillmentBranch> goalNonFulfillmentBranchDS
+            , IEntityRepository<GoalGoodsCategoryGoods> goalGoodsCategoryGoodsDS
            )
         {
             this.context = context;
@@ -132,7 +134,8 @@ namespace Neutrino.Data.EntityFramework
             GoodsCategoryDataService = goodsCategoryDS;
             GoalNonFulfillmentPercentDataService = goalNonFulfillmentPercentDS;
             GoalNonFulfillmentBranchDataService = goalNonFulfillmentBranchDS;
-        }
+            GoalGoodsCategoryGoodsDataService = goalGoodsCategoryGoodsDS;
+    }
         #endregion
 
         #region [ Public Method(s) ]

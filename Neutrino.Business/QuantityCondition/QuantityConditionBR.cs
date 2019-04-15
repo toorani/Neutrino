@@ -1,36 +1,38 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
+using Neutrino.Data.EntityFramework;
 using Neutrino.Entities;
 
 namespace Neutrino.Business
 {
-    public class QuantityConditionBR : AbstractValidator<QuantityCondition>
+    public class QuantityConditionBR : NeutrinoValidator<QuantityCondition>
     {
-        public QuantityConditionBR()
+        public QuantityConditionBR(NeutrinoUnitOfWork unitOfWork):base(unitOfWork)
         {
             RuleFor(x => x.GoalId)
                 .NotEqual(0)
                 .WithMessage("اطلاعات هدف موجود نمیباشد");
 
-            RuleFor(x => x.Quantity)
-                .NotEqual(0)
-                .WithMessage("تعداد ایتم را مشخص نماید");
+            RuleFor(x => x)
+                .Must(x => x.Quantity != 0)
+                .WithMessage("تعداد ایتم را مشخص نماید")
+                .Must(entity => checkedLessThanGoodsCount(entity))
+                .WithMessage("تعداد ایتم باید از تعداد داروهای موجود در هدف کمتر یا مساوی باشد");
 
-            RuleFor(x => x.ExtraEncouragePercent)
-                .NotEmpty()
-                .WithMessage("درصد پاداش اضافی را مشخص نماید");
-
-            //RuleFor(x => x.ForthCasePercent)
-            //    .NotEqual(0)
-            //    .WithMessage("درصد حالت چهارم را مشخص نماید");
-
-            //RuleFor(x => x.NotReachedPercent)
-            //    .NotEqual(0)
-            //    .WithMessage("درصد نزده را مشخص نماید");
-
-            //RuleFor(x => x.GoodsQuantityConditions)
-            //    .SetCollectionValidator(new GoodsQuantityConditionRule());
+            When(x => x.QuantityConditionTypeId == QuantityConditionTypeEnum.DependedOnGoal, () =>
+             {
+                 RuleFor(x => x.ExtraEncouragePercent)
+                 .NotEmpty()
+                 .WithMessage("درصد پاداش اضافی را مشخص نماید");
+             });
         }
 
+        private bool checkedLessThanGoodsCount(QuantityCondition entity)
+        {
+            var goalEntity = unitOfWork.GoalDataService.FirstOrDefault(x => x.Id == entity.GoalId);
+            var count = unitOfWork.GoalGoodsCategoryGoodsDataService.GetCount(x => x.GoalGoodsCategoryId == goalEntity.GoalGoodsCategoryId);
+            return count >= entity.Quantity;
+        }
     }
 
     class GoodsQuantityConditionRule : AbstractValidator<GoodsQuantityCondition>
@@ -47,8 +49,8 @@ namespace Neutrino.Business
             RuleFor(x => x.GoodsId)
                 .NotEqual(0)
                 .WithMessage("اطلاعات فراورده موجود نمیباشد");
-            RuleFor(x => x.BranchQuantityConditions)
-                .SetCollectionValidator(x => new BranchQuantityConditionRules(x.Goods));
+            RuleForEach(x => x.BranchQuantityConditions)
+                .SetValidator(x => new BranchQuantityConditionRules(x.Goods));
         }
     }
 

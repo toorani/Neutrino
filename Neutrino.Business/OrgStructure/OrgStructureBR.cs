@@ -17,8 +17,8 @@ namespace Neutrino.Business
                 .WithMessage("اطلاعاتی جهت ثبت وجود ندارد")
                 .Configure(x => x.CascadeMode = CascadeMode.StopOnFirstFailure);
 
-            RuleFor(x => x)
-                .SetCollectionValidator(x=> new OrgStructureBR());
+            RuleForEach(x => x)
+                .SetValidator(x=> new OrgStructureBR());
         }
     }
     public class OrgStructureBR : NeutrinoValidator<OrgStructure>

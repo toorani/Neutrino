@@ -52,8 +52,8 @@ namespace Neutrino.Business
                 .Must(x => x.Count != 0)
                 .WithMessage(".پاداش و جریمه هر دو نامشخص میباشد شما باید یکی از این دو ایتم را انتخاب کنید");
 
-            RuleFor(x => x.Items)
-                .SetCollectionValidator(new GoalStepItemInfoRules());
+            RuleForEach(x => x.Items)
+                .SetValidator(new GoalStepItemInfoRules());
 
 
             When(x => x.GoalTypeId == GoalTypeEnum.Supplier, () =>

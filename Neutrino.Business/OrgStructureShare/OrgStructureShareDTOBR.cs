@@ -14,8 +14,8 @@ namespace Neutrino.Business
             RuleFor(x => x.Branch)
                 .NotNull()
                 .WithMessage("مرکز را مشخص کنید");
-            RuleFor(x => x.Items)
-                .SetCollectionValidator(new OrgStructureShareBR());
+            RuleForEach(x => x.Items)
+                .SetValidator(new OrgStructureShareBR());
         
         }
 

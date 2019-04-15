@@ -517,6 +517,10 @@
     <Compile Include="Migrations\201904121443503_addQuantityConditionTypeId_alterQuantityCondition.Designer.cs">
       <DependentUpon>201904121443503_addQuantityConditionTypeId_alterQuantityCondition.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904151830561_alterDb.cs" />
+    <Compile Include="Migrations\201904151830561_alterDb.Designer.cs">
+      <DependentUpon>201904151830561_alterDb.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NeutrinoRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -852,6 +856,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904121443503_addQuantityConditionTypeId_alterQuantityCondition.resx">
       <DependentUpon>201904121443503_addQuantityConditionTypeId_alterQuantityCondition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904151830561_alterDb.resx">
+      <DependentUpon>201904151830561_alterDb.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

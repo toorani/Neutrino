@@ -17,8 +17,8 @@ namespace Neutrino.Business
     {
         public CostCoefficientBusinessRules()
         {
-            RuleFor(x => x.Records)
-                .SetCollectionValidator(new CostCoefficientItemBusinessRules());
+            RuleForEach(x => x.Records)
+                .SetValidator(new CostCoefficientItemBusinessRules());
         }
        
     }

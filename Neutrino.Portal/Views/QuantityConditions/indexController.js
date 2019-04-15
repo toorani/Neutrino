@@ -24,11 +24,14 @@ function ($scope, $filter, $compile, $location, $timeout, $routeParams, ajaxServ
     $scope.selection = "all";
     $scope.isEditMode = false;
     $scope.initializeController = function () {
-        $scope.title = 'شرط تعدادی هدف';
+        $scope.title = ' تعریف هدف تعدادی مشروط';
         var goalIdAndQuntityType = ($routeParams.id || '');
         if (goalIdAndQuntityType != '') {
             $scope.quantityCondition.goalId = goalIdAndQuntityType.substring(0, goalIdAndQuntityType.indexOf('-'));
             $scope.quantityCondition.quantityConditionTypeId = goalIdAndQuntityType.substr(goalIdAndQuntityType.indexOf('-') + 1, 1);
+            if ($scope.quantityCondition.quantityConditionTypeId == 2) {
+                $scope.title = 'تعریف هدف تعدادی';
+            }
             loadData();
         }
 

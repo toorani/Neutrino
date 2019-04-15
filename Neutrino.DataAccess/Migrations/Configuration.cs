@@ -25,6 +25,8 @@
         protected override void Seed(Neutrino.Data.EntityFramework.NeutrinoContext context)
         {
             //  This method will be called after migrating to the latest version.
+            //if (System.Diagnostics.Debugger.IsAttached == false)
+            //    System.Diagnostics.Debugger.Launch();
 
 
             context.GoalGoodsCategoryTypes.SeedEnumValues<GoalGoodsCategoryType, GoalGoodsCategoryTypeEnum>(e => new GoalGoodsCategoryType(e));
@@ -275,9 +277,7 @@
             //adminUser.UserRoles.Add(adminRole);
             //context.Users.AddOrUpdate(x => x.UserName, adminUser);
 
-            //if (System.Diagnostics.Debugger.IsAttached == false)
-            //    System.Diagnostics.Debugger.Launch();
-
+          
 
 
 

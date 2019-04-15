@@ -12,8 +12,8 @@ namespace Neutrino.Business
             RuleFor(x => x.Count)
                 .NotEqual(0)
                 .WithMessage("اطلاعاتی جهت ثبت وجود ندارد");
-            RuleFor(x => x)
-                .SetCollectionValidator(x => new FulfillmentPromotionConditionBR());
+            RuleForEach(x => x)
+                .SetValidator(x => new FulfillmentPromotionConditionBR());
 
         }
         #endregion
