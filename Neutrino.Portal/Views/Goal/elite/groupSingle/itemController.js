@@ -246,9 +246,7 @@ function ($scope, $location, $filter, $timeout, $routeParams, ajaxService, modal
             goal = goalDataGathering();
             goal.goalSteps = []
             var bodyText = 'مطمئن هستید ؟';
-            var goodsCatTitle = $filter('getById')($scope.goalGoodsCategoryTypes, 3).name; // generalGoal
-            if (goal.goalGoodsCategoryTypeId != 3) // generalGoal
-                goodsCatTitle = $filter('getById')($scope.goalGoodsCategories, goal.goalGoodsCategoryId).name;
+            var goodsCatTitle = ' هدف ' + $filter('getById')($scope.goalGoodsCategories, $scope.goal.goalGoodsCategoryId).name;
             bodyText = ' در صورت حذف در محدوده <strong>' + goal.startDate + '</strong> ';
             if (goal.endDate != undefined) {
                 bodyText += 'تا <strong>' + goal.endDate + '</strong>'
@@ -275,7 +273,7 @@ function ($scope, $location, $filter, $timeout, $routeParams, ajaxService, modal
                         ajaxService.ajaxPost(goal, "api/goalService/delete",
                             function (response) {
                                 alertService.showSuccess(response.data.actionResult.returnMessage);
-                                $location.url('goal/distributor/index');
+                                $location.url('goal/elite/groupSingle/index');
                             },
                             function (response) {
                                 alertService.showError(response.data.returnMessage);
