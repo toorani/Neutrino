@@ -815,8 +815,6 @@
     <Content Include="Views\Security\item.action.html" />
     <Content Include="Views\Security\item.permissionController.js" />
     <Content Include="Views\Security\item.actionController.js" />
-    <Content Include="Views\ServicesMonitoring\index.html" />
-    <Content Include="Views\ServicesMonitoring\indexController.js" />
     <Content Include="Views\Shared\neutrinoServices.js" />
     <Content Include="Views\Shared\modal.tmpl.html" />
     <Content Include="Views\Shared\angular.dataTable.tmpl.html" />
