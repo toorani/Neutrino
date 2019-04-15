@@ -49,7 +49,7 @@ namespace Neutrino.Portal.Tests
         }
 
         [TestMethod]
-        public async Task SameDbContextinUOWAndRepository()
+        public void SameDbContextinUOWAndRepository()
         {
             var uow = _kernel.Get<NeutrinoUnitOfWork>();
 
@@ -67,16 +67,16 @@ namespace Neutrino.Portal.Tests
             //goalBusiness.CreateGoalAsync(goal);
 
             GoalServiceController goalServiceController = new GoalServiceController(goalBusiness);
-            await goalServiceController.Add(new Models.GoalViewModel()
-            {
-                ComputingTypeId = 2,
-                GoalGoodsCategoryId = 5098,
-                GoalGoodsCategoryTypeId = 1,
-                GoalTypeId = 1,
-                //2019-01-20
-                StartDate = "1397/10/01",
-                EndDate = "1397/10/30"
-            });
+            //await goalServiceController.Add(new Models.GoalViewModel()
+            //{
+            //    ComputingTypeId = 2,
+            //    GoalGoodsCategoryId = 5098,
+            //    GoalGoodsCategoryTypeId = 1,
+            //    GoalTypeId = 1,
+            //    //2019-01-20
+            //    StartDate = "1397/10/01",
+            //    EndDate = "1397/10/30"
+            //});
 
 
             foreach (var item in uow.context.ChangeTracker.Entries())
