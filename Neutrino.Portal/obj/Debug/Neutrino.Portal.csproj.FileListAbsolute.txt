@@ -1,2 +1,0 @@
-I:\Projects\Repo\Neutrino.Portal\obj\Debug\Neutrino.Portal.csproj.App.config
-I:\Projects\Repo\Neutrino.Portal\obj\Debug\Neutrino.Portal.csprojResolveAssemblyReference.cache

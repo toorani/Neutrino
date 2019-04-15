@@ -51,16 +51,16 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Espresso.Core">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.Core.dll</HintPath>
+      <HintPath>..\build\Espresso.Core.dll</HintPath>
     </Reference>
     <Reference Include="Espresso.DataAccess">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.DataAccess.dll</HintPath>
+      <HintPath>..\build\Espresso.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="Espresso.Entites">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.Entites.dll</HintPath>
+      <HintPath>..\build\Espresso.Entites.dll</HintPath>
     </Reference>
     <Reference Include="Espresso.Identity">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.Identity.dll</HintPath>
+      <HintPath>..\build\Espresso.Identity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

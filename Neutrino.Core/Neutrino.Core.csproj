@@ -30,6 +30,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Espresso.DataAccess, Version=2019.4.9.494, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\build\Espresso.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Espresso.Entites, Version=2019.4.9.344, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\build\Espresso.Entites.dll</HintPath>
+    </Reference>
+    <Reference Include="Espresso.Utilities, Version=2019.4.9.80, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\build\Espresso.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -70,7 +82,20 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Neutrino.Business.Entities\Neutrino.Entities.csproj">
+      <Project>{223c1caf-caa4-4ffd-8e22-11566858a8fb}</Project>
+      <Name>Neutrino.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neutrino.DataAccess\Neutrino.Data.EntityFramework.csproj">
+      <Project>{f58dba9d-0b74-4ac6-b3c8-be32769d2d7f}</Project>
+      <Name>Neutrino.Data.EntityFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neutrino.Interfaces\Neutrino.Interfaces.csproj">
+      <Project>{d0e43a2b-7e07-4ff8-b2cb-6b3ba58ccf47}</Project>
+      <Name>Neutrino.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
