@@ -25,6 +25,7 @@ namespace Neutrino.Portal.Tests
         public Commission_Test()
             :base()
         {
+
         }
 
         [TestMethod]

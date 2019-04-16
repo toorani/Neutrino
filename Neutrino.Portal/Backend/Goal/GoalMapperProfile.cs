@@ -34,7 +34,7 @@ namespace Neutrino.Portal.ProfileMapper
                     {
                         decimal result = 0;
                         if (x.GoalGoodsCategoryTypeId >= GoalGoodsCategoryTypeEnum.TotalSalesGoal
-                        && x.GoalGoodsCategoryTypeId <= GoalGoodsCategoryTypeEnum.ReceiptGovernGoal)
+                        && x.GoalGoodsCategoryTypeId <= GoalGoodsCategoryTypeEnum.AggregationGoal)
                         {
                             result = x.GoalSteps.FirstOrDefault().ComputingValue;
                         }

@@ -130,7 +130,8 @@ namespace Neutrino.Business
 
                 var lstGoals = await unitOfWork.GoalDataService.GetAsync(x => x.Month == entity.Month && x.Year == entity.Year
                 && x.IsUsed == false
-                && (x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal || x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.TotalSalesGoal)
+                && (x.GoalGoodsCategoryTypeId != GoalGoodsCategoryTypeEnum.Group
+                && x.GoalGoodsCategoryTypeId != GoalGoodsCategoryTypeEnum.Single)
                 , includes: x => new { x.BranchGoals, x.GoalSteps });
 
                 var lst_totalFulfillPromotions = await unitOfWork.TotalFulfillPromotionPercentDataService.GetAllAsync();
@@ -248,15 +249,24 @@ namespace Neutrino.Business
         {
             //  هدف کل و وصول و سهم مراکز از اهداف تعریف شده
             var totalSalesGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.TotalSalesGoal);
-            var receiptGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal);
+            var receiptTotalGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal);
+            var receiptPrivateGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal);
+            var aggregationGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.AggregationGoal);
 
             var totalGeneralGoalAmount = totalSalesGoal.GoalSteps.FirstOrDefault().ComputingValue;
-            var totalReceiptGoalAmount = receiptGoal.GoalSteps.FirstOrDefault().ComputingValue;
+            var receiptTotalGoalAmount = receiptTotalGoal.GoalSteps.FirstOrDefault().ComputingValue;
+            var receiptPrivateGoalAmount = receiptPrivateGoal.GoalSteps.FirstOrDefault().ComputingValue;
+            var aggregationGoalAmount = 0m;
+            if (aggregationGoal != null)
+            {
+                aggregationGoalAmount = aggregationGoal.GoalSteps.FirstOrDefault().ComputingValue;
+            }
+            
 
 
             var query_branchPromotion = await (from brSal in (from br in unitOfWork.BranchSalesDataService.GetQuery()
-                                                              where br.Month == totalSalesGoal.Month
-                                                              && br.Year == totalSalesGoal.Year
+                                                              where br.Month == entity.Month
+                                                              && br.Year == entity.Year
                                                               && br.Deleted == false
                                                               group br by br.BranchId into grp
                                                               select new
@@ -271,7 +281,7 @@ namespace Neutrino.Business
                                                   && x.Deleted == false).DefaultIfEmpty()
                                                select new
                                                {
-                                                   BranchId = brSal.BranchId,
+                                                   brSal.BranchId,
                                                    TotalReceiptAmount = br_sales_receipt != null ? br_sales_receipt.TotalAmount : 0,
                                                    TotalSalesAmount = brSal.TotalAmount,
                                                }).ToListAsync();
@@ -295,7 +305,7 @@ namespace Neutrino.Business
                 branchPromotion.TotalSalesSpecifiedAmount = (totalGeneralGoalAmount * branchPromotion.TotalSalesSpecifiedPercent) / 100;
                 branchPromotion.TotalSalesReachedPercent = Math.Round((branchPromotion.TotalSalesAmount / branchPromotion.TotalSalesSpecifiedAmount) * 100, MidpointRounding.AwayFromZero);
 
-                branchPromotion.TotalReceiptSpecifiedAmount = receiptGoal.BranchGoals.Single(bg => bg.BranchId == branchPromotion.BranchId).Amount.Value;
+                branchPromotion.TotalReceiptSpecifiedAmount = receiptTotalGoal.BranchGoals.Single(bg => bg.BranchId == branchPromotion.BranchId).Amount.Value;
                 branchPromotion.TotalReceiptReachedPercent = Math.Round((branchPromotion.TotalReceiptAmount / branchPromotion.TotalReceiptSpecifiedAmount) * 100, MidpointRounding.AwayFromZero);
 
                 var range = new FulfillmentPromotionCondition();
@@ -347,8 +357,8 @@ namespace Neutrino.Business
                 {
                     BranchId = branchPromotion.BranchId,
                     SellerReachedPercent = range.SellerPromotion.Value,
-                    Year = receiptGoal.Year,
-                    Month = receiptGoal.Month,
+                    Year = receiptTotalGoal.Year,
+                    Month = receiptTotalGoal.Month,
                     SellerFulfillmentPercent = range.SellerPromotion
                 });
                 entity.BranchPromotions.Add(branchPromotion);

@@ -119,7 +119,7 @@ namespace Neutrino.Business
                     }
                 }
                 else if (goalEntity.GoalGoodsCategoryTypeId >= GoalGoodsCategoryTypeEnum.TotalSalesGoal &&
-                    goalEntity.GoalGoodsCategoryTypeId <= GoalGoodsCategoryTypeEnum.ReceiptGovernGoal)
+                    goalEntity.GoalGoodsCategoryTypeId <= GoalGoodsCategoryTypeEnum.AggregationGoal)
                 {
                     if (goalEntity.StartDate == DateTime.MinValue)
                     {

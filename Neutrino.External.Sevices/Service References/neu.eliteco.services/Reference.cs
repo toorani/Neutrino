@@ -706,10 +706,10 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         private string NameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NationalCodeField;
+        private string NamePostField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Neutrino.External.Sevices.neu.eliteco.services.Positions PositionField;
+        private string NationalCodeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> ccgorohField;
@@ -793,6 +793,19 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NamePost {
+            get {
+                return this.NamePostField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NamePostField, value) != true)) {
+                    this.NamePostField = value;
+                    this.RaisePropertyChanged("NamePost");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string NationalCode {
             get {
                 return this.NationalCodeField;
@@ -801,19 +814,6 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
                 if ((object.ReferenceEquals(this.NationalCodeField, value) != true)) {
                     this.NationalCodeField = value;
                     this.RaisePropertyChanged("NationalCode");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public Neutrino.External.Sevices.neu.eliteco.services.Positions Position {
-            get {
-                return this.PositionField;
-            }
-            set {
-                if ((this.PositionField.Equals(value) != true)) {
-                    this.PositionField = value;
-                    this.RaisePropertyChanged("Position");
                 }
             }
         }
@@ -852,107 +852,6 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Positions", Namespace="http://schemas.datacontract.org/2004/07/Elite.Neutrino.Services")]
-    public enum Positions : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        ViceCEO = 1000,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        HRManager = 1001,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        HREmployee = 1002,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CommercialManager = 1003,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CommercialEmployee = 1004,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        ITManager = 1005,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        ITEmployee = 1006,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        FinancialManager = 1007,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        FinancialEmployee = 1008,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        SalesManager_ZoneOne = 1009,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        SalesEmployee_ZoneOne = 1010,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        SalesManager_ZoneTwo = 1011,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        SalesEmployee_ZoneTwo = 1012,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Seller = 1013,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        SalesSupervisor = 1014,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        SalesOperator = 1015,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Accountant = 1016,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        AccountantSupervisor = 1017,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        BranchManager = 1018,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        AccountantEmployee = 1019,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        OperationResponsible = 1020,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Officer = 1021,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        StoreSupervisor = 1022,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Storekeeper = 1023,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        StorekeeperAssistance = 1024,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Storeworker = 1025,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        StoreOperator = 1026,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Driver = 1027,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Carrier = 1028,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Servant = 1029,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Gguard = 1030,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Other = 1031,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
