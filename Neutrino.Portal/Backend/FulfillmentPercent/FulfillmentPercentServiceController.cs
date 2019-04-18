@@ -39,23 +39,11 @@ namespace Neutrino.Portal.WebApiControllers
             {
                 return CreateErrorResponse(lstGoalFullfillments);
             }
-            List<FulfillmentPercentViewModel> result = new List<FulfillmentPercentViewModel>();
+            
             var mapper = GetMapper();
+            List<FulfillmentPercentViewModel> result = mapper.Map<List<FulfillmentPercentViewModel>>(lstGoalFullfillments.ResultValue);
 
-            lstGoalFullfillments.ResultValue.ForEach(x =>
-            {
-                result.Add(mapper.Map<FulfillmentPercent, FulfillmentPercentViewModel>(x));
-            });
-
-            if (result.Count == 0)
-            {
-                lstGoalFullfillments.ReturnMessage.Add("اطلاعات مراکز وجود ندارد");
-                return CreateErrorResponse(lstGoalFullfillments);
-            }
-
-            return CreateSuccessedListResponse<FulfillmentPercentViewModel>(result);
-
-
+            return CreateSuccessedListResponse(result);
         }
 
         [Route("addFulfillment"), HttpPost]
@@ -72,7 +60,7 @@ namespace Neutrino.Portal.WebApiControllers
                 return CreateErrorResponse(businessResult);
             }
 
-            postedViewModel.Where(x => (x.TouchedGoalPercent != 0 || x.EncouragePercent != 0) && x.Id == 0)
+            postedViewModel.Where(x => (x.ManagerFulfillmentPercent != 0 || x.SellerFulfillmentPercent != 0) && x.Id == 0)
                 .ToList()
                 .ForEach(vm =>
                 {
@@ -92,9 +80,6 @@ namespace Neutrino.Portal.WebApiControllers
             {
                 cfg.AddProfile(new FulfillmentPercentMapperProfile());
                 cfg.AddProfile(new BranchMapperProfile());
-                cfg.AddProfile(new GoalStepMapperProfile());
-                cfg.AddProfile(new GoalMapperProfile());
-
 
             });
             return config.CreateMapper();

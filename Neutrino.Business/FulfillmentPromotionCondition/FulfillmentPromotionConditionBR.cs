@@ -28,6 +28,9 @@ namespace Neutrino.Business
                 || x.SellerPromotion.HasValue || x.TotalReceiptFulfilledPercent.HasValue
                 || x.TotalSalesFulfilledPercent.HasValue)
                 .WithMessage("یکی از فیلد های اطلاعاتی باید مشخص شود");
+            RuleFor(x => x)
+                .Must(x => x.SellerPromotion.HasValue && x.ManagerPromotion.HasValue)
+                .WithMessage("امکان ثبت رکورد در زمانی که هر دو پورسانت فروشنده و مدیر مشخص شده است ،وجود ندارد");
         }
     }
 }

@@ -13,38 +13,30 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">
-                            تاریخ شروع هدف
-                        </label>
-                        <div class="col-md-2">
-                            <input type="text"
-                                   ng-model="viewModel.goal.startDate"
-                                   disabled>
-                        </div>
-                        <label class="col-md-2 control-label">
-                            تاریخ پایان هدف
-                        </label>
-                        <div class="col-md-2">
-                            <input type="text"
-                                   ng-model="viewModel.goal.endDate"
-                                   disabled>
-                        </div>
-                        <label class="col-md-2 control-label">
-                            نوع هدف
-                        </label>
-                        <div class="col-md-2">
-                            <input type="text"
-                                   ng-model="viewModel.goal.goalGoodsCategory.name"
-                                   ng-trim=false
-                                   disabled>
-
-                        </div>
-
+                    <label class="col-md-2 control-label">
+                        تاریخ شروع هدف
+                    </label>
+                    <div class="col-md-4">
+                        {{viewModel.goal.startDate}}
+                    </div>
+                    <label class="col-md-2 control-label">
+                        تاریخ پایان هدف
+                    </label>
+                    <div class="col-md-4">
+                        {{viewModel.goal.endDate}}
                     </div>
                 </div>
                 <br />
-                <div class="ls_divider row form-group">
+                <div class="row">
+                    <label class="col-md-2 control-label">
+                        نوع هدف
+                    </label>
+                    <div class="col-md-6">
+                        {{viewModel.goal.goalGoodsCategory.name}}
+                    </div>
+                </div>
+                <div class="ls_divider"></div>
+                <div class="row ">
                     <label class="col-md-2 control-label">
                         ورود اطلاعات براساس
                     </label>
@@ -60,11 +52,11 @@
                                data-ng-model="dataEntryMethod"
                                value="2"
                                ng-checked="{{dataEntryMethod == 2}}" />
-                        <span>مبلغ</span>
+                        <span>مقدار</span>
                     </div>
                 </div>
 
-                <div class="ls_divider row form-group">
+                <div class="row form-group">
                     <label class="col-md-8 control-label">
 
                     </label>
@@ -108,7 +100,7 @@
                                     <td class="align-center" ng-repeat="step in goalSteps track by step.id">
                                         <div class="col-sm-12">
                                             <span>
-                                                مبلغ پایه پله شماره
+                                                مقدار پایه پله شماره
                                                 {{$index + 1}}
                                             </span>
                                         </div>
@@ -154,14 +146,14 @@
                                         </span>
                                     </div>
                                     <div class="col-sm-12 dir-ltr" ng-if="dataEntryMethod == 2">
-                                        
+
                                         <input type="text" class="form-control dir-ltr"
                                                ng-model="record.temp_amount"
                                                ng-trim=false
                                                ng-change="calculateTotalPercent()"
                                                ng-if="$index== 0"
                                                awnum="price">
-                                       
+
                                         <span class="yellow" ng-if="$index!= 0">
                                             {{step.computingValue * record.percent / 100 | number}}
                                         </span>

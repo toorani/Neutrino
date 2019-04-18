@@ -521,6 +521,14 @@
     <Compile Include="Migrations\201904151830561_alterDb.Designer.cs">
       <DependentUpon>201904151830561_alterDb.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904181945312_alterBranchPromotion_addaggeration.cs" />
+    <Compile Include="Migrations\201904181945312_alterBranchPromotion_addaggeration.Designer.cs">
+      <DependentUpon>201904181945312_alterBranchPromotion_addaggeration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904182038261_alterFulfillmentPercent_addfulfilledcolumns.cs" />
+    <Compile Include="Migrations\201904182038261_alterFulfillmentPercent_addfulfilledcolumns.Designer.cs">
+      <DependentUpon>201904182038261_alterFulfillmentPercent_addfulfilledcolumns.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NeutrinoRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -859,6 +867,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904151830561_alterDb.resx">
       <DependentUpon>201904151830561_alterDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904181945312_alterBranchPromotion_addaggeration.resx">
+      <DependentUpon>201904181945312_alterBranchPromotion_addaggeration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904182038261_alterFulfillmentPercent_addfulfilledcolumns.resx">
+      <DependentUpon>201904182038261_alterFulfillmentPercent_addfulfilledcolumns.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

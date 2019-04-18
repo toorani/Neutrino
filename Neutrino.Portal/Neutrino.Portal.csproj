@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -752,6 +753,8 @@
     <Content Include="Views\BranchGoal\itemController.js" />
     <Content Include="Views\BranchReceiptGoalPercent\item.html" />
     <Content Include="Views\BranchReceiptGoalPercent\itemController.js" />
+    <Content Include="Views\FinalOperationRpt\item.html" />
+    <Content Include="Views\FinalOperationRpt\itemController.js" />
     <Content Include="Views\GoalNonFulfillment\item.html" />
     <Content Include="Views\GoalNonFulfillment\itemController.js" />
     <Content Include="Views\Goal\elite\aggregation\index.html" />

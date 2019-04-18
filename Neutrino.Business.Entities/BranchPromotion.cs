@@ -43,7 +43,7 @@ namespace Neutrino.Entities
         /// <summary>
         ///  مقدار مشخص شده مرکز برای دستیابی به هدف وصول خصوصی
         /// </summary>
-        public decimal PrivateReceiptAmountSpecified { get; set; }
+        public decimal PrivateReceiptSpecifiedAmount { get; set; }
         /// <summary>
         /// مبلغ دست یافته شده برای وصول خصوصی 
         /// </summary>
@@ -81,6 +81,27 @@ namespace Neutrino.Entities
         /// درصد پورسانت دریافت شده هدف کل فروش
         /// </summary>
         public decimal TotalSalesPromotionPercent { get; set; }
+        /// <summary>
+        /// مبلغ کل تجمیعی
+        /// </summary>
+        public decimal AggregationSalesAmount { get; set; }
+        /// <summary>
+        ///  درصد دستیابی هدف تجمیعی
+        /// </summary>
+        public decimal AggregationReachedPercent { get; set; }
+        /// <summary>
+        /// درصد مشخص شده مرکز برای تجمیعی
+        /// </summary>
+        public decimal AggregationSpecifiedPercent { get; set; }
+        /// <summary>
+        /// مقدار مشخص شده مرکز برای هدف تجمیعی
+        /// </summary>
+        public decimal AggregationSpecifiedAmount { get; set; }
+        /// <summary>
+        /// درصد پورسانت دریافت شده هدف تجمیعی
+        /// </summary>
+        public decimal AggregationPromotionPercent { get; set; }
+
         /// <summary>
         /// مبلغ پورسانت دریافت شده هدف کل فروش
         /// </summary>

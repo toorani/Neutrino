@@ -32,6 +32,18 @@ namespace Neutrino.Entities
         /// </summary>
         public int BranchId { get; set; }
         public virtual Branch Branch { get; set; }
+        /// <summary>
+        ///  درصد دستیابی هدف کل فروش یا تجمیعی 
+        /// </summary>
+        public decimal TotalSalesFulfilledPercent { get; set; }
+        /// <summary>
+        /// درصد تحقق هدف وصول کل
+        /// </summary>
+        public decimal TotalReceiptFulfilledPercent { get; set; }
+        /// <summary>
+        /// درصد تحقق هدف وصول خصوصی
+        /// </summary>
+        public decimal PrivateReceiptFulfilledPercent { get; set; }
         #endregion
 
         #region [ Constructor(s) ]

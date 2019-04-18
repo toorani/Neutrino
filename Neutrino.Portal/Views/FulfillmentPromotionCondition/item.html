@@ -82,11 +82,13 @@
                                         <input type="text" class="form-control dir-ltr"
                                                ng-trim="false"
                                                ng-model="item.managerPromotion"
+                                               ng-if="item.sellerPromotion == null"
                                                awnum="percent">
                                     </td>
                                     <td class="align-center">
                                         <input type="text" class="form-control dir-ltr"
                                                ng-trim="false"
+                                               ng-if="item.managerPromotion == null"
                                                ng-model="item.sellerPromotion"
                                                awnum="percent">
                                     </td>

@@ -17,14 +17,8 @@ namespace Neutrino.Portal.ProfileMapper
         public FulfillmentPercentMapperProfile()
         {
             CreateMap<FulfillmentPercent, FulfillmentPercentViewModel>()
-            .ForMember(goalVM => goalVM.YearMonth, opt => opt.ResolveUsing(goalDTO =>
-                 {
-                     var monthName = Utilities.PersianMonthNames().Single(x => x.Key == goalDTO.Month).Value;
-                     return $"{monthName} - {goalDTO.Year}";
-                 }))
-            .ReverseMap()
-            .ForMember(dto => dto.Month, opt => opt.ResolveUsing(x => x.Goal.Month))
-            .ForMember(dto => dto.Year, opt => opt.ResolveUsing(x => x.Goal.Year));
+            .ReverseMap();
+            
             
         }
         #endregion

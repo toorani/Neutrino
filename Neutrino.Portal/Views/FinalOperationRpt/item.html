@@ -1,4 +1,4 @@
-﻿<div ng-controller="fulfillmentPercent.itemController" ng-init="initializeController()" class="fragment {{transitionState}}">
+﻿<div ng-controller="finalOperationRpt.itemController" ng-init="initializeController()" class="fragment {{transitionState}}">
     <div class="row">
         <div class="col-md-12">
             <!--Top header start-->
@@ -63,13 +63,12 @@
                                 <tr>
                                     <td class="align-center" rowspan="2" width="40px">#</td>
                                     <td class="align-center vertical-middle" rowspan="2">مرکز</td>
-                                    <td class="align-center" colspan="3">درصد تحقق</td>
+                                    <td class="align-center" colspan="2">معیار</td>
                                     <td class="align-center" colspan="2">مشمول</td>
                                 </tr>
                                 <tr>
-                                    <td class="align-center">هدف کل یا تجمیعی</td>
-                                    <td class="align-center">وصول کل</td>
-                                    <td class="align-center">وصول خصوصی</td>
+                                    <td class="align-center">رئیس و سرپرست</td>
+                                    <td class="align-center">فروشنده</td>
                                     <td class="align-center">رئیس و سرپرست</td>
                                     <td class="align-center">فروشنده</td>
                                 </tr>
@@ -82,20 +81,17 @@
                                     {{record.branch.name}}
                                 </td>
                                 <td class="align-center">
-                                    {{record.totalSalesFulfilledPercent}}
+                                    {{record.managerReachedPercent}}
                                 </td>
                                 <td class="align-center">
-                                    {{record.totalReceiptFulfilledPercent}}
-                                </td>
-                                <td class="align-center">
-                                    {{record.privateReceiptFulfilledPercent}}
+                                    {{record.sellerReachedPercent}}
+
                                 </td>
                                 <td class="align-center">
                                     <input type="number"
                                            ng-model="record.managerFulfillmentPercent"
                                            ng-disabled="isUsed"
-                                           min="0" max="100"
-                                           step="0.01"
+                                           placeholder="درصد مشمول را وارد کنید"
                                            class="form-control dir-ltr">
 
                                 </td>
@@ -103,8 +99,7 @@
                                     <input type="number"
                                            ng-model="record.sellerFulfillmentPercent"
                                            ng-disabled="isUsed"
-                                           min="0" max="100"
-                                           step="0.01"
+                                           placeholder="درصد مشمول را وارد کنید"
                                            class="form-control dir-ltr">
 
                                 </td>

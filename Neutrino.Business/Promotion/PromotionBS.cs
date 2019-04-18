@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Globalization;
@@ -245,24 +246,42 @@ namespace Neutrino.Business
         #endregion
 
         #region [ Private Method(s) ]
+        class AggregationInfo
+        {
+            public int BranchId { get; set; }
+            public decimal AggregationSalesAmount { get; set; }
+            public double AggregationSalesNumber { get; set; }
+            public AggregationInfo()
+            {
+
+            }
+        }
         private async Task<List<FulfillmentPercent>> Calculate_Fulfillment_BranchPromotion(Promotion entity, List<Goal> lstGoals, List<FulfillmentPromotionCondition> lst_totalFulfillPromotion)
         {
             //  هدف کل و وصول و سهم مراکز از اهداف تعریف شده
-            var totalSalesGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.TotalSalesGoal);
-            var receiptTotalGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal);
-            var receiptPrivateGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal);
-            var aggregationGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.AggregationGoal);
+            Goal totalSalesGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.TotalSalesGoal);
+            Goal receiptTotalGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal);
+            Goal receiptPrivateGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal);
+            Goal aggregationGoal = lstGoals.FirstOrDefault(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.AggregationGoal);
 
             var totalGeneralGoalAmount = totalSalesGoal.GoalSteps.FirstOrDefault().ComputingValue;
             var receiptTotalGoalAmount = receiptTotalGoal.GoalSteps.FirstOrDefault().ComputingValue;
             var receiptPrivateGoalAmount = receiptPrivateGoal.GoalSteps.FirstOrDefault().ComputingValue;
             var aggregationGoalAmount = 0m;
+            var lst_aggregationInfo = new List<AggregationInfo>();
             if (aggregationGoal != null)
             {
                 aggregationGoalAmount = aggregationGoal.GoalSteps.FirstOrDefault().ComputingValue;
+                lst_aggregationInfo = (from brs in unitOfWork.BranchSalesDataService.GetQuery()
+                                       where brs.Month > 1 && brs.Year == entity.Year
+                                       group brs by brs.BranchId into grp
+                                       select new AggregationInfo
+                                       {
+                                           BranchId = grp.Key,
+                                           AggregationSalesAmount = grp.Sum(x => x.TotalAmount),
+                                           AggregationSalesNumber = grp.Sum(x => x.TotalNumber)
+                                       }).ToList();
             }
-            
-
 
             var query_branchPromotion = await (from brSal in (from br in unitOfWork.BranchSalesDataService.GetQuery()
                                                               where br.Month == entity.Month
@@ -277,12 +296,13 @@ namespace Neutrino.Business
                                                join brRec in unitOfWork.BranchReceiptDataService.GetQuery()
                                                on brSal.BranchId equals brRec.BranchId into branch_receipt_leftjoin
                                                from br_sales_receipt in branch_receipt_leftjoin.Where(x =>
-                                                  x.Month == totalSalesGoal.Month && x.Year == totalSalesGoal.Year
+                                                  x.Month == entity.Month && x.Year == entity.Year
                                                   && x.Deleted == false).DefaultIfEmpty()
                                                select new
                                                {
                                                    brSal.BranchId,
                                                    TotalReceiptAmount = br_sales_receipt != null ? br_sales_receipt.TotalAmount : 0,
+                                                   PrivateReceiptAmount = br_sales_receipt != null ? br_sales_receipt.PrivateAmount : 0,
                                                    TotalSalesAmount = brSal.TotalAmount,
                                                }).ToListAsync();
 
@@ -293,6 +313,7 @@ namespace Neutrino.Business
                     BranchId = x.BranchId,
                     TotalReceiptAmount = x.TotalReceiptAmount,
                     TotalSalesAmount = x.TotalSalesAmount,
+                    PrivateReceiptAmount = x.PrivateReceiptAmount != null ? x.PrivateReceiptAmount.Value : 0,
                     Year = entity.Year,
                     Month = entity.Month
                 }).ToList();
@@ -301,66 +322,65 @@ namespace Neutrino.Business
 
             lst_BranchPromotion.ForEach(branchPromotion =>
             {
+
+                //Aggregation data
+                if (aggregationGoal != null)
+                {
+                    AggregationInfo aggregationInfo = lst_aggregationInfo.SingleOrDefault(x => x.BranchId == branchPromotion.BranchId);
+                    if (aggregationInfo != null)
+                    {
+                        branchPromotion.AggregationSpecifiedAmount = aggregationGoal.BranchGoals.Single(bg => bg.BranchId == branchPromotion.BranchId).Amount.Value;
+                        branchPromotion.AggregationReachedPercent = Math.Round(aggregationInfo.AggregationSalesAmount / branchPromotion.AggregationSpecifiedAmount * 100, MidpointRounding.AwayFromZero);
+                    }
+
+                }
+
+                //Total sales data
                 branchPromotion.TotalSalesSpecifiedPercent = totalSalesGoal.BranchGoals.Single(bg => bg.BranchId == branchPromotion.BranchId).Percent.Value;
                 branchPromotion.TotalSalesSpecifiedAmount = (totalGeneralGoalAmount * branchPromotion.TotalSalesSpecifiedPercent) / 100;
                 branchPromotion.TotalSalesReachedPercent = Math.Round((branchPromotion.TotalSalesAmount / branchPromotion.TotalSalesSpecifiedAmount) * 100, MidpointRounding.AwayFromZero);
 
+                //total receipt
                 branchPromotion.TotalReceiptSpecifiedAmount = receiptTotalGoal.BranchGoals.Single(bg => bg.BranchId == branchPromotion.BranchId).Amount.Value;
                 branchPromotion.TotalReceiptReachedPercent = Math.Round((branchPromotion.TotalReceiptAmount / branchPromotion.TotalReceiptSpecifiedAmount) * 100, MidpointRounding.AwayFromZero);
 
-                var range = new FulfillmentPromotionCondition();
+                //private receipt
+                branchPromotion.PrivateReceiptSpecifiedAmount = receiptPrivateGoal.BranchGoals.Single(bg => bg.BranchId == branchPromotion.BranchId).Amount.Value;
+                branchPromotion.PrivateReceiptReachedPercent = Math.Round((branchPromotion.PrivateReceiptAmount / branchPromotion.PrivateReceiptSpecifiedAmount) * 100, MidpointRounding.AwayFromZero);
+
+                //maximum value between aggregation and total sales
+                var max_totalSales_aggregation = branchPromotion.AggregationReachedPercent > branchPromotion.TotalReceiptReachedPercent ? branchPromotion.AggregationReachedPercent : branchPromotion.TotalReceiptReachedPercent;
 
 
-                if (branchPromotion.TotalSalesReachedPercent < branchPromotion.TotalReceiptReachedPercent)
-                {
-                    // درصد فروش کل از درصد وصول کل کمتر میباشد
-
-                    //نزدیکترین محدوده که کوچکتر از درصد دست یافته شده هدف کل میباشد
-                    range = lst_totalFulfillPromotion
+                var fulfillmentPromotion_manager = lst_totalFulfillPromotion
                     .OrderByDescending(x => x.TotalSalesFulfilledPercent)
-                    .FirstOrDefault(x => x.TotalSalesFulfilledPercent <= branchPromotion.TotalSalesReachedPercent);
+                    .FirstOrDefault(x => x.TotalSalesFulfilledPercent <= max_totalSales_aggregation
+                    && x.TotalReceiptFulfilledPercent <= branchPromotion.TotalReceiptReachedPercent
+                    && x.PrivateReceiptFulfilledPercent <= branchPromotion.PrivateReceiptReachedPercent
+                    && x.ManagerPromotion != null);
 
-                    if (range == null)
-                    {
-                        range = lst_totalFulfillPromotion
-                        .OrderBy(x => x.TotalSalesFulfilledPercent).FirstOrDefault();
-                    }
-                }
-                else
-                {
-                    // درصد فروش کل از درصد وصول کل بیشتر میباشد
+                var fulfillmentPromotion_seller = lst_totalFulfillPromotion
+                    .OrderByDescending(x => x.TotalSalesFulfilledPercent)
+                    .FirstOrDefault(x => x.TotalSalesFulfilledPercent <= max_totalSales_aggregation
+                    && x.TotalReceiptFulfilledPercent <= branchPromotion.TotalReceiptReachedPercent
+                    && x.PrivateReceiptFulfilledPercent <= branchPromotion.PrivateReceiptReachedPercent
+                    && x.SellerPromotion != null);
 
-                    //نزدیکترین محدوده که کوچکتر از درصد دست یافته شده هدف وصول میباشد
-                    range = lst_totalFulfillPromotion
-                    .OrderByDescending(x => x.TotalReceiptFulfilledPercent)
-                    .FirstOrDefault(x => x.TotalReceiptFulfilledPercent <= branchPromotion.TotalReceiptReachedPercent);
-
-                    if (range == null)
-                    {
-                        range = lst_totalFulfillPromotion
-                        .OrderBy(x => x.TotalReceiptFulfilledPercent).FirstOrDefault();
-                    }
-                }
-
-                //Add total sales goal fulfillment
                 lst_Goalfulfillment.Add(new FulfillmentPercent
                 {
                     BranchId = branchPromotion.BranchId,
-                    ManagerReachedPercent = range.ManagerPromotion.Value,
+
                     Year = totalSalesGoal.Year,
                     Month = totalSalesGoal.Month,
-                    ManagerFulfillmentPercent = range.SellerPromotion
+                    ManagerReachedPercent = fulfillmentPromotion_manager.ManagerPromotion.Value,
+                    ManagerFulfillmentPercent = fulfillmentPromotion_manager.ManagerPromotion,
+                    SellerReachedPercent = fulfillmentPromotion_seller.SellerPromotion.Value,
+                    SellerFulfillmentPercent = fulfillmentPromotion_seller.SellerPromotion,
+                    TotalSalesFulfilledPercent = max_totalSales_aggregation,
+                    TotalReceiptFulfilledPercent = branchPromotion.TotalReceiptReachedPercent,
+                    PrivateReceiptFulfilledPercent = branchPromotion.PrivateReceiptReachedPercent,
                 });
-
-                //Add receipt goal fulfillment
-                lst_Goalfulfillment.Add(new FulfillmentPercent
-                {
-                    BranchId = branchPromotion.BranchId,
-                    SellerReachedPercent = range.SellerPromotion.Value,
-                    Year = receiptTotalGoal.Year,
-                    Month = receiptTotalGoal.Month,
-                    SellerFulfillmentPercent = range.SellerPromotion
-                });
+                
                 entity.BranchPromotions.Add(branchPromotion);
             });
 
@@ -605,7 +625,7 @@ namespace Neutrino.Business
             lst_branchReceipt.ForEach(braReceipt =>
             {
                 var branchPromotion = entity.BranchPromotions.FirstOrDefault(x => x.BranchId == braReceipt.BranchId);
-                
+
                 var lst_branchGoals = (from goal in lst_goal_branch_Goals
                                        from branchG in goal.BranchGoals
                                        where branchG.BranchId == branchPromotion.BranchId
@@ -644,7 +664,7 @@ namespace Neutrino.Business
                 //            + $"TotalReceiptPercent={receiptPromotion.TotalReceiptPercent},IsTouchedTotal={receiptPromotion.IsTouchedTotal}"
                 //            + $",TotalPromotionPercent={receiptPromotion.TotalPromotionPercent},TotalPromotion={receiptPromotion.TotalPromotion},"
                 //            + $"");
-                
+
             });
 
             return result;

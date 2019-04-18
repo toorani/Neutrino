@@ -40,6 +40,7 @@ namespace Neutrino.Data.EntityFramework.DataServices
                                     Branch = branch,
                                     FulfillmentPercent = lf_br_fullfil,
                                 })
+                                .OrderBy(x=>x.Branch.Order)
                                 .ToListAsync();
             return result.Select(x => new FulfillmentPercent()
             {
@@ -49,6 +50,9 @@ namespace Neutrino.Data.EntityFramework.DataServices
                 ManagerReachedPercent = x.FulfillmentPercent != null ? x.FulfillmentPercent.ManagerReachedPercent : 0,
                 SellerFulfillmentPercent = x.FulfillmentPercent != null ? x.FulfillmentPercent.SellerFulfillmentPercent : 0,
                 SellerReachedPercent = x.FulfillmentPercent != null ? x.FulfillmentPercent.SellerReachedPercent : 0,
+                TotalSalesFulfilledPercent = x.FulfillmentPercent != null ? x.FulfillmentPercent.TotalSalesFulfilledPercent : 0,
+                TotalReceiptFulfilledPercent = x.FulfillmentPercent != null ? x.FulfillmentPercent.TotalReceiptFulfilledPercent : 0,
+                PrivateReceiptFulfilledPercent = x.FulfillmentPercent != null ? x.FulfillmentPercent.PrivateReceiptFulfilledPercent : 0,
                 Id = x.FulfillmentPercent != null ? x.FulfillmentPercent.Id : 0,
                 IsUsed = x.FulfillmentPercent != null ? x.FulfillmentPercent.IsUsed : false,
                 Month = month,
