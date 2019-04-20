@@ -20,12 +20,15 @@ namespace Neutrino.Portal.WebApiControllers
     {
         #region [ Varibale(s) ]
         private readonly IFulfillmentPercentBS businessService;
+        private readonly IPromotionBS promotionBS;
         #endregion
 
         #region [ Constructor(s) ]
-        public FulfillmentPercentServiceController(IFulfillmentPercentBS businessService)
+        public FulfillmentPercentServiceController(IFulfillmentPercentBS businessService
+            ,IPromotionBS promotionBS)
         {
             this.businessService = businessService;
+            this.promotionBS = promotionBS;
         }
         #endregion
 
@@ -70,6 +73,17 @@ namespace Neutrino.Portal.WebApiControllers
 
             return Request.CreateResponse(HttpStatusCode.OK, new { ReturnMessage = businessResult.ReturnMessage, Items = postedViewModel });
 
+        }
+
+        [Route("approveFulfillment"), HttpPost]
+        public async Task<HttpResponseMessage> ApproveFulfillment(FulfillmentPercentViewModel postedViewModel)
+        {
+            var businessResult = await promotionBS.PutInProcessQueueAsync(postedViewModel.Year, postedViewModel.Month);
+            if (!businessResult.ReturnStatus)
+            {
+                return CreateErrorResponse(businessResult);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, businessResult);
         }
         #endregion
 

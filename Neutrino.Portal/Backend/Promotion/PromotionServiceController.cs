@@ -89,7 +89,7 @@ namespace Neutrino.Portal
         {
             var mapper = GetMapper();
             var commission = mapper.Map<Promotion>(postedViewModel);
-            var entityCreated = await businessService.PutInProcessQueueAsync(commission);
+            var entityCreated = await businessService.PutInProcessQueueAsync(postedViewModel.Year,postedViewModel.Month);
 
             if (entityCreated.ReturnStatus == false)
             {

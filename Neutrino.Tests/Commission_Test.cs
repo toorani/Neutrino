@@ -90,7 +90,7 @@ namespace Neutrino.Portal.Tests
             //promotion business
             var promotionBS = _kernel.Get<IPromotionBS>();
             var result_load_entity = await promotionBS.EntityLoader.LoadAsync(x => x.Month == month && x.Year == year);
-            var result_put = await promotionBS.PutInProcessQueueAsync(result_load_entity.ResultValue);
+            var result_put = await promotionBS.PutInProcessQueueAsync(year,month);
 
             Assert.IsTrue(result_load_entity.ReturnStatus);
 

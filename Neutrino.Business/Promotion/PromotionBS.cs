@@ -167,36 +167,42 @@ namespace Neutrino.Business
             }
             return result;
         }
-        public async Task<IBusinessResult> PutInProcessQueueAsync(Promotion entity)
+        public async Task<IBusinessResult> PutInProcessQueueAsync(int year, int month)
         {
             var result = new BusinessResult();
             try
             {
-                if (entity.StatusId == PromotionStatusEnum.WaitingForGoalFulfillment)
+                var entity = await unitOfWork.PromotionDataService.FirstOrDefaultAsync(x => x.Month == month && x.Year == year);
+                var monthName = Utilities.PersianMonthNames().FirstOrDefault(x => x.Key == month).Value;
+                if (entity != null)
                 {
-                    entity = unitOfWork.PromotionDataService.GetById(entity.Id);
-                    entity.StatusId = PromotionStatusEnum.InProcessQueue;
-                    //لود شروط تحقق 
-                    var lstGoalFulfillments = await unitOfWork.FulfillmentPercentDataService.GetAsync(x => x.Year == entity.Year && x.Month == entity.Month && x.IsUsed == false);
-
-                    lstGoalFulfillments.ForEach(x =>
+                    if (entity.StatusId == PromotionStatusEnum.WaitingForGoalFulfillment)
                     {
-                        x.IsUsed = true;
-                        unitOfWork.FulfillmentPercentDataService.Update(x);
-                    });
+                        entity.StatusId = PromotionStatusEnum.InProcessQueue;
+                        //لود شروط تحقق 
+                        var lstGoalFulfillments = await unitOfWork.FulfillmentPercentDataService.GetAsync(x => x.Year == entity.Year && x.Month == entity.Month && x.IsUsed == false);
 
-                    unitOfWork.PromotionDataService.Update(entity);
+                        lstGoalFulfillments.ForEach(x =>
+                        {
+                            x.IsUsed = true;
+                            unitOfWork.FulfillmentPercentDataService.Update(x);
+                        });
 
-                    await unitOfWork.CommitAsync();
+                        unitOfWork.PromotionDataService.Update(entity);
 
-                    var monthName = Utilities.PersianMonthNames().FirstOrDefault(x => x.Key == entity.Month).Value;
-
-                    result.ReturnMessage.Add($"پورسانت {monthName} ماه سال {entity.Year} در صف محاسبه قرار گرفت");
+                        await unitOfWork.CommitAsync();
+                        result.ReturnMessage.Add($"پورسانت {monthName} ماه سال {year} در صف محاسبه قرار گرفت");
+                    }
+                    else
+                    {
+                        result.ReturnStatus = false;
+                        result.ReturnMessage.Add("با توجه به وضعیت پورسانت امکان انجام درخواست وجود ندارد");
+                    }
                 }
                 else
                 {
                     result.ReturnStatus = false;
-                    result.ReturnMessage.Add("با توجه به وضعیت پورسانت امکان انجام درخواست وجود ندارد");
+                    result.ReturnMessage.Add($"یافت نشد {year} و سال {monthName} اطلاعات پورسانت برای ماه ");
                 }
             }
             catch (Exception ex)
