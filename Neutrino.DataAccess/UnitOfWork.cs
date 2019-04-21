@@ -198,6 +198,7 @@ namespace Neutrino.Data.EntityFramework
             where TEntity : EntityBase, new()
         {
             //return new NeutrinoRepositoryBase<TEntity>(context);
+            
             return NinjectHttpContainer.Resolve<IEntityRepository<TEntity>>();
 
         }

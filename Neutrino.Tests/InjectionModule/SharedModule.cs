@@ -10,7 +10,7 @@ using Ninject.Web.Common;
 namespace Neutrino.Portal.Tests
 {
     //Shared Module For Application
-    public class SharedModule 
+    public class SharedModule  
     {
         public static void Bind(MoqMockingKernel _kernel)
         {
@@ -21,8 +21,8 @@ namespace Neutrino.Portal.Tests
             //_kernel.Bind(typeof(IEntityCreator<>)).To(typeof(SimpleEntityCreator<>));
             //_kernel.Bind(typeof(IEntityModifer<>)).To(typeof(SimpleEntityModifer<>));
             //_kernel.Bind(typeof(IEntityCounter<>)).To(typeof(GeneralEntityCounter<>));
-            //_kernel.Bind(typeof(IEntityLoader<>)).To(typeof(GeneralEntityLoader<>));
-            //_kernel.Bind(typeof(IEntityListLoader<>)).To(typeof(GeneralEntityListLoader<>));
+            _kernel.Bind(typeof(IEntityLoader<>)).To(typeof(GeneralEntityLoader<>));
+            _kernel.Bind(typeof(IEntityListLoader<>)).To(typeof(GeneralEntityListLoader<>));
             //_kernel.Bind(typeof(IEntityListByPagingLoader<>)).To(typeof(GeneralEntityListByPagingLoader<>));
         }
     }

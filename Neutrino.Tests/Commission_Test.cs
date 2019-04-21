@@ -23,7 +23,7 @@ namespace Neutrino.Portal.Tests
     public class Commission_Test : UnitTestBase
     {
         public Commission_Test()
-            :base()
+            : base()
         {
 
         }
@@ -90,10 +90,28 @@ namespace Neutrino.Portal.Tests
             //promotion business
             var promotionBS = _kernel.Get<IPromotionBS>();
             var result_load_entity = await promotionBS.EntityLoader.LoadAsync(x => x.Month == month && x.Year == year);
-            var result_put = await promotionBS.PutInProcessQueueAsync(year,month);
+            var result_put = await promotionBS.PutInProcessQueueAsync(year, month);
 
             Assert.IsTrue(result_load_entity.ReturnStatus);
 
+        }
+        [TestMethod]
+        public async Task CalculateSalesGoals()
+        {
+            //Arrange
+            int month = 10;
+            int year = 1397;
+
+
+            //promotion business
+            var promotionBS = _kernel.Get<IPromotionBS>();
+            var result_load_entity = await promotionBS.EntityLoader.LoadAsync(x => x.Month == month && x.Year == year);
+
+
+
+            var result = await promotionBS.CalculateSalesGoalsAsync(result_load_entity.ResultValue);
+
+            Assert.IsTrue(result.ReturnStatus, result.ReturnMessage.ConcatAll());
         }
 
         [TestMethod]

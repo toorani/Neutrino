@@ -195,10 +195,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Commission_Test.cs" />
-    <Compile Include="InjectionModule\EliteServicesModule.cs" />
-    <Compile Include="InjectionModule\EspressoModule.cs" />
-    <Compile Include="InjectionModule\MainModule.cs" />
-    <Compile Include="InjectionModule\SharedModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuantityConditionDataService_Test.cs" />
     <Compile Include="UnitOfWorkTest.cs" />
@@ -216,6 +212,10 @@
     <ProjectReference Include="..\Neutrino.DataAccess\Neutrino.Data.EntityFramework.csproj">
       <Project>{f58dba9d-0b74-4ac6-b3c8-be32769d2d7f}</Project>
       <Name>Neutrino.Data.EntityFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neutrino.InjectModules\Neutrino.InjectModules.csproj">
+      <Project>{849503c2-8e18-4a8a-9897-647e4ce2e3d7}</Project>
+      <Name>Neutrino.InjectModules</Name>
     </ProjectReference>
     <ProjectReference Include="..\Neutrino.Interfaces\Neutrino.Interfaces.csproj">
       <Project>{d0e43a2b-7e07-4ff8-b2cb-6b3ba58ccf47}</Project>

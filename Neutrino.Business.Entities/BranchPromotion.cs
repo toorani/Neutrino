@@ -1,4 +1,5 @@
 ﻿using Espresso.Entites;
+using System.Collections.Generic;
 
 namespace Neutrino.Entities
 {
@@ -24,22 +25,9 @@ namespace Neutrino.Entities
         /// </summary>
         public decimal TotalReceiptSpecifiedAmount { get; set; }
         /// <summary>
-        /// مبلغ دست یافته شده برای وصول کل 
-        /// </summary>
-        public decimal TotalReceiptAmount { get; set; }
-        /// <summary>
         /// درصد دست یافته شده هدف وصول کل
         /// </summary>
         public decimal TotalReceiptReachedPercent { get; set; }
-        /// <summary>
-        /// درصد پورسانت دستیابی شده هدف وصول کل
-        /// </summary>
-        public decimal TotalReceiptPromotionPercent { get; set; }
-        /// <summary>
-        /// مبلغ پورسانت دستیابی شده هدف وصول کل
-        /// </summary>
-        public decimal TotalReceiptPromotion { get; set; }
-
         /// <summary>
         ///  مقدار مشخص شده مرکز برای دستیابی به هدف وصول خصوصی
         /// </summary>
@@ -53,19 +41,6 @@ namespace Neutrino.Entities
         /// </summary>
         public decimal PrivateReceiptReachedPercent { get; set; }
         /// <summary>
-        /// درصد پورسانت دریافت شده هدف وصول خصوصی
-        /// </summary>
-        public decimal PrivateReceiptPromotionPercent { get; set; }
-        /// <summary>
-        /// مبلغ پورسانت دریافت شده هدف وصول خصوصی
-        /// </summary>
-        public decimal PrivateReceiptPromotion { get; set; }
-
-        /// <summary>
-        /// مبلغ کل فروش
-        /// </summary>
-        public decimal TotalSalesAmount { get; set; }
-        /// <summary>
         ///  درصد دستیابی هدف کل فروش
         /// </summary>
         public decimal TotalSalesReachedPercent { get; set; }
@@ -77,10 +52,7 @@ namespace Neutrino.Entities
         /// درصد مشخص شده مرکز برای هدف کل فروش
         /// </summary>
         public decimal TotalSalesSpecifiedAmount { get; set; }
-        /// <summary>
-        /// درصد پورسانت دریافت شده هدف کل فروش
-        /// </summary>
-        public decimal TotalSalesPromotionPercent { get; set; }
+     
         /// <summary>
         /// مبلغ کل تجمیعی
         /// </summary>
@@ -89,30 +61,19 @@ namespace Neutrino.Entities
         ///  درصد دستیابی هدف تجمیعی
         /// </summary>
         public decimal AggregationReachedPercent { get; set; }
-        /// <summary>
-        /// درصد مشخص شده مرکز برای تجمیعی
-        /// </summary>
-        public decimal AggregationSpecifiedPercent { get; set; }
+        
         /// <summary>
         /// مقدار مشخص شده مرکز برای هدف تجمیعی
         /// </summary>
         public decimal AggregationSpecifiedAmount { get; set; }
-        /// <summary>
-        /// درصد پورسانت دریافت شده هدف تجمیعی
-        /// </summary>
-        public decimal AggregationPromotionPercent { get; set; }
 
-        /// <summary>
-        /// مبلغ پورسانت دریافت شده هدف کل فروش
-        /// </summary>
-        public decimal TotalSalesPromotion { get; set; }
-        /// <summary>
-        /// مبلغ پورسانت دریافت شده از اهداف گروهی / تکی
-        /// </summary>
-        public decimal SalesPromotion { get; set; }
+        public virtual ICollection<BranchGoalPromotion> BranchGoalPromotions { get; private set; }
 
         #region [ Constructor(s) ]
-
+        public BranchPromotion()
+        {
+            BranchGoalPromotions = new HashSet<BranchGoalPromotion>();
+        }
         #endregion
     }
 }

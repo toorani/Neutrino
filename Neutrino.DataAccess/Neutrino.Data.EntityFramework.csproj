@@ -529,6 +529,14 @@
     <Compile Include="Migrations\201904182038261_alterFulfillmentPercent_addfulfilledcolumns.Designer.cs">
       <DependentUpon>201904182038261_alterFulfillmentPercent_addfulfilledcolumns.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904210459397_alterGoal_realtionQuantityCondition.cs" />
+    <Compile Include="Migrations\201904210459397_alterGoal_realtionQuantityCondition.Designer.cs">
+      <DependentUpon>201904210459397_alterGoal_realtionQuantityCondition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904211144577_addBranchGoalPromotion.cs" />
+    <Compile Include="Migrations\201904211144577_addBranchGoalPromotion.Designer.cs">
+      <DependentUpon>201904211144577_addBranchGoalPromotion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NeutrinoRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -873,6 +881,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904182038261_alterFulfillmentPercent_addfulfilledcolumns.resx">
       <DependentUpon>201904182038261_alterFulfillmentPercent_addfulfilledcolumns.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904210459397_alterGoal_realtionQuantityCondition.resx">
+      <DependentUpon>201904210459397_alterGoal_realtionQuantityCondition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904211144577_addBranchGoalPromotion.resx">
+      <DependentUpon>201904211144577_addBranchGoalPromotion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

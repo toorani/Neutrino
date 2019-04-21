@@ -93,6 +93,7 @@ namespace Neutrino.Entities
         
         public virtual ICollection<BranchReceiptGoalPercent> BranchReceiptGoalPercent { get; set; }
         public virtual ICollection<GoalNonFulfillmentPercent> GoalNonFulfillmentPercents { get; private set; }
+        public virtual ICollection<QuantityCondition> QuantityConditions { get; private set; }
         public Goal()
         {
             GoalSteps = new HashSet<GoalStep>();
@@ -101,6 +102,7 @@ namespace Neutrino.Entities
             BranchGoals = new HashSet<BranchGoal>();
             BranchReceiptGoalPercent = new HashSet<BranchReceiptGoalPercent>();
             GoalNonFulfillmentPercents = new HashSet<GoalNonFulfillmentPercent>();
+            QuantityConditions = new HashSet<QuantityCondition>();
         }
 
     }

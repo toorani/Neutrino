@@ -25,10 +25,10 @@ namespace Neutrino.Portal.Tests
             //_kernel.Bind<NeutrinoUnitOfWork>().ToSelf().InRequestScope();
             //_kernel.Bind(typeof(IEntityRepository<>)).To(typeof(NeutrinoRepositoryBase<>));
 
-            SharedModule.Bind(_kernel);
-            MainModule.Bind(_kernel);
-            EliteServicesModule.Bind(_kernel);
-            EspressoModule.Bind(_kernel);
+            //SharedModule.Bind(_kernel);
+            //MainModule.Bind(_kernel);
+            //EliteServicesModule.Bind(_kernel);
+            //EspressoModule.Bind(_kernel);
 
 
         }
