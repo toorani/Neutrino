@@ -537,6 +537,10 @@
     <Compile Include="Migrations\201904211144577_addBranchGoalPromotion.Designer.cs">
       <DependentUpon>201904211144577_addBranchGoalPromotion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904211355237_alterTotalNumber_branchsales.cs" />
+    <Compile Include="Migrations\201904211355237_alterTotalNumber_branchsales.Designer.cs">
+      <DependentUpon>201904211355237_alterTotalNumber_branchsales.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NeutrinoRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -887,6 +891,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904211144577_addBranchGoalPromotion.resx">
       <DependentUpon>201904211144577_addBranchGoalPromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904211355237_alterTotalNumber_branchsales.resx">
+      <DependentUpon>201904211355237_alterTotalNumber_branchsales.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

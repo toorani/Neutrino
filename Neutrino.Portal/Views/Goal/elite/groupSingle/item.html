@@ -94,7 +94,7 @@
                                 <div class="col-md-4">
                                     <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
                                             ng-options="item.id as item.name for item in computingTypes "
-                                            ng-disabled="goal.id !=0"
+                                            
                                             ng-model="goal.computingTypeId">
                                         <option value="" selected>[ انتخاب کنید ]</option>
 
@@ -144,7 +144,7 @@
                                         </a>
                                     </li>
 
-                                    <li ng-if="goal.computingTypeId == 2 || goal.computingTypeId == 3">
+                                    <li ng-if="goal.computingTypeId == 2 || goal.computingTypeId == 3" hidden>
                                         <a ng-click="quantityCondition_onclick(1)">
                                             <i class="fa fa-question-circle"></i>
                                             <span> تعریف هدف تعدادی مشروط</span>

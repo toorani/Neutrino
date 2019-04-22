@@ -23,6 +23,51 @@ namespace Neutrino.Business
         private readonly IBranchSalesBS branchSalesBS;
         private readonly IQuantityConditionBS quantityConditionBS;
         private readonly IBranchReceiptBS branchReceiptBS;
+        /// <summary>
+        /// اطلاعات فروش کلی مراکز
+        /// </summary>
+        class TotalBranchSales
+        {
+            /// <summary>
+            //شناسه مرکز
+            /// </summary>
+            public int BranchId { get; set; }
+            /// <summary>
+            //مبلغ کل فروش مرکز
+            /// </summary>
+            public decimal TotalSales { get; set; }
+            /// <summary>
+            //تعداد کل فروش مرکز
+            /// </summary>
+            public int TotalNumber { get; set; }
+        }
+        ///// <summary>
+        ///// اطلاعات فروش اهداف تعدادی
+        ///// </summary>
+        //class QuantityConditionSalesInfo
+        //{
+        //    /// <summary>
+        //    //شناسه کالا
+        //    /// </summary>
+        //    public int GoodsId { get; set; }
+        //    /// <summary>
+        //    //شناسه مرکز
+        //    /// </summary>
+        //    public int BranchId { get; set; }
+        //    /// <summary>
+        //    //مبلغ فروش  محصول در مرکز
+        //    /// </summary>
+        //    public decimal Amount { get; set; }
+        //    /// <summary>
+        //    //تعداد فروش  محصول در مرکز
+        //    /// </summary>
+        //    public int Quantity { get; set; }
+        //    /// <summary>
+        //    /// آیا به  تعداد مشخص شده فروش داشته است
+        //    /// </summary>
+        //    public bool IsFulfilled { get; set; }
+        //}
+
         class TouchingGoal
         {
             public int GoalId { get; set; }
@@ -226,7 +271,7 @@ namespace Neutrino.Business
 
                 //Update commission's status 
                 entity.StatusId = PromotionStatusEnum.InProcessing;
-                unitOfWork.PromotionDataService.Update(entity);
+                //unitOfWork.PromotionDataService.Update(entity);
 
                 //به دلیل اینکه ممکن است اهدافی تعریف شود که طول زمان آن بیشتر از یکماه باشد 
 
@@ -243,12 +288,16 @@ namespace Neutrino.Business
                                    .IncludeFilter(x => x.BranchGoals.Where(y => y.Deleted == false))
                                    .IncludeFilter(x => x.GoalSteps.Where(y => y.Deleted == false).Select(i => i.Items))
                                    .IncludeFilter(x => x.QuantityConditions.Where(y => y.Deleted == false))
+                                   .IncludeFilter(x => x.QuantityConditions.Select(y => y.GoodsQuantityConditions.Where(z => z.Deleted == false)))
+                                   .IncludeFilter(x => x.QuantityConditions.Select(y => y.GoodsQuantityConditions.Select(u => u.BranchQuantityConditions.Where(z => z.Deleted == false))))
+                                   .IncludeFilter(x => x.GoalNonFulfillmentPercents.Where(y => y.Deleted == false))
+                                   .IncludeFilter(x => x.GoalNonFulfillmentPercents.Select(z => z.GoalNonFulfillmentBranches.Where(y => y.Deleted == false)))
                                    .Where(g => g.IsUsed == false && g.Deleted == false
                                    && (g.EndDate >= dateRange.Start && g.EndDate <= dateRange.End)
                                    && (g.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Group ||
                                    g.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single))
                                    .ToListAsync();
-
+                //TODO : uncomment
                 //lst_goals.ForEach(x =>
                 //{
                 //    x.IsUsed = true;
@@ -257,66 +306,70 @@ namespace Neutrino.Business
 
 
                 //لیست شرط تحقق فروش کل هر مرکز
-                var lst_fulfillmentPercents = await (from gFull in unitOfWork.FulfillmentPercentDataService.GetQuery()
-                                                     where gFull.Year == entity.Year && gFull.Month == entity.Month
-                                                     && gFull.Deleted == false
-                                                     select gFull).ToListAsync();
+                //var lst_fulfillmentPercents = await (from gFull in unitOfWork.FulfillmentPercentDataService.GetQuery()
+                //                                     where gFull.Year == entity.Year && gFull.Month == entity.Month
+                //                                     && gFull.Deleted == false
+                //                                     select gFull).ToListAsync();
+                GoalStep goalStep = null;
 
-
+                //فعلا وجود ندارد
                 lst_goals.Where(x => x.ComputingTypeId == ComputingTypeEnum.Amount && x.QuantityConditions.Any(y => y.QuantityConditionTypeId == QuantityConditionTypeEnum.DependedOnGoal))
                     .ToList()
                     .ForEach(goal =>
                     {
-
+                        //TODO 
                     });
+
                 //هدف فروش ریالی به همراه اهداف تعدادی
-                lst_goals.Where(x => x.ComputingTypeId == ComputingTypeEnum.Amount && x.QuantityConditions.Any(y => y.QuantityConditionTypeId == QuantityConditionTypeEnum.Independent))
+                lst_goals.Where(x => x.ComputingTypeId == ComputingTypeEnum.Amount
+                && x.QuantityConditions.Any(y => y.QuantityConditionTypeId == QuantityConditionTypeEnum.Independent))
                     .ToList()
                     .ForEach(goal =>
                     {
 
                     });
 
-                lst_goals.Where(x => x.ComputingTypeId == ComputingTypeEnum.Amount && x.QuantityConditions.Count == 0)
+                //اهداف با معیار تعدادی و ریالی بدون داشتن هدف تعدادی
+                lst_goals.Where(x => x.ComputingTypeId == ComputingTypeEnum.Quantities
+                || (x.ComputingTypeId == ComputingTypeEnum.Amount && x.QuantityConditions.Count == 0))
                     .ToList()
                     .ForEach(goal =>
                     {
                         //به دلیل اینکه ممکن است اهدافی تعریف شود که طول زمان آن بیشتر از یکماه باشد 
                         //باید به ازای هر هدف و تاریخ آن فروش محاسبه شود
-                        var lst_branch_totalSales = (from ggcg in unitOfWork.GoalGoodsCategoryGoodsDataService.GetQuery()
-                                                     join brsa in unitOfWork.BranchSalesDataService.GetQuery()
-                                                     on ggcg.GoodsId equals brsa.GoodsId
-                                                     where brsa.StartDate >= goal.StartDate && brsa.EndDate <= goal.EndDate
-                                                     && ggcg.GoalGoodsCategoryId == goal.GoalGoodsCategoryId
-                                                     group brsa by new { brsa.BranchId } into grp
-                                                     select new
-                                                     {
-                                                         grp.Key.BranchId,
-                                                         TotalSales = grp.Sum(x => x.TotalAmount),
-                                                         TotalNumber = grp.Sum(x => x.TotalNumber),
-                                                     }).ToList();
+                        List<TotalBranchSales> lst_branch_salesInfo = getBranchSalesInfo(goal);
 
-                        decimal totalBranchSales = 0;
-                        GoalStep goalStep = null;
-                        foreach (var branchGoal in goal.BranchGoals)
+
+                        foreach (var branchGoal in goal.BranchGoals.Where(x => lst_branch_salesInfo.Any(y => y.BranchId == x.BranchId)))
                         {
-                            //مقدار فروش مرکز
-                            totalBranchSales = lst_branch_totalSales.Single(x => x.BranchId == branchGoal.BranchId).TotalSales;
+                            //اطلاعات فروش مرکز
+                            var branchSalesInfo = lst_branch_salesInfo.Single(x => x.BranchId == branchGoal.BranchId);
 
-                            goalStep = goal.GoalSteps.OrderByDescending(step => step.ComputingValue)
-                            .Where(step => (step.ComputingValue * branchGoal.Percent * 0.01M) <= totalBranchSales)
-                            .FirstOrDefault();
+                            if (goal.ComputingTypeId == ComputingTypeEnum.Quantities)
+                            {
+                                //در صورتیکه معیار هدف تعدادی باشد ،باید تعداد فروش مقایسه شود
+                                goalStep = goal.GoalSteps.OrderByDescending(step => step.ComputingValue)
+                                .Where(step => (step.ComputingValue * branchGoal.Percent * 0.01M) <= branchSalesInfo.TotalNumber)
+                                .FirstOrDefault();
+                            }
+                            else if (goal.ComputingTypeId == ComputingTypeEnum.Amount)
+                            {
+                                //در صورتیکه معیار هدف تعدادی باشد ،باید مقدار فروش مقایسه شود
+                                goalStep = goal.GoalSteps.OrderByDescending(step => step.ComputingValue)
+                                .Where(step => (step.ComputingValue * branchGoal.Percent * 0.01M) <= branchSalesInfo.TotalSales)
+                                .FirstOrDefault();
+                            }
 
+
+                            decimal promotion = 0;
                             // هدف فروش زده است؟
                             if (goalStep != null)
                             {
-
                                 var goalStepItem = goalStep.Items.Where(it => it.ActionTypeId == GoalStepActionTypeEnum.Reward).Single();
-                                decimal promotion = 0;
 
                                 if (goalStepItem.ItemTypeId == (int)RewardTypeEnum.Percent) //درصد پاداش
                                 {
-                                    promotion = goalStepItem.Amount.Value * 0.01M * totalBranchSales;
+                                    promotion = goalStepItem.Amount.Value * 0.01M * branchSalesInfo.TotalSales;
                                 }
                                 else if (goalStepItem.ItemTypeId == (int)RewardTypeEnum.SingleGoods) //جایزه عوامل فروش هر محصول
                                 {
@@ -331,22 +384,95 @@ namespace Neutrino.Business
                                 .Single(x => x.BranchId == branchGoal.BranchId)
                                 .BranchGoalPromotions
                                 .Add(new BranchGoalPromotion { GoalId = goal.Id, PromotionWithOutFulfillmentPercent = promotion });
-
+                            }
+                            else if (goal.GoalNonFulfillmentPercents.Count != 0)
+                            {
+                                //در صورت عدم تحقق هدف ،چک کردن اینکه 'سهم مرکز در صورت عدم تحقق' تعریف شده است یا نه
+                                var goalNonFulfillmentPercent = goal.GoalNonFulfillmentPercents.SingleOrDefault(x => x.GoalNonFulfillmentBranches.Any(y => y.BranchId == branchGoal.BranchId));
+                                if (goalNonFulfillmentPercent != null)
+                                {
+                                    promotion = goalNonFulfillmentPercent.Percent * 0.01M * branchSalesInfo.TotalSales;
+                                    entity.BranchPromotions
+                                    .Single(x => x.BranchId == branchGoal.BranchId)
+                                    .BranchGoalPromotions
+                                    .Add(new BranchGoalPromotion { GoalId = goal.Id, PromotionWithOutFulfillmentPercent = promotion });
+                                }
                             }
                         }
                     });
+                lst_goals.Where(x => x.ComputingTypeId == ComputingTypeEnum.Percentage && x.QuantityConditions.Count != 0)
+                    .ToList()
+                    .ForEach(goal =>
+                    {
+                        var quantityConditions = goal.QuantityConditions.Single();
 
-                lst_goals.Where(x => x.ComputingTypeId == ComputingTypeEnum.Quantities)
-                    .ToList()
-                    .ForEach(goal =>
-                    {
-                        var i = goal;
-                    });
-                lst_goals.Where(x => x.ComputingTypeId == ComputingTypeEnum.Percentage)
-                    .ToList()
-                    .ForEach(goal =>
-                    {
-                        var i = goal;
+                        var lst_branchConditions = (from gdsqc in quantityConditions.GoodsQuantityConditions
+                                                    join brsa in unitOfWork.BranchSalesDataService.GetQuery()
+                                                    on gdsqc.GoodsId equals brsa.GoodsId
+                                                    where brsa.StartDate >= goal.StartDate && brsa.EndDate <= goal.EndDate
+                                                    select new
+                                                    {
+                                                        brsa.BranchId,
+                                                        brsa.GoodsId,
+                                                        Amount = brsa.TotalAmount,
+                                                        Quantity = brsa.TotalNumber,
+                                                        IsGoodsFulfilled = gdsqc.BranchQuantityConditions.SingleOrDefault(x => x.BranchId == brsa.BranchId) != null ? gdsqc.BranchQuantityConditions.SingleOrDefault(x => x.BranchId == brsa.BranchId).Quantity > brsa.TotalNumber : false
+                                                    }).ToList();
+
+                        var lst_branchFulfillInfo = (from br_cd in lst_branchConditions
+                                                     select new
+                                                     {
+                                                         br_cd.BranchId,
+                                                         FulFillPercent = (lst_branchConditions.Count(x => x.IsGoodsFulfilled) / quantityConditions.Quantity) * 100
+                                                     }).ToList();
+
+                        lst_branchFulfillInfo.ForEach(branchFulfillInfo =>
+                        {
+                            goalStep = goal.GoalSteps.OrderByDescending(step => step.ComputingValue)
+                            .Where(step => step.ComputingValue <= branchFulfillInfo.FulFillPercent)
+                            .FirstOrDefault();
+
+                            decimal promotion = 0;
+                            // هدف فروش زده است؟
+                            if (goalStep != null)
+                            {
+                                var goalStepItem = goalStep.Items.Where(it => it.ActionTypeId == GoalStepActionTypeEnum.Reward).Single();
+
+                                if (goalStepItem.ItemTypeId == (int)RewardTypeEnum.Percent) //درصد پاداش
+                                {
+                                    promotion = goalStepItem.Amount.Value * 0.01M * branchSalesInfo.TotalSales;
+                                }
+                                else if (goalStepItem.ItemTypeId == (int)RewardTypeEnum.SingleGoods) //جایزه عوامل فروش هر محصول
+                                {
+
+                                }
+                                else if (goalStepItem.ItemTypeId == (int)RewardTypeEnum.Seller) //جایزه عوامل فروش
+                                {
+
+                                }
+
+                                entity.BranchPromotions
+                                .Single(x => x.BranchId == branchGoal.BranchId)
+                                .BranchGoalPromotions
+                                .Add(new BranchGoalPromotion { GoalId = goal.Id, PromotionWithOutFulfillmentPercent = promotion });
+                            }
+                            else if (goal.GoalNonFulfillmentPercents.Count != 0)
+                            {
+                                //در صورت عدم تحقق هدف ،چک کردن اینکه 'سهم مرکز در صورت عدم تحقق' تعریف شده است یا نه
+                                var goalNonFulfillmentPercent = goal.GoalNonFulfillmentPercents.SingleOrDefault(x => x.GoalNonFulfillmentBranches.Any(y => y.BranchId == branchGoal.BranchId));
+                                if (goalNonFulfillmentPercent != null)
+                                {
+                                    promotion = goalNonFulfillmentPercent.Percent * 0.01M * branchSalesInfo.TotalSales;
+                                    entity.BranchPromotions
+                                    .Single(x => x.BranchId == branchGoal.BranchId)
+                                    .BranchGoalPromotions
+                                    .Add(new BranchGoalPromotion { GoalId = goal.Id, PromotionWithOutFulfillmentPercent = promotion });
+                                }
+                            }
+                        });
+
+
+
                     });
 
                 await unitOfWork.CommitAsync();
@@ -358,6 +484,8 @@ namespace Neutrino.Business
             }
             return result;
         }
+
+
 
         public async Task<IBusinessResult> CalculateAsync(Promotion entity)
         {
@@ -528,6 +656,21 @@ namespace Neutrino.Business
             });
 
             return lst_fulfillmentPercent;
+        }
+        private List<TotalBranchSales> getBranchSalesInfo(Goal goal)
+        {
+            return (from ggcg in unitOfWork.GoalGoodsCategoryGoodsDataService.GetQuery()
+                    join brsa in unitOfWork.BranchSalesDataService.GetQuery()
+                    on ggcg.GoodsId equals brsa.GoodsId
+                    where brsa.StartDate >= goal.StartDate && brsa.EndDate <= goal.EndDate
+                    && ggcg.GoalGoodsCategoryId == goal.GoalGoodsCategoryId
+                    group brsa by new { brsa.BranchId } into grp
+                    select new TotalBranchSales
+                    {
+                        BranchId = grp.Key.BranchId,
+                        TotalSales = grp.Sum(x => x.TotalAmount),
+                        TotalNumber = grp.Sum(x => x.TotalNumber),
+                    }).ToList();
         }
 
         private async Task<IBusinessResult> CalculateReceiptGoals(Promotion entity)

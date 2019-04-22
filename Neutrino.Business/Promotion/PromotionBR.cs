@@ -53,15 +53,13 @@ namespace Neutrino.Business
                 .Must(x => CheckGoal(x, GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal))
                 .WithMessage("هدف وصول برای ماه و سال انتخاب شده مشخص نشده است");
 
+
             //.Must(x => CheckBranchGoal(x, GoalGoodsCategoryTypeEnum.ReceiptTotalGoal))
             //.WithMessage("سهم مراکز به صورت کامل در هدف وصول کل تعریف نشده است")
             //.Must(x => CheckBranchGoal(x, GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal))
             //.WithMessage("سهم مراکز به صورت کامل در هدف وصول خصوصی تعریف نشده است");
 
-            //RuleFor(x => x)
-            //    .Cascade(CascadeMode.StopOnFirstFailure)
-            //    .Must(x => CheckBranchGoal(x, GoalGoodsCategoryTypeEnum.Group))
-            //    .WithMessage("سهم مراکز به صورت کامل در اهداف گروهی تعریف نشده است");
+        
 
         }
         private bool CheckExistBranchSales(Promotion entity)
@@ -87,19 +85,7 @@ namespace Neutrino.Business
             && x.IsUsed == false && x.Deleted == false);
             return result;
         }
-        private bool CheckBranchGoal(Promotion entity, GoalGoodsCategoryTypeEnum goalGoodsTypeId)
-        {
-            if (branchCount.HasValue == false)
-                branchCount = unitOfWork.BranchSalesDataService.GetQuery().Count(x => x.DateCreated < entity.StartDate);
-
-            var branchGoalCount = (from goal in unitOfWork.GoalDataService.GetQuery().Include(x => x.BranchGoals)
-                                   where goal.GoalGoodsCategoryTypeId == goalGoodsTypeId && goal.Deleted == false
-                                   && goal.IsUsed == false && goal.Month == entity.Month && entity.Year == entity.Year
-                                   select goal.BranchGoals.Count())
-                               .FirstOrDefault();
-            return branchCount.Value == branchGoalCount;
-        }
-
+       
         #endregion
     }
 }

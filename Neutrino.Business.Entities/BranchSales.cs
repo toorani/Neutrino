@@ -22,7 +22,7 @@ namespace Neutrino.Entities
         /// <summary>
         /// تعداد فروش
         /// </summary>
-        public double TotalNumber { get; set; }
+        public int TotalNumber { get; set; }
         public int Year { get; set; }
         public int Month { get; set; }
         public DateTime? StartDate { get; set; }
