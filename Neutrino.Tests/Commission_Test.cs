@@ -113,7 +113,25 @@ namespace Neutrino.Portal.Tests
 
             Assert.IsTrue(result.ReturnStatus, result.ReturnMessage.ConcatAll());
         }
+        [TestMethod]
+        public async Task CalculateReceiptGoals()
+        {
+            //Arrange
+            int month = 10;
+            int year = 1397;
 
+
+            //promotion business
+            var promotionBS = _kernel.Get<IPromotionBS>();
+            var result_load_entity = await promotionBS.EntityLoader.LoadAsync(x => x.Month == month && x.Year == year);
+            if (result_load_entity.ReturnStatus == false)
+            {
+                Assert.Fail(result_load_entity.ReturnMessage.ConcatAll());
+            }
+            var result = await promotionBS.CalculateReceiptGoalsAsync(result_load_entity.ResultValue);
+
+            Assert.IsTrue(result.ReturnStatus, result.ReturnMessage.ConcatAll());
+        }
         [TestMethod]
         public async Task CalculatePromotion()
         {
@@ -127,10 +145,23 @@ namespace Neutrino.Portal.Tests
             {
                 Assert.Fail(loaderResult.ReturnMessage.ConcatAll());
             }
+            var result_sales = await promotionBS.CalculateSalesGoalsAsync(loaderResult.ResultValue);
+            var result_receipt = await promotionBS.CalculateReceiptGoalsAsync(loaderResult.ResultValue);
 
-            var result_calculate = await promotionBS.CalculateAsync(loaderResult.ResultValue);
 
-            Assert.IsTrue(result_calculate.ReturnStatus, result_calculate.ReturnMessage.ConcatAll());
+            //loaderResult = await promotionBS.EntityLoader.LoadAsync(x => x.Month == month && x.Year == year);
+            //if (loaderResult.ReturnStatus == false)
+            //{
+            //    Assert.Fail(loaderResult.ReturnMessage.ConcatAll());
+            //}
+
+            //Assert.IsTrue(loaderResult.ReturnStatus, loaderResult.ReturnMessage.ConcatAll());
+            //Assert.IsTrue(loaderResult.ResultValue.IsSalesCalculated);
+            //Assert.IsTrue(loaderResult.ResultValue.IsReceiptCalculated);
+
+            Assert.IsTrue(result_sales.ReturnStatus, result_sales.ReturnMessage.ConcatAll());
+            Assert.IsTrue(result_receipt.ReturnStatus, result_receipt.ReturnMessage.ConcatAll());
+
         }
     }
 }

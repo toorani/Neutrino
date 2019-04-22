@@ -113,24 +113,6 @@ namespace Neutrino.Data.EntityFramework
                 .HasForeignKey<int>(i => i.GoalStepId)
                 .WillCascadeOnDelete();
 
-            //modelBuilder.Entity<BranchBenefit>()
-            //    .HasMany<GoalGoodsCategory>(s => s.GoalGoodsCategory)
-            //    .WithMany(c => c.BranchBenefits)
-            //    .Map(cs =>
-            //    {
-            //        cs.MapLeftKey("BranchBenefitId");
-            //        cs.MapRightKey("GoodsCategoryId");
-            //    });
-
-            //modelBuilder.Entity<GoalGoodsCategory>()
-            //    .HasMany<Goods>(s => s.GoodsCollection)
-            //    .WithMany(c => c.GoalGoodsCategory_GoodsCollection)
-            //    .Map(cs =>
-            //    {
-            //        cs.MapLeftKey("GoodsCategoryId");
-            //        cs.MapRightKey("GoodsId");
-            //    });
-
             modelBuilder.Entity<Goods>()
                 .HasRequired<Company>(s => s.Company)
                 .WithMany(g => g.GoodsCollection)
@@ -174,6 +156,18 @@ namespace Neutrino.Data.EntityFramework
             modelBuilder.Entity<BranchPromotion>()
                 .Property(p => p.TotalSalesSpecifiedPercent)
                 .HasPrecision(9, 5);
+
+           
+            modelBuilder.Entity<OrgStructureShare>()
+                .Property(p => p.PrivateReceiptPercent)
+                .HasPrecision(9, 5);
+            modelBuilder.Entity<OrgStructureShare>()
+                .Property(p => p.SalesPercent)
+                .HasPrecision(9, 5);
+            modelBuilder.Entity<OrgStructureShare>()
+                .Property(p => p.TotalReceiptPercent)
+                .HasPrecision(9, 5);
+           
 
 
 

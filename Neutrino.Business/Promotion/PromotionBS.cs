@@ -20,36 +20,7 @@ namespace Neutrino.Business
     {
         #region [ Varibale(s) ]
         private readonly AbstractValidator<Promotion> validator;
-        private readonly IBranchSalesBS branchSalesBS;
-        private readonly IQuantityConditionBS quantityConditionBS;
-        private readonly IBranchReceiptBS branchReceiptBS;
 
-        ///// <summary>
-        ///// اطلاعات فروش اهداف تعدادی
-        ///// </summary>
-        //class QuantityConditionSalesInfo
-        //{
-        //    /// <summary>
-        //    //شناسه کالا
-        //    /// </summary>
-        //    public int GoodsId { get; set; }
-        //    /// <summary>
-        //    //شناسه مرکز
-        //    /// </summary>
-        //    public int BranchId { get; set; }
-        //    /// <summary>
-        //    //مبلغ فروش  محصول در مرکز
-        //    /// </summary>
-        //    public decimal Amount { get; set; }
-        //    /// <summary>
-        //    //تعداد فروش  محصول در مرکز
-        //    /// </summary>
-        //    public int Quantity { get; set; }
-        //    /// <summary>
-        //    /// آیا به  تعداد مشخص شده فروش داشته است
-        //    /// </summary>
-        //    public bool IsFulfilled { get; set; }
-        //}
 
         class TouchingGoal
         {
@@ -123,16 +94,10 @@ namespace Neutrino.Business
 
         #region [ Constructor(s) ]
         public PromotionBS(NeutrinoUnitOfWork unitOfWork
-            , IBranchSalesBS branchSalesBS
-            , IQuantityConditionBS quantityConditionBS
-            , IBranchReceiptBS branchReceiptBS
             , AbstractValidator<Promotion> validator)
             : base(unitOfWork)
         {
             this.validator = validator;
-            this.branchSalesBS = branchSalesBS;
-            this.quantityConditionBS = quantityConditionBS;
-            this.branchReceiptBS = branchReceiptBS;
         }
         #endregion
 
@@ -178,10 +143,6 @@ namespace Neutrino.Business
                 unitOfWork.FulfillmentPercentDataService.InsertFulfillment(lst_GoalFulfillments);
                 unitOfWork.PromotionDataService.Insert(entity);
 
-                //foreach (var entry in dataService.UnitOfWork.Context.ChangeTracker.Entries())
-                //{
-                //    Debug.WriteLine($"Entity Name: {entry.Entity.GetType().Name} with Status: {entry.State}");
-                //}
 
                 await unitOfWork.CommitAsync();
 
@@ -257,22 +218,27 @@ namespace Neutrino.Business
             public int TotalQuantity { get; set; }
             public decimal? SellerFulfillmentPercent { get; set; }
         }
+        /// <summary>
+        /// محاسبه پورسانت اهداف ریالی و تعدادی
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public async Task<IBusinessResult> CalculateSalesGoalsAsync(Promotion entity)
         {
             var result = new BusinessResult();
             try
             {
-                if (entity.StatusId != PromotionStatusEnum.InProcessQueue)
+                if (entity.StatusId != PromotionStatusEnum.InProcessQueue && entity.IsSalesCalculated == false)
                 {
                     result.ReturnStatus = false;
-                    result.ReturnMessage.Add("با توجه به وضعیت پورسانت امکان انجام درخواست وجود ندارد");
+                    result.ReturnMessage.Add("با توجه به وضعیت پورسانت امکان محاسبه پورسانت اهداف فروش وجود ندارد");
                     return result;
                 }
 
                 entity = await unitOfWork.PromotionDataService.FirstOrDefaultAsync(x => x.Id == entity.Id, includes: x => new { x.BranchPromotions });
 
                 //Update commission's status 
-                entity.StatusId = PromotionStatusEnum.InProcessing;
+                //entity.StatusId = PromotionStatusEnum.InProcessing;
                 //unitOfWork.PromotionDataService.Update(entity);
 
                 //به دلیل اینکه ممکن است اهدافی تعریف شود که طول زمان آن بیشتر از یکماه باشد 
@@ -416,7 +382,10 @@ namespace Neutrino.Business
 
                     });
 
+                entity.IsSalesCalculated = true;
                 await unitOfWork.CommitAsync();
+                result.ReturnStatus = true;
+                result.ReturnMessage.Add("محاسبه پورسانت اهداف فروش با موفقیت پایان یافت");
 
             }
             catch (Exception ex)
@@ -425,43 +394,112 @@ namespace Neutrino.Business
             }
             return result;
         }
-
-        public async Task<IBusinessResult> CalculateAsync(Promotion entity)
+        /// <summary>
+        /// محاسبه پورسانت اهداف وصول خصوصی و کل
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task<IBusinessResult> CalculateReceiptGoalsAsync(Promotion entity)
         {
             var result = new BusinessResult();
             try
             {
-                if (entity.StatusId != PromotionStatusEnum.InProcessQueue)
+                if (entity.StatusId != PromotionStatusEnum.InProcessQueue && entity.IsReceiptCalculated == false)
                 {
                     result.ReturnStatus = false;
-                    result.ReturnMessage.Add("با توجه به وضعیت پورسانت امکان انجام درخواست وجود ندارد");
+                    result.ReturnMessage.Add("با توجه به وضعیت پورسانت امکان محاسبه پورسانت اهداف وصول وجود ندارد");
                     return result;
                 }
 
                 entity = await unitOfWork.PromotionDataService.FirstOrDefaultAsync(x => x.Id == entity.Id, includes: x => new { x.BranchPromotions });
 
-                //Update commission's status 
-                entity.StatusId = PromotionStatusEnum.InProcessing;
-                unitOfWork.PromotionDataService.Update(entity);
+                var lst_goals = await (from g in unitOfWork.GoalDataService.GetQuery()
+                                       .IncludeFilter(x => x.BranchGoals.Where(y => y.Deleted == false))
+                                       .IncludeFilter(x => x.GoalSteps.Where(y => y.Deleted == false))
+                                       .IncludeFilter(x => x.BranchReceiptGoalPercent.Where(y => y.Deleted == false))
+                                       where g.Deleted == false
+                                       && g.Month == entity.Month && g.Year == entity.Year
+                                       && (g.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal
+                                       || g.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal
+                                       || g.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptGovernGoal)
+                                       select g).ToListAsync();
 
-                //محاسبه اهداف فروش
-                result = await CalculateSalesGoalsAsync(entity) as BusinessResult;
-                if (!result.ReturnStatus)
-                    return result;
+                lst_goals.ForEach(x =>
+                {
+                    x.IsUsed = true;
+                    unitOfWork.GoalDataService.Update(x);
+                });
 
-                //محاسبه اهداف وصول
-                result = await calculateReceiptGoals(entity) as BusinessResult;
-                if (!result.ReturnStatus)
-                    return result;
 
+                //وصول هر مرکز
+                var lst_branchReceipts = await unitOfWork.BranchReceiptDataService.GetAsync(where: x => x.Year == entity.Year && x.Month == entity.Month);
+
+                var receiptTotalGoal = lst_goals.Single(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal);
+                var receiptPrivateGoal = lst_goals.Single(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal);
+
+                //لیست سهم پست های سازمانی مراکز
+                var lst_orgStructureShare = await unitOfWork.OrgStructureShareDataService.GetAsync(x => x.PrivateReceiptPercent != null || x.TotalReceiptPercent != null
+                , includes: x => new { x.OrgStructure });
+
+
+                decimal promotion = 0;
+                BranchPromotion branchPromotion = new BranchPromotion();
+                List<OrgStructureShare> lst_orgStructureShare_branch = new List<OrgStructureShare>();
+                lst_branchReceipts.ForEach(braReceipt =>
+                {
+                    branchPromotion = entity.BranchPromotions.Single(x => x.BranchId == braReceipt.BranchId);
+
+                    //لیست سهم پست های سازمانی برای مرکز
+                    lst_orgStructureShare_branch = lst_orgStructureShare.Where(x => x.BranchId == braReceipt.BranchId).ToList();
+
+                    //محاسبه پورسانت هدف وصول خصوصی
+                    promotion = getReceiptPromotion(braReceipt, receiptTotalGoal);
+                    //محاسبه سهم پورسانت پست های سازمانی از هدف وصول خصوصی
+                    branchPromotion.BranchGoalPromotions.Add(new BranchGoalPromotion
+                    {
+                        GoalId = receiptTotalGoal.Id,
+                        FinalPromotion = promotion,
+                        PromotionWithOutFulfillmentPercent = promotion,
+                        PositionReceiptPromotions = lst_orgStructureShare_branch
+                        .Where(x => x.TotalReceiptPercent != null)
+                        .Select(x => new PositionReceiptPromotion
+                        {
+                            OrgStructureShareId = x.Id,
+                            Promotion = x.TotalReceiptPercent.Value * promotion * 0.01M,
+                            PositionTypeId = x.OrgStructure.PositionTypeId
+                        }).ToList()
+                    });
+
+                    //محاسبه پورسانت هدف وصول خصوصی
+                    promotion = getReceiptPromotion(braReceipt, receiptPrivateGoal);
+
+                    //محاسبه سهم پورسانت پست های سازمانی از هدف وصول خصوصی
+                    branchPromotion.BranchGoalPromotions.Add(new BranchGoalPromotion
+                    {
+                        GoalId = receiptPrivateGoal.Id,
+                        FinalPromotion = promotion,
+                        PromotionWithOutFulfillmentPercent = promotion,
+                        PositionReceiptPromotions = lst_orgStructureShare_branch
+                        .Where(x => x.PrivateReceiptPercent != null)
+                        .Select(x => new PositionReceiptPromotion
+                        {
+                            OrgStructureShareId = x.Id,
+                            Promotion = x.PrivateReceiptPercent.Value * promotion * 0.01M,
+                            PositionTypeId = x.OrgStructure.PositionTypeId
+
+                        }).ToList()
+                    });
+
+                });
+                entity.IsReceiptCalculated = true;
                 await unitOfWork.CommitAsync();
-
+                result.ReturnStatus = true;
+                result.ReturnMessage.Add("محاسبه پورسانت اهداف وصول با موفقیت پایان یافت");
             }
             catch (Exception ex)
             {
                 CatchException(ex, result, "");
             }
-
             return result;
         }
         #endregion
@@ -664,7 +702,7 @@ namespace Neutrino.Business
             else if (goal.GoalNonFulfillmentPercents.Count != 0)
             {
                 //در صورت عدم تحقق هدف ،چک کردن اینکه 'سهم مرکز در صورت عدم تحقق' تعریف شده است یا نه
-                var goalNonFulfillmentPercent = goal.GoalNonFulfillmentPercents.SingleOrDefault(x => x.GoalNonFulfillmentBranches.Any(y => y.BranchId == branchGoal.BranchId));
+                var goalNonFulfillmentPercent = goal.GoalNonFulfillmentPercents.SingleOrDefault(x => x.GoalNonFulfillmentBranches.Any(y => y.BranchId == branchSalesInfo.BranchId));
                 if (goalNonFulfillmentPercent != null)
                 {
                     promotion = goalNonFulfillmentPercent.Percent * 0.01M * branchSalesInfo.TotalSales;
@@ -681,118 +719,29 @@ namespace Neutrino.Business
                 }
             }
         }
-        private async Task<IBusinessResult> calculateReceiptGoals(Promotion entity)
+        private decimal getReceiptPromotion(BranchReceipt braReceipt, Goal receiptGoal)
         {
-            var result = new BusinessResult();
+            var receiptTotal_branchGoal = receiptGoal.BranchGoals.Single(x => x.BranchId == braReceipt.BranchId);
+            var receiptTotal_branchReceiptGoalPercent = receiptGoal.BranchReceiptGoalPercent.Single(x => x.BranchId == braReceipt.BranchId);
 
-            // لیست اهداف وصول خصوصی / دولتی هر مرکز
-            var lst_goals = await (from g in unitOfWork.GoalDataService.GetQuery()
-                                               .IncludeFilter(x => x.BranchGoals.Where(y => y.Deleted == false))
-                                               .IncludeFilter(x => x.GoalSteps.Where(y => y.Deleted == false))
-                                               .IncludeFilter(x => x.BranchReceiptGoalPercent.Where(y => y.Deleted == false))
-                                   where g.IsUsed == false && g.Deleted == false
-                                   && g.StartDate >= entity.StartDate && g.EndDate <= entity.EndDate
-                                   && (g.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal
-                                   || g.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal
-                                   || g.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptGovernGoal)
-                                   select g).ToListAsync();
 
-            lst_goals.ForEach(x =>
+            decimal promotion = 0;
+            decimal amount = braReceipt.TotalAmount;
+            if (receiptGoal.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal)
+                amount = braReceipt.PrivateAmount.Value;
+
+            if (receiptTotal_branchGoal.Amount <= amount)
             {
-                x.IsUsed = true;
-                unitOfWork.GoalDataService.Update(x);
-            });
-
-
-            //لیست اهداف محقق شده وصول کل هر مرکز
-            var lst_totalReceiptGoal_fulfillments = await (from gFull in unitOfWork.FulfillmentPercentDataService.GetQuery()
-                                                           where gFull.Year == entity.Year && gFull.Month == entity.Month
-                                                           && gFull.Deleted == false
-                                                           select gFull).ToListAsync();
-
-            //وصول هر مرکز
-            var lst_branchReceipt = await unitOfWork.BranchReceiptDataService.GetAsync(where: x => x.Year == entity.Year && x.Month == entity.Month);
-
-            lst_branchReceipt.ForEach(braReceipt =>
-            {
-                var branchPromotion = entity.BranchPromotions.FirstOrDefault(x => x.BranchId == braReceipt.BranchId);
-
-                var lst_branchGoals = (from goal in lst_goals
-                                       from branchG in goal.BranchGoals
-                                       where branchG.BranchId == branchPromotion.BranchId
-                                       select branchG).ToList();
-
-                //درصد مشمول شرط تحقق
-                var branchFulfillment = lst_totalReceiptGoal_fulfillments.SingleOrDefault(x => x.BranchId == branchPromotion.BranchId);
-                decimal branchFulfillmentPercent = 0;
-                //if (branchFulfillment != null)
-                //    branchFulfillmentPercent = branchFulfillment.EncouragePercent.Value;
-
-                //وصول کل
-                var goalGoodsCategoryTypeId = GoalGoodsCategoryTypeEnum.ReceiptTotalGoal;
-                var branchGoal = lst_branchGoals.SingleOrDefault(x => x.Goal.GoalGoodsCategoryTypeId == goalGoodsCategoryTypeId);
-                if (branchGoal != null)
-                {
-                    branchPromotion.TotalReceiptReachedPercent = getReceiptReachedPercent(branchGoal.Amount, goalGoodsCategoryTypeId, braReceipt);
-                    //branchPromotion.TotalReceiptPromotionPercent = getReceiptPromotion(branchPromotion.TotalReceiptReachedPercent > 100, branchGoal);
-                    //branchPromotion.TotalReceiptPromotion = branchPromotion.TotalReceiptAmount * branchPromotion.TotalReceiptPromotionPercent * branchFulfillmentPercent;
-                    //branchPromotion.TotalReceiptPromotion = branchPromotion.TotalReceiptAmount * getReceiptPromotion(branchPromotion.TotalReceiptReachedPercent > 100, branchGoal) * branchFulfillmentPercent;
-                }
-
-                //وصول خصوصی
-                goalGoodsCategoryTypeId = GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal;
-                branchGoal = lst_branchGoals.SingleOrDefault(x => x.Goal.GoalGoodsCategoryTypeId == goalGoodsCategoryTypeId);
-                if (branchGoal != null)
-                {
-                    branchPromotion.PrivateReceiptAmount = braReceipt.PrivateAmount.Value;
-                    branchPromotion.PrivateReceiptReachedPercent = getReceiptReachedPercent(branchGoal.Amount, goalGoodsCategoryTypeId, braReceipt);
-                    //branchPromotion.PrivateReceiptPromotionPercent = getReceiptPromotion(branchPromotion.PrivateReceiptReachedPercent > 100, branchGoal);
-                    //branchPromotion.PrivateReceiptPromotion = branchPromotion.PrivateReceiptAmount * branchPromotion.PrivateReceiptPromotionPercent * branchFulfillmentPercent;
-                    //branchPromotion.PrivateReceiptPromotion = branchPromotion.PrivateReceiptAmount * getReceiptPromotion(branchPromotion.PrivateReceiptReachedPercent > 100, branchGoal) * branchFulfillmentPercent;
-                }
-                //Debug.WriteLine($"BranchId={receiptPromotion.BranchId},BranchName={lst_temp_branch.Find(x => x.Id == receiptPromotion.BranchId).Name}"
-                //            + $",PrivateReceiptPercent={receiptPromotion.PrivateReceiptPercent},IsTouchedPrivate={receiptPromotion.IsTouchedPrivate},"
-                //            + $",PrivatePromotionPercent={receiptPromotion.PrivatePromotionPercent},PrivatePromotion={receiptPromotion.PrivatePromotion},"
-                //            + $"TotalReceiptPercent={receiptPromotion.TotalReceiptPercent},IsTouchedTotal={receiptPromotion.IsTouchedTotal}"
-                //            + $",TotalPromotionPercent={receiptPromotion.TotalPromotionPercent},TotalPromotion={receiptPromotion.TotalPromotion},"
-                //            + $"");
-
-            });
-
-            return result;
-
-        }
-        private decimal getReceiptPromotion(bool isReached, BranchGoal branchGoal)
-        {
-            var branchId = branchGoal.BranchId;
-            var branchReceiptGoalPercent = branchGoal.Goal.BranchReceiptGoalPercent.SingleOrDefault(x => x.BranchId == branchId);
-            if (branchReceiptGoalPercent != null)
-            {
-                if (isReached)
-                    return branchReceiptGoalPercent.ReachedPercent;
-                return branchReceiptGoalPercent.NotReachedPercent;
+                //مرکز به هدف وصول دست یافته  
+                promotion = amount * receiptTotal_branchReceiptGoalPercent.ReachedPercent * 0.01M;
             }
-            return 0;
-        }
-        private decimal getReceiptReachedPercent(decimal? amount, GoalGoodsCategoryTypeEnum goalGoodsCategoryTypeId, BranchReceipt braReceipt)
-        {
-            if (!amount.HasValue)
-                return 0;
-            decimal? receiptAmount = 0;
-            switch (goalGoodsCategoryTypeId)
+            else
             {
-                case GoalGoodsCategoryTypeEnum.ReceiptTotalGoal:
-                    receiptAmount = braReceipt.TotalAmount;
-                    break;
-                case GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal:
-                case GoalGoodsCategoryTypeEnum.ReceiptGovernGoal:
-                    receiptAmount = braReceipt.PrivateAmount;
-                    break;
+                promotion = amount * receiptTotal_branchReceiptGoalPercent.NotReachedPercent * 0.01M;
             }
-            return receiptAmount.HasValue ? Math.Round((receiptAmount.Value * 100) / amount.Value, 3) : 0;
 
+            return promotion;
         }
-
         #endregion
     }
 }

@@ -75,9 +75,6 @@ namespace Neutrino.Business
                     return result;
                 }
                 personelShareDTO.Items
-                    .Where(x => x.PrivateReceiptPercent.HasValue || x.SalesPercent.HasValue || x.TotalReceiptPercent.HasValue
-                    || x.MinimumPromotion.HasValue || x.MaximumPromotion.HasValue)
-                    .ToList()
                     .ForEach(x =>
                     {
                         x.BranchId = personelShareDTO.Branch.Id;

@@ -541,6 +541,18 @@
     <Compile Include="Migrations\201904211355237_alterTotalNumber_branchsales.Designer.cs">
       <DependentUpon>201904211355237_alterTotalNumber_branchsales.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904221913298_addPositionReceiptPromotion.cs" />
+    <Compile Include="Migrations\201904221913298_addPositionReceiptPromotion.Designer.cs">
+      <DependentUpon>201904221913298_addPositionReceiptPromotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904222034422_addFalgsToPromotion.cs" />
+    <Compile Include="Migrations\201904222034422_addFalgsToPromotion.Designer.cs">
+      <DependentUpon>201904222034422_addFalgsToPromotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904222138103_addPostion_positionpromotion.cs" />
+    <Compile Include="Migrations\201904222138103_addPostion_positionpromotion.Designer.cs">
+      <DependentUpon>201904222138103_addPostion_positionpromotion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NeutrinoRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -894,6 +906,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904211355237_alterTotalNumber_branchsales.resx">
       <DependentUpon>201904211355237_alterTotalNumber_branchsales.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904221913298_addPositionReceiptPromotion.resx">
+      <DependentUpon>201904221913298_addPositionReceiptPromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904222034422_addFalgsToPromotion.resx">
+      <DependentUpon>201904222034422_addFalgsToPromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904222138103_addPostion_positionpromotion.resx">
+      <DependentUpon>201904222138103_addPostion_positionpromotion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

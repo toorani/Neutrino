@@ -17,8 +17,11 @@ namespace Neutrino.Entities
         [Description("در صف بررسی")]
         InProcessQueue = 3,
         [Description("در انتظار تایید شرط تحقق")]
-        WaitingForGoalFulfillment = 4
-
+        WaitingForGoalFulfillment = 4,
+        [Description("اتمام محاسبه اهداف مبلغی و تعدادی")]
+        SalesCalculated = 5,
+        [Description("اتمام محاسبه اهداف وصول")]
+        ReceiptCalculated = 6
     }
 
     public class PromotionStatus : EnumEntity<PromotionStatusEnum>

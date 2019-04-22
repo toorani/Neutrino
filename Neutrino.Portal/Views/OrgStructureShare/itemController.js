@@ -33,11 +33,6 @@ function ($scope, $filter, ajaxService, alertService) {
                 alertService.showError(response);
             });
     }
-
-    $scope.cancel = function () {
-        $location.url('orgStructureShare/index');
-    }
-
     $scope.onchange_branch = function () {
         if ($scope.viewModel.branch != null) {
             $scope.viewModel.items = [];

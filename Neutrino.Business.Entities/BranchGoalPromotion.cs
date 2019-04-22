@@ -1,5 +1,6 @@
 ﻿using Espresso.Entites;
 using System;
+using System.Collections.Generic;
 
 namespace Neutrino.Entities
 {
@@ -20,6 +21,9 @@ namespace Neutrino.Entities
         /// مقدار پورسانت با در نظر گرفتن درصد پورسانت مرکز
         /// </summary>
         public decimal FinalPromotion { get; set; }
+        public virtual ICollection<PositionReceiptPromotion> PositionReceiptPromotions { get; set; }
+
+        public BranchGoalPromotion() => PositionReceiptPromotions = new HashSet<PositionReceiptPromotion>();
 
     }
 }
