@@ -5,8 +5,14 @@ namespace Neutrino.Entities
 {
     public enum ApprovePromotionTypeEnum
     {
+        /// <summary>
+        /// مرکز
+        /// </summary>
         [Description("مرکز")]
         Branch = 1,
+        /// <summary>
+        /// عوامل فروش
+        /// </summary>
         [Description("عوامل فروش")]
         Seller= 2,
         

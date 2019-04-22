@@ -150,7 +150,7 @@
                                             <span> تعریف هدف تعدادی مشروط</span>
                                         </a>
                                     </li>
-                                    <li ng-if="goal.computingTypeId == 2 || goal.computingTypeId == 3">
+                                    <li ng-if="goal.computingTypeId == 3">
                                         <a ng-click="quantityCondition_onclick(2)">
                                             <i class="fa fa-bullseye"></i>
                                             <span> تعریف هدف تعدادی</span>
@@ -248,7 +248,7 @@
                                                                     <div class="form-group" ng-show="rewardType.code == 2">
                                                                         <div class="col-md-3">
                                                                             <select class="form-control "
-                                                                                    ng-options="item.id as item.name for item in computingTypes "
+                                                                                    ng-options="item.id as item.name for item in rewardComputingTypes "
                                                                                     ng-disabled="!isDisable(rewardType.eId,step.rewardTypeId)"
                                                                                     ng-model="step.rewardInfo[rewardType.eId + '_computingTypeId']">
                                                                                 <option value="" selected>[ انتخاب کنید ]</option>

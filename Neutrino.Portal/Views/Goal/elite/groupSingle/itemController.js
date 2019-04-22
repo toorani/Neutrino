@@ -22,6 +22,7 @@ function ($scope, $location, $filter, $timeout, $routeParams, ajaxService, modal
     $scope.goodsCategories = [];
     $scope.goodsCategoryTypes = [];
     $scope.computingTypes = [];
+    $scope.rewardComputingTypes = [];
     $scope.rewardTypes = [];
     $scope.otherRewardTypes = [];
     $scope.condemnationTypes = [];
@@ -32,6 +33,7 @@ function ($scope, $location, $filter, $timeout, $routeParams, ajaxService, modal
         getGoalGoodsCategories();
         getGoalGoodsCategoryTypes();
         getComputingTypes();
+        getrewardComputingTypes();
         getRewardTypes();
         getOtherRewardTypes();
         getCondemnationType();
@@ -71,6 +73,13 @@ function ($scope, $location, $filter, $timeout, $routeParams, ajaxService, modal
             { id: 3, name: 'درصد' }
         ];
     }
+    var getrewardComputingTypes = function () {
+        $scope.rewardComputingTypes = [
+            { id: 1, name: 'تعداد' },
+            { id: 2, name: 'مبلغ' },
+        ];
+    }
+
     var getApprovePromotionType = function () {
         $scope.approvePromotionType = [
             { id: 1, name: 'مرکز' },
