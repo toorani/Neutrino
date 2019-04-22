@@ -431,7 +431,7 @@ namespace Neutrino.Business
                             goalStep = goal.GoalSteps.OrderByDescending(step => step.ComputingValue)
                             .Where(step => step.ComputingValue <= branchFulfillInfo.FulFillPercent)
                             .FirstOrDefault();
-
+                            var totalSales = lst_branchConditions.Sum(x => x.Amount);
                             decimal promotion = 0;
                             // هدف فروش زده است؟
                             if (goalStep != null)
@@ -440,7 +440,7 @@ namespace Neutrino.Business
 
                                 if (goalStepItem.ItemTypeId == (int)RewardTypeEnum.Percent) //درصد پاداش
                                 {
-                                    promotion = goalStepItem.Amount.Value * 0.01M * branchSalesInfo.TotalSales;
+                                    promotion = goalStepItem.Amount.Value * 0.01M * totalSales;
                                 }
                                 else if (goalStepItem.ItemTypeId == (int)RewardTypeEnum.SingleGoods) //جایزه عوامل فروش هر محصول
                                 {
@@ -452,7 +452,7 @@ namespace Neutrino.Business
                                 }
 
                                 entity.BranchPromotions
-                                .Single(x => x.BranchId == branchGoal.BranchId)
+                                .Single(x => x.BranchId == branchFulfillInfo.BranchId)
                                 .BranchGoalPromotions
                                 .Add(new BranchGoalPromotion { GoalId = goal.Id, PromotionWithOutFulfillmentPercent = promotion });
                             }
@@ -462,9 +462,9 @@ namespace Neutrino.Business
                                 var goalNonFulfillmentPercent = goal.GoalNonFulfillmentPercents.SingleOrDefault(x => x.GoalNonFulfillmentBranches.Any(y => y.BranchId == branchGoal.BranchId));
                                 if (goalNonFulfillmentPercent != null)
                                 {
-                                    promotion = goalNonFulfillmentPercent.Percent * 0.01M * branchSalesInfo.TotalSales;
+                                    promotion = goalNonFulfillmentPercent.Percent * 0.01M * totalSales;
                                     entity.BranchPromotions
-                                    .Single(x => x.BranchId == branchGoal.BranchId)
+                                    .Single(x => x.BranchId == branchFulfillInfo.BranchId)
                                     .BranchGoalPromotions
                                     .Add(new BranchGoalPromotion { GoalId = goal.Id, PromotionWithOutFulfillmentPercent = promotion });
                                 }
