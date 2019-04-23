@@ -145,23 +145,12 @@ namespace Neutrino.Portal.Tests
             {
                 Assert.Fail(loaderResult.ReturnMessage.ConcatAll());
             }
-            var result_sales = await promotionBS.CalculateSalesGoalsAsync(loaderResult.ResultValue);
-            var result_receipt = await promotionBS.CalculateReceiptGoalsAsync(loaderResult.ResultValue);
+            var result = await promotionBS.CalculateGoalsAsync(loaderResult.ResultValue);
 
-
-            //loaderResult = await promotionBS.EntityLoader.LoadAsync(x => x.Month == month && x.Year == year);
-            //if (loaderResult.ReturnStatus == false)
-            //{
-            //    Assert.Fail(loaderResult.ReturnMessage.ConcatAll());
-            //}
-
-            //Assert.IsTrue(loaderResult.ReturnStatus, loaderResult.ReturnMessage.ConcatAll());
-            //Assert.IsTrue(loaderResult.ResultValue.IsSalesCalculated);
-            //Assert.IsTrue(loaderResult.ResultValue.IsReceiptCalculated);
-
-            Assert.IsTrue(result_sales.ReturnStatus, result_sales.ReturnMessage.ConcatAll());
-            Assert.IsTrue(result_receipt.ReturnStatus, result_receipt.ReturnMessage.ConcatAll());
-
+            Assert.IsTrue(result.ReturnStatus, result.ReturnMessage.ConcatAll());
+            Assert.IsTrue(loaderResult.ResultValue.IsReceiptCalculated);
+            Assert.IsTrue(loaderResult.ResultValue.IsSalesCalculated);
+            Assert.AreEqual(loaderResult.ResultValue.StatusId, PromotionStatusEnum.GoalCalculated);
         }
     }
 }

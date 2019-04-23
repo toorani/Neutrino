@@ -21,66 +21,31 @@ namespace Neutrino.Business
         #region [ Varibale(s) ]
         private readonly AbstractValidator<Promotion> validator;
 
-
-        class TouchingGoal
+        /// <summary>
+        /// اطلاعات فروش کلی مراکز
+        /// </summary>
+        class BranchSalesInfo
         {
-            public int GoalId { get; set; }
+            /// <summary>
+            //شناسه مرکز
+            /// </summary>
             public int BranchId { get; set; }
             /// <summary>
-            /// جمع مبلغ فروش هدف
+            //مبلغ کل فروش مرکز
             /// </summary>
             public decimal TotalSales { get; set; }
             /// <summary>
-            /// جمع تعدادی فروش
+            //تعداد کل فروش مرکز
             /// </summary>
-            public double TotalNumber { get; set; }
-            public TouchingGoalStatus StatusId { get; set; }
-            /// <summary>
-            /// درصد پورسانت 
-            /// </summary>
-            public decimal PromotionReachedPercent { get; set; }
-            /// <summary>
-            /// درصد مشمول
-            /// </summary>
-            public decimal Fulfillment_EncouragePercent { get; set; }
-            /// <summary>
-            /// مقدار ردیفی که مرکز به هدف تعدادی آن رسیده است
-            /// </summary>
-            public int TouchedQuntity { get; set; }
-            /// <summary>
-            /// جمع مبلغ فروش تعدادی 
-            /// </summary>
-            public decimal TotalQuntitySales { get; set; }
-            /// <summary>
-            /// مقدار پورسانت
-            /// </summary>
-            public decimal PromotionValue { get; set; }
-            /// <summary>
-            /// مقدار پورسانت هدف نزده
-            /// </summary>
-            public decimal ForthCasePromotionValue { get; set; }
-            /// <summary>
-            /// درصد تحقق هدف اصلی
-            /// </summary>
-            public decimal FulfillmentGoalPercent { get; set; }
-            /// <summary>
-            /// درصد تحقق تعدادی
-            /// </summary>
-            public decimal FulfillmentQuantityPercent { get; set; }
-            public TouchingGoal()
-            {
-                StatusId = TouchingGoalStatus.Nothing;
-                ForthCasePromotionValue = 0;
-            }
+            public int TotalQuantity { get; set; }
+            public decimal? SellerFulfillmentPercent { get; set; }
         }
-        enum TouchingGoalStatus : int
+        class AggregationInfo
         {
-            Nothing = 0,
-            Amount = 1,
-            Qunatity = 2,
-            Both = 3
+            public int BranchId { get; set; }
+            public decimal AggregationSalesAmount { get; set; }
+            public double AggregationSalesNumber { get; set; }
         }
-
         #endregion
 
         #region [ Public Property(ies) ]
@@ -199,24 +164,29 @@ namespace Neutrino.Business
             }
             return result;
         }
-        /// <summary>
-        /// اطلاعات فروش کلی مراکز
-        /// </summary>
-        class BranchSalesInfo
+        public async Task<IBusinessResult> CalculateGoalsAsync(Promotion entity)
         {
-            /// <summary>
-            //شناسه مرکز
-            /// </summary>
-            public int BranchId { get; set; }
-            /// <summary>
-            //مبلغ کل فروش مرکز
-            /// </summary>
-            public decimal TotalSales { get; set; }
-            /// <summary>
-            //تعداد کل فروش مرکز
-            /// </summary>
-            public int TotalQuantity { get; set; }
-            public decimal? SellerFulfillmentPercent { get; set; }
+            var result = new BusinessResult();
+            try
+            {
+                var result_sales = await CalculateSalesGoalsAsync(entity);
+                var result_receipt = await CalculateReceiptGoalsAsync(entity);
+
+                result.ReturnStatus = result_receipt.ReturnStatus & result_sales.ReturnStatus;
+                if (result.ReturnStatus)
+                {
+                    entity = await unitOfWork.PromotionDataService.FirstOrDefaultAsync(x => x.Id == entity.Id);
+                    entity.StatusId = PromotionStatusEnum.GoalCalculated;
+                    await unitOfWork.CommitAsync();
+                }
+                result.ReturnMessage.AddRange(result_receipt.ReturnMessage);
+                result.ReturnMessage.AddRange(result_sales.ReturnMessage);
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
         }
         /// <summary>
         /// محاسبه پورسانت اهداف ریالی و تعدادی
@@ -237,9 +207,7 @@ namespace Neutrino.Business
 
                 entity = await unitOfWork.PromotionDataService.FirstOrDefaultAsync(x => x.Id == entity.Id, includes: x => new { x.BranchPromotions });
 
-                //Update commission's status 
-                //entity.StatusId = PromotionStatusEnum.InProcessing;
-                //unitOfWork.PromotionDataService.Update(entity);
+
 
                 //به دلیل اینکه ممکن است اهدافی تعریف شود که طول زمان آن بیشتر از یکماه باشد 
 
@@ -265,12 +233,12 @@ namespace Neutrino.Business
                                    && (g.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Group ||
                                    g.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single))
                                    .ToListAsync();
-                //TODO : uncomment
-                //lst_goals.ForEach(x =>
-                //{
-                //    x.IsUsed = true;
-                //    unitOfWork.GoalDataService.Update(x);
-                //});
+
+                lst_goals.ForEach(x =>
+                {
+                    x.IsUsed = true;
+                    unitOfWork.GoalDataService.Update(x);
+                });
 
 
                 //لیست ضریب تحقق ویزیتور هر مرکز
@@ -376,6 +344,7 @@ namespace Neutrino.Business
                                 SellerFulfillmentPercent = lst_fulfillmentPercents.Any(x => x.BranchId == branchFulfillInfo.BranchId) ?
                                     lst_fulfillmentPercents.Single(x => x.BranchId == branchFulfillInfo.BranchId).SellerFulfillmentPercent : null
                             };
+
                             addBranchGoalPromotion(entity, goal, goalStep, branchSalesInfo);
                         });
 
@@ -386,7 +355,6 @@ namespace Neutrino.Business
                 await unitOfWork.CommitAsync();
                 result.ReturnStatus = true;
                 result.ReturnMessage.Add("محاسبه پورسانت اهداف فروش با موفقیت پایان یافت");
-
             }
             catch (Exception ex)
             {
@@ -505,16 +473,7 @@ namespace Neutrino.Business
         #endregion
 
         #region [ Private Method(s) ]
-        class AggregationInfo
-        {
-            public int BranchId { get; set; }
-            public decimal AggregationSalesAmount { get; set; }
-            public double AggregationSalesNumber { get; set; }
-            public AggregationInfo()
-            {
 
-            }
-        }
         private async Task<List<FulfillmentPercent>> calculateFulfillmentPercent(Promotion entity, List<Goal> lstGoals, List<FulfillmentPromotionCondition> lst_totalFulfillPromotion)
         {
             //  هدف کل و وصول و سهم مراکز از اهداف تعریف شده
@@ -636,20 +595,30 @@ namespace Neutrino.Business
         }
         private List<BranchSalesInfo> getBranchSalesInfo(Goal goal, List<FulfillmentPercent> lst_fulfillmentPercents)
         {
-            return (from ggcg in unitOfWork.GoalGoodsCategoryGoodsDataService.GetQuery()
-                    join brsa in unitOfWork.BranchSalesDataService.GetQuery()
-                    on ggcg.GoodsId equals brsa.GoodsId
-                    where brsa.StartDate >= goal.StartDate && brsa.EndDate <= goal.EndDate
-                    && ggcg.GoalGoodsCategoryId == goal.GoalGoodsCategoryId
-                    group brsa by new { brsa.BranchId } into grp
-                    select new BranchSalesInfo
-                    {
-                        BranchId = grp.Key.BranchId,
-                        TotalSales = grp.Sum(x => x.TotalAmount),
-                        TotalQuantity = grp.Sum(x => x.TotalNumber),
-                        SellerFulfillmentPercent = lst_fulfillmentPercents.Any(x => x.BranchId == grp.Key.BranchId) ?
-                            lst_fulfillmentPercents.Single(x => x.BranchId == grp.Key.BranchId).SellerFulfillmentPercent : null
-                    }).ToList();
+            var query = (from ggcg in unitOfWork.GoalGoodsCategoryGoodsDataService.GetQuery()
+                         join brsa in unitOfWork.BranchSalesDataService.GetQuery()
+                         on ggcg.GoodsId equals brsa.GoodsId
+                         where brsa.StartDate >= goal.StartDate && brsa.EndDate <= goal.EndDate
+                         && ggcg.GoalGoodsCategoryId == goal.GoalGoodsCategoryId
+                         group brsa by new { brsa.BranchId } into grp
+                         select new
+                         {
+                             grp.Key.BranchId,
+                             TotalSales = grp.Sum(x => x.TotalAmount),
+                             TotalQuantity = grp.Sum(x => x.TotalNumber),
+                         }).ToList();
+
+            var result = (from q in query
+                          join fulfill in lst_fulfillmentPercents
+                          on q.BranchId equals fulfill.BranchId
+                          select new BranchSalesInfo
+                          {
+                              BranchId = q.BranchId,
+                              TotalSales = q.TotalSales,
+                              TotalQuantity = q.TotalQuantity,
+                              SellerFulfillmentPercent = fulfill.SellerFulfillmentPercent
+                          }).ToList();
+            return result;
         }
         /// <summary>
         /// محاسبه مبلغ پورسانت و ثبت اطلاعات پورسانت بدست آمده برای هدف و مرکز 

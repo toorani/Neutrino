@@ -12,6 +12,7 @@ namespace Neutrino.Interfaces
     {
         Task<IBusinessResultValue<Promotion>> AddPromotionAsync(Promotion entity);
         Task<IBusinessResult> PutInProcessQueueAsync(int year,int month);
+        Task<IBusinessResult> CalculateGoalsAsync(Promotion entity);
         Task<IBusinessResult> CalculateSalesGoalsAsync(Promotion entity);
         Task<IBusinessResult> CalculateReceiptGoalsAsync(Promotion entity);
     }
