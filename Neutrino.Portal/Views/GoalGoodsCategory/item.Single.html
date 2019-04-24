@@ -31,6 +31,7 @@
                                 <ui-select ng-model="viewModel.companySelected"
                                            disableAnimate
                                            refresh-delay="0"
+                                           append-to-body="true"
                                            on-select="onCompanySelected($item)">
                                     <ui-select-match placeholder="تامین کننده را انتخاب کنید" allow-clear="true">
                                         <span ng-bind="$select.selected.faName"></span>
@@ -55,7 +56,7 @@
 
 
                                 <ui-select ng-model="viewModel.goodsSelected">
-                                    <ui-select-match placeholder="دارو را انتخاب کنید" allow-clear="true">
+                                    <ui-select-match placeholder="دارو را انتخاب کنید" allow-clear="true" append-to-body="true">
                                         <span ng-bind="$select.selected.faName"></span>
                                     </ui-select-match>
                                     <ui-select-choices repeat="item in goodsCollection | propsFilter: {goodsCode: $select.search, enName: $select.search,faName:$select.search} ">

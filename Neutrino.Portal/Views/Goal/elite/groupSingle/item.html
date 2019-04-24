@@ -94,7 +94,6 @@
                                 <div class="col-md-4">
                                     <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
                                             ng-options="item.id as item.name for item in computingTypes "
-                                            
                                             ng-model="goal.computingTypeId">
                                         <option value="" selected>[ انتخاب کنید ]</option>
 
@@ -113,7 +112,7 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                         </div>
 
                         <div class="modal-footer">
@@ -125,7 +124,7 @@
                                 <i class="fa fa-check"></i>
                                 <span>ثبت</span>
                             </button>
-                            <div class="btn-group" ng-if="(goal.id != 0 && !goal.isUsed) && (goal.goalSteps.length != 0 && goal.goalSteps[0].id != 0)">
+                            <div class="btn-group" ng-if="(goal.id != 0 && !goal.isUsed) && (goal.goalSteps.length != 0 && goal.goalSteps[0].id != 0) && goal.approvePromotionTypeId==1">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-gear"></i> تنظیمات هدف <span class="caret"></span>
                                 </button>
@@ -240,7 +239,7 @@
                                                                                ng-disabled="!isDisable(rewardType.eId,step.rewardTypeId)"
                                                                                ng-model="step.rewardInfo[rewardType.eId + '_amount']"
                                                                                ng-trim="false"
-                                                                               awnum="percent"
+                                                                               awnum="price"
                                                                                placeholder="مقدار {{rewardType.description}} را وارد کنید">
 
                                                                     </div>

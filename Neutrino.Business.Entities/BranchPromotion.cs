@@ -68,11 +68,13 @@ namespace Neutrino.Entities
         public decimal AggregationSpecifiedAmount { get; set; }
 
         public virtual ICollection<BranchGoalPromotion> BranchGoalPromotions { get; private set; }
+        public virtual ICollection<MemberPromotion> MemberPromotions { get; private set; }
 
         #region [ Constructor(s) ]
         public BranchPromotion()
         {
             BranchGoalPromotions = new HashSet<BranchGoalPromotion>();
+            MemberPromotions = new HashSet<MemberPromotion>();
         }
         #endregion
     }

@@ -10,6 +10,9 @@ namespace Neutrino.Entities
         public virtual GoalStepActionTypeEnum ActionTypeId { get; set; }
         [ForeignKey("ActionTypeId")]
         public virtual GoalStepActionType ActionType { get; set; }
+        /// <summary>
+        /// contains an id of RewardType or CondemnationType
+        /// </summary>
         [Required]
         public int ItemTypeId { get; set; }
         public virtual ComputingTypeEnum? ComputingTypeId { get; set; }
