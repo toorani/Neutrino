@@ -90,6 +90,7 @@ namespace Neutrino.Data.EntityFramework
         public DbSet<QuantityConditionType> QuantityConditionTypes { get; set; }
         public DbSet<MemberSales> MemberSales { get; set; }
         public DbSet<MemberPromotion> MemberPromotions { get; set; }
+        public DbSet<CustomerGoal> CustomerGoals { get; set; }
         #endregion
 
         #region [ Override Method(s) ]
