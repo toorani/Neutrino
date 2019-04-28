@@ -118,7 +118,7 @@ namespace Neutrino.Data.EntityFramework.DataServices
             foreach (var goodsQC in entity.GoodsQuantityConditions.Where(x => x.Quantity != 0))
             {
                 goodsQC.Goods = null;
-
+                goodsQC.QuantityConditionId = entity.Id;
                 foreach (var branchQC in goodsQC.BranchQuantityConditions)
                 {
                     branchQC.Branch = null;

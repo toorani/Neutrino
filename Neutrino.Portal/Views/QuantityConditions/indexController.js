@@ -46,17 +46,23 @@ angular.module("neutrinoProject").register.controller('quantityConditions.indexC
                     function (response) {
                         alertService.showSuccess(response.data.actionResult.returnMessage);
                         $scope.quantityCondition.id = response.data.id;
-                        if ($scope.goodsQuantityConditions.lenght > 0) {
+
+                        if ($scope.quantityCondition.goodsQuantityConditions.length > 0) {
                             let response_goodsQunatity = response.data.goodsQuantityConditions[0];
-                            $scope.goodsQuantityConditions[0].id = response_goodsQunatity.id;
-                            $scope.goodsQuantityConditions[0].branchQuantityConditions.forEach((branchQunatity) => {
-                                //let response_branchQunatity = $filter('filter')(response.data.goodsQuantityConditions[0].branchQuantityConditions, { branchId: branchQunatity.branchId });
-                                let response_branchQunatity = response_goodsQunatity.branchQuantityConditions.filter((branchQ) => branchQ.branchId = branchQunatity.branchId)[0];
-                                if (response_branchQunatity != null) {
-                                    branchQunatity.id =
-                                }
-                                branchQunatity.id = 
-                            });
+                            let local_goodsQunatity = $scope.quantityCondition.goodsQuantityConditions.filter((goodsQunatity) => goodsQunatity.goodsId == response_goodsQunatity.goodsId)[0];
+
+                            if (local_goodsQunatity != null) {
+                                local_goodsQunatity.id = response_goodsQunatity.id;
+                                local_goodsQunatity.branchQuantityConditions.forEach((branchQunatity) => {
+                                    //let response_branchQunatity = $filter('filter')(response.data.goodsQuantityConditions[0].branchQuantityConditions, { branchId: branchQunatity.branchId });
+                                    let response_branchQunatity = response_goodsQunatity.branchQuantityConditions.filter((branchQ) => branchQ.branchId == branchQunatity.branchId)[0];
+                                    if (response_branchQunatity != null) {
+                                        branchQunatity.id = response_branchQunatity.id;
+                                    }
+
+                                });
+                            }
+
                         }
 
                     },
