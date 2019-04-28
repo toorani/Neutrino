@@ -763,7 +763,9 @@
     <Content Include="Views\Goal\elite\aggregation\itemController.js" />
     <Content Include="Views\Penalty\index.html" />
     <Content Include="Views\Penalty\indexController.js" />
+    <Content Include="Views\Promotion\overview\index.html" />
     <Content Include="Views\Promotion\index.html" />
+    <Content Include="Views\Promotion\overview\indexController.js" />
     <Content Include="Views\Promotion\indexController.js" />
     <Content Include="Views\CostCoefficient\index.html" />
     <Content Include="Views\CostCoefficient\indexController.js" />

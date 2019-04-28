@@ -26,14 +26,14 @@ function ($scope, $location, $filter, $routeParams, ajaxService, alertService) {
             {
                 if (item.percent != undefined) {
                     var firstStep = $scope.goalSteps[0];
-                    item.temp_amount = firstStep.computingValue * item.percent / 100;
+                    item.amount = firstStep.computingValue * item.percent / 100;
                     $scope.totalPercent += item.percent;
                 }
             }
             else { // amount
-                if (item.temp_amount != undefined && String(item.temp_amount).length > 5) {
+                if ((item.amount != undefined && String(item.amount).length >= 3) || $scope.reLoadData) {
                     var firstStep = $scope.goalSteps[0];
-                    let percent = item.temp_amount * 100 / firstStep.computingValue;
+                    let percent = item.amount * 100 / firstStep.computingValue;
                     item.percent = parseFloat(percent.toFixed(5));
                     $scope.totalPercent += item.percent;
                 }
@@ -52,10 +52,12 @@ function ($scope, $location, $filter, $routeParams, ajaxService, alertService) {
             function (response) {
                 alertService.showSuccess(response.data.returnMessage);
                 $scope.viewModel.items = response.data.resultValue.items;
+                $scope.reLoadData = true;
+                $scope.calculateTotalPercent();
+                $scope.reLoadData = false;
             },
             function (response) {
                 alertService.showError(response);
-                alertService.setValidationErrors($scope, response.data.validationErrors);
             });
     }
     $scope.cancel = function () {

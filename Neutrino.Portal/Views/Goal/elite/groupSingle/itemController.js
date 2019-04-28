@@ -464,7 +464,7 @@ function ($scope, $location, $filter, $timeout, $routeParams, ajaxService, modal
             setRewardInfo(result, goalStep);
         }
 
-        if (JSON.stringify(goalStep.condemnationInfo) !== JSON.stringify({})) {
+        if (JSON.stringify(goalStep.condemnationInfo) !== JSON.stringify({}) && goalStep.condemnationInfo != null) {
             result.condemnationInfo = {};
 
             if (goalStep.condemnationInfo.id != undefined) {
