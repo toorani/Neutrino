@@ -15,7 +15,7 @@ namespace Neutrino.Business
     public class PromotionBR : NeutrinoValidator<Promotion>
     {
         #region [ Varibale(s) ]
-        int? branchCount = null;
+        
         #endregion
 
         #region [ Constructor(s) ]

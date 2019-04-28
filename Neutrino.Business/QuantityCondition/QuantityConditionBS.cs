@@ -62,6 +62,7 @@ namespace Neutrino.Business
 
                 unitOfWork.QuantityConditionDataService.InsertOrUpdate(entity);
                 await unitOfWork.CommitAsync();
+                result.ResultValue = entity;
                 result.ReturnStatus = true;
                 result.ReturnMessage.Add("ثبت اطلاعات با موفقیت انجام گردید");
             }

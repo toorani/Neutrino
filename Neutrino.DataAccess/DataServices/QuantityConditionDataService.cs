@@ -143,8 +143,15 @@ namespace Neutrino.Data.EntityFramework.DataServices
                     dbContext.Entry(goodsQC).State = EntityState.Modified;
                 }
             }
-
-            base.InsertOrUpdate(entity);
+            if (entity.Id == 0)
+            {
+                Insert(entity);
+            }
+            else
+            {
+                Update(entity);
+            }
+            
         }
         public async Task<List<QuantityCondition>> GetQuantityConditionListAsync(List<int> goalIds)
         {

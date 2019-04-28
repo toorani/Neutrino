@@ -70,6 +70,19 @@ namespace Neutrino.Portal.WebApiControllers
             {
                 return CreateErrorResponse(resultValue);
             }
+            postedData.Id = resultValue.ResultValue.Id;
+            var goodsQ = resultValue.ResultValue.GoodsQuantityConditions.FirstOrDefault();
+            if (goodsQ != null)
+            {
+                var viewGoodsQ = postedData.GoodsQuantityConditions.First();
+                viewGoodsQ.Id = goodsQ.Id;
+                foreach (var branchQ in goodsQ.BranchQuantityConditions)
+                {
+                    viewGoodsQ.BranchQuantityConditions.Single(x => x.BranchId == branchQ.BranchId).Id = branchQ.Id;
+                }
+            }
+            
+           
 
             return CreateViewModelResponse(postedData, resultValue);
         }
