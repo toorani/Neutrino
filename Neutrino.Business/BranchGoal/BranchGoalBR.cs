@@ -30,7 +30,7 @@ namespace Neutrino.Business
     public class BranchGoalBatchRules : AbstractValidator<BranchGoalDTO>
     {
         #region [ Varibale(s) ]
-        
+
         #endregion
 
         #region [ Constructor(s) ]
@@ -41,10 +41,14 @@ namespace Neutrino.Business
             RuleFor(entity => entity.Items)
                 .Must(x => CheckTotalPercent(x))
                 .WithMessage("جمع درصد سهام وارد شده برای مراکز نباید بیشتر از 100 باشد");
-            RuleFor(entity => entity)
+            When(x => x.Goal.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal
+            || x.Goal.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptGovernGoal
+            || x.Goal.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal, () =>
+            {
+                RuleFor(entity => entity)
                 .Must(x => CheckTotalAmount(x))
                 .WithMessage("جمع مبالغ وصول مراکز نباید بیشتر از مبلغ وصول باشد");
-
+            });
         }
 
         private bool CheckTotalAmount(BranchGoalDTO dto)
@@ -75,7 +79,7 @@ namespace Neutrino.Business
     class BranchGoalBatchItemRules : AbstractValidator<BranchGoalItem>
     {
         #region [ Varibale(s) ]
-        
+
         #endregion
 
         #region [ Constructor(s) ]
