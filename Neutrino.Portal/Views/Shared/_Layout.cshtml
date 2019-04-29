@@ -42,6 +42,7 @@
         <link rel="stylesheet" href="~/Content/plugins/pace/pace-rtl.css">
         @Styles.Render("~/Content/validation")
         <link rel="stylesheet" href="~/Content/plugins/icheck/angular-icheck.css" />
+        <link rel="stylesheet" href="~/Content/datatable/buttons.dataTables.min.css" />
         <base href="@baseUrl" />
 
 
@@ -120,7 +121,7 @@
                 <div class="user-image">
                     <img src="~/Content/fickle/images/avatar-80.png" alt="" />
                     <div class="user-online-status"><span class="user-status is-online  "></span> </div>
-                    
+
                 </div>
                 <!--Left navigation user details end-->
                 <!--Left navigation start-->
@@ -238,6 +239,11 @@
 
         @Scripts.Render("~/bundles/jPlugins")
         <script src="/Scripts/plugins/pace/pace.min.js"></script>
+        <script src="~/Scripts/jquery.dataTables/extras/Button/js/dataTables.buttons.min.js"></script>
+        <script src="~/Scripts/jquery.dataTables/extras/Button/js/jszip.min.js"></script>
+        <script src="~/Scripts/jquery.dataTables/extras/Button/js/pdfmake.min.js"></script>
+        <script src="~/Scripts/jquery.dataTables/extras/Button/js/buttons.html5.min.js"></script>
+        <script src="~/Scripts/jquery.dataTables/extras/Button/js/buttons.flash.min.js"></script>
 
 
 
@@ -303,7 +309,7 @@
 
         </script>
         @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?ver =" + @version + "\"></script>", "~/bundles/routing-debug")
-        
+
 
     </body>
 </html>

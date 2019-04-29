@@ -13,85 +13,84 @@
                     <div class="col-md-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <form novalidate role="form" esp-validate-complete="submit()"
-                                      esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true
-                                  ,autoHidePrompt:true}"
-                                      class="form-horizontal ls_form" name="form">
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">
-                                            سال
-                                        </label>
-                                        <div class="col-md-4">
-                                            <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
-                                                    ng-options="item for item in years"
-                                                    ng-model="viewModel.year">
-                                                <option value="" selected>[ انتخاب کنید ]</option>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">
+                                        سال
+                                    </label>
+                                    <div class="col-md-4">
+                                        <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                                ng-options="item for item in years"
+                                                ng-model="viewModel.year">
+                                            <option value="" selected>[ انتخاب کنید ]</option>
 
-                                            </select>
-                                        </div>
-                                        <label class="col-md-2 control-label">
-                                            ماه
-                                        </label>
-                                        <div class="col-md-4">
-                                            <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
-                                                    ng-options="item.id as item.name for item in months"
-                                                    ng-model="viewModel.month">
-                                                <option value="" selected>[ انتخاب کنید ]</option>
-                                            </select>
-
-                                        </div>
+                                        </select>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" ng-click="showReport()"
-                                                class="btn btn-info">
-                                            <i class="fa fa-filter"></i>
-                                            <span>نمایش گزارش</span>
-                                        </button>
+                                    <label class="col-md-2 control-label">
+                                        ماه
+                                    </label>
+                                    <div class="col-md-4">
+                                        <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                                ng-options="item.id as item.name for item in months"
+                                                ng-model="viewModel.month">
+                                            <option value="" selected>[ انتخاب کنید ]</option>
+                                        </select>
+
                                     </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" ng-click="showReport()"
+                                            class="btn btn-info">
+                                        <i class="fa fa-filter"></i>
+                                        <span>نمایش گزارش</span>
+                                    </button>
+                                    <button type="button" ng-click="exportReport()"
+                                            class="btn btn-info">
+                                        <i class="fa fa-filter"></i>
+                                        <span>خروجی اکسل</span>
+                                    </button>
+                                </div>
 
-                                    <div class="ls-editable-table table-responsive ls-table ">
-                                        <table class="display responsive nowrap dataTable " cellspacing="0">
+                                <div class="ls-editable-table table-responsive ls-table ">
+                                    <table class="display responsive nowrap dataTable " cellspacing="0">
 
-                                            <thead>
-                                                <tr>
-                                                    <td></td>
-                                                    <td class="align-center"><input type="text" ng-model="filter_branchName" class="form-control" /></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td class="align-center" rowspan="2">#</td>
-                                                    <td class="align-center" rowspan="2">نام مرکز</td>
-                                                    <td class="align-center" colspan="3">درصد تحقق</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="align-center">هدف کل</td>
-                                                    <td class="align-center">وصول هدف کل</td>
-                                                    <td class="align-center">وصول خصوصی</td>
-                                                </tr>
-                                            </thead>
-                                            <tr ng-repeat="record in reportData | filter :{branch: filter_branchName}  ">
-                                                <td class="text-center">
-                                                    {{$index + 1}}
-                                                </td>
-                                                <td ng-class="{false:'text-center', true:'text-center label-success'}[record.totalSalesReachedPercent >= 100 && record.totalReceiptReachedPercent >= 100 && record.privateReceiptReachedPercent >= 100]">
-                                                    {{record.branch}}
-                                                </td>
-                                                <td ng-class="{false:'text-center', true:'text-center label-success'}[record.totalSalesReachedPercent >= 100]">
-                                                    % {{record.totalSalesReachedPercent}}
-                                                </td>
-                                                <td ng-class="{false:'text-center', true:'text-center label-success'}[record.totalReceiptReachedPercent >= 100]">
-                                                    % {{record.totalReceiptReachedPercent}}
-                                                </td>
-                                                <td ng-class="{false:'text-center', true:'text-center label-success'}[record.privateReceiptReachedPercent >= 100]">
-                                                    % {{record.privateReceiptReachedPercent}}
-                                                </td>
+                                        <thead>
+                                            <tr>
+                                                <td></td>
+                                                <td class="align-center"><input type="text" ng-model="filter_branchName" class="form-control" /></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
                                             </tr>
-                                        </table>
-                                    </div>
-                                </form>
+                                            <tr>
+                                                <td class="align-center" rowspan="2">#</td>
+                                                <td class="align-center" rowspan="2">نام مرکز</td>
+                                                <td class="align-center" colspan="3">درصد تحقق</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-center">هدف کل یا تجمیعی</td>
+                                                <td class="align-center">وصول هدف کل</td>
+                                                <td class="align-center">وصول خصوصی</td>
+                                            </tr>
+                                        </thead>
+                                        <tr ng-repeat="record in reportData | filter :{branch: filter_branchName}  ">
+                                            <td class="text-center">
+                                                {{$index + 1}}
+                                            </td>
+                                            <td ng-class="{false:'text-center label-danger', true:'text-center label-success'}[record.totalAndAggregationReached >= 100 && record.totalReceiptReachedPercent >= 100 && record.privateReceiptReachedPercent >= 100]">
+                                                {{record.branch}}
+                                            </td>
+                                            <td ng-class="{false:'text-center label-danger', true:'text-center label-success'}[record.totalAndAggregationReached >= 100]">
+                                                % {{record.totalAndAggregationReached}}
+                                            </td>
+                                            <td ng-class="{false:'text-center label-danger', true:'text-center label-success'}[record.totalReceiptReachedPercent >= 100]">
+                                                % {{record.totalReceiptReachedPercent}}
+                                            </td>
+                                            <td ng-class="{false:'text-center label-danger', true:'text-center label-success'}[record.privateReceiptReachedPercent >= 100]">
+                                                % {{record.privateReceiptReachedPercent}}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

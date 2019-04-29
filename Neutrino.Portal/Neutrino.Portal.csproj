@@ -100,6 +100,9 @@
       <HintPath>..\packages\FluentValidation.8.2.3\lib\net45\FluentValidation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.4.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.4\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="jQuery.DataTables.WebApi, Version=2018.10.16.129, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\jQuery.DataTables.WebApi.dll</HintPath>
@@ -425,6 +428,7 @@
     <Compile Include="Backend\TypeEntities\RewardTypeServiceController.cs" />
     <Compile Include="Backend\Goods\GoodsServiceController.cs" />
     <Compile Include="Attributes\WebApiValidateAntiForgeryTokenAttribute.cs" />
+    <Compile Include="Tools\ExportToExcel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\account.css" />
@@ -440,6 +444,7 @@
     <Content Include="Content\datatable\back_disabled.png" />
     <Content Include="Content\datatable\back_enabled.png" />
     <Content Include="Content\datatable\back_enabled_hover.png" />
+    <Content Include="Content\datatable\buttons.dataTables.min.css" />
     <Content Include="Content\datatable\dataTables.bootstrap.min.css" />
     <Content Include="Content\datatable\fixedColumns.bootstrap.min.css" />
     <Content Include="Content\datatable\fixedColumns.dataTables.min.css" />
@@ -813,6 +818,7 @@
     <Content Include="Views\OrgStructureShare\indexController.js" />
     <Content Include="Views\OrgStructureShare\item.html" />
     <Content Include="Views\OrgStructureShare\itemController.js" />
+    <Content Include="Views\Promotion\overviewrpt\OverviewExcelTemplate.html" />
     <Content Include="Views\QuantityConditions\index.html" />
     <Content Include="Views\QuantityConditions\indexController.js" />
     <Content Include="Views\Security\index.permission.html" />
