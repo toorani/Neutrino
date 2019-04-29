@@ -126,7 +126,7 @@ namespace Neutrino.Portal.Tools
                     }
                 }
             }
-            byte[] bytes = Encoding.Unicode.GetBytes(tableNode.OuterHtml);
+            byte[] bytes = Encoding.UTF8.GetBytes(tableNode.OuterHtml);
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
             var stream = new MemoryStream(bytes);
             result.Content = new StreamContent(stream);

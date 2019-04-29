@@ -38,7 +38,8 @@ angular.module("neutrinoProject").register.controller('promotion.overview.indexC
             $scope.exportReport = function () {
 
                 var url = '/api/promotionReportService/exportExcelOverView?year=' + $scope.viewModel.year + '&month=' + $scope.viewModel.month;
-                $location.url(url);
+
+                window.open(url);
 
                 //return ajaxService.ajaxCall({ year: $scope.viewModel.year, month: $scope.viewModel.month }, '', 'get',
                 //    function (response) {
