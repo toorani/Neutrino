@@ -1,26 +1,16 @@
-﻿using Espresso.Entites;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Espresso.Portal;
 
-namespace Neutrino.Entities
+namespace Neutrino.Portal
 {
-    public class BranchPromotion : EntityBase
+    public class BranchPromotionViewModel : ViewModelBase
     {
-        //شناسه پورسانت
-        public int PromotionId { get; set; }
-        public virtual Promotion Promotion { get; set; }
-        /// <summary>
-        /// شناسه شعبه
-        /// </summary>
-        public int BranchId { get; set; }
-        public virtual Branch Branch { get; set; }
-        /// <summary>
-        /// ماه محاسبه شده
-        /// </summary>
         public int Month { get; set; }
-        /// <summary>
-        /// سال محاسبه شده
-        /// </summary>
         public int Year { get; set; }
+        public string Branch { get; set; }
         /// <summary>
         ///  مقدار مشخص شده مرکز برای دستیابی به هدف وصول کل
         /// </summary>
@@ -53,7 +43,7 @@ namespace Neutrino.Entities
         /// درصد مشخص شده مرکز برای هدف کل فروش
         /// </summary>
         public decimal TotalSalesSpecifiedAmount { get; set; }
-     
+
         /// <summary>
         /// مبلغ کل تجمیعی
         /// </summary>
@@ -62,21 +52,18 @@ namespace Neutrino.Entities
         ///  درصد دستیابی هدف تجمیعی
         /// </summary>
         public decimal AggregationReachedPercent { get; set; }
-        
+
         /// <summary>
         /// مقدار مشخص شده مرکز برای هدف تجمیعی
         /// </summary>
         public decimal AggregationSpecifiedAmount { get; set; }
 
-        public virtual ICollection<BranchGoalPromotion> BranchGoalPromotions { get; private set; }
-        public virtual ICollection<MemberPromotion> MemberPromotions { get; private set; }
-
         #region [ Constructor(s) ]
-        public BranchPromotion()
+        public BranchPromotionViewModel():base()
         {
-            BranchGoalPromotions = new HashSet<BranchGoalPromotion>();
-            MemberPromotions = new HashSet<MemberPromotion>();
+
         }
         #endregion
+
     }
 }

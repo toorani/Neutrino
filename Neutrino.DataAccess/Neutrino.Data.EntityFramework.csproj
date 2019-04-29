@@ -557,6 +557,10 @@
     <Compile Include="Migrations\201904242000275_addMemberSales.Designer.cs">
       <DependentUpon>201904242000275_addMemberSales.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904290550504_addSome.cs" />
+    <Compile Include="Migrations\201904290550504_addSome.Designer.cs">
+      <DependentUpon>201904290550504_addSome.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NeutrinoRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -922,6 +926,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904242000275_addMemberSales.resx">
       <DependentUpon>201904242000275_addMemberSales.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904290550504_addSome.resx">
+      <DependentUpon>201904290550504_addSome.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

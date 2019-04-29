@@ -12,6 +12,7 @@ angular.module("neutrinoProject").register.controller('groupSingle.indexControll
 
         dataTableColumns.add({ mappingData: 'goalGoodsCategory.name', title: 'نام دسته دارویی' });
         dataTableColumns.add({ mappingData: 'goalGoodsCategoryType.description', title: 'نوع دسته دارویی' });
+        dataTableColumns.add({ mappingData: 'computingTypeTitle', title: 'نحوه محاسبه', sortable: false });
         dataTableColumns.add({ mappingData: 'startDate', title: 'تاریخ شروع' });
         dataTableColumns.add({ mappingData: 'endDate', title: 'تاریخ پایان' });
         dataTableColumns.add({

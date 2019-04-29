@@ -45,6 +45,7 @@ namespace Neutrino.Portal.ProfileMapper
                         return x.Amount;
                     }
                 }))
+                .ForMember(x => x.ComputingTypeTitle, opt => opt.ResolveUsing(x => x.ComputingType.Description))
                 //.Ignore(x => x.GoalSteps)
                 .ReverseMap()
                 .ForMember(goalDTO => goalDTO.StartDate,

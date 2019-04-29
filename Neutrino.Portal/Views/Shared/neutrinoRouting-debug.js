@@ -31,7 +31,7 @@ angular.module("neutrinoProject").config(['$routeProvider', '$locationProvider',
         $routeProvider.when('/:rootSection1/:rootSection2/:section/:tree', {
             templateUrl: function (rp) {
                 return baseSiteUrlPath + 'views/' + rp.rootSection1 + '/' + rp.rootSection2 + '/' + rp.section + '/' + rp.tree + '.html?v=' + this.getApplicationVersion();
-                                         
+
             },
             resolve: {
                 loadMyCtrl: ['$q', '$rootScope', '$location', '$ocLazyLoad', function ($q, $rootScope, $location, $ocLazyLoad) {
@@ -42,11 +42,13 @@ angular.module("neutrinoProject").config(['$routeProvider', '$locationProvider',
                     var directory = path[3];
                     var controllerName = path[4];
 
-                    var controllerToLoad = "Views/" + root_directory1 + "/" + root_directory2 + "/" + directory + "/" + controllerName +  "Controller.js?v=" + this.getApplicationVersion();
+                    var controllerToLoad = "Views/" + root_directory1 + "/" + root_directory2 + "/" + directory + "/" + controllerName + "Controller.js?v=" + this.getApplicationVersion();
                     return $ocLazyLoad.load(controllerToLoad);
                 }]
             }
         });
+
+
         $routeProvider.when('/:rootSection1/:rootSection2/:section/:tree/:id', {
             templateUrl: function (rp) {
                 return baseSiteUrlPath + 'views/' + rp.rootSection1 + '/' + rp.rootSection2 + '/' + rp.section + '/' + rp.tree + '.html?v=' + this.getApplicationVersion();
@@ -85,7 +87,7 @@ angular.module("neutrinoProject").config(['$routeProvider', '$locationProvider',
                 }]
             }
         });
-        
+
         $routeProvider.when('/:section/item/:id', {
             templateUrl: function (rp) {
                 return baseSiteUrlPath + 'views/' + rp.section + '/item.html?v=' + this.getApplicationVersion();
@@ -130,18 +132,20 @@ angular.module("neutrinoProject").config(['$routeProvider', '$locationProvider',
         });
         $routeProvider.when('/:rootSection/:section/:tree', {
             templateUrl: function (rp) {
-                return baseSiteUrlPath + 'views/' + rp.rootSection + '/' + rp.tree + '.' + rp.section + '.html?v=' + this.getApplicationVersion();
-                                           
+                //return baseSiteUrlPath + 'views/' + rp.rootSection + '/' + rp.tree + '.' + rp.section + '.html?v=' + this.getApplicationVersion();
+                return baseSiteUrlPath + 'views/' + rp.rootSection + '/' + rp.section + '/' + rp.tree + '.html?v=' + this.getApplicationVersion();
+
             },
             resolve: {
-                loadMyCtrl: ['$q', '$rootScope', '$location', '$ocLazyLoad', function ($q, $rootScope, $location, $ocLazyLoad) {
+                loadMyCtrl: ['$location', '$ocLazyLoad', function ($location, $ocLazyLoad) {
 
                     var path = $location.path().split("/");
                     var root_directory = path[1];
                     var directory = path[2];
                     var controllerName = path[3];
 
-                    var controllerToLoad = "Views/" + root_directory + "/" + controllerName + '.' + directory + "Controller.js?v=" + this.getApplicationVersion();
+                    //var controllerToLoad = "Views/" + root_directory + "/" + controllerName + '.' + directory + "Controller.js?v=" + this.getApplicationVersion();
+                    var controllerToLoad = "Views/" + root_directory + "/" + directory +'/'+ controllerName + "Controller.js?v=" + this.getApplicationVersion();
                     return $ocLazyLoad.load(controllerToLoad);
                 }]
             }
@@ -165,13 +169,13 @@ angular.module("neutrinoProject").config(['$routeProvider', '$locationProvider',
             templateUrl: function (rp) { return baseSiteUrlPath + 'views/Home/Index.html?v=' + this.getApplicationVersion(); },
             resolve: {
                 loadMyCtrl: ['$ocLazyLoad', 'permissions'
-                     , function ($ocLazyLoad, permissions) {
-                         var controllerToLoad = "Views/Home/IndexController.js?v=" + this.getApplicationVersion();
-                         return $ocLazyLoad.load(controllerToLoad);
-                     }]
+                    , function ($ocLazyLoad, permissions) {
+                        var controllerToLoad = "Views/Home/IndexController.js?v=" + this.getApplicationVersion();
+                        return $ocLazyLoad.load(controllerToLoad);
+                    }]
             }
         });
-        
+
 
         $locationProvider.html5Mode(true);
 

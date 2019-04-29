@@ -50,12 +50,13 @@
                 x => new { x.Title, x.Url },
                 new AppMenu { Title = "هدف گذاری تامین کننده", Icon = "fa fa-line-chart", Url = "/goal/supplier/index", OrderId = 1 },
                 new AppMenu { Title = "هدف گذاری الیت دارو", Icon = "fa fa-line-chart", OrderId = 2 },
-                new AppMenu { Title = "ضریب تحقق پورسانت", OrderId = 3, Url= "/fulfillmentPercent/item" , Icon = "fa fa-money"},
+                new AppMenu { Title = "ضریب تحقق پورسانت", OrderId = 3, Url = "/fulfillmentPercent/item", Icon = "fa fa-money" },
                 new AppMenu { Title = "محاسبه پورسانت", Icon = "fa fa-gears", Url = "/promotion/index", OrderId = 5 },
 
                 new AppMenu { Title = "تقسیم پورسانت بین اعضا", Icon = "fa fa-percent", Url = "/sharePromotion/index", OrderId = 7 },
                 new AppMenu { Title = "مدیریت پرداخت و کسورات", Icon = "fa fa-percent", Url = "/penalty/index", OrderId = 8 },
-                new AppMenu { Title = "ضریب نوع محصول", Icon = "fa fa-medkit", Url = "/costCoefficient/index", OrderId = 10 },
+                new AppMenu { Title = "گزارشات", Icon = "fa fa-list-alt", OrderId = 9 },
+                new AppMenu { Title = "ضریب نوع محصول", Icon = "fa fa-medkit", Url = "/costCoefficient/index", OrderId = 10, Deleted = true },
 
 
                 new AppMenu { Title = "اطلاعات پایه", Icon = "fa fa-book", OrderId = 20 },
@@ -147,45 +148,27 @@
                        Parent = systemItem,
                        ParentId = systemItem.Id
                    }
-                   //,
-                   //new AppMenu
-                   //{
-                   //    Title = "مانیتورینگ سرویس ها",
-                   //    Icon = "fa fa-info-circle",
-                   //    Url = "/servicesMonitoring/index",
-                   //    OrderId = 2,
-                   //    Parent = systemItem,
-                   //    ParentId = systemItem.Id
-                   //}
+                   
                );
 
-            //AppMenu fulfillmentItem = context.AppMenuItems.SingleOrDefault(x => x.Title == "شرط تحقق پورسانت");
-            //if (fulfillmentItem == null)
-            //{
-            //    fulfillmentItem = context.AppMenuItems.Local.SingleOrDefault(x => x.Title == "شرط تحقق پورسانت");
-            //}
+            AppMenu reportItem = context.AppMenuItems.SingleOrDefault(x => x.Title == "گزارشات");
+            if (reportItem == null)
+            {
+                reportItem = context.AppMenuItems.Local.SingleOrDefault(x => x.Title == "گزارشات");
+            }
 
-            //context.AppMenuItems.AddOrUpdate(
-            //    x => new { x.Title, x.Url },
-            //        new AppMenu
-            //        {
-            //            Title = "هدف کل",
-            //            Icon = "fa fa-flag-checkered",
-            //            Url = "/goalFulfillment/index/" + GoalGoodsCategoryTypeEnum.TotalSalesGoal.ToString().ToLower(),
-            //            OrderId = 1,
-            //            Parent = fulfillmentItem,
-            //            ParentId = fulfillmentItem.Id
-            //        },
-            //        new AppMenu
-            //        {
-            //            Title = "هدف وصول",
-            //            Icon = "fa fa-money",
-            //            Url = "/goalFulfillment/index/" + GoalGoodsCategoryTypeEnum.ReceiptTotalGoal.ToString().ToLower(),
-            //            OrderId = 2,
-            //            Parent = fulfillmentItem,
-            //            ParentId = fulfillmentItem.Id
-            //        }
-            //    );
+            context.AppMenuItems.AddOrUpdate(
+                x => new { x.Title, x.Url },
+                    new AppMenu
+                    {
+                        Title = "عملکرد نهایی",
+                        Icon = "fa fa-file-text-o",
+                        Url = "/promotion/overviewrpt/index" ,
+                        OrderId = 1,
+                        Parent = reportItem,
+                        ParentId = reportItem.Id
+                    }
+                );
 
             AppMenu eliteGoalItem = context.AppMenuItems.SingleOrDefault(x => x.Title == "هدف گذاری الیت دارو");
             if (eliteGoalItem == null)
@@ -277,7 +260,7 @@
             //adminUser.UserRoles.Add(adminRole);
             //context.Users.AddOrUpdate(x => x.UserName, adminUser);
 
-          
+
 
 
 

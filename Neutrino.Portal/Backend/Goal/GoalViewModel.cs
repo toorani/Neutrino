@@ -25,6 +25,7 @@ namespace Neutrino.Portal.Models
         public List<GoodsViewModel> GoodsSelectionList { get; set; }
         public List<GoalStepViewModel> GoalSteps { get; set; }
         public List<FulfillmentPromotionConditionViewModel> TotalSalesGoalRanges { get; set; }
+        public string ComputingTypeTitle { get; set; }
         public int ComputingTypeId { get; set; }
         public int? ApprovePromotionTypeId { get; set; }
         public decimal? Amount { get; set; }

@@ -114,6 +114,7 @@ namespace Neutrino.Data.EntityFramework.DataServices
                 .IncludeFilter(x => x.GoalGoodsCategory)
                 .IncludeFilter(x => x.GoalGoodsCategory.GoodsCollection.Where(y => y.Deleted == false))
                 .IncludeFilter(x => x.Company)
+                .IncludeFilter(x => x.ComputingType)
                 .FirstOrDefaultAsync(x => x.Id == goalId);
 
             return query;
@@ -178,7 +179,7 @@ namespace Neutrino.Data.EntityFramework.DataServices
             return result == 0 ? thisMonthAmount : result;
 
         }
-        
+
         #endregion
 
         #region [ Private Method(s) ]

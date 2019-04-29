@@ -33,7 +33,7 @@ function ($scope, $location, $filter, $timeout, $routeParams, ajaxService, modal
         getGoalGoodsCategories();
         getGoalGoodsCategoryTypes();
         getComputingTypes();
-        getrewardComputingTypes();
+        getrewardComputingTypes();  
         getRewardTypes();
         getOtherRewardTypes();
         getCondemnationType();

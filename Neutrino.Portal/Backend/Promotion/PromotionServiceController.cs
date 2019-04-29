@@ -83,7 +83,6 @@ namespace Neutrino.Portal
             return CreateViewModelResponse(dataModelView, entity);
 
         }
-
         [Route("startCalculation"), HttpPost]
         public async Task<HttpResponseMessage> StartCalculation(PromotionViewModel postedViewModel)
         {
@@ -98,6 +97,7 @@ namespace Neutrino.Portal
 
             return CreateViewModelResponse(postedViewModel, entityCreated);
         }
+        
         #endregion
 
         #region [ Private Method(s) ]

@@ -85,10 +85,11 @@ namespace Neutrino.Portal.WebApiControllers
                     .LoadAsync(
                     pageNumber: dataTablesModel.iDisplayStart
                     , pageSize: dataTablesModel.iDisplayLength
-                    , includes: goal => new { goal.GoalGoodsCategory, goal.Company, goal.GoalGoodsCategoryType, goal.GoalSteps }
+                    , includes: goal => new { goal.GoalGoodsCategory, goal.Company, goal.GoalGoodsCategoryType, goal.GoalSteps,goal.ComputingType }
                     , orderBy: UIHelper.GetOrderBy<Goal, GoalViewModel>(dataTablesModel.GetSortedColumns())
                     , where: or => (or.GoalGoodsCategory.Name.Contains(dataTablesModel.sSearch)
                     || or.GoalGoodsCategoryType.Description.Contains(dataTablesModel.sSearch)
+                    || or.ComputingType.Description.Contains(dataTablesModel.sSearch)
                     )
                     && or.GoalTypeId == goalTypeId.Value
                     && (isUsed == null || or.IsUsed == isUsed.Value)
