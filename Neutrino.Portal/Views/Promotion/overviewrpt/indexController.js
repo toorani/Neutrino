@@ -1,8 +1,8 @@
 ﻿console.log("promotion.overview.indexController")
 
 angular.module("neutrinoProject").register.controller('promotion.overview.indexController',
-    ['$scope', 'ajaxService', 'alertService', 'persianCalendar','$location',
-        function ($scope, ajaxService, alertService, persianCalendar, $location) {
+    ['$scope', 'ajaxService', 'alertService', 'persianCalendar','exportExcel',
+        function ($scope, ajaxService, alertService, persianCalendar, exportExcel) {
 
             "use strict";
             $scope.viewModel = {
@@ -38,16 +38,7 @@ angular.module("neutrinoProject").register.controller('promotion.overview.indexC
             $scope.exportReport = function () {
 
                 var url = '/api/promotionReportService/exportExcelOverView?year=' + $scope.viewModel.year + '&month=' + $scope.viewModel.month;
-
-                window.open(url);
-
-                //return ajaxService.ajaxCall({ year: $scope.viewModel.year, month: $scope.viewModel.month }, '', 'get',
-                //    function (response) {
-
-                //    },
-                //    function (response) {
-                //        alertService.showError(response);
-                //    });
+                exportExcel.loadfile(url);
             }
 
         }]);

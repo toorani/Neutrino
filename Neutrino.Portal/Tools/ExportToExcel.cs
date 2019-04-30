@@ -100,7 +100,9 @@ namespace Neutrino.Portal.Tools
                 var captionElement = tableNode.Element("caption");
                 if (string.IsNullOrWhiteSpace(caption) == false && captionElement != null)
                 {
-                    captionElement.InnerHtml = caption;
+                    
+                    var caption_span = HtmlNode.CreateNode($"<span style='font-weight: bold;font-family:Tahoma;font-size:14px'>{caption} </span>");
+                    captionElement.AppendChild(caption_span);
                 }
                 var tbodyElement = tableNode.Element("tbody");
                 if (tbodyElement != null)

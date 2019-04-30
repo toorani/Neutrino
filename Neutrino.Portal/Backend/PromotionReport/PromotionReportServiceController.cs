@@ -62,7 +62,7 @@ namespace Neutrino.Portal
 
             var mapper = GetMapper();
             var dataModelView = mapper.Map<List<BranchPromotionViewModel>>(entity.ResultValue);
-            string caption = $"{month} ماه  - {year} عملکرد نهایی سال";
+            string caption = $"عملکرد نهایی سال {year} ماه {month} ";
             var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/overviewrpt/OverviewExcelTemplate.html");
             var result = ExportToExcel.WriteHtmlTable<BranchPromotionViewModel>(dataModelView, "OverView", excelTemplate, caption);
             return result;
