@@ -565,6 +565,18 @@
     <Compile Include="Migrations\201905010938063_addChanges.Designer.cs">
       <DependentUpon>201905010938063_addChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905020457408_addBranchGoal_branchgoalpromotion.cs" />
+    <Compile Include="Migrations\201905020457408_addBranchGoal_branchgoalpromotion.Designer.cs">
+      <DependentUpon>201905020457408_addBranchGoal_branchgoalpromotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905020621066_addsalesquantity_branchgoalpromotion.cs" />
+    <Compile Include="Migrations\201905020621066_addsalesquantity_branchgoalpromotion.Designer.cs">
+      <DependentUpon>201905020621066_addsalesquantity_branchgoalpromotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905021245360_addRelationSomeEntities.cs" />
+    <Compile Include="Migrations\201905021245360_addRelationSomeEntities.Designer.cs">
+      <DependentUpon>201905021245360_addRelationSomeEntities.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NeutrinoRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -936,6 +948,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905010938063_addChanges.resx">
       <DependentUpon>201905010938063_addChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905020457408_addBranchGoal_branchgoalpromotion.resx">
+      <DependentUpon>201905020457408_addBranchGoal_branchgoalpromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905020621066_addsalesquantity_branchgoalpromotion.resx">
+      <DependentUpon>201905020621066_addsalesquantity_branchgoalpromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905021245360_addRelationSomeEntities.resx">
+      <DependentUpon>201905021245360_addRelationSomeEntities.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

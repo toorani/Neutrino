@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Espresso.BusinessService.Interfaces;
 using Neutrino.Entities;
@@ -15,5 +16,6 @@ namespace Neutrino.Interfaces
         Task<IBusinessResult> CalculateGoalsAsync(Promotion entity);
         Task<IBusinessResult> CalculateSalesGoalsAsync(Promotion entity);
         Task<IBusinessResult> CalculateReceiptGoalsAsync(Promotion entity);
+        Task<IBusinessResultValue<List<ReportBranchSalesGoal>>> LoadReportBranchSalesGoal(DateTime startDate, DateTime endDate, int goalGoodsCategoryId);
     }
 }

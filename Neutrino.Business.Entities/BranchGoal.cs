@@ -1,4 +1,5 @@
 ﻿using Espresso.Entites;
+using System.Collections.Generic;
 
 namespace Neutrino.Entities
 {
@@ -31,8 +32,8 @@ namespace Neutrino.Entities
         /// هدف
         /// </summary>
         public virtual Goal Goal { get; set; }
+        public virtual ICollection<BranchGoalPromotion> BranchGoalPromotions { get; private set; }
 
-
-        public BranchGoal() { }
+        public BranchGoal() => BranchGoalPromotions = new HashSet<BranchGoalPromotion>();
     }
 }

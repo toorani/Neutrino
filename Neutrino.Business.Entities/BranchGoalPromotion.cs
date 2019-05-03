@@ -13,6 +13,7 @@ namespace Neutrino.Entities
         /// شناسه مرکز
         /// </summary>
         public int GoalId { get; set; }
+        public virtual Goal Goal { get; set; }
         /// <summary>
         /// مقدار پورسانت بدون در نظر گرفتن درصد پورسانت مرکز
         /// </summary>
@@ -21,7 +22,15 @@ namespace Neutrino.Entities
         /// مقدار پورسانت با در نظر گرفتن درصد پورسانت مرکز
         /// </summary>
         public decimal FinalPromotion { get; set; }
+        /// <summary>
+        /// شناسه هدف مرکز
+        /// </summary>
+        public int BranchGoalId { get; set; }
+        public virtual BranchGoal BranchGoal { get; set; }
+        
         public virtual ICollection<PositionReceiptPromotion> PositionReceiptPromotions { get; set; }
+        public decimal TotalSales { get; set; }
+        public int TotalQuantity { get; set; }
 
         public BranchGoalPromotion() => PositionReceiptPromotions = new HashSet<PositionReceiptPromotion>();
 

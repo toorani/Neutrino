@@ -1,4 +1,5 @@
 ﻿using Espresso.Entites;
+using System;
 using System.Collections.Generic;
 
 namespace Neutrino.Entities
@@ -21,6 +22,14 @@ namespace Neutrino.Entities
         /// سال محاسبه شده
         /// </summary>
         public int Year { get; set; }
+        /// <summary>
+        /// تاریخ شروع
+        /// </summary>
+        public DateTime StartDate { get; set; }
+        /// <summary>
+        /// تاریخ پایان
+        /// </summary>
+        public DateTime EndDate { get; set; }
         /// <summary>
         ///  مقدار مشخص شده مرکز برای دستیابی به هدف وصول کل
         /// </summary>

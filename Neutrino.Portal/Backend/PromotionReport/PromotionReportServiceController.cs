@@ -10,6 +10,7 @@ using System.Web.Hosting;
 using System.Web.Http;
 using AutoMapper;
 using Espresso.BusinessService.Interfaces;
+using Espresso.Core;
 using Espresso.Portal;
 using jQuery.DataTables.WebApi;
 using Neutrino.Entities;
@@ -25,12 +26,15 @@ namespace Neutrino.Portal
     {
         #region [ Varibale(s) ]
         private readonly IEntityListLoader<BranchPromotion> branchPromotionLoader;
+        private readonly IPromotionBS promotionBS;
         #endregion
 
         #region [ Constructor(s) ]
-        public PromotionReportServiceController(IEntityListLoader<BranchPromotion> entityListLoader)
+        public PromotionReportServiceController(IEntityListLoader<BranchPromotion> entityListLoader
+            , IPromotionBS promotionBS)
         {
             this.branchPromotionLoader = entityListLoader;
+            this.promotionBS = promotionBS;
         }
         #endregion
 
@@ -63,9 +67,42 @@ namespace Neutrino.Portal
             var mapper = GetMapper();
             var dataModelView = mapper.Map<List<BranchPromotionViewModel>>(entity.ResultValue);
             string caption = $"عملکرد نهایی سال {year} ماه {month} ";
-            var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/overviewrpt/OverviewExcelTemplate.html");
+            var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/overviewrpt/excelTemplate.html");
             var result = ExportToExcel.WriteHtmlTable<BranchPromotionViewModel>(dataModelView, "OverView", excelTemplate, caption);
             return result;
+        }
+
+        [Route("getBranchSaleGoals")]
+        public async Task<HttpResponseMessage> GetBranchSaleGoals(string startDate, string endDate, int goalGoodsCategoryId)
+        {
+            DateTime? startDateTime = Utilities.ToDateTime(startDate);
+            DateTime? endDateTime = Utilities.ToDateTime(endDate);
+            if (startDateTime.HasValue && endDateTime.HasValue)
+            {
+                var entity = await promotionBS.LoadReportBranchSalesGoal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+                if (entity.ReturnStatus == false)
+                {
+                    return CreateErrorResponse(entity);
+                }
+
+                var lst_responses = entity.ResultValue.GroupBy(x => new { x.BranchName })
+                    .Select(x => new ReportBranchSalesGoalViewModel
+                    {
+                        BranchName = x.Key.BranchName,
+                        TotalSales = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalSales,
+                        FinalPromotion = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).FinalPromotion,
+                        PromotionWithOutFulfillmentPercent = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).PromotionWithOutFulfillmentPercent,
+                        PromotionGoalSteps = x.Select(y => new PromotionGoalStep
+                        {
+                            AmountSpecified = y.AmountSpecified,
+                            FulfilledPercent = Math.Round(y.FulfilledPercent, MidpointRounding.AwayFromZero),
+                            GoalAmount = y.GoalAmount,
+                        }).ToList()
+                    }).ToList();
+
+                return CreateSuccessedListResponse(lst_responses);
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
 
         #endregion

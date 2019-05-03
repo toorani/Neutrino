@@ -167,6 +167,15 @@
                         OrderId = 1,
                         Parent = reportItem,
                         ParentId = reportItem.Id
+                    },
+                    new AppMenu
+                    {
+                        Title = "عملکرداهداف فروش",
+                        Icon = "fa fa-file-text-o",
+                        Url = "/promotion/branchsalesrpt/index",
+                        OrderId = 2,
+                        Parent = reportItem,
+                        ParentId = reportItem.Id
                     }
                 );
 

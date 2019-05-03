@@ -58,6 +58,7 @@ namespace Neutrino.Data.EntityFramework
         public IEntityRepository<GoalNonFulfillmentBranch> GoalNonFulfillmentBranchDataService { get; private set; }
         public IEntityRepository<GoalGoodsCategoryGoods> GoalGoodsCategoryGoodsDataService { get; private set; }
         public IEntityRepository<MemberSales> MemberSalesDataService { get; private set; }
+        public IEntityRepository<BranchGoalPromotion> BranchGoalPromotionDataService { get; set; }
 
         #endregion
 
@@ -98,7 +99,8 @@ namespace Neutrino.Data.EntityFramework
             , IEntityRepository<GoalNonFulfillmentPercent> goalNonFulfillmentPercentDS
             , IEntityRepository<GoalNonFulfillmentBranch> goalNonFulfillmentBranchDS
             , IEntityRepository<GoalGoodsCategoryGoods> goalGoodsCategoryGoodsDS
-            ,IEntityRepository<MemberSales> memberSalesDS
+            , IEntityRepository<MemberSales> memberSalesDS
+            , IEntityRepository<BranchGoalPromotion> branchGoalPromotionDS
            )
         {
             this.context = context;
@@ -138,7 +140,8 @@ namespace Neutrino.Data.EntityFramework
             GoalNonFulfillmentBranchDataService = goalNonFulfillmentBranchDS;
             GoalGoodsCategoryGoodsDataService = goalGoodsCategoryGoodsDS;
             MemberSalesDataService = memberSalesDS;
-    }
+            BranchGoalPromotionDataService = branchGoalPromotionDS;
+        }
         #endregion
 
         #region [ Public Method(s) ]
@@ -201,7 +204,7 @@ namespace Neutrino.Data.EntityFramework
             where TEntity : EntityBase, new()
         {
             //return new NeutrinoRepositoryBase<TEntity>(context);
-            
+
             return NinjectHttpContainer.Resolve<IEntityRepository<TEntity>>();
 
         }

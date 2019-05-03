@@ -11,15 +11,17 @@ using System.Data.Entity.Validation;
 using Espresso.BusinessService;
 using Espresso.BusinessService.Interfaces;
 using Neutrino.Data.EntityFramework;
+using System.Data.Entity;
+using Z.EntityFramework.Plus;
 
 namespace Neutrino.Business
 {
     public class PermissionBS : NeutrinoBusinessService, IPermissionBS
     {
         #region [ Constructor(s) ]
-        public PermissionBS(NeutrinoUnitOfWork unitOfWork):base(unitOfWork)
+        public PermissionBS(NeutrinoUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            
+
         }
 
         #endregion
@@ -72,6 +74,7 @@ namespace Neutrino.Business
             }
             return result;
         }
+        
         #endregion
 
 

@@ -14,14 +14,11 @@ angular.module("neutrinoProject").register.controller('promotion.overview.indexC
             $scope.months = persianCalendar.getMonthNames();
             $scope.reportData = [];
             $scope.initializeController = function () {
-                $scope.title = 'مدیریت محاسبه پورسانت';
+                $scope.title = 'گزارش عملکرد نهایی ';
 
                 var perDate = new persianDate();
-                //$scope.viewModel.year = perDate.year();
-                //$scope.viewModel.month = perDate.month();
-
-                $scope.viewModel.year = 1397;
-                $scope.viewModel.month = 10;
+                $scope.viewModel.year = perDate.year();
+                $scope.viewModel.month = perDate.month();
             }
 
 

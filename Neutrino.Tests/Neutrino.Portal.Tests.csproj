@@ -199,7 +199,7 @@
   <ItemGroup>
     <Compile Include="Commission_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuantityConditionDataService_Test.cs" />
+    <Compile Include="ReportPrmotion_Test.cs" />
     <Compile Include="UnitOfWorkTest.cs" />
     <Compile Include="ExportToExcelUnitTest.cs" />
     <Compile Include="UnitTestBase.cs" />

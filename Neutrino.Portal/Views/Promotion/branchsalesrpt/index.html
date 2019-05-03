@@ -1,0 +1,128 @@
+﻿<div ng-controller="promotion.branchsalesrpt.indexController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="itemView-Body col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <label class="col-md-2 control-label">
+                                        <i class="red fa fa-asterisk"></i>
+                                        نوع هدف
+                                    </label>
+                                    <div class="col-md-4">
+                                        <select class="form-control"
+                                                ng-options="item.id as item.description for item in goalGoodsCategoryTypes "
+                                                data-ng-change="onGoalGoodsCategoryTypeChanged()"
+                                                ng-model="viewModel.goalGoodsCategoryTypeId">
+                                            <option value="" selected>[ انتخاب کنید ]</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-md-2 control-label">
+                                        <i class="red fa fa-asterisk"></i>
+                                        نام هدف
+                                    </label>
+                                    <div class="col-md-4">
+                                        <select class="form-control"
+                                                ng-options="item.id as item.name for item in goalGoodsCategories "
+                                                ng-model="viewModel.goalGoodsCategoryId">
+                                            <option value="" selected>[ انتخاب کنید ]</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <br />
+
+                                <div class="row">
+                                    <label class="col-md-2 control-label">
+                                        <i class="red fa fa-asterisk"></i>
+                                        از تاریخ
+                                    </label>
+                                    <div class="col-md-4">
+                                        <adm-dtp full-data="startDate_detail"
+                                                 ng-model='viewModel.startDate'></adm-dtp>
+                                    </div>
+                                    <label class="col-md-2 control-label">
+                                        <i class="red fa fa-asterisk"></i>
+                                        تا تاریخ
+                                    </label>
+                                    <div class="col-md-4">
+                                        <adm-dtp disable='{{!viewModel.startDate}}'
+                                                 mindate="{{startDate_detail.unix + 1}}"
+                                                 ng-model='viewModel.endDate'></adm-dtp>
+                                    </div>
+                                </div>
+
+                                <br />
+                                <br />
+                                <div class="modal-footer">
+                                    <button type="button" ng-click="showReport()"
+                                            class="btn btn-info">
+                                        <i class="fa fa-filter"></i>
+                                        <span>نمایش گزارش</span>
+                                    </button>
+                                    <button type="button" ng-click="exportReport()"
+                                            class="btn btn-info">
+                                        <i class="fa fa-filter"></i>
+                                        <span>خروجی اکسل</span>
+                                    </button>
+                                </div>
+
+                                <div class="table-responsive text-nowrap">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <td class="align-center"><input type="text" ng-model="filter_branchName" class="form-control" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-center">نام مرکز</td>
+                                                <td class="align-center">فروش</td>
+                                                <td class="align-center" ng-repeat-start="gols in reportData[0].promotionGoalSteps">پله {{$index + 1}} </td>
+                                                <td ng-repeat-end class="align-center">تحقق</td>
+                                                <td class="align-center">پورسانت</td>
+                                            </tr>
+
+                                        </thead>
+                                        <tr ng-repeat="record in reportData | filter :{branchName: filter_branchName}  ">
+                                            <td style=" position: relative;">
+                                                <span ng-class="{false:'fillTd text-center label-danger', true:'fillTd text-center label-success'}[isFulfillGoalStep(record)]">
+                                                    {{record.branchName}}
+                                                </span>
+                                            </td>
+
+                                            <td class="align-center dir-ltr">
+                                                {{record.totalSales | number}}
+                                            </td>
+                                            <td ng-repeat-start="gols in record.promotionGoalSteps" class="align-center dir-ltr">
+                                                {{gols.amountSpecified | number}}
+                                            </td>
+
+                                            <td ng-repeat-end style=" position: relative;">
+                                                <span ng-class="{false:'fillTd text-center dir-ltr label-warning', true:'fillTd text-center dir-ltr label-success'}[gols.fulfilledPercent >= 100]">
+                                                    % {{gols.fulfilledPercent}}
+                                                </span>
+
+                                            </td>
+                                            <td class="align-center dir-ltr info">
+                                                {{record.promotionWithOutFulfillmentPercent | number}}
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
