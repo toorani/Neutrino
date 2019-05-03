@@ -1,31 +1,35 @@
-﻿<table border="1" cellpadding="0" cellspacing="0" style="font-family:Tahoma;font-size:14px" >
-    <caption>
-        
-    </caption>
-    <thead >
-        <tr style="font-weight:bold;text-align:center">
-            <td style="vertical-align:middle" rowspan="2">نام مرکز</td>
-            <td colspan="3">درصد تحقق</td>
+﻿<table border="1" cellpadding="0" cellspacing="0" style="font-family:Tahoma;font-size:14px">
+    <caption></caption>
+    <thead>
+        <tr>
+            <td style="font-weight:bold;text-align:center">نام مرکز</td>
+            <td style="font-weight:bold;text-align:center">فروش</td>
+            <loop>
+                <td style="font-weight:bold;text-align:center">پله $index </td>
+                <td style="font-weight:bold;text-align:center">تحقق</td>
+            </loop>
+            <td style="font-weight:bold;text-align:center">پورسانت</td>
         </tr>
-        <tr style="font-weight:bold;text-align:center">
-            <td >هدف کل یا تجمیعی</td>
-            <td >وصول هدف کل</td>
-            <td>وصول خصوصی</td>
-        </tr>
+
     </thead>
-    <tbody >
-        <tr >
-            <td style="text-align:center">
-                branch
+    <tbody>
+        <tr>
+            <td>
+                branchName
             </td>
             <td style="text-align:center">
-                % totalAndAggregationReached
+                totalSales
             </td>
+            <loop>
+                <td style="text-align:center">
+                    amountSpecified
+                </td>
+                <td style="text-align:center">
+                    % fulfilledPercent
+                </td>
+            </loop>
             <td style="text-align:center">
-                % totalReceiptReachedPercent
-            </td>
-            <td style="text-align:center">
-                % privateReceiptReachedPercent
+                promotionWithOutFulfillmentPercent
             </td>
         </tr>
     </tbody>

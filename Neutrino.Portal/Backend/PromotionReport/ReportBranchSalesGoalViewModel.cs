@@ -22,8 +22,6 @@ namespace Neutrino.Portal
 
     public class PromotionGoalStep
     {
-        
-     
         public decimal GoalAmount { get; set; }
         public decimal AmountSpecified { get; set; }
         public decimal FulfilledPercent { get; set; }

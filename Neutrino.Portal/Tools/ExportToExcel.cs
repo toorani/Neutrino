@@ -87,7 +87,7 @@ namespace Neutrino.Portal.Tools
 
         }
 
-        public static HttpResponseMessage WriteHtmlTable<T>(IEnumerable<T> data, string outputFileName, string excelTemplatePath,string caption = "")
+        public static HttpResponseMessage WriteHtmlTable<T>(IEnumerable<T> data, string outputFileName, string excelTemplatePath, string caption = "")
         {
             HtmlDocument htmlExcelTemplate = new HtmlDocument();
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));
@@ -100,7 +100,7 @@ namespace Neutrino.Portal.Tools
                 var captionElement = tableNode.Element("caption");
                 if (string.IsNullOrWhiteSpace(caption) == false && captionElement != null)
                 {
-                    
+
                     var caption_span = HtmlNode.CreateNode($"<span style='font-weight: bold;font-family:Tahoma;font-size:14px'>{caption} </span>");
                     captionElement.AppendChild(caption_span);
                 }
@@ -108,7 +108,7 @@ namespace Neutrino.Portal.Tools
                 if (tbodyElement != null)
                 {
                     var trbodyElement = tbodyElement.Element("tr");
-                   
+
                     string trTemplate = trbodyElement.InnerHtml.ToLower();
                     trbodyElement.RemoveAllChildren();
                     tbodyElement.RemoveAllChildren();
@@ -121,6 +121,104 @@ namespace Neutrino.Portal.Tools
                         {
                             trdata = trdata.Replace(prop.Name.ToLower(), prop.Converter.ConvertToString(prop.GetValue(item)));
                         }
+                        trHtmlNode = HtmlNode.CreateNode("<tr></tr>");
+                        trHtmlNode.InnerHtml = trdata;
+                        tbodyElement.AppendChild(trHtmlNode);
+
+                    }
+                }
+            }
+            byte[] bytes = Encoding.UTF8.GetBytes(tableNode.OuterHtml);
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            var stream = new MemoryStream(bytes);
+            result.Content = new StreamContent(stream);
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = outputFileName + ".xls"
+            };
+            return result;
+        }
+
+        public static HttpResponseMessage WriteHtmlTable<T>(List<T> data, string outputFileName, string excelTemplatePath
+            , string caption = ""
+            , Func<List<T>, string, string> generatorHeader = null
+            , Func<T, string, string> generatorRowBody = null
+            , Func<T, IEnumerable<object>> getLoopObjects = null)
+        {
+            HtmlDocument htmlExcelTemplate = new HtmlDocument();
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));
+
+            htmlExcelTemplate.Load(excelTemplatePath);
+
+            var tableNode = htmlExcelTemplate.DocumentNode.SelectSingleNode("//table");
+            if (tableNode != null)
+            {
+                var captionElement = tableNode.Element("caption");
+                if (string.IsNullOrWhiteSpace(caption) == false && captionElement != null)
+                {
+
+                    var caption_span = HtmlNode.CreateNode($"<span style='font-weight: bold;font-family:Tahoma;font-size:14px'>{caption} </span>");
+                    captionElement.AppendChild(caption_span);
+                }
+
+                var theadElement = tableNode.Element("thead");
+                var loopNode = theadElement.SelectSingleNode("//loop");
+                if (loopNode != null && generatorHeader != null)
+                {
+                    string header = generatorHeader(data, loopNode.InnerHtml);
+                    theadElement.InnerHtml = theadElement.InnerHtml.Replace(loopNode.OuterHtml, header);
+                }
+
+
+                var tbodyElement = tableNode.Element("tbody");
+                if (tbodyElement != null)
+                {
+                    var trbodyElement = tbodyElement.Element("tr");
+                    HtmlNode loopBodyNode = trbodyElement.SelectSingleNode("//loop");
+                    string loopBodyTemplate = string.Empty;
+                    if (loopBodyNode != null)
+                    {
+                        loopBodyTemplate = loopBodyNode.InnerHtml.ToLower();
+                        loopBodyNode.RemoveAll();
+                    }
+
+                    string trTemplate = trbodyElement.InnerHtml.ToLower();
+                    trbodyElement.RemoveAllChildren();
+                    tbodyElement.RemoveAllChildren();
+
+                    HtmlNode trHtmlNode;
+                    //  add each of the data item to the table
+                    foreach (T item in data)
+                    {
+                        string trdata = trTemplate;
+                        foreach (PropertyDescriptor prop in props)
+                        {
+                            trdata = trdata.Replace(prop.Name.ToLower(), prop.Converter.ConvertToString(prop.GetValue(item)));
+                        }
+                        if (string.IsNullOrWhiteSpace(loopBodyTemplate) == false && generatorRowBody != null)
+                        {
+                            var loopValues = generatorRowBody(item, loopBodyTemplate);
+                            trdata = trdata.Replace("<loop></loop>", loopValues);
+                        }
+                        else if (string.IsNullOrWhiteSpace(loopBodyTemplate) == false && getLoopObjects != null)
+                        {
+                            IEnumerable<object> nestedObjects = getLoopObjects(item);
+                            var loopValues = "";
+                            foreach (object nestedObj in nestedObjects)
+                            {
+                                var nestedProps = TypeDescriptor.GetProperties(nestedObj);
+                                var loopRecord = loopBodyTemplate;
+                                foreach (PropertyDescriptor prop in nestedProps)
+                                {
+                                    loopRecord = loopRecord.Replace(prop.Name.ToLower(), prop.Converter.ConvertToString(prop.GetValue(nestedObj)));
+                                }
+                                loopValues += loopRecord; 
+
+                            }
+                            trdata = trdata.Replace("<loop></loop>", loopValues);
+                        }
+
                         trHtmlNode = HtmlNode.CreateNode("<tr></tr>");
                         trHtmlNode.InnerHtml = trdata;
                         tbodyElement.AppendChild(trHtmlNode);

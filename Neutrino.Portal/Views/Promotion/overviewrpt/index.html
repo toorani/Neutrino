@@ -45,14 +45,14 @@
                                         <i class="fa fa-filter"></i>
                                         <span>نمایش گزارش</span>
                                     </button>
-                                    <button type="button" ng-click="exportReport()"
+                                    <button type="button" ng-click="exportReport()"  ng-show="reportData.length != 0"
                                             class="btn btn-info">
-                                        <i class="fa fa-filter"></i>
+                                        <i class="fa fa-file-excel-o"></i>
                                         <span>خروجی اکسل</span>
                                     </button>
                                 </div>
 
-                                <div class="ls-editable-table table-responsive ls-table ">
+                                <div class="ls-editable-table table-responsive ls-table" ng-show="reportData.length !=0">
                                     <table class="display responsive nowrap dataTable " cellspacing="0">
 
                                         <thead>
@@ -91,6 +91,13 @@
                                                 % {{record.privateReceiptReachedPercent}}
                                             </td>
                                         </tr>
+                                    </table>
+                                </div>
+                                <div ng-show="reportData.length == 0">
+                                    <table class="table" cellspacing="0">
+                                        <caption>
+                                            <h2>اطلاعاتی وجود ندارد</h2>
+                                        </caption>
                                     </table>
                                 </div>
                             </div>

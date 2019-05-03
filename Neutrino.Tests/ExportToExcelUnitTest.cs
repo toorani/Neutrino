@@ -8,6 +8,7 @@ using Espresso.BusinessService.Interfaces;
 using Espresso.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Neutrino.Entities;
+using Neutrino.Interfaces;
 using Neutrino.Portal.Tools;
 using Ninject;
 
@@ -42,6 +43,22 @@ namespace Neutrino.Portal.Tests
             string caption = $"{month} ماه  - {year} عملکرد نهایی سال";
             var excelTemplate = @"D:\Projects\Elite\Source\Neutrino\Neutrino.Portal\Views\Promotion\overviewrpt\OverviewExcelTemplate.html";
             ExportToExcel.WriteHtmlTable<BranchPromotionViewModel>(dataModelView, null, excelTemplate, caption);
+
+        }
+
+        [TestMethod]
+        public async Task ExportExcelSaleGoalsRept()
+        {
+            //Arrange
+            string startDate = "1397/10/01";
+            string endDate = "1397/10/30";
+            int goalGoodsCategoryId = 5093;
+
+            var promotionBS = _kernel.Get<IPromotionBS>();
+            IEntityListLoader<BranchPromotion> branchPromotionLoader = _kernel.Get<IEntityListLoader<BranchPromotion>>();
+
+            PromotionReportServiceController promotionReportServiceController = new PromotionReportServiceController(branchPromotionLoader, promotionBS);
+            await promotionReportServiceController.ExportExcelSaleGoals(startDate, endDate, goalGoodsCategoryId);
 
         }
     }

@@ -3,7 +3,6 @@
 angular.module("neutrinoProject").register.controller('promotion.branchsalesrpt.indexController',
     ['$scope', 'ajaxService', 'alertService', 'persianCalendar', 'exportExcel',
         function ($scope, ajaxService, alertService, persianCalendar, exportExcel) {
-
             "use strict";
             $scope.viewModel = {
                 startDate: null,
@@ -18,26 +17,8 @@ angular.module("neutrinoProject").register.controller('promotion.branchsalesrpt.
                 getGoalGoodsCategoryTypes();
                 $scope.viewModel.startDate = '1397/10/01';
                 $scope.viewModel.endDate = '1397/10/30';
-
             }
 
-            var getGoalGoodsCategories = function () {
-                return ajaxService.ajaxCall({ goodsCategoryTypeId: $scope.viewModel.goalGoodsCategoryTypeId, isActive: true, iGoalTypeId: 1 }
-                    , "api/goalGoodsCategoryService/getDataList", 'get',
-                    function (response) {
-                        $scope.goalGoodsCategories = response.data;
-                    },
-                    function (response) {
-                        $scope.goodsCategories = [];
-                        alertService.showError(response);
-                    });
-            }
-
-            var getGoalGoodsCategoryTypes = function () {
-                $scope.goalGoodsCategoryTypes = [
-                    { id: 1, description: 'گروهی' },
-                    { id: 2, description: 'تکی' }]
-            }
             $scope.onGoalGoodsCategoryTypeChanged = function () {
                 $scope.viewModel.goalGoodsCategoryId = null;
                 getGoalGoodsCategories();
@@ -52,20 +33,42 @@ angular.module("neutrinoProject").register.controller('promotion.branchsalesrpt.
             }
 
             $scope.showReport = function () {
-                ajaxService.ajaxCall($scope.viewModel, '/api/promotionReportService/getBranchSaleGoals', 'get',
-                    function (response) {
-                        $scope.reportData = response.data;
-                    },
-                    function (response) {
-                        alertService.showError(response);
-                    });
-            }
 
+                if ($scope.viewModel.startDate != null && $scope.viewModel.endDate != null
+                    && $scope.viewModel.goalGoodsCategoryId != null) {
+                    ajaxService.ajaxCall($scope.viewModel, '/api/promotionReportService/getBranchSaleGoals', 'get',
+                        function (response) {
+                            $scope.reportData = response.data;
+                        },
+                        function (response) {
+                            alertService.showError(response);
+                        });
+                }
+            }
             $scope.exportReport = function () {
 
-                var url = '/api/promotionReportService/exportExcelOverView?year=' + $scope.viewModel.year + '&month=' + $scope.viewModel.month;
+                var url = '/api/promotionReportService/exportExcelSaleGoals?startDate=' + $scope.viewModel.startDate
+                    + '&endDate=' + $scope.viewModel.endDate
+                    + '&goalGoodsCategoryId=' + $scope.viewModel.goalGoodsCategoryId;
+
                 exportExcel.loadfile(url);
             }
 
+            var getGoalGoodsCategories = function () {
+                return ajaxService.ajaxCall({ goodsCategoryTypeId: $scope.viewModel.goalGoodsCategoryTypeId, isActive: true, iGoalTypeId: 1 }
+                    , "api/goalGoodsCategoryService/getDataList", 'get',
+                    function (response) {
+                        $scope.goalGoodsCategories = response.data;
+                    },
+                    function (response) {
+                        $scope.goodsCategories = [];
+                        alertService.showError(response);
+                    });
+            }
+            var getGoalGoodsCategoryTypes = function () {
+                $scope.goalGoodsCategoryTypes = [
+                    { id: 1, description: 'گروهی' },
+                    { id: 2, description: 'تکی' }]
+            }
 
         }]);

@@ -104,7 +104,63 @@ namespace Neutrino.Portal
             }
             return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
+        [Route("exportExcelSaleGoals"), HttpGet]
+        public async Task<HttpResponseMessage> ExportExcelSaleGoals(string startDate, string endDate, int goalGoodsCategoryId)
+        {
+            DateTime? startDateTime = Utilities.ToDateTime(startDate);
+            DateTime? endDateTime = Utilities.ToDateTime(endDate);
+            if (startDateTime.HasValue && endDateTime.HasValue)
+            {
+                var entity = await promotionBS.LoadReportBranchSalesGoal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+                if (entity.ReturnStatus == false)
+                {
+                    return CreateErrorResponse(entity);
+                }
+                if (entity.ResultValue.Count != 0)
+                {
+                    var goalGoodsCategoryName = entity.ResultValue.First().GoalGoodsCategoryName;
+                    var lst_responses = entity.ResultValue.GroupBy(x => new { x.BranchName })
+                        .Select(x => new ReportBranchSalesGoalViewModel
+                        {
+                            BranchName = x.Key.BranchName,
+                            TotalSales = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalSales,
+                            FinalPromotion = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).FinalPromotion,
+                            PromotionWithOutFulfillmentPercent = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).PromotionWithOutFulfillmentPercent,
+                            PromotionGoalSteps = x.Select(y => new PromotionGoalStep
+                            {
+                                AmountSpecified = y.AmountSpecified,
+                                FulfilledPercent = Math.Round(y.FulfilledPercent, MidpointRounding.AwayFromZero),
+                                GoalAmount = y.GoalAmount,
+                            }).ToList()
+                        }).ToList();
 
+                    string caption = $" گزارش عملکرد اهداف فروش محدوده تاریخ {startDate} - {endDate} هدف {goalGoodsCategoryName}";
+                    var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/branchsalesrpt/excelTemplate.html");
+                    var result = ExportToExcel.WriteHtmlTable<ReportBranchSalesGoalViewModel>(lst_responses
+                        , outputFileName: "branchSalegoals"
+                        , excelTemplatePath: excelTemplate
+                        , caption: caption
+                        , generatorHeader: (List<ReportBranchSalesGoalViewModel> data, string template) =>
+                        {
+                            if (data.Count == 0)
+                                return string.Empty;
+                            var loop = string.Empty;
+                            for (int i = 1; i <= data[0].PromotionGoalSteps.Count; i++)
+                            {
+                                loop += template.Replace("$index", i.ToString());
+                            }
+
+                            return loop;
+                        }
+                        , getLoopObjects: (ReportBranchSalesGoalViewModel record) => record.PromotionGoalSteps
+                        );
+                    return result;
+                }
+                else
+                    Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
+        }
         #endregion
 
         #region [ Private Method(s) ]

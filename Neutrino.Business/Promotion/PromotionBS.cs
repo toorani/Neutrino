@@ -575,7 +575,10 @@ namespace Neutrino.Business
             var result = new BusinessResultValue<List<ReportBranchSalesGoal>>();
             try
             {
+                
                 var query = await (from gl in unitOfWork.GoalDataService.GetQuery()
+                                   join ggc in unitOfWork.GoalGoodsCategoryDataService.GetQuery()
+                                   on gl.GoalGoodsCategoryId equals ggc.Id
                                    join gls in unitOfWork.GoalStepDataService.GetQuery()
                                    on gl.Id equals gls.GoalId
                                    join brgl in unitOfWork.BranchGoalDataService.GetQuery()
@@ -596,6 +599,7 @@ namespace Neutrino.Business
                                        brglp.FinalPromotion,
                                        brglp.PromotionWithOutFulfillmentPercent,
                                        GoalAmount = gls.ComputingValue,
+                                       GoalGoodsCategoryName = ggc.Name,
                                        AmountSpecified = brgl.Percent.Value * 0.01M * gls.ComputingValue
                                    })
                                    .ToListAsync();
@@ -608,6 +612,7 @@ namespace Neutrino.Business
                     PromotionWithOutFulfillmentPercent = x.PromotionWithOutFulfillmentPercent,
                     TotalSales = x.TotalSales,
                     FinalPromotion = x.FinalPromotion,
+                    GoalGoodsCategoryName = x.GoalGoodsCategoryName,
                     FulfilledPercent = (x.TotalSales * 100) / x.AmountSpecified
                 }).ToList();
                 result.ReturnStatus = true;
