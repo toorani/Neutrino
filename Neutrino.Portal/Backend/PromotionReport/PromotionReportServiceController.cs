@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Web.Hosting;
-using System.Web.Http;
-using AutoMapper;
+﻿using AutoMapper;
 using Espresso.BusinessService.Interfaces;
 using Espresso.Core;
 using Espresso.Portal;
-using jQuery.DataTables.WebApi;
 using Neutrino.Entities;
 using Neutrino.Interfaces;
-using Neutrino.Portal.Models;
-using Neutrino.Portal.ProfileMapper;
 using Neutrino.Portal.Tools;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Hosting;
+using System.Web.Http;
 
 namespace Neutrino.Portal
 {
@@ -90,6 +85,7 @@ namespace Neutrino.Portal
                     {
                         BranchName = x.Key.BranchName,
                         TotalSales = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalSales,
+                        TotalQuantity = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalQuantity,
                         FinalPromotion = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).FinalPromotion,
                         PromotionWithOutFulfillmentPercent = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).PromotionWithOutFulfillmentPercent,
                         PromotionGoalSteps = x.Select(y => new PromotionGoalStep
@@ -104,6 +100,7 @@ namespace Neutrino.Portal
             }
             return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
+
         [Route("exportExcelSaleGoals"), HttpGet]
         public async Task<HttpResponseMessage> ExportExcelSaleGoals(string startDate, string endDate, int goalGoodsCategoryId)
         {
@@ -124,6 +121,7 @@ namespace Neutrino.Portal
                         {
                             BranchName = x.Key.BranchName,
                             TotalSales = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalSales,
+                            TotalQuantity = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalQuantity,
                             FinalPromotion = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).FinalPromotion,
                             PromotionWithOutFulfillmentPercent = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).PromotionWithOutFulfillmentPercent,
                             PromotionGoalSteps = x.Select(y => new PromotionGoalStep
@@ -161,6 +159,8 @@ namespace Neutrino.Portal
             }
             return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
+
+
         #endregion
 
         #region [ Private Method(s) ]

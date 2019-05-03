@@ -575,7 +575,7 @@ namespace Neutrino.Business
             var result = new BusinessResultValue<List<ReportBranchSalesGoal>>();
             try
             {
-                
+
                 var query = await (from gl in unitOfWork.GoalDataService.GetQuery()
                                    join ggc in unitOfWork.GoalGoodsCategoryDataService.GetQuery()
                                    on gl.GoalGoodsCategoryId equals ggc.Id
@@ -587,20 +587,24 @@ namespace Neutrino.Business
                                    on brgl.BranchId equals br.Id
                                    join brglp in unitOfWork.BranchGoalPromotionDataService.GetQuery()
                                    on brgl.Id equals brglp.BranchGoalId
-                                   where gl.ComputingTypeId == ComputingTypeEnum.Amount &&
+                                   where (gl.ComputingTypeId == ComputingTypeEnum.Amount ||
+                                   gl.ComputingTypeId == ComputingTypeEnum.Quantities)
+                                   &&
                                    gl.GoalTypeId == GoalTypeEnum.Distributor &&
                                    gl.GoalGoodsCategoryId == goalGoodsCategoryId
                                    && gl.StartDate >= startDate && gl.EndDate <= gl.EndDate
                                    && gl.GoalGoodsCategoryId == goalGoodsCategoryId
                                    select new
                                    {
+                                       gl.ComputingTypeId,
                                        brglp.TotalSales,
+                                       brglp.TotalQuantity,
                                        BranchName = br.Name,
                                        brglp.FinalPromotion,
                                        brglp.PromotionWithOutFulfillmentPercent,
                                        GoalAmount = gls.ComputingValue,
                                        GoalGoodsCategoryName = ggc.Name,
-                                       AmountSpecified = brgl.Percent.Value * 0.01M * gls.ComputingValue
+                                       AmountSpecified = brgl.Percent.HasValue ? brgl.Percent.Value * 0.01M * gls.ComputingValue : brgl.Amount.Value
                                    })
                                    .ToListAsync();
 
@@ -611,9 +615,11 @@ namespace Neutrino.Business
                     GoalAmount = x.GoalAmount,
                     PromotionWithOutFulfillmentPercent = x.PromotionWithOutFulfillmentPercent,
                     TotalSales = x.TotalSales,
+                    TotalQuantity = x.TotalQuantity,
+                    ComputingTypeId = x.ComputingTypeId,
                     FinalPromotion = x.FinalPromotion,
                     GoalGoodsCategoryName = x.GoalGoodsCategoryName,
-                    FulfilledPercent = (x.TotalSales * 100) / x.AmountSpecified
+                    FulfilledPercent = x.ComputingTypeId == ComputingTypeEnum.Amount ? (x.TotalSales * 100) / x.AmountSpecified : (x.TotalQuantity * 100) / x.AmountSpecified
                 }).ToList();
                 result.ReturnStatus = true;
 

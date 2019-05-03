@@ -10,6 +10,7 @@ namespace Neutrino.Portal
     {
         public string BranchName { get; set; }
         public decimal TotalSales { get; set; }
+        public int TotalQuantity { get; set; }
         public decimal FinalPromotion { get; set; }
         public decimal PromotionWithOutFulfillmentPercent { get; set; }
         public List<PromotionGoalStep> PromotionGoalSteps { get; set; }

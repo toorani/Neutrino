@@ -17,6 +17,8 @@ angular.module("neutrinoProject").register.controller('promotion.branchsalesrpt.
                 getGoalGoodsCategoryTypes();
                 $scope.viewModel.startDate = '1397/10/01';
                 $scope.viewModel.endDate = '1397/10/30';
+                $scope.viewModel.goalGoodsCategoryId = 5093;
+                
             }
 
             $scope.onGoalGoodsCategoryTypeChanged = function () {

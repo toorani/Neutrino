@@ -82,11 +82,12 @@
                                                 <td class="align-center"><input type="text" ng-model="filter_branchName" class="form-control" /></td>
                                             </tr>
                                             <tr>
-                                                <td class="align-center">نام مرکز</td>
-                                                <td class="align-center">فروش</td>
-                                                <td class="align-center" ng-repeat-start="gols in reportData[0].promotionGoalSteps">پله {{$index + 1}} </td>
-                                                <td ng-repeat-end class="align-center">تحقق</td>
-                                                <td class="align-center">پورسانت</td>
+                                                <td class="align-center ">نام مرکز</td>
+                                                <td class="align-center ">فروش</td>
+                                                <td class="align-center ">تعداد</td>
+                                                <td class="align-center " ng-repeat-start="gols in reportData[0].promotionGoalSteps">پله {{$index + 1}} </td>
+                                                <td ng-repeat-end class="align-center ">تحقق</td>
+                                                <td class="align-center ">پورسانت</td>
                                             </tr>
 
                                         </thead>
@@ -99,6 +100,9 @@
 
                                             <td class="align-center dir-ltr">
                                                 {{record.totalSales | number}}
+                                            </td>
+                                            <td class="align-center dir-ltr">
+                                                {{record.totalQuantity | number}}
                                             </td>
                                             <td ng-repeat-start="gols in record.promotionGoalSteps" class="align-center dir-ltr">
                                                 {{gols.amountSpecified | number}}
