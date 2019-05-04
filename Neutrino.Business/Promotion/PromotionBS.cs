@@ -630,6 +630,68 @@ namespace Neutrino.Business
             }
             return result;
         }
+
+        public async Task<IBusinessResultValue<List<ReportBranchReceiptGoal>>> LoadReportBranchReceipt(DateTime startDate, DateTime endDate)
+        {
+            var result = new BusinessResultValue<List<ReportBranchReceiptGoal>>();
+            try
+            {
+
+                var query = await (from gl in unitOfWork.GoalDataService.GetQuery()
+                                   join brgl in unitOfWork.BranchGoalDataService.GetQuery()
+                                   on gl.Id equals brgl.GoalId
+                                   join br in unitOfWork.BranchDataService.GetQuery()
+                                   on brgl.BranchId equals br.Id
+                                   join brglp in unitOfWork.BranchGoalPromotionDataService.GetQuery()
+                                   on brgl.Id equals brglp.BranchGoalId
+                                   join prp in unitOfWork.PositionReceiptPromotionDataService.GetQuery()
+                                   on brglp.Id equals prp.BranchGoalPromotionId
+                                   join brr in unitOfWork.BranchReceiptDataService.GetQuery()
+                                   on br.Id equals brr.BranchId
+                                   where brr.StartDate >= startDate && brr.EndDate <= gl.EndDate
+                                   join pt in unitOfWork.PositionTypeDataService.GetQuery()
+                                   on prp.PositionTypeId equals pt.eId
+                                   where gl.GoalTypeId == GoalTypeEnum.Distributor &&
+                                   (gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal
+                                   || gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.TotalSalesGoal)
+                                   && gl.StartDate >= startDate && gl.EndDate <= gl.EndDate
+                                   select new
+                                   {
+                                       AmountSpecified = brgl.Amount.Value,
+                                       brglp.TotalSales,
+                                       brglp.TotalQuantity,
+                                       BranchName = br.Name,
+                                       brglp.FinalPromotion,
+                                       prp.Promotion,
+                                       PositionTitle = pt.Description,
+                                       ReceiptPrivateAmount = brr.PrivateAmount,
+                                       ReceiptTotalAmount = brr.TotalAmount
+                                   })
+                                   .ToListAsync();
+
+                result.ResultValue = query.Select(x => new ReportBranchReceiptGoal
+                {
+                    AmountSpecified = x.AmountSpecified,
+                    BranchName = x.BranchName,
+                    TotalSales = x.TotalSales,
+                    TotalQuantity = x.TotalQuantity,
+                    FinalPromotion = x.FinalPromotion,
+                    FulfilledPercent = (x.TotalSales * 100) / x.AmountSpecified, 
+                    PositionPromotion = x.Promotion,
+                    PositionTitle = x.PositionTitle,
+                    ReceiptPrivateAmount = x.ReceiptPrivateAmount.Value,
+                    ReceiptTotalAmount = x.ReceiptTotalAmount
+                }).ToList();
+                result.ReturnStatus = true;
+
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
+
         #endregion
 
         #region [ Private Method(s) ]
