@@ -17,5 +17,7 @@ namespace Neutrino.Interfaces
         Task<IBusinessResult> CalculateSalesGoalsAsync(Promotion entity);
         Task<IBusinessResult> CalculateReceiptGoalsAsync(Promotion entity);
         Task<IBusinessResultValue<List<ReportBranchSalesGoal>>> LoadReportBranchSalesGoal(DateTime startDate, DateTime endDate, int goalGoodsCategoryId);
+        Task<IBusinessResultValue<List<BranchPromotion>>> LoadReportOverView(int year, int month);
+        Task<IBusinessResultValue<List<ReportBranchReceiptGoal>>> LoadReportBranchReceipt(int year, int month, GoalGoodsCategoryTypeEnum goalGoodsCategoryTypeId);
     }
 }

@@ -17,9 +17,7 @@ namespace Neutrino.Entities
         public int TotalQuantity { get; set; }
         public decimal PositionPromotion { get; set; }
         public string PositionTitle { get; set; }
-        public decimal ReceiptPrivateAmount { get; set; }
-        public decimal ReceiptTotalAmount { get; set; }
-
-
+        public decimal ReceiptAmount { get; set; }
+        
     }
 }

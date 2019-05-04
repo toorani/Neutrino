@@ -15,9 +15,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchsalesrpt.
             $scope.initializeController = function () {
                 $scope.title = 'گزارش عملکرد اهداف فروش ';
                 getGoalGoodsCategoryTypes();
-                $scope.viewModel.startDate = '1397/10/01';
-                $scope.viewModel.endDate = '1397/10/30';
-                $scope.viewModel.goalGoodsCategoryId = 5093;
+                
                 
             }
 

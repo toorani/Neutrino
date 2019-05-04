@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Espresso.BusinessService;
 using Espresso.BusinessService.Interfaces;
 using Espresso.Core;
+using Espresso.Entites;
 using FluentValidation;
 using Neutrino.Data.EntityFramework;
 using Neutrino.Entities;
@@ -568,9 +569,21 @@ namespace Neutrino.Business
             }
             return result;
         }
-        public async Task<IBusinessResultValue<List<ReportBranchSalesGoal>>> LoadReportBranchSalesGoal(DateTime startDate, DateTime endDate
-            , int goalGoodsCategoryId
-            )
+        public async Task<IBusinessResultValue<List<BranchPromotion>>> LoadReportOverView(int year, int month)
+        {
+            var result = new BusinessResultValue<List<BranchPromotion>>();
+            try
+            {
+                result.ResultValue = await unitOfWork.BranchPromotionDataService.GetAsync(x => x.Year == year && x.Month == month
+                , includes: x => new { x.Branch }, orderBy: x => x.OrderBy(y => y.Branch.Order));
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
+        public async Task<IBusinessResultValue<List<ReportBranchSalesGoal>>> LoadReportBranchSalesGoal(DateTime startDate, DateTime endDate, int goalGoodsCategoryId)
         {
             var result = new BusinessResultValue<List<ReportBranchSalesGoal>>();
             try
@@ -630,8 +643,7 @@ namespace Neutrino.Business
             }
             return result;
         }
-
-        public async Task<IBusinessResultValue<List<ReportBranchReceiptGoal>>> LoadReportBranchReceipt(DateTime startDate, DateTime endDate)
+        public async Task<IBusinessResultValue<List<ReportBranchReceiptGoal>>> LoadReportBranchReceipt(int year, int month, GoalGoodsCategoryTypeEnum goalGoodsCategoryTypeId)
         {
             var result = new BusinessResultValue<List<ReportBranchReceiptGoal>>();
             try
@@ -648,13 +660,12 @@ namespace Neutrino.Business
                                    on brglp.Id equals prp.BranchGoalPromotionId
                                    join brr in unitOfWork.BranchReceiptDataService.GetQuery()
                                    on br.Id equals brr.BranchId
-                                   where brr.StartDate >= startDate && brr.EndDate <= gl.EndDate
+                                   where brr.Year == year && brr.Month == month
                                    join pt in unitOfWork.PositionTypeDataService.GetQuery()
                                    on prp.PositionTypeId equals pt.eId
                                    where gl.GoalTypeId == GoalTypeEnum.Distributor &&
-                                   (gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal
-                                   || gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.TotalSalesGoal)
-                                   && gl.StartDate >= startDate && gl.EndDate <= gl.EndDate
+                                   gl.GoalGoodsCategoryTypeId == goalGoodsCategoryTypeId
+                                   && gl.Month == month && gl.Year == year
                                    select new
                                    {
                                        AmountSpecified = brgl.Amount.Value,
@@ -676,11 +687,11 @@ namespace Neutrino.Business
                     TotalSales = x.TotalSales,
                     TotalQuantity = x.TotalQuantity,
                     FinalPromotion = x.FinalPromotion,
-                    FulfilledPercent = (x.TotalSales * 100) / x.AmountSpecified, 
+                    FulfilledPercent = ((goalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal ? x.ReceiptPrivateAmount.Value : x.ReceiptTotalAmount) * 100) / x.AmountSpecified,
                     PositionPromotion = x.Promotion,
                     PositionTitle = x.PositionTitle,
-                    ReceiptPrivateAmount = x.ReceiptPrivateAmount.Value,
-                    ReceiptTotalAmount = x.ReceiptTotalAmount
+                    ReceiptAmount = goalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal ? x.ReceiptPrivateAmount.Value : x.ReceiptTotalAmount,
+                    GoalGoodsCategoryName =  goalGoodsCategoryTypeId.GetEnumDescription()
                 }).ToList();
                 result.ReturnStatus = true;
 

@@ -176,6 +176,15 @@
                         OrderId = 2,
                         Parent = reportItem,
                         ParentId = reportItem.Id
+                    },
+                    new AppMenu
+                    {
+                        Title = "عملکرداهداف وصول",
+                        Icon = "fa fa-file-text-o",
+                        Url = "/promotion/branchreceiptrpt/index",
+                        OrderId = 3,
+                        Parent = reportItem,
+                        ParentId = reportItem.Id
                     }
                 );
 

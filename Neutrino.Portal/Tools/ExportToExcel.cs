@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -40,52 +41,8 @@ namespace Neutrino.Portal.Tools
                 output.WriteLine();
             }
         }
-        public static void WriteHtmlTable<T>(IEnumerable<T> data, TextWriter output)
-        {
-            //Writes markup characters and text to an ASP.NET server control output stream. This class provides formatting capabilities that ASP.NET server controls use when rendering markup to clients.
-            using (StringWriter sw = new StringWriter())
-            {
-                using (HtmlTextWriter htw = new HtmlTextWriter(sw))
-                {
 
-                    //  Create a form to contain the List
-                    Table table = new Table();
-                    TableRow row = new TableRow();
-                    PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));
-                    foreach (PropertyDescriptor prop in props)
-                    {
-                        TableHeaderCell hcell = new TableHeaderCell();
-                        hcell.Text = prop.Name;
-                        hcell.BackColor = System.Drawing.Color.Yellow;
-                        row.Cells.Add(hcell);
-                    }
-
-                    table.Rows.Add(row);
-
-                    //  add each of the data item to the table
-                    foreach (T item in data)
-                    {
-                        row = new TableRow();
-                        foreach (PropertyDescriptor prop in props)
-                        {
-                            TableCell cell = new TableCell();
-                            cell.Text = prop.Converter.ConvertToString(prop.GetValue(item));
-                            row.Cells.Add(cell);
-                        }
-                        table.Rows.Add(row);
-                    }
-
-                    //  render the table into the htmlwriter
-                    table.RenderControl(htw);
-
-                    //  render the htmlwriter into the response
-                    output.Write(sw.ToString());
-                }
-            }
-
-        }
-
-        public static HttpResponseMessage WriteHtmlTable<T>(IEnumerable<T> data, string outputFileName, string excelTemplatePath, string caption = "")
+        public static HttpResponseMessage GetExcelFile<T>(IEnumerable<T> data, string outputFileName, string excelTemplatePath, string caption = "")
         {
             HtmlDocument htmlExcelTemplate = new HtmlDocument();
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));
@@ -138,7 +95,7 @@ namespace Neutrino.Portal.Tools
             return result;
         }
 
-        public static HttpResponseMessage WriteHtmlTable<T>(List<T> data, string outputFileName, string excelTemplatePath
+        public static HttpResponseMessage GetExcelFile<T>(List<T> data, string outputFileName, string excelTemplatePath
             , string caption = ""
             , Func<List<T>, string, string> generatorHeader = null
             , Func<T, string, string> generatorRowBody = null
@@ -161,11 +118,37 @@ namespace Neutrino.Portal.Tools
                 }
 
                 var theadElement = tableNode.Element("thead");
-                var loopNode = theadElement.SelectSingleNode("//loop");
-                if (loopNode != null && generatorHeader != null)
+                var loopHeaderNode = theadElement.SelectSingleNode("//loop");
+
+
+                if (loopHeaderNode != null)
                 {
-                    string header = generatorHeader(data, loopNode.InnerHtml);
-                    theadElement.InnerHtml = theadElement.InnerHtml.Replace(loopNode.OuterHtml, header);
+                    if (generatorHeader != null)
+                    {
+                        string header = generatorHeader(data, loopHeaderNode.InnerHtml);
+                        theadElement.InnerHtml = theadElement.InnerHtml.Replace(loopHeaderNode.OuterHtml, header);
+                    }
+                    else if (getLoopObjects != null && data.Count != 0)
+                    {
+                        string loopHeaderTemplate = string.Empty;
+                        loopHeaderTemplate = loopHeaderNode.InnerHtml.ToLower();
+                        loopHeaderNode.RemoveAll();
+
+                        IEnumerable<object> nestedObjects = getLoopObjects(data.First());
+                        var loopValues = "";
+                        foreach (object nestedObj in nestedObjects)
+                        {
+                            var nestedProps = TypeDescriptor.GetProperties(nestedObj);
+                            var loopHeader = loopHeaderTemplate;
+                            foreach (PropertyDescriptor prop in nestedProps)
+                            {
+                                loopHeader = loopHeader.Replace(prop.Name.ToLower(), prop.Converter.ConvertToString(prop.GetValue(nestedObj)));
+                            }
+                            loopValues += loopHeader;
+
+                        }
+                        theadElement.InnerHtml = theadElement.InnerHtml.Replace("<loop></loop>", loopValues);
+                    }
                 }
 
 
@@ -194,27 +177,30 @@ namespace Neutrino.Portal.Tools
                         {
                             trdata = trdata.Replace(prop.Name.ToLower(), prop.Converter.ConvertToString(prop.GetValue(item)));
                         }
-                        if (string.IsNullOrWhiteSpace(loopBodyTemplate) == false && generatorRowBody != null)
+                        if (string.IsNullOrWhiteSpace(loopBodyTemplate) == false)
                         {
-                            var loopValues = generatorRowBody(item, loopBodyTemplate);
-                            trdata = trdata.Replace("<loop></loop>", loopValues);
-                        }
-                        else if (string.IsNullOrWhiteSpace(loopBodyTemplate) == false && getLoopObjects != null)
-                        {
-                            IEnumerable<object> nestedObjects = getLoopObjects(item);
-                            var loopValues = "";
-                            foreach (object nestedObj in nestedObjects)
+                            if (generatorRowBody != null)
                             {
-                                var nestedProps = TypeDescriptor.GetProperties(nestedObj);
-                                var loopRecord = loopBodyTemplate;
-                                foreach (PropertyDescriptor prop in nestedProps)
-                                {
-                                    loopRecord = loopRecord.Replace(prop.Name.ToLower(), prop.Converter.ConvertToString(prop.GetValue(nestedObj)));
-                                }
-                                loopValues += loopRecord; 
-
+                                var loopValues = generatorRowBody(item, loopBodyTemplate);
+                                trdata = trdata.Replace("<loop></loop>", loopValues);
                             }
-                            trdata = trdata.Replace("<loop></loop>", loopValues);
+                            else if (getLoopObjects != null)
+                            {
+                                IEnumerable<object> nestedObjects = getLoopObjects(item);
+                                var loopValues = "";
+                                foreach (object nestedObj in nestedObjects)
+                                {
+                                    var nestedProps = TypeDescriptor.GetProperties(nestedObj);
+                                    var loopRecord = loopBodyTemplate;
+                                    foreach (PropertyDescriptor prop in nestedProps)
+                                    {
+                                        loopRecord = loopRecord.Replace(prop.Name.ToLower(), prop.Converter.ConvertToString(prop.GetValue(nestedObj)));
+                                    }
+                                    loopValues += loopRecord;
+
+                                }
+                                trdata = trdata.Replace("<loop></loop>", loopValues);
+                            }
                         }
 
                         trHtmlNode = HtmlNode.CreateNode("<tr></tr>");

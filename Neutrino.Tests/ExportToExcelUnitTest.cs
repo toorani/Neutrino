@@ -42,7 +42,7 @@ namespace Neutrino.Portal.Tests
             var dataModelView = mapper.Map<List<BranchPromotionViewModel>>(entity.ResultValue);
             string caption = $"{month} ماه  - {year} عملکرد نهایی سال";
             var excelTemplate = @"D:\Projects\Elite\Source\Neutrino\Neutrino.Portal\Views\Promotion\overviewrpt\OverviewExcelTemplate.html";
-            ExportToExcel.WriteHtmlTable<BranchPromotionViewModel>(dataModelView, null, excelTemplate, caption);
+            ExportToExcel.GetExcelFile<BranchPromotionViewModel>(dataModelView, null, excelTemplate, caption);
 
         }
 
@@ -55,9 +55,8 @@ namespace Neutrino.Portal.Tests
             int goalGoodsCategoryId = 5093;
 
             var promotionBS = _kernel.Get<IPromotionBS>();
-            IEntityListLoader<BranchPromotion> branchPromotionLoader = _kernel.Get<IEntityListLoader<BranchPromotion>>();
 
-            PromotionReportServiceController promotionReportServiceController = new PromotionReportServiceController(branchPromotionLoader, promotionBS);
+            PromotionReportServiceController promotionReportServiceController = new PromotionReportServiceController(promotionBS);
             await promotionReportServiceController.ExportExcelSaleGoals(startDate, endDate, goalGoodsCategoryId);
 
         }

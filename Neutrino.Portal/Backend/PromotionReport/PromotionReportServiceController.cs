@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Espresso.BusinessService;
 using Espresso.BusinessService.Interfaces;
 using Espresso.Core;
 using Espresso.Portal;
@@ -20,25 +21,22 @@ namespace Neutrino.Portal
     public class PromotionReportServiceController : ApiControllerBase
     {
         #region [ Varibale(s) ]
-        private readonly IEntityListLoader<BranchPromotion> branchPromotionLoader;
         private readonly IPromotionBS promotionBS;
         #endregion
 
         #region [ Constructor(s) ]
-        public PromotionReportServiceController(IEntityListLoader<BranchPromotion> entityListLoader
-            , IPromotionBS promotionBS)
+        public PromotionReportServiceController(IPromotionBS promotionBS)
         {
-            this.branchPromotionLoader = entityListLoader;
             this.promotionBS = promotionBS;
         }
         #endregion
 
         #region [ Public Method(s) ]
+
         [Route("getOverView")]
         public async Task<HttpResponseMessage> GetOverView(int year, int month)
         {
-            var entity = await branchPromotionLoader.LoadListAsync(x => x.Year == year && x.Month == month
-            , includes: x => new { x.Branch }, orderBy: x => x.OrderBy(y => y.Branch.Order));
+            var entity = await promotionBS.LoadReportOverView(year, month);
             if (entity.ReturnStatus == false)
             {
                 return CreateErrorResponse(entity);
@@ -52,8 +50,7 @@ namespace Neutrino.Portal
         [Route("exportExcelOverView"), HttpGet]
         public async Task<HttpResponseMessage> ExportExcelOverView(int year, int month)
         {
-            var entity = await branchPromotionLoader.LoadListAsync(x => x.Year == year && x.Month == month
-            , includes: x => new { x.Branch }, orderBy: x => x.OrderBy(y => y.Branch.Order));
+            var entity = await promotionBS.LoadReportOverView(year, month);
             if (entity.ReturnStatus == false)
             {
                 return CreateErrorResponse(entity);
@@ -63,7 +60,7 @@ namespace Neutrino.Portal
             var dataModelView = mapper.Map<List<BranchPromotionViewModel>>(entity.ResultValue);
             string caption = $"عملکرد نهایی سال {year} ماه {month} ";
             var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/overviewrpt/excelTemplate.html");
-            var result = ExportToExcel.WriteHtmlTable<BranchPromotionViewModel>(dataModelView, "OverView", excelTemplate, caption);
+            var result = ExportToExcel.GetExcelFile<BranchPromotionViewModel>(dataModelView, "OverView", excelTemplate, caption);
             return result;
         }
 
@@ -72,7 +69,7 @@ namespace Neutrino.Portal
         {
             DateTime? startDateTime = Utilities.ToDateTime(startDate);
             DateTime? endDateTime = Utilities.ToDateTime(endDate);
-            if (startDateTime.HasValue && endDateTime.HasValue)
+            if (startDateTime.HasValue && endDateTime.HasValue && goalGoodsCategoryId != 0)
             {
                 var entity = await promotionBS.LoadReportBranchSalesGoal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
                 if (entity.ReturnStatus == false)
@@ -134,7 +131,7 @@ namespace Neutrino.Portal
 
                     string caption = $" گزارش عملکرد اهداف فروش محدوده تاریخ {startDate} - {endDate} هدف {goalGoodsCategoryName}";
                     var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/branchsalesrpt/excelTemplate.html");
-                    var result = ExportToExcel.WriteHtmlTable<ReportBranchSalesGoalViewModel>(lst_responses
+                    var result = ExportToExcel.GetExcelFile<ReportBranchSalesGoalViewModel>(lst_responses
                         , outputFileName: "branchSalegoals"
                         , excelTemplatePath: excelTemplate
                         , caption: caption
@@ -160,7 +157,72 @@ namespace Neutrino.Portal
             return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
 
+        [Route("getBranchReceiptGoals")]
+        public async Task<HttpResponseMessage> GetBranchReceiptGoals(int year, int month, int goalGoodsCategoryTypeId)
+        {
 
+            var entity = await promotionBS.LoadReportBranchReceipt(year, month, (GoalGoodsCategoryTypeEnum)goalGoodsCategoryTypeId);
+            if (entity.ReturnStatus == false)
+            {
+                return CreateErrorResponse(entity);
+            }
+            var lst_responses = entity.ResultValue.GroupBy(x => new { x.BranchName })
+               .Select(x => new ReportBranchReceiptGoalViewModel
+               {
+                   BranchName = x.Key.BranchName,
+                   TotalSales = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalSales,
+                   TotalQuantity = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalQuantity,
+                   FinalPromotion = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).FinalPromotion,
+                   FulfilledPercent = Math.Round(x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).FulfilledPercent, MidpointRounding.AwayFromZero),
+                   AmountSpecified = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).AmountSpecified,
+                   ReceiptAmount = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).ReceiptAmount,
+                   PositionTotalAmount = x.Sum(y => y.PositionPromotion),
+                   PositionPromotions = x.Select(y => new PositionPromotion
+                   {
+                       PositionTitle = y.PositionTitle,
+                       Promotion = y.PositionPromotion
+                   }).ToList()
+               }).ToList();
+            return CreateSuccessedListResponse(lst_responses);
+        }
+
+        [Route("exportExcelBranchReceiptGoals"),HttpGet]
+        public async Task<HttpResponseMessage> ExportExcelBranchReceiptGoals(int year, int month, int goalGoodsCategoryTypeId)
+        {
+            var entity = await promotionBS.LoadReportBranchReceipt(year, month, (GoalGoodsCategoryTypeEnum)goalGoodsCategoryTypeId);
+            if (entity.ReturnStatus == false)
+            {
+                return CreateErrorResponse(entity);
+            }
+            var lst_responses = entity.ResultValue.GroupBy(x => new { x.BranchName })
+               .Select(x => new ReportBranchReceiptGoalViewModel
+               {
+                   BranchName = x.Key.BranchName,
+                   TotalSales = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalSales,
+                   TotalQuantity = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalQuantity,
+                   FinalPromotion = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).FinalPromotion,
+                   FulfilledPercent = Math.Round(x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).FulfilledPercent, MidpointRounding.AwayFromZero),
+                   AmountSpecified = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).AmountSpecified,
+                   ReceiptAmount = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).ReceiptAmount,
+                   PositionTotalAmount = x.Sum(y => y.PositionPromotion),
+                   GoalGoodsCategoryName = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).GoalGoodsCategoryName,
+                   PositionPromotions = x.Select(y => new PositionPromotion
+                   {
+                       PositionTitle = y.PositionTitle,
+                       Promotion = y.PositionPromotion
+                   }).ToList()
+               }).ToList();
+
+            string caption = $" گزارش عملکرد {lst_responses.First().GoalGoodsCategoryName} سال {year} - ماه {month} ";
+            var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/branchreceiptrpt/excelTemplate.html");
+            var result = ExportToExcel.GetExcelFile<ReportBranchReceiptGoalViewModel>(lst_responses
+                , outputFileName: "branchReceiptgoals"
+                , excelTemplatePath: excelTemplate
+                , caption: caption
+                , getLoopObjects: (ReportBranchReceiptGoalViewModel record) => record.PositionPromotions
+                );
+            return result;
+        }
         #endregion
 
         #region [ Private Method(s) ]

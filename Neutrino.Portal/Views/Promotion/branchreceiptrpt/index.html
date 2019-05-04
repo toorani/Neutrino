@@ -1,0 +1,121 @@
+﻿<div ng-controller="promotion.branchreceiptrpt.indexController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="itemView-Body col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">
+                                        سال
+                                    </label>
+                                    <div class="col-md-2">
+                                        <select class="form-control"
+                                                ng-options="item for item in years"
+                                                ng-model="viewModel.year">
+                                            <option value="" selected>[ انتخاب کنید ]</option>
+
+                                        </select>
+                                    </div>
+                                    <label class="col-md-1 control-label">
+                                        ماه
+                                    </label>
+                                    <div class="col-md-2">
+                                        <select class="form-control"
+                                                ng-options="item.id as item.name for item in months"
+                                                ng-model="viewModel.month">
+                                            <option value="" selected>[ انتخاب کنید ]</option>
+                                        </select>
+
+                                    </div>
+                                    <label class="col-md-1 control-label">
+                                        هدف
+                                    </label>
+                                    <div class="col-md-3">
+                                        <select class="form-control"
+                                                ng-options="item.id as item.title for item in receiptTypes"
+                                                ng-model="viewModel.goalGoodsCategoryTypeId">
+                                            <option value="" selected>[ انتخاب کنید ]</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="modal-footer">
+                                    <button type="button" ng-click="showReport()"
+                                            class="btn btn-info">
+                                        <i class="fa fa-filter"></i>
+                                        <span>نمایش گزارش</span>
+                                    </button>
+                                    <button type="button" ng-click="exportReport()" ng-show="reportData.length != 0"
+                                            class="btn btn-info">
+                                        <i class="fa fa-file-excel-o"></i>
+                                        <span>خروجی اکسل</span>
+                                    </button>
+                                </div>
+
+                                <div class="table-responsive text-nowrap" ng-show="reportData.length != 0">
+                                    <table class="table table-striped">
+
+                                        <thead>
+                                            <tr>
+                                                <td class="align-center"><input type="text" ng-model="filter_branchName" class="form-control" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-center">نام مرکز</td>
+                                                <td class="align-center">مبلغ هدف</td>
+                                                <td class="align-center">مبلغ وصول</td>
+                                                <td class="align-center">درصد تحقق</td>
+                                                <td class="align-center " ng-repeat="psp in reportData[0].positionPromotions">{{psp.positionTitle}} </td>
+                                                <td class="align-center ">پورسانت مرکز</td>
+                                            </tr>
+                                        </thead>
+                                        <tr ng-repeat="record in reportData | filter :{branchName: filter_branchName}  ">
+                                            <td style=" position: relative;">
+                                                <span ng-class="{false:'fillTd text-center dir-ltr label-warning', true:'fillTd text-center dir-ltr label-success'}[record.fulfilledPercent >= 100]">
+                                                    {{record.branchName}}
+                                                </span>
+                                            </td>
+                                            <td class="align-center dir-ltr">
+                                                {{record.amountSpecified | number}}
+                                            </td>
+                                            <td class="align-center dir-ltr">
+                                                {{record.receiptAmount | number}}
+                                            </td>
+                                            <td style="position: relative;">
+                                                <span ng-class="{false:'fillTd text-center label-warning', true:'fillTd text-center label-success'}[record.fulfilledPercent >= 100]">
+                                                    % {{record.fulfilledPercent}}
+                                                </span>
+                                            </td>
+
+                                            <td class="align-center dir-ltr" ng-repeat="psp in record.positionPromotions">{{psp.promotion | number}} </td>
+                                            <td class="text-center dir-ltr info">
+                                                {{record.finalPromotion | number}}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div ng-show="reportData.length == 0">
+                                    <table class="table" cellspacing="0">
+                                        <caption>
+                                            <h2>اطلاعاتی وجود ندارد</h2>
+                                        </caption>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
