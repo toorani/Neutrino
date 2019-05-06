@@ -545,6 +545,7 @@
     <Content Include="Scripts\angular\angular-cookies.js" />
     <Content Include="Scripts\angular\angular-cookies.min.js" />
     <Content Include="Scripts\angular\angular-csp.css" />
+    <Content Include="Scripts\angular\angular-filter.js" />
     <Content Include="Scripts\angular\angular-loader.js" />
     <Content Include="Scripts\angular\angular-loader.min.js" />
     <Content Include="Scripts\angular\angular-message-format.js" />
@@ -776,6 +777,9 @@
     <Content Include="Views\Promotion\branchreceiptrpt\excelTemplate.html" />
     <Content Include="Views\Promotion\branchreceiptrpt\index.html" />
     <Content Include="Views\Promotion\branchreceiptrpt\indexController.js" />
+    <Content Include="Views\Promotion\branchsalesoverviewrpt\excelTemplate.html" />
+    <Content Include="Views\Promotion\branchsalesoverviewrpt\index.html" />
+    <Content Include="Views\Promotion\branchsalesoverviewrpt\indexController.js" />
     <Content Include="Views\Promotion\branchsalesrpt\index.html" />
     <Content Include="Views\Promotion\branchsalesrpt\indexController.js" />
     <Content Include="Views\Promotion\branchsalesrpt\excelTemplate.html" />

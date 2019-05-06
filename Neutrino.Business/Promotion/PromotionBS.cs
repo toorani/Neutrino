@@ -643,6 +643,55 @@ namespace Neutrino.Business
             }
             return result;
         }
+        public async Task<IBusinessResultValue<List<ReportBranchPromotionDetail>>> LoadReportBranchPromotionDetail(DateTime startDate, DateTime endDate)
+        {
+            var result = new BusinessResultValue<List<ReportBranchPromotionDetail>>();
+            try
+            {
+                var query = await (from gl in unitOfWork.GoalDataService.GetQuery()
+                                   join brgl in unitOfWork.BranchGoalDataService.GetQuery()
+                                   on gl.Id equals brgl.GoalId
+                                   where gl.StartDate >= startDate && gl.EndDate <= endDate
+                                   join brglp in unitOfWork.BranchGoalPromotionDataService.GetQuery()
+                                   on brgl.Id equals brglp.BranchGoalId
+                                   join br in unitOfWork.BranchDataService.GetQuery()
+                                   on brgl.BranchId equals br.Id
+                                   join ggc in unitOfWork.GoalGoodsCategoryDataService.GetQuery()
+                                   on gl.GoalGoodsCategoryId equals ggc.Id
+                                   join ffp in unitOfWork.FulfillmentPercentDataService.GetQuery()
+                                   on br.Id equals ffp.BranchId
+                                   select new
+                                   {
+                                       BranchId = br.Id,
+                                       BranchName = br.Name,
+                                       GoalGoodsCategoryName = ggc.Name,
+                                       brglp.FinalPromotion,
+                                       brglp.PromotionWithOutFulfillmentPercent,
+                                       SellerFulfillmentPercent = ffp.SellerFulfillmentPercent.Value,
+                                       ManagerFulfillmentPercent = ffp.ManagerFulfillmentPercent.Value
+                                   }).ToListAsync();
+
+                result.ResultValue = query.Select(x => new ReportBranchPromotionDetail
+                {
+                    BranchId = x.BranchId,
+                    BranchName = x.BranchName,
+                    FinalPromotion = x.FinalPromotion,
+                    GoalGoodsCategoryName = x.GoalGoodsCategoryName,
+                    ManagerFulfillmentPercent = x.ManagerFulfillmentPercent,
+                    PromotionWithOutFulfillmentPercent = x.PromotionWithOutFulfillmentPercent,
+                    SellerFulfillmentPercent = x.SellerFulfillmentPercent,
+                    TotalFinalPromotion = query.Where(y => x.BranchId == x.BranchId).Sum(y => y.FinalPromotion),
+                    TotalPromotionWithOutFulfillmentPercent = query.Where(y => x.BranchId == x.BranchId).Sum(y => y.PromotionWithOutFulfillmentPercent)
+                }).ToList();
+                result.ReturnStatus = true;
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
+
         public async Task<IBusinessResultValue<List<ReportBranchReceiptGoal>>> LoadReportBranchReceipt(int year, int month, GoalGoodsCategoryTypeEnum goalGoodsCategoryTypeId)
         {
             var result = new BusinessResultValue<List<ReportBranchReceiptGoal>>();
@@ -691,7 +740,7 @@ namespace Neutrino.Business
                     PositionPromotion = x.Promotion,
                     PositionTitle = x.PositionTitle,
                     ReceiptAmount = goalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal ? x.ReceiptPrivateAmount.Value : x.ReceiptTotalAmount,
-                    GoalGoodsCategoryName =  goalGoodsCategoryTypeId.GetEnumDescription()
+                    GoalGoodsCategoryName = goalGoodsCategoryTypeId.GetEnumDescription()
                 }).ToList();
                 result.ReturnStatus = true;
 

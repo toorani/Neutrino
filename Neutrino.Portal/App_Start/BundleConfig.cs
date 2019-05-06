@@ -62,6 +62,7 @@ namespace Neutrino.Portal
                "~/Scripts/angular/angular-route.min.js",
                "~/Scripts/angular/angular-ui.min.js",
                "~/Scripts/angular/angular-block-ui.js",
+               "~/Scripts/angular/angular-filter.js",
                "~/Scripts/ui-router/ui-router.min.js",
                "~/Scripts/ui-bootstrap/ui-bootstrap.min.js",
                "~/Scripts/ui-bootstrap/ui-bootstrap-tpls.min.js"

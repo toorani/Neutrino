@@ -223,6 +223,20 @@ namespace Neutrino.Portal
                 );
             return result;
         }
+        [Route("getBranchPromotion"),HttpGet]
+        public async Task<HttpResponseMessage> GetBranchPromotion(string startDate, string endDate)
+        {
+            DateTime? startDateTime = Utilities.ToDateTime(startDate);
+            DateTime? endDateTime = Utilities.ToDateTime(endDate);
+            var entity = await promotionBS.LoadReportBranchSalesGoal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+            if (entity.ReturnStatus == false)
+            {
+                return CreateErrorResponse(entity);
+            }
+            
+            return Request.CreateResponse(HttpStatusCode.OK, entity.ResultValue);
+        }
+
         #endregion
 
         #region [ Private Method(s) ]

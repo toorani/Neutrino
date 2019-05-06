@@ -73,6 +73,7 @@
     <Compile Include="QuantityCondition.cs" />
     <Compile Include="QuantityConditionType.cs" />
     <Compile Include="ReportBranchReceiptGoal.cs" />
+    <Compile Include="ReportBranchPromotionDetail.cs" />
     <Compile Include="ReportBranchSalesGoal.cs" />
     <Compile Include="StockInventory.cs" />
     <Compile Include="CompanyType.cs" />
