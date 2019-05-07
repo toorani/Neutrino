@@ -652,14 +652,17 @@ namespace Neutrino.Business
                                    join brgl in unitOfWork.BranchGoalDataService.GetQuery()
                                    on gl.Id equals brgl.GoalId
                                    where gl.StartDate >= startDate && gl.EndDate <= endDate
+                                   && (gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Group || gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single)
                                    join brglp in unitOfWork.BranchGoalPromotionDataService.GetQuery()
                                    on brgl.Id equals brglp.BranchGoalId
+                                   join brp in unitOfWork.BranchPromotionDataService.GetQuery()
+                                   on brglp.BranchPromotionId equals brp.Id
                                    join br in unitOfWork.BranchDataService.GetQuery()
                                    on brgl.BranchId equals br.Id
                                    join ggc in unitOfWork.GoalGoodsCategoryDataService.GetQuery()
                                    on gl.GoalGoodsCategoryId equals ggc.Id
                                    join ffp in unitOfWork.FulfillmentPercentDataService.GetQuery()
-                                   on br.Id equals ffp.BranchId
+                                   on new { brp.BranchId, brp.Month, brp.Year } equals new { ffp.BranchId, ffp.Month, ffp.Year }
                                    select new
                                    {
                                        BranchId = br.Id,
@@ -680,8 +683,8 @@ namespace Neutrino.Business
                     ManagerFulfillmentPercent = x.ManagerFulfillmentPercent,
                     PromotionWithOutFulfillmentPercent = x.PromotionWithOutFulfillmentPercent,
                     SellerFulfillmentPercent = x.SellerFulfillmentPercent,
-                    TotalFinalPromotion = query.Where(y => x.BranchId == x.BranchId).Sum(y => y.FinalPromotion),
-                    TotalPromotionWithOutFulfillmentPercent = query.Where(y => x.BranchId == x.BranchId).Sum(y => y.PromotionWithOutFulfillmentPercent)
+                    TotalFinalPromotion = query.Where(y => y.BranchId == x.BranchId).Sum(y => y.FinalPromotion),
+                    TotalPromotionWithOutFulfillmentPercent = query.Where(y => y.BranchId == x.BranchId).Sum(y => y.PromotionWithOutFulfillmentPercent)
                 }).ToList();
                 result.ReturnStatus = true;
             }

@@ -186,7 +186,7 @@ namespace Neutrino.Portal
             return CreateSuccessedListResponse(lst_responses);
         }
 
-        [Route("exportExcelBranchReceiptGoals"),HttpGet]
+        [Route("exportExcelBranchReceiptGoals"), HttpGet]
         public async Task<HttpResponseMessage> ExportExcelBranchReceiptGoals(int year, int month, int goalGoodsCategoryTypeId)
         {
             var entity = await promotionBS.LoadReportBranchReceipt(year, month, (GoalGoodsCategoryTypeEnum)goalGoodsCategoryTypeId);
@@ -223,18 +223,35 @@ namespace Neutrino.Portal
                 );
             return result;
         }
-        [Route("getBranchPromotion"),HttpGet]
-        public async Task<HttpResponseMessage> GetBranchPromotion(string startDate, string endDate)
+        [Route("getBranchPromotionDetail"), HttpGet]
+        public async Task<HttpResponseMessage> GetBranchPromotionDetail(string startDate, string endDate)
         {
             DateTime? startDateTime = Utilities.ToDateTime(startDate);
             DateTime? endDateTime = Utilities.ToDateTime(endDate);
-            var entity = await promotionBS.LoadReportBranchSalesGoal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+            var entity = await promotionBS.LoadReportBranchPromotionDetail(startDateTime.Value, endDateTime.Value);
             if (entity.ReturnStatus == false)
             {
                 return CreateErrorResponse(entity);
             }
-            
-            return Request.CreateResponse(HttpStatusCode.OK, entity.ResultValue);
+
+            var dataResult = entity.ResultValue.GroupBy(x => x.BranchId)
+                .Select(x => new ReportBranchPromotionDetailViewModel
+                {
+                    BranchId = x.Key,
+                    BranchName = x.FirstOrDefault(y => y.BranchId == x.Key).BranchName,
+                    ManagerFulfillmentPercent = x.FirstOrDefault(y => y.BranchId == x.Key).ManagerFulfillmentPercent,
+                    SellerFulfillmentPercent = x.FirstOrDefault(y => y.BranchId == x.Key).SellerFulfillmentPercent,
+                    TotalFinalPromotion = x.FirstOrDefault(y => y.BranchId == x.Key).TotalFinalPromotion,
+                    TotalPromotionWithOutFulfillmentPercent = x.FirstOrDefault(y => y.BranchId == x.Key).TotalPromotionWithOutFulfillmentPercent,
+                    GoalPromotions = x.Select(y => new GoalPromotion
+                    {
+                        FinalPromotion = y.FinalPromotion,
+                        GoalGoodsCategoryName = y.GoalGoodsCategoryName,
+                        PromotionWithOutFulfillmentPercent = y.PromotionWithOutFulfillmentPercent
+                    }).ToList()
+                }).ToList();
+
+            return CreateSuccessedListResponse(dataResult);
         }
 
         #endregion

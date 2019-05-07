@@ -170,7 +170,7 @@
                     },
                     new AppMenu
                     {
-                        Title = "عملکرداهداف فروش",
+                        Title = "عملکرداهداف فروش مراکز ",
                         Icon = "fa fa-file-text-o",
                         Url = "/promotion/branchsalesrpt/index",
                         OrderId = 2,
@@ -179,10 +179,19 @@
                     },
                     new AppMenu
                     {
+                        Title = "پورسانت مراکز از اهداف فروش",
+                        Icon = "fa fa-file-text-o",
+                        Url = "/promotion/branchsalesoverviewrpt/index",
+                        OrderId = 3,
+                        Parent = reportItem,
+                        ParentId = reportItem.Id
+                    },
+                    new AppMenu
+                    {
                         Title = "عملکرداهداف وصول",
                         Icon = "fa fa-file-text-o",
                         Url = "/promotion/branchreceiptrpt/index",
-                        OrderId = 3,
+                        OrderId = 4,
                         Parent = reportItem,
                         ParentId = reportItem.Id
                     }

@@ -50,58 +50,59 @@
 
                                 <div class="table-responsive text-nowrap" ng-show="reportData.length != 0">
                                     <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <td class="align-center"><input type="text" ng-model="filter_branchName" class="form-control" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <td class="align-center ">نام مرکز</td>
-                                                <td class="align-center ">پورسانت بدون احتساب درصد فروشنده</td>
-                                                <td class="align-center ">پورسانت با احتساب درصد فروشنده</td>
-                                            </tr>
-                                        </thead>
-                                        <tr ng-repeat="record in reportData | filter :{branchName: filter_branchName}  ">
-                                            <td>
-                                                <a class="handpointer glyphicon glyphicon-chevron-right" 
-                                                   data-ng-click="collapse($event)" 
-                                                   data-ng-if="product.items!=null" 
-                                                   role="button" 
-                                                   data-toggle="collapse" 
-                                                   href="#view_{{record.branchId}}" 
-                                                   aria-expanded="false">
-                                                </a>
-                                            </td>
-                                            <td class="text-center">
-                                                    {{record.branchName}}
-                                            </td>
-                                            <td class="align-center dir-ltr">
-                                                {{record.totalFinalPromotion | number}}
-                                            </td>
-                                            <td class="align-center dir-ltr">
-                                                {{record.totalPromotionWithOutFulfillmentPercent | number}}
-                                            </td>
-                                        </tr>
-                                        <tr class="collapse" id="view_{{record.branchId}}" data-ng-if="product.items!=null">
-                                            <td colspan="4">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <td class="align-center"><input type="text" ng-model="filter_branchName" class="form-control" /></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td></td>
-                                                            <td class="align-center ">نام مرکز</td>
-                                                            <td class="align-center ">پورسانت بدون احتساب درصد فروشنده</td>
-                                                            <td class="align-center ">پورسانت با احتساب درصد فروشنده</td>
-                                                        </tr>
-                                                    </thead>
-                                                    <tr ng-repeat="record in reportData | filter :{branchName: filter_branchName}  "></tr>
-                                                </table>
-                                            </td>
-                                        </tr>
+                                        <tr class="row">
+                                            <th class="align-center ">نام مرکز</th>
+                                            <th class="align-center ">جمع پورسانت بدون درصد مشمول</th>
+                                            <th class="align-center ">جمع پورسانت با درصد مشمول</th>
+                                            <th class="align-center ">% مشمول فروشنده</th>
 
+                                        </tr>
+                                        <tbody ng-repeat="record in reportData">
+                                            <tr>
+                                                <td>
+                                                    <a class="handpointer glyphicon glyphicon-chevron-right"
+                                                       data-ng-click="collapse($event)" data-ng-if="record.goalPromotions!=null"
+                                                       role="button" data-toggle="collapse" href="#view_{{record.branchId}}"
+                                                       aria-expanded="false">
+                                                    </a>
+                                                </td>
+                                               <td class="text-center">
+                                                    {{record.branchName}}
+                                                </td>
+                                                <td class="align-center dir-ltr">
+                                                    {{record.totalPromotionWithOutFulfillmentPercent | number}}
+                                                </td>
+                                                <td class="align-center dir-ltr">
+                                                    {{record.totalFinalPromotion | number}}
+                                                </td>
+                                                <td class="align-center">
+                                                    % {{record.sellerFulfillmentPercent}}
+                                                </td>
+
+                                            </tr>
+
+                                            <tr class="collapse" id="view_{{record.branchId}}" data-ng-if="record.goalPromotions!=null">
+                                                <td colspan="4">
+                                                    <div class="col-sm-offset-1">
+                                                        <table class="table-condensed responsive-table">
+                                                            <tr class="row">
+                                                                <th class="align-center ">نام هدف</th>
+                                                                <th class="align-center ">پورسانت بدون درصد مشمول</th>
+                                                                <th class="align-center ">پورسانت با درصد مشمول</th>
+                                                            </tr>
+                                                            <tr class="row" ng-repeat="goalPr in record.goalPromotions">
+                                                                <td data-ng-bind="goalPr.goalGoodsCategoryName"></td>
+                                                                <td  class="align-center dir-ltr" data-ng-bind="goalPr.finalPromotion | number"></td>
+                                                                <td  class="align-center dir-ltr" data-ng-bind="goalPr.promotionWithOutFulfillmentPercent | number"></td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
                                     </table>
+                                    
                                     <div ng-show="reportData.length == 0">
                                         <table class="table" cellspacing="0">
                                             <caption>
