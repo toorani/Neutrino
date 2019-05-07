@@ -253,6 +253,43 @@ namespace Neutrino.Portal
 
             return CreateSuccessedListResponse(dataResult);
         }
+        [Route("exportExcelBranchPromotionDetail"), HttpGet]
+        public async Task<HttpResponseMessage> ExportExcelBranchPromotionDetail(string startDate, string endDate)
+        {
+            DateTime? startDateTime = Utilities.ToDateTime(startDate);
+            DateTime? endDateTime = Utilities.ToDateTime(endDate);
+            var entity = await promotionBS.LoadReportBranchPromotionDetail(startDateTime.Value, endDateTime.Value);
+            if (entity.ReturnStatus == false)
+            {
+                return CreateErrorResponse(entity);
+            }
+
+            var dataResult = entity.ResultValue.GroupBy(x => x.BranchId)
+                .Select(x => new ReportBranchPromotionDetailViewModel
+                {
+                    BranchId = x.Key,
+                    BranchName = x.FirstOrDefault(y => y.BranchId == x.Key).BranchName,
+                    ManagerFulfillmentPercent = x.FirstOrDefault(y => y.BranchId == x.Key).ManagerFulfillmentPercent,
+                    SellerFulfillmentPercent = x.FirstOrDefault(y => y.BranchId == x.Key).SellerFulfillmentPercent,
+                    TotalFinalPromotion = x.FirstOrDefault(y => y.BranchId == x.Key).TotalFinalPromotion,
+                    TotalPromotionWithOutFulfillmentPercent = x.FirstOrDefault(y => y.BranchId == x.Key).TotalPromotionWithOutFulfillmentPercent,
+                    GoalPromotions = x.Select(y => new GoalPromotion
+                    {
+                        FinalPromotion = y.FinalPromotion,
+                        GoalGoodsCategoryName = y.GoalGoodsCategoryName,
+                        PromotionWithOutFulfillmentPercent = y.PromotionWithOutFulfillmentPercent
+                    }).ToList()
+                }).ToList();
+            string caption = $" گزارش پورسانت مراکز از فروش {startDate} - {endDate} ";
+            var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/branchsalesoverviewrpt/excelTemplate.html");
+            var result = ExportToExcel.GetExcelFile<ReportBranchPromotionDetailViewModel>(dataResult
+                , outputFileName: "branchpromotion"
+                , excelTemplatePath: excelTemplate
+                , caption: caption
+                , getLoopObjects: (ReportBranchPromotionDetailViewModel record) => record.GoalPromotions
+                );
+            return result;
+        }
 
         #endregion
 

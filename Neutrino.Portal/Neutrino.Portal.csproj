@@ -563,6 +563,11 @@
     <Content Include="Scripts\angular\angular-sanitize.js" />
     <Content Include="Scripts\angular\angular-sanitize.min.js" />
     <Content Include="Scripts\angular\angular-scenario.js" />
+    <None Include="Scripts\jquery\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.js" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.min.js" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.slim.js" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\jquery.dataTables\dataTables.fixedHeader.min.js" />
     <Content Include="Scripts\jquery.dataTables\extras\Button\js\buttons.flash.min.js" />
     <Content Include="Scripts\jquery.dataTables\extras\Button\js\buttons.html5.min.js" />
@@ -697,11 +702,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\elite-neutrino.com - Web Deploy.pubxml" />
-    <None Include="Scripts\jquery\jquery-3.1.1.intellisense.js" />
-    <Content Include="Scripts\jquery\jquery-3.1.1.js" />
-    <Content Include="Scripts\jquery\jquery-3.1.1.min.js" />
-    <Content Include="Scripts\jquery\jquery-3.1.1.slim.js" />
-    <Content Include="Scripts\jquery\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.slim.min.map" />
+    <Content Include="Scripts\jquery\jquery-3.4.1.min.map" />
     <Content Include="Scripts\jquery.dataTables\bootstrapPager.min.js" />
     <Content Include="Scripts\jquery.dataTables\extras\AutoFill\media\docs\media\js\doc.js" />
     <Content Include="Scripts\jquery.dataTables\extras\AutoFill\media\docs\media\js\jquery.js" />
@@ -891,12 +893,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\angular\angular-block-ui.css.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Scripts\jquery\jquery-3.1.1.slim.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Scripts\jquery\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\images\" />

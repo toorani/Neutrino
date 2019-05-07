@@ -694,8 +694,7 @@ namespace Neutrino.Business
             }
             return result;
         }
-
-        public async Task<IBusinessResultValue<List<ReportBranchReceiptGoal>>> LoadReportBranchReceipt(int year, int month, GoalGoodsCategoryTypeEnum goalGoodsCategoryTypeId)
+                public async Task<IBusinessResultValue<List<ReportBranchReceiptGoal>>> LoadReportBranchReceipt(int year, int month, GoalGoodsCategoryTypeEnum goalGoodsCategoryTypeId)
         {
             var result = new BusinessResultValue<List<ReportBranchReceiptGoal>>();
             try
@@ -952,7 +951,7 @@ namespace Neutrino.Business
                     BranchGoalId = branchSalesInfo.BranchGoalId,
                     TotalSales = branchSalesInfo.TotalSales,
                     TotalQuantity = branchSalesInfo.TotalQuantity,
-                    FinalPromotion = branchSalesInfo.SellerFulfillmentPercent.HasValue ? promotion * branchSalesInfo.SellerFulfillmentPercent.Value : promotion
+                    FinalPromotion = branchSalesInfo.SellerFulfillmentPercent.HasValue ? promotion * branchSalesInfo.SellerFulfillmentPercent.Value * 0.01M: promotion
                 });
             }
             else if (goal.GoalNonFulfillmentPercents.Count != 0)
@@ -972,7 +971,7 @@ namespace Neutrino.Business
                        BranchGoalId = branchSalesInfo.BranchGoalId,
                        TotalSales = branchSalesInfo.TotalSales,
                        TotalQuantity = branchSalesInfo.TotalQuantity,
-                       FinalPromotion = branchSalesInfo.SellerFulfillmentPercent.HasValue ? promotion * branchSalesInfo.SellerFulfillmentPercent.Value : promotion
+                       FinalPromotion = branchSalesInfo.SellerFulfillmentPercent.HasValue ? promotion * branchSalesInfo.SellerFulfillmentPercent.Value * 0.01M : promotion
                    });
                 }
             }

@@ -36,13 +36,13 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
         <title>Neutrino Project</title>
-
         @Styles.Render("~/Content/css")
         @Styles.Render("~/Content/plugins")
         <link rel="stylesheet" href="~/Content/plugins/pace/pace-rtl.css">
         @Styles.Render("~/Content/validation")
         <link rel="stylesheet" href="~/Content/plugins/icheck/angular-icheck.css" />
         <link rel="stylesheet" href="~/Content/datatable/buttons.dataTables.min.css" />
+
         <base href="@baseUrl" />
 
 
@@ -309,7 +309,7 @@
 
         </script>
         @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}?ver =" + @version + "\"></script>", "~/bundles/routing-debug")
-
+        
 
     </body>
 </html>

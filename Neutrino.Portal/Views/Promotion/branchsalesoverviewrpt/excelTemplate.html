@@ -3,13 +3,12 @@
     <thead>
         <tr>
             <td style="font-weight:bold;text-align:center">نام مرکز</td>
-            <td style="font-weight:bold;text-align:center">فروش</td>
-            <td style="font-weight:bold;text-align:center">تعداد</td>
-            <loop>
-                <td style="font-weight:bold;text-align:center">پله $index </td>
-                <td style="font-weight:bold;text-align:center">تحقق</td>
-            </loop>
+            <td style="font-weight:bold;text-align:center">پورسانت با درصد مشمول</td>
+            <td style="font-weight:bold;text-align:center">درصد مشمول</td>
             <td style="font-weight:bold;text-align:center">پورسانت</td>
+            <loop>
+                <td style="font-weight:bold;text-align:center">goalGoodsCategoryName</td>
+            </loop>
         </tr>
 
     </thead>
@@ -19,22 +18,22 @@
                 branchName
             </td>
             <td style="text-align:center">
-                totalSales
+                totalFinalPromotion
             </td>
             <td style="text-align:center">
-                totalQuantity
+                % sellerFulfillmentPercent
+            </td>
+            <td style="text-align:center">
+                totalPromotionWithOutFulfillmentPercent
             </td>
             <loop>
                 <td style="text-align:center">
-                    amountSpecified
-                </td>
-                <td style="text-align:center">
-                    % fulfilledPercent
+                    finalPromotion
                 </td>
             </loop>
-            <td style="text-align:center">
-                promotionWithOutFulfillmentPercent
-            </td>
+
+
+
         </tr>
     </tbody>
 </table>

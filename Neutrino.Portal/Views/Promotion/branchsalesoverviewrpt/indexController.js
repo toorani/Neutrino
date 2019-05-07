@@ -12,12 +12,14 @@ angular.module("neutrinoProject").register.controller('promotion.branchsalesover
             $scope.reportData = [];
 
             $scope.initializeController = function () {
-                $scope.title = 'گزارش عملکرد کلی اهداف فروش ';
+                $scope.title = 'گزارش پورسانت مراکز از فروش ';
                 $scope.viewModel.startDate = '1397/10/01';
                 $scope.viewModel.endDate = '1397/10/30';
             }
-            $scope.collapse = function (event) {
-                $(event.target).toggleClass("glyphicon-chevron-down");
+            $scope.collapse = function (event, branchId) {
+                $(event.target).toggleClass("fa-arrow-circle-down");
+                $(event.target.parentNode.parentNode).toggleClass("info");
+                $('#view_' + branchId).toggle('show');
             };
 
             $scope.showReport = function () {
@@ -37,9 +39,8 @@ angular.module("neutrinoProject").register.controller('promotion.branchsalesover
             }
             $scope.exportReport = function () {
 
-                var url = '/api/promotionReportService/exportExcelSaleGoals?startDate=' + $scope.viewModel.startDate
-                    + '&endDate=' + $scope.viewModel.endDate
-                    + '&goalGoodsCategoryId=' + $scope.viewModel.goalGoodsCategoryId;
+                var url = '/api/promotionReportService/exportExcelBranchPromotionDetail?startDate=' + $scope.viewModel.startDate
+                    + '&endDate=' + $scope.viewModel.endDate;
 
                 exportExcel.loadfile(url);
             }
