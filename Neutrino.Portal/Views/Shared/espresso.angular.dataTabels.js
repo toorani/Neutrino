@@ -118,7 +118,7 @@ angular.module('neutrinoProject')
                     orderValue: '@orderValue',
                     serverParams: '@serverParams',
                     lengthChangeable: '@lengthChangeable',
-                    enableExpandcolumn: '@enableExpandcolumn',
+                    enableexpandcolumn: '@enableExpandColumn',
                     fnDrawcallback: '&',
                     fnRowcallback: '&',
                     fnDetailsexpanded: '&',
@@ -127,13 +127,15 @@ angular.module('neutrinoProject')
 
                 },
                 templateUrl: '/views/shared/angular.dataTable.tmpl.html',
-                link: function (scope, element, attrs, controller) {
+                link: function (scope, element, attrs) {
 
                     scope.$parent.dataTable = {
                         startRenderArgs: {}
                     }
 
-                    var fnDetailsexpanded = function (ngGrid, trSelected) { }
+                    scope.fnexpanded = function (ngGrid, trSelected) {
+                        return scope.fnDetailsexpanded()(ngGrid, trSelected);
+                    }
 
                     //handel server params
                     var setServerParams = function () {
@@ -178,18 +180,19 @@ angular.module('neutrinoProject')
                         var keyIndex = 0;
 
                         //create expand columns
-                        if (Boolean(scope.enableExpandcolumn)) {
-                            scope.columns.splice(0, 0, {
-                                mappingData: '',
-                                fnRenderCallBack: function (data, type, full) {
-                                    return "<span id='btnExpand'><i  class='green fa fa-plus-circle fa-lg'></i></span>";
-                                },
-                                width: '50px',
-                                className: 'grid-expandIcon',
-                                sortable: false,
-                                searchable: false
+                        if (Boolean(scope.enableexpandcolumn)) {
+                            if (scope.columns.filter((col) => col.className == 'grid-expandIcon').length == 0)
+                                scope.columns.splice(0, 0, {
+                                    mappingData: '',
+                                    fnRenderCallBack: function (data, type, full) {
+                                        return "<span id='btnExpand'><i  class='green fa fa-plus-circle fa-lg'></i></span>";
+                                    },
+                                    width: '50px',
+                                    className: 'grid-expandIcon',
+                                    sortable: false,
+                                    searchable: false
 
-                            });
+                                });
                         }
 
                         //collect columns
@@ -278,43 +281,6 @@ angular.module('neutrinoProject')
                             }
                         }
 
-
-                        //$.fn.dataTable.TableTools.buttons.download = $.extend(true, {},
-                        //    $.fn.dataTable.TableTools.buttonBase, {
-                        //        "sButtonText": "Download",
-                        //        "sUrl": "",
-                        //        "sType": "POST",
-                        //        "fnData": false,
-                        //        "fnClick": function (button, config) {
-                        //            var dt = new $.fn.dataTable.Api(this.s.dt);
-                        //            var data = dt.ajax.params() || {};
-                        //            // Optional static additional parameters
-                        //            // data.customParameter = ...;
-                        //            if (config.fnData) {
-                        //                config.fnData(data);
-                        //            }
-                        //            var iframe = $('<iframe/>', {
-                        //                id: "RemotingIFrame"
-                        //            }).css({
-                        //                border: 'none',
-                        //                width: 0,
-                        //                height: 0
-                        //            }).appendTo('body');
-                        //            var contentWindow = iframe[0].contentWindow;
-                        //            contentWindow.document.open();
-                        //            contentWindow.document.close();
-                        //            var form = contentWindow.document.createElement('form');
-                        //            form.setAttribute('method', config.sType);
-                        //            form.setAttribute('action', config.sUrl);
-                        //            var input = contentWindow.document.createElement('input');
-                        //            input.name = 'json';
-                        //            input.value = JSON.stringify(data);
-                        //            form.appendChild(input);
-                        //            contentWindow.document.body.appendChild(form);
-                        //            form.submit();
-                        //        }
-                        //    });
-
                         var token = angular.element('input[name="__RequestVerificationToken"]').attr('value');
 
                         var ngGrid = tableElement.dataTable({
@@ -402,17 +368,11 @@ angular.module('neutrinoProject')
                                         /* Open this row */
                                         $(this).html("<i class='green fa fa-minus-circle fa-lg'></i>");
                                         if (scope.fnDetailsexpanded != undefined) {
-
-                                            scope.$parent.rowSelected = nTr;
-                                            scope.fnDetailsexpanded()
+                                            ngGrid.fnOpen(nTr, scope.fnexpanded(ngGrid, nTr), 'details');
                                         }
-                                        //ngGrid.fnOpen(nTr, fnFormatDetails(ngGrid, nTr), 'details');
+                                        //
                                     }
                                 });
-
-
-
-
                             }
                             , "fnServerParams": function (aoData) {
                                 if (serverParams != null) {

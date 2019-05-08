@@ -34,8 +34,8 @@
                                 <esp.ng.datatable columns="dataColumns"
                                                   server-Url="{{serverUrl}}"
                                                   server-Params="{{tab.filter}}"
-                                                  by-grouping="startDate"
-                                                  order-Value="[3,'asc']">
+                                                  enable-expand-column="true"
+                                                  fn-detailsexpanded="goalsExpanded">
                                 </esp.ng.datatable>
                             </div>
 

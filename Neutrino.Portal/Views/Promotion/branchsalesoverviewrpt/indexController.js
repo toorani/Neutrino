@@ -17,7 +17,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchsalesover
                 $scope.viewModel.endDate = '1397/10/30';
             }
             $scope.collapse = function (event, branchId) {
-                $(event.target).toggleClass("fa-arrow-circle-down");
+                $(event.target).toggleClass("green fa fa-minus-circle fa-lg");
                 $(event.target.parentNode.parentNode).toggleClass("info");
                 $('#view_' + branchId).toggle('show');
             };

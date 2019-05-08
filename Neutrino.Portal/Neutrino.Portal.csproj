@@ -751,12 +751,12 @@
     <Content Include="Scripts\validationEngine\jquery\jquery.validationEngine.js" />
     <Content Include="Scripts\validationEngine\jquery\languages\jquery.validationEngine-en.js" />
     <Content Include="Scripts\validationEngine\jquery\languages\jquery.validationEngine-fa.js" />
-    <Content Include="Views\Account\index.registration.html" />
-    <Content Include="Views\Account\item.registrationController.js" />
-    <Content Include="Views\Account\item.registration.html" />
+    <Content Include="Views\Account\registration\index.html" />
+    <Content Include="Views\Account\registration\itemController.js" />
+    <Content Include="Views\Account\registration\item.html" />
     <Content Include="Views\Account\forbidden.html" />
     <Content Include="Views\Account\login.html" />
-    <Content Include="Views\Account\index.registrationController.js" />
+    <Content Include="Views\Account\registration\indexController.js" />
     <Content Include="Views\Account\loginController.js" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\anonymousBootstrap.js" />

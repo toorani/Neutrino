@@ -109,4 +109,11 @@ namespace Neutrino.Entities
         }
 
     }
+    public class GroupByStartEndDate 
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public bool? IsUsed { get; set; }
+
+    }
 }

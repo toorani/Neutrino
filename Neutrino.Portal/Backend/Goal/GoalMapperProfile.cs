@@ -69,6 +69,10 @@ namespace Neutrino.Portal.ProfileMapper
                 .ReverseMap()
                 .ConstructUsing(x => new TypeEntityViewModel());
 
+            CreateMap<GroupByStartEndDate, GroupByStartEndDateViewModel>()
+                .ForMember(goalVM => goalVM.StartDate, opt => opt.ResolveUsing(goalDTO => Utilities.ToPersianDate(goalDTO.StartDate)))
+                .ForMember(goalVM => goalVM.EndDate, opt => opt.ResolveUsing(goalDTO => Utilities.ToPersianDate(goalDTO.EndDate)));
+
         }
         #endregion
 

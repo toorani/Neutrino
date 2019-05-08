@@ -652,7 +652,7 @@ namespace Neutrino.Business
                                    join brgl in unitOfWork.BranchGoalDataService.GetQuery()
                                    on gl.Id equals brgl.GoalId
                                    where gl.StartDate >= startDate && gl.EndDate <= endDate
-                                   && (gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Group || gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single)
+                                   //&& (gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Group || gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single)
                                    join brglp in unitOfWork.BranchGoalPromotionDataService.GetQuery()
                                    on brgl.Id equals brglp.BranchGoalId
                                    join brp in unitOfWork.BranchPromotionDataService.GetQuery()

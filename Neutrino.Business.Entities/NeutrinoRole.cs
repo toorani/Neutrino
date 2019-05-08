@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Espresso.Identity.Models;
 
@@ -7,6 +8,7 @@ namespace Neutrino.Entities
     {
         [StringLength(256)]
         public string FaName { get; set; }
+        [DefaultValue(false)]
         public bool IsUsingBySystem { get; set; }
         public NeutrinoRole()
             :base()

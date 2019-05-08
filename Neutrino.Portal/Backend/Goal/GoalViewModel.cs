@@ -49,7 +49,13 @@ namespace Neutrino.Portal.Models
             ApprovePromotionTypeId = 1;
         }
         #endregion
+    }
 
+    public class GroupByStartEndDateViewModel : ViewModelBase
+    {
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+        public bool IsUsed { get; set; }
 
     }
 }

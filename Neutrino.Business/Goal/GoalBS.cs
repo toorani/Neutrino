@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Espresso.BusinessService;
@@ -212,6 +214,39 @@ namespace Neutrino.Business
             try
             {
                 result.ResultValue = await unitOfWork.GoalDataService.GetPreviousAggregationValueAsync(month, year);
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
+
+        public async Task<IBusinessLoadByPagingResult<GroupByStartEndDate>> LoadGroupByStartEndDateGoalsAync(bool? isUsed, int pageNumber = 0, int pageSize = 15)
+        {
+            var result = new BusinessLoadByPagingResult<GroupByStartEndDate>();
+            try
+            {
+                var query = (from gl in unitOfWork.GoalDataService.GetQuery()
+                             where (isUsed == null || gl.IsUsed == isUsed) &&
+                             (gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single || gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Group)
+                             && gl.Deleted == false
+                             group gl by new { gl.StartDate, gl.EndDate } into grpgl
+                             select new
+                             {
+                                 grpgl.Key.StartDate,
+                                 grpgl.Key.EndDate
+                             });
+                result.TotalRows = await query.CountAsync();
+                
+                var takePaging = await query.OrderBy(x => x.StartDate).Skip(pageNumber).Take(pageSize).ToListAsync();
+                result.ResultValue = takePaging.Select(x => new GroupByStartEndDate
+                {
+                    EndDate = x.EndDate,
+                    StartDate = x.StartDate,
+                    IsUsed = isUsed
+                }).ToList();
+                result.ReturnStatus = true;
             }
             catch (Exception ex)
             {

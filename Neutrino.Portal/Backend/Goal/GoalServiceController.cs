@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web.Http;
-using AutoMapper;
+﻿using AutoMapper;
 using Espresso.BusinessService.Interfaces;
 using Espresso.Core;
 using Espresso.Portal;
@@ -14,6 +7,13 @@ using Neutrino.Entities;
 using Neutrino.Interfaces;
 using Neutrino.Portal.Models;
 using Neutrino.Portal.ProfileMapper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace Neutrino.Portal.WebApiControllers
 {
@@ -22,7 +22,7 @@ namespace Neutrino.Portal.WebApiControllers
     {
         #region [ Varibale(s) ]
         private readonly IGoalBS businessService;
-        
+
         #endregion
 
         #region [ Constructor(s) ]
@@ -50,7 +50,7 @@ namespace Neutrino.Portal.WebApiControllers
             return CreateViewModelResponse(result, goalEntity);
         }
         [Route("getDataGrid"), HttpPost]
-        public virtual async Task<HttpResponseMessage> GetDataGrid(JQueryDataTablesModel dataTablesModel)
+        public async Task<HttpResponseMessage> GetDataGrid(JQueryDataTablesModel dataTablesModel)
         {
             GoalTypeEnum? goalTypeId = GoalTypeEnum.Distributor;
             bool? isUsed = null;
@@ -85,7 +85,7 @@ namespace Neutrino.Portal.WebApiControllers
                     .LoadAsync(
                     pageNumber: dataTablesModel.iDisplayStart
                     , pageSize: dataTablesModel.iDisplayLength
-                    , includes: goal => new { goal.GoalGoodsCategory, goal.Company, goal.GoalGoodsCategoryType, goal.GoalSteps,goal.ComputingType }
+                    , includes: goal => new { goal.GoalGoodsCategory, goal.Company, goal.GoalGoodsCategoryType, goal.GoalSteps, goal.ComputingType }
                     , orderBy: UIHelper.GetOrderBy<Goal, GoalViewModel>(dataTablesModel.GetSortedColumns())
                     , where: or => (or.GoalGoodsCategory.Name.Contains(dataTablesModel.sSearch)
                     || or.GoalGoodsCategoryType.Description.Contains(dataTablesModel.sSearch)
@@ -114,6 +114,56 @@ namespace Neutrino.Portal.WebApiControllers
                 return Request.CreateResponse(HttpStatusCode.NotFound, new List<GoalViewModel>());
             }
         }
+
+        [Route("getGroupByStartEndDateGoalDataGrid"), HttpPost]
+        public async Task<HttpResponseMessage> GetGroupByStartEndDateGoalDataGrid(JQueryDataTablesModel dataTablesModel)
+        {
+            bool isUsed = false;
+            string isUsedParam = "isUsed";
+            if (dataTablesModel.ExternalParam.ContainsKey(isUsedParam))
+            {
+                isUsed = Convert.ToBoolean(dataTablesModel.ExternalParam[isUsedParam]);
+            }
+
+            var entities = await businessService.LoadGroupByStartEndDateGoalsAync(isUsed, pageNumber: dataTablesModel.iDisplayStart, pageSize: dataTablesModel.iDisplayLength);
+
+            if (entities.ReturnStatus == false)
+            {
+                return CreateErrorResponse(entities);
+            }
+
+            var mapper = GetMapper();
+            var dataSource = mapper.Map<List<GroupByStartEndDate>, List<GroupByStartEndDateViewModel>>(entities.ResultValue);
+            if (dataTablesModel.sSearch != null)
+                dataSource = dataSource.Where(x => x.StartDate.Contains(dataTablesModel.sSearch)).ToList();
+            return Request.CreateResponse(HttpStatusCode.OK
+                , DataTablesJson(items: dataSource
+                , totalRecords: entities.TotalRows
+                , totalDisplayRecords: entities.TotalRows
+                , sEcho: dataTablesModel.sEcho));
+        }
+        [Route("getGroupSingle"), HttpGet]
+        public async Task<HttpResponseMessage> GetGroupSingle(string startDate, string endDate, bool isUsed = false)
+        {
+            var startDateTime = Utilities.ToDateTime(startDate);
+            var endDateTime = Utilities.ToDateTime(endDate);
+            var entities = await businessService.EntityListLoader
+                   .LoadListAsync(includes: goal => new { goal.GoalGoodsCategory, goal.GoalGoodsCategoryType, goal.ComputingType }
+                   , where: or => or.IsUsed == isUsed
+                   && (or.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single || or.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Group)
+                   && or.StartDate >= startDateTime && or.EndDate <= endDateTime);
+
+            if (entities.ReturnStatus == false)
+            {
+                return CreateErrorResponse(entities);
+            }
+
+            var mapper = GetMapper();
+            var dataSource = mapper.Map<List<Goal>, List<GoalViewModel>>(entities.ResultValue);
+
+            return Request.CreateResponse(HttpStatusCode.OK, dataSource);
+        }
+
         [Route("getDataItem")]
         public async Task<HttpResponseMessage> GetDataItem(int id)
         {

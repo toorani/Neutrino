@@ -257,6 +257,7 @@
                 x => new { x.HtmlUrl, x.ActionUrl },
                 new ApplicationAction { FaTitle = "نوترینو", HtmlUrl = "/home" });
 
+
             NeutrinoRole adminRole = new NeutrinoRole { Name = "Admin", IsUsingBySystem = true };
             UserRole userRole = new UserRole();
             userRole.Role = new NeutrinoRole { Name = "Admin", IsUsingBySystem = true };
