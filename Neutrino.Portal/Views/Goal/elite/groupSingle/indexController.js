@@ -5,11 +5,11 @@ angular.module("neutrinoProject").register.controller('groupSingle.indexControll
         , function ($scope, $location, $compile, ajaxService, dataTableColumns) {
 
             "use strict";
-            
+
             $scope.initializeController = function () {
                 $scope.title = 'هدف گذاری گروهی/ تکی';
                 dataTableColumns.initialize();
-                
+
                 dataTableColumns.add({ mappingData: 'startDate', title: 'تاریخ شروع' });
                 dataTableColumns.add({ mappingData: 'endDate', title: 'تاریخ پایان' });
 
@@ -31,21 +31,24 @@ angular.module("neutrinoProject").register.controller('groupSingle.indexControll
             $scope.fnFormatDetails = function (data) {
                 var sOut = '<table class="table-bordered table-striped" cellspacing="0" style="width:100%">';
                 sOut += "<thead><tr >"
-
+                sOut += "<th class='align-center'>#</th>"
                 sOut += "<th class='align-center'>نوع هدف</th>"
                 sOut += "<th class='align-center'>نام هدف</th>"
                 sOut += "<th class='align-center'>نحوه محاسبه</th>"
                 sOut += "<th></th>"
                 sOut += "</tr></thead>"
-
+                let counter = 1;
                 data.forEach(function (item) {
-                    sOut += '<tr class="align-center"><td>' + item.goalGoodsCategoryType.description + '</td>'
+                    sOut += '<tr class="align-center">'
+                        + '<td>' + counter + '</td>'
+                        + '<td>' + item.goalGoodsCategoryType.description + '</td>'
                         + '<td>' + item.goalGoodsCategory.name + '</td>'
                         + '<td>' + item.computingTypeTitle + '</td>'
                         + '<td><button type="button" ng-click="viewEntity('
                         + item.id
                         + ')" class="btn ls-light-blue-btn"><i class="fa fa-magic"></i><span>جزییات</span></button></td>'
                         + '</tr>';
+                    counter++;
                 });
 
                 sOut += '</table>';
