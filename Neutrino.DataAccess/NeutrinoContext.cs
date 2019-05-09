@@ -1,14 +1,11 @@
-﻿using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Xml;
-using System.Data.Entity.ModelConfiguration.Conventions;
-using Espresso.Identity.Models;
+﻿using Espresso.Entites;
 using Neutrino.Entities;
-using System.Linq;
-using System.Data.Entity.Infrastructure.Interception;
-using Espresso.Entites;
-using System.Threading.Tasks;
 using System;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure.Interception;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neutrino.Data.EntityFramework
 {
@@ -34,10 +31,9 @@ namespace Neutrino.Data.EntityFramework
         #endregion
 
         #region [ DbSets ]
-        public DbSet<NeutrinoRole> Roles { get; set; }
-        public DbSet<NeutrinoUser> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<UserClaim> UserClaims { get; set; }
-        public DbSet<UserLogin> UserLogins { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<AppMenu> AppMenuItems { get; set; }
         public DbSet<Goal> Goals { get; set; }

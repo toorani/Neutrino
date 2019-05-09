@@ -4,7 +4,7 @@ using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface IGoalGoodsCategoryDS : IEntityRepository<GoalGoodsCategory>
+    public interface IGoalGoodsCategoryDS : IEntityBaseRepository<GoalGoodsCategory>
     {
         Task<GoalGoodsCategory> GetGoalGoodsCategoryAsync(int goalGoodsCategoryId);
     }

@@ -18,11 +18,11 @@ namespace Neutrino.Business
 
         #region [ Public Property(ies) ]
         [Inject]
-        public IEntityListByPagingLoader<NeutrinoRole> EntityListByPagingLoader { get; set; }
+        public IEntityListByPagingLoader<Role> EntityListByPagingLoader { get; set; }
         [Inject]
-        public IEntityListLoader<NeutrinoRole> EntityListLoader { get; set; }
+        public IEntityListLoader<Role> EntityListLoader { get; set; }
         [Inject]
-        public IEntityLoader<NeutrinoRole> EntityLoader { get; set; }
+        public IEntityLoader<Role> EntityLoader { get; set; }
         #endregion
 
         #region [ Constructor(s) ]

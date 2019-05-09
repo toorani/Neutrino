@@ -6,7 +6,7 @@ using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface IGoalDS : IEntityRepository<Goal>
+    public interface IGoalDS : IEntityBaseRepository<Goal>
     {
         Task<Goal> GetGoalAync(int goalId);
         Task<Goal> GetGoalInclude_GoalGoodsCategory_GoalSteps(int goalId);

@@ -1,8 +1,8 @@
 ﻿console.log("OrgStructure itemController")
 
 angular.module("neutrinoProject").register.controller('orgStructure.itemController',
-['$scope', '$location', '$routeParams', 'ajaxService', 'modalService', 'alertService', 'focus', '$timeout',
-function ($scope, $location, $routeParams, ajaxService, modalService, alertService, focus, $timeout) {
+['$scope', '$location', '$routeParams', 'ajaxService', 'modalService', 'alertService', '$timeout',
+function ($scope, $location, $routeParams, ajaxService, modalService, alertService,  $timeout) {
 
     "use strict";
     $scope.viewModel = {

@@ -50,6 +50,11 @@
     <Reference Include="Espresso.Identity">
       <HintPath>..\..\..\..\New Espresso\build\Espresso.Identity.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Neutrino.DataAccess\bin\Debug\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -97,8 +102,7 @@
     <Compile Include="GoalGoodsCategory\IGoalGoodsCategoryBS.cs" />
     <Compile Include="UserAccount\INeutrinoRoleBS.cs" />
     <Compile Include="UserAccount\INeutrinoRoleDS.cs" />
-    <Compile Include="UserAccount\INeutrinoUserBS.cs" />
-    <Compile Include="UserAccount\INeutrinoUserDS.cs" />
+    <Compile Include="UserAccount\IUserBS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

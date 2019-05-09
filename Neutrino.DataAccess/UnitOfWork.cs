@@ -22,9 +22,9 @@ namespace Neutrino.Data.EntityFramework
         #endregion
 
         #region [ Public Property(ies) ]
-        public IEntityRepository<AppMenu> AppMenuDataService { get; private set; }
-        public IEntityRepository<AppSetting> AppSettingDataService { get; private set; }
-        public IEntityRepository<Branch> BranchDataService { get; private set; }
+        public IEntityBaseRepository<AppMenu> AppMenuDataService { get; private set; }
+        public IEntityBaseRepository<AppSetting> AppSettingDataService { get; private set; }
+        public IEntityBaseRepository<Branch> BranchDataService { get; private set; }
         public IBranchGoalDS BranchGoalDataService { get; private set; }
         public IBranchReceiptDS BranchReceiptDataService { get; private set; }
         public IBranchReceiptGoalPercentDS BranchReceiptGoalPercentDataService { get; private set; }
@@ -33,78 +33,82 @@ namespace Neutrino.Data.EntityFramework
         public IGoalDS GoalDataService { get; private set; }
         public IFulfillmentPercentDS FulfillmentPercentDataService { get; private set; }
         public IGoalGoodsCategoryDS GoalGoodsCategoryDataService { get; private set; }
-        public IEntityRepository<GoalStep> GoalStepDataService { get; private set; }
+        public IEntityBaseRepository<GoalStep> GoalStepDataService { get; private set; }
         public IInvoiceDS InvoiceDataService { get; private set; }
-        public IEntityRepository<Member> MemberDataService { get; private set; }
+        public IEntityBaseRepository<Member> MemberDataService { get; private set; }
         public IMemberPayrollDS MemberPayrollDataService { get; private set; }
         public IMemberReceiptDS MemberReceiptDataService { get; private set; }
-        public IEntityRepository<OrgStructure> OrgStructureDataService { get; private set; }
+        public IEntityBaseRepository<OrgStructure> OrgStructureDataService { get; private set; }
         public IOrgStructureShareDS OrgStructureShareDataService { get; private set; }
         public IPermissionDS PermissionDataService { get; private set; }
-        public IEntityRepository<FulfillmentPromotionCondition> TotalFulfillPromotionPercentDataService { get; private set; }
-        public IEntityRepository<Promotion> PromotionDataService { get; private set; }
+        public IEntityBaseRepository<FulfillmentPromotionCondition> TotalFulfillPromotionPercentDataService { get; private set; }
+        public IEntityBaseRepository<Promotion> PromotionDataService { get; private set; }
         public IQuantityConditionDS QuantityConditionDataService { get; private set; }
-        public IEntityRepository<BranchQuntityGoal> BranchQuntityGoalDataService { get; private set; }
+        public IEntityBaseRepository<BranchQuntityGoal> BranchQuntityGoalDataService { get; private set; }
         public INeutrinoRoleDS RoleDataService { get; private set; }
-        public INeutrinoUserDS UserDataService { get; private set; }
-        public IEntityRepository<GoalStepItemInfo> GoalStepItemInfoDataService { get; private set; }
-        public IEntityRepository<BranchPromotion> BranchPromotionDataService { get; private set; }
-        public IEntityRepository<Company> CompanyDataService { get; private set; }
-        public IEntityRepository<DataSyncStatus> DataSyncStatusDataService { get; private set; }
-        public IEntityRepository<Goods> GoodsDataService { get; private set; }
-        public IEntityRepository<GoodsCategoryType> GoodsCategoryTypeDataService { get; private set; }
-        public IEntityRepository<GoodsCategory> GoodsCategoryDataService { get; private set; }
-        public IEntityRepository<GoalNonFulfillmentPercent> GoalNonFulfillmentPercentDataService { get; private set; }
-        public IEntityRepository<GoalNonFulfillmentBranch> GoalNonFulfillmentBranchDataService { get; private set; }
-        public IEntityRepository<GoalGoodsCategoryGoods> GoalGoodsCategoryGoodsDataService { get; private set; }
-        public IEntityRepository<MemberSales> MemberSalesDataService { get; private set; }
-        public IEntityRepository<BranchGoalPromotion> BranchGoalPromotionDataService { get; private set; }
-        public IEntityRepository<PositionReceiptPromotion> PositionReceiptPromotionDataService { get; private set; }
-        public IEntityRepository<PositionType> PositionTypeDataService { get; private set; }
+        public IDataRepository<User> UserDataService { get; private set; }
+        public IDataRepository<UserRole> UserRoleDataService { get; private set; }
+        public IDataRepository<UserClaim> UserClaimDataService { get; private set; }
+        public IEntityBaseRepository<GoalStepItemInfo> GoalStepItemInfoDataService { get; private set; }
+        public IEntityBaseRepository<BranchPromotion> BranchPromotionDataService { get; private set; }
+        public IEntityBaseRepository<Company> CompanyDataService { get; private set; }
+        public IEntityBaseRepository<DataSyncStatus> DataSyncStatusDataService { get; private set; }
+        public IEntityBaseRepository<Goods> GoodsDataService { get; private set; }
+        public IEntityBaseRepository<GoodsCategoryType> GoodsCategoryTypeDataService { get; private set; }
+        public IEntityBaseRepository<GoodsCategory> GoodsCategoryDataService { get; private set; }
+        public IEntityBaseRepository<GoalNonFulfillmentPercent> GoalNonFulfillmentPercentDataService { get; private set; }
+        public IEntityBaseRepository<GoalNonFulfillmentBranch> GoalNonFulfillmentBranchDataService { get; private set; }
+        public IEntityBaseRepository<GoalGoodsCategoryGoods> GoalGoodsCategoryGoodsDataService { get; private set; }
+        public IEntityBaseRepository<MemberSales> MemberSalesDataService { get; private set; }
+        public IEntityBaseRepository<BranchGoalPromotion> BranchGoalPromotionDataService { get; private set; }
+        public IEntityBaseRepository<PositionReceiptPromotion> PositionReceiptPromotionDataService { get; private set; }
+        public IEntityBaseRepository<PositionType> PositionTypeDataService { get; private set; }
 
         #endregion
 
         #region [ Constructor(s) ]
         public NeutrinoUnitOfWork(NeutrinoContext context
-            , IEntityRepository<AppMenu> appMenuDS
-            , IEntityRepository<AppSetting> appSettingDS
+            , IEntityBaseRepository<AppMenu> appMenuDS
+            , IEntityBaseRepository<AppSetting> appSettingDS
             , IBranchReceiptDS branchReceiptDS
             , IBranchGoalDS branchGoalDS
-            , IEntityRepository<Branch> branchDS
+            , IEntityBaseRepository<Branch> branchDS
             , IBranchReceiptGoalPercentDS branchReceiptGoalPercentDS
             , IBranchSalesDS branchSalesDS
             , ICostCoefficientDS costCoefficientDS
             , IGoalDS goalDS
             , IFulfillmentPercentDS goalFulfillmentDS
             , IGoalGoodsCategoryDS goalGoodsCategoryDS
-            , IEntityRepository<GoalStep> goalStepDS
+            , IEntityBaseRepository<GoalStep> goalStepDS
             , IInvoiceDS invoiceDS
             , IMemberPayrollDS memberPayrollDS
             , IMemberReceiptDS memberReceiptDS
-            , IEntityRepository<OrgStructure> orgStructureDS
+            , IEntityBaseRepository<OrgStructure> orgStructureDS
             , IOrgStructureShareDS orgStructureShareDS
             , IPermissionDS permissionDS
-            , IEntityRepository<FulfillmentPromotionCondition> totalFulfillPromotionPercentDS
-            , IEntityRepository<Promotion> promotionDS
+            , IEntityBaseRepository<FulfillmentPromotionCondition> totalFulfillPromotionPercentDS
+            , IEntityBaseRepository<Promotion> promotionDS
             , IQuantityConditionDS quantityConditionDS
-            , IEntityRepository<BranchQuntityGoal> branchQuntityGoalDS
+            , IEntityBaseRepository<BranchQuntityGoal> branchQuntityGoalDS
             , INeutrinoRoleDS roleDS
-            , INeutrinoUserDS userDS
-            , IEntityRepository<GoalStepItemInfo> goalStepItemInfoDS
-            , IEntityRepository<BranchPromotion> branchPromotionDS
-            , IEntityRepository<Member> memberDS
-            , IEntityRepository<Company> companyDS
-            , IEntityRepository<DataSyncStatus> dataSyncStatusDS
-            , IEntityRepository<Goods> goodsDS
-            , IEntityRepository<GoodsCategoryType> goodsCategoryTypeDS
-            , IEntityRepository<GoodsCategory> goodsCategoryDS
-            , IEntityRepository<GoalNonFulfillmentPercent> goalNonFulfillmentPercentDS
-            , IEntityRepository<GoalNonFulfillmentBranch> goalNonFulfillmentBranchDS
-            , IEntityRepository<GoalGoodsCategoryGoods> goalGoodsCategoryGoodsDS
-            , IEntityRepository<MemberSales> memberSalesDS
-            , IEntityRepository<BranchGoalPromotion> branchGoalPromotionDS
-            , IEntityRepository<PositionReceiptPromotion> positionReceiptPromotionDS
-            , IEntityRepository<PositionType> positionTypeDS
+            , IDataRepository<User> userDS
+            , IDataRepository<UserRole> userRoleDS
+            , IDataRepository<UserClaim> userClaimDS
+            , IEntityBaseRepository<GoalStepItemInfo> goalStepItemInfoDS
+            , IEntityBaseRepository<BranchPromotion> branchPromotionDS
+            , IEntityBaseRepository<Member> memberDS
+            , IEntityBaseRepository<Company> companyDS
+            , IEntityBaseRepository<DataSyncStatus> dataSyncStatusDS
+            , IEntityBaseRepository<Goods> goodsDS
+            , IEntityBaseRepository<GoodsCategoryType> goodsCategoryTypeDS
+            , IEntityBaseRepository<GoodsCategory> goodsCategoryDS
+            , IEntityBaseRepository<GoalNonFulfillmentPercent> goalNonFulfillmentPercentDS
+            , IEntityBaseRepository<GoalNonFulfillmentBranch> goalNonFulfillmentBranchDS
+            , IEntityBaseRepository<GoalGoodsCategoryGoods> goalGoodsCategoryGoodsDS
+            , IEntityBaseRepository<MemberSales> memberSalesDS
+            , IEntityBaseRepository<BranchGoalPromotion> branchGoalPromotionDS
+            , IEntityBaseRepository<PositionReceiptPromotion> positionReceiptPromotionDS
+            , IEntityBaseRepository<PositionType> positionTypeDS
            )
         {
             this.context = context;
@@ -132,6 +136,8 @@ namespace Neutrino.Data.EntityFramework
             BranchQuntityGoalDataService = branchQuntityGoalDS;
             RoleDataService = roleDS;
             UserDataService = userDS;
+            UserRoleDataService = userRoleDS;
+            UserClaimDataService = userClaimDS;
             GoalStepItemInfoDataService = goalStepItemInfoDS;
             BranchPromotionDataService = branchPromotionDS;
             MemberDataService = memberDS;
@@ -206,12 +212,12 @@ namespace Neutrino.Data.EntityFramework
         {
             transaction = context.Database.BeginTransaction();
         }
-        public IEntityRepository<TEntity> GetRepository<TEntity>()
+        public IEntityBaseRepository<TEntity> GetRepository<TEntity>()
             where TEntity : EntityBase, new()
         {
             //return new NeutrinoRepositoryBase<TEntity>(context);
 
-            return NinjectHttpContainer.Resolve<IEntityRepository<TEntity>>();
+            return NinjectHttpContainer.Resolve<IEntityBaseRepository<TEntity>>();
 
         }
         #endregion

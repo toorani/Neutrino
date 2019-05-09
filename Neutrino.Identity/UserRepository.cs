@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Espresso.Identity.Models;
+﻿using AutoMapper;
 using Neutrino.Data.EntityFramework;
 using Neutrino.Entities;
-using Neutrino.Identity;
-using Espresso.Core;
+using System;
 using System.Data.Entity;
+using System.Linq;
+using System.Text;
 
 
 namespace Neutrino.Identity
@@ -51,7 +46,7 @@ namespace Neutrino.Identity
             int result = -1;
             try
             {
-                NeutrinoUser newUser = new NeutrinoUser
+                User newUser = new User
                 {
                     UserName = user.UserName,
                     PasswordHash = user.PasswordHash,
@@ -66,15 +61,24 @@ namespace Neutrino.Identity
                     Name = user.Name,
                     LastName = user.LastName
                 };
-                user.Roles.ToList().ForEach((item) =>
+                foreach (var item in user.Roles)
                 {
-                    //NeutrinoRole role = new NeutrinoRole() { Id = item.RoleId };
-                    //_databaseContext.Entry<NeutrinoRole>(role).State = System.Data.Entity.EntityState.Unchanged;
-                    UserRole userRole = new UserRole();
-                    userRole.RoleId = item.RoleId;
-                    userRole.UserId = item.UserId;
-                    newUser.UserRoles.Add(userRole);
-                });
+                    newUser.UserRoles.Add(new UserRole
+                    {
+                        RoleId = item.RoleId,
+                        UserId = item.UserId
+                    });
+                }
+                foreach (var item in user.Claims)
+                {
+                    newUser.UserClaims.Add(new UserClaim
+                    {
+                        ClaimType = item.ClaimType,
+                        ClaimValue = item.ClaimValue
+                    });
+                }
+
+
                 _databaseContext.Users.Add(newUser);
 
                 result = _databaseContext.SaveChanges();
@@ -187,10 +191,10 @@ namespace Neutrino.Identity
             if (_databaseContext != null)
                 _databaseContext.Dispose();
         }
-        private TIdentityUser getIdentityUser(NeutrinoUser user)
+        private TIdentityUser getIdentityUser(User user)
         {
             var mapper = getMapper();
-            var result = mapper.Map<NeutrinoUser, TIdentityUser>(user);
+            var result = mapper.Map<User, TIdentityUser>(user);
             result.LastName = user.LastName;
             result.Name = user.Name;
             return result;

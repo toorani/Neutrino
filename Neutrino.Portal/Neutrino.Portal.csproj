@@ -335,7 +335,6 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\Ninject.Web.Common.cs" />
     <Compile Include="App_Start\NinjectHttpModules.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -394,7 +393,6 @@
     <Compile Include="Backend\Models\TreeGoodsViewModel.cs" />
     <Compile Include="Backend\Goods\GoodsViewModel.cs" />
     <Compile Include="Backend\Goal\GoalViewModel.cs" />
-    <Compile Include="Backend\UserAccount\IdentityModels.cs" />
     <Compile Include="Backend\Models\ManageViewModels.cs" />
     <Compile Include="Backend\BranchGoal\BranchGoalMapperProfile.cs" />
     <Compile Include="Backend\FulfillmentPercent\FulfillmentPercentMapperProfile.cs" />
@@ -432,6 +430,10 @@
     <Compile Include="Backend\Goods\GoodsServiceController.cs" />
     <Compile Include="Attributes\WebApiValidateAntiForgeryTokenAttribute.cs" />
     <Compile Include="Tools\ExportToExcel.cs" />
+    <Compile Include="Backend\UserAccount\ApplicationSignInManager.cs" />
+    <Compile Include="Backend\UserAccount\ApplicationUserManager.cs" />
+    <Compile Include="Backend\UserAccount\PasswordValidator.cs" />
+    <Compile Include="Backend\UserAccount\UserValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\account.css" />
@@ -914,10 +916,6 @@
     <ProjectReference Include="..\Neutrino.DataAccess\Neutrino.Data.EntityFramework.csproj">
       <Project>{f58dba9d-0b74-4ac6-b3c8-be32769d2d7f}</Project>
       <Name>Neutrino.Data.EntityFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Neutrino.Identity\Neutrino.Identity.csproj">
-      <Project>{936c2b5b-ec67-43b2-a8ce-9224350500b7}</Project>
-      <Name>Neutrino.Identity</Name>
     </ProjectReference>
     <ProjectReference Include="..\Neutrino.InjectModules\Neutrino.InjectModules.csproj">
       <Project>{849503c2-8e18-4a8a-9897-647e4ce2e3d7}</Project>

@@ -7,7 +7,7 @@ using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface IOrgStructureShareDS : IEntityRepository<OrgStructureShare>
+    public interface IOrgStructureShareDS : IEntityBaseRepository<OrgStructureShare>
     {
         Task<Tuple<List<OrgStructureShareDTO>, int>> GetOrgStructureShareDTOByPagingAsync(string brandName
             , Func<IQueryable<OrgStructureShareDTO>, IOrderedQueryable<OrgStructureShareDTO>> orderBy

@@ -9,7 +9,7 @@ using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface IBranchReceiptGoalPercentDS : IEntityRepository<BranchReceiptGoalPercent>
+    public interface IBranchReceiptGoalPercentDS : IEntityBaseRepository<BranchReceiptGoalPercent>
     {
         Task<List<Branch>> GetNotSpecifiedBranchesAsync(int goalId);
         Task<Goal> GetReceiptGoalAsync(int goalId);

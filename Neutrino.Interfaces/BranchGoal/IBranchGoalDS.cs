@@ -9,7 +9,7 @@ using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface IBranchGoalDS : IEntityRepository<BranchGoal>
+    public interface IBranchGoalDS : IEntityBaseRepository<BranchGoal>
     {
         Task<List<BranchGoalItem>> GetBranchGoalListAsync(int goalId);
     }

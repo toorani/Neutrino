@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neutrino.InjectModules", "N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neutrino.Core", "Neutrino.Core\Neutrino.Core.csproj", "{EF06262A-DF23-43D5-A928-A3426CBEF854}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neutrino.Identity", "Neutrino.Identity\Neutrino.Identity.csproj", "{936C2B5B-EC67-43B2-A8CE-9224350500B7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,10 +57,6 @@ Global
 		{EF06262A-DF23-43D5-A928-A3426CBEF854}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF06262A-DF23-43D5-A928-A3426CBEF854}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF06262A-DF23-43D5-A928-A3426CBEF854}.Release|Any CPU.Build.0 = Release|Any CPU
-		{936C2B5B-EC67-43B2-A8CE-9224350500B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{936C2B5B-EC67-43B2-A8CE-9224350500B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{936C2B5B-EC67-43B2-A8CE-9224350500B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{936C2B5B-EC67-43B2-A8CE-9224350500B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,7 +5,7 @@ using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface IFulfillmentPercentDS : IEntityRepository<FulfillmentPercent>
+    public interface IFulfillmentPercentDS : IEntityBaseRepository<FulfillmentPercent>
     {
         Task<List<FulfillmentPercent>> GetFulfillmentListAsync(int year, int month);
         void InsertFulfillment(List<FulfillmentPercent> lstGoalFulfillment);

@@ -8,7 +8,7 @@ using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface IBranchSalesDS : IEntityRepository<BranchSales>
+    public interface IBranchSalesDS : IEntityBaseRepository<BranchSales>
     {
         Task<BranchSales> GetLatestYearMonthAsync();
         Task<List<BranchSales>> GetMonthYearListAsync();

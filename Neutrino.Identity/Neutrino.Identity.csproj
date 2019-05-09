@@ -78,11 +78,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IdentityUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserRepository.cs" />
     <Compile Include="UserRolesRepository.cs" />
-    <Compile Include="UserStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -65,6 +65,8 @@
       <HintPath>..\packages\FluentValidation.8.2.3\lib\net45\FluentValidation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -140,7 +142,7 @@
     <Compile Include="Permission\PermissionBS.cs" />
     <Compile Include="UserAccount\UserBusinessRules.cs" />
     <Compile Include="UserAccount\NeutrinoRoleBS.cs" />
-    <Compile Include="UserAccount\NeutrinoUserBS.cs" />
+    <Compile Include="UserAccount\UserBS.cs" />
     <Compile Include="BranchGoal\BranchGoalBS.cs" />
     <Compile Include="BranchGoal\BranchGoalBR.cs" />
     <Compile Include="GoalStep\GoalStepItemInfoRules.cs" />

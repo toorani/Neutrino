@@ -8,7 +8,7 @@ using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface IMemberPayrollDS : IEntityRepository<MemberPayroll>
+    public interface IMemberPayrollDS : IEntityBaseRepository<MemberPayroll>
     {
         Task<MemberPayroll> GetLatestYearMonthAsync();
         Task<List<MemberPayroll>> GetMonthYearListAsync();

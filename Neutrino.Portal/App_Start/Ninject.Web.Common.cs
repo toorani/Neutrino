@@ -5,9 +5,13 @@ namespace Neutrino.Portal.App_Start
 {
     using System;
     using System.Web;
-
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.Owin;
+    using Microsoft.Owin.Security;
+    using Microsoft.Owin.Security.DataProtection;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-
+    using Neutrino.Entities;
+    using Neutrino.Portal.Models;
     using Ninject;
     using Ninject.Web.Common;
 
@@ -61,6 +65,11 @@ namespace Neutrino.Portal.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             Espresso.Core.Ninject.Http.NinjectHttpContainer.RegisterModules(kernel, Ninject.Http.NinjectHttpModules.Modules);
+
+            kernel.Bind<ApplicationUserManager>().ToSelf();
+            kernel.Bind<ApplicationSignInManager>().ToSelf();
+            kernel.Bind<IAuthenticationManager>().ToMethod(x => HttpContext.Current.GetOwinContext().Authentication);
+
         }
     }
 }

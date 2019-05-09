@@ -19,7 +19,7 @@ namespace Neutrino.Business
         where TEntity : EntityBase, new()
     {
         #region [ Varibale(s) ]
-        protected readonly IEntityRepository<TEntity> dataRepository;
+        protected readonly IEntityBaseRepository<TEntity> dataRepository;
         protected readonly AbstractValidator<TEntity> validator;
         #endregion
 

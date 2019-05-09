@@ -22,6 +22,7 @@ using System;
 using Espresso.Utilities.Interfaces;
 using Neutrino.Interfaces;
 using Espresso.BusinessService;
+using System.Linq;
 
 namespace Neutrino.Portal.WebApiControllers
 {
@@ -30,39 +31,11 @@ namespace Neutrino.Portal.WebApiControllers
     public class AccountServiceController : ApiControllerBase
     {
         #region [ Varibale(s) ]
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-        private ApplicationSignInManager signInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.Current.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            set
-            {
-                _signInManager = value;
-            }
-        }
-        private ApplicationUserManager userManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            set
-            {
-                _userManager = value;
-            }
-        }
-        private IAuthenticationManager authenticationManager
-        {
-            get
-            {
-                return HttpContext.Current.GetOwinContext().Authentication;
-            }
-        }
+        private readonly ApplicationSignInManager _signInManager;
+        private readonly ApplicationUserManager _userManager;
+        private readonly IAuthenticationManager authenticationManager;
         private readonly IAppSettingManager appSettingManager;
-        private readonly INeutrinoUserBS userBusinessService;
+        private readonly IUserBS userBusinessService;
         private readonly INeutrinoRoleBS roleBusinessService;
         #endregion
 
@@ -72,12 +45,19 @@ namespace Neutrino.Portal.WebApiControllers
 
         #region [ Constructor(s) ]
         public AccountServiceController(IAppSettingManager appSettingManager
-            , INeutrinoUserBS userBusinessService
-            , INeutrinoRoleBS roleBusinessService)
+            , INeutrinoRoleBS roleBusinessService
+            , IUserBS userBusinessService
+            , ApplicationUserManager userManager
+            , ApplicationSignInManager signInManager
+            , IAuthenticationManager authenticationManager)
         {
             this.appSettingManager = appSettingManager;
-            this.userBusinessService = userBusinessService;
             this.roleBusinessService = roleBusinessService;
+            this.userBusinessService = userBusinessService;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            this.authenticationManager = authenticationManager;
+
         }
 
         #endregion
@@ -85,20 +65,21 @@ namespace Neutrino.Portal.WebApiControllers
         #region [ User Method(s) ]
 
         [Route("getUsers"), HttpPost]
-        public HttpResponseMessage GetGridData(JQueryDataTablesModel dataTablesModel)
+        public async Task<HttpResponseMessage> GetGridData(JQueryDataTablesModel dataTablesModel)
         {
-            var entities = userBusinessService.EntityListByPagingLoader.Load(
-                where: UIHelper.GetWhere<NeutrinoUser>(dataTablesModel.sSearch),
-                orderBy: UIHelper.GetOrderBy<NeutrinoUser, RegisterViewModel>(dataTablesModel.GetSortedColumns()),
-                pageNumber: dataTablesModel.iDisplayStart,
-                pageSize: dataTablesModel.iDisplayLength);
+            var entities = await userBusinessService.LoadAsync(
+                where: x => x.UserName.Contains(dataTablesModel.sSearch) || x.Email.Contains(dataTablesModel.sSearch) 
+                || x.Name.Contains(dataTablesModel.sSearch) || x.LastName.Contains(dataTablesModel.sSearch)
+                ,orderBy: UIHelper.GetOrderBy<User, RegisterViewModel>(dataTablesModel.GetSortedColumns())
+                ,pageNumber: dataTablesModel.iDisplayStart
+                ,pageSize: dataTablesModel.iDisplayLength);
             if (entities.ReturnStatus == false)
             {
                 return CreateErrorResponse(entities);
             }
 
             var mapper = GetMapper();
-            List<RegisterViewModel> dataSource = mapper.Map<List<NeutrinoUser>, List<RegisterViewModel>>(entities.ResultValue);
+            var dataSource = mapper.Map<List<User>, List<UserIndexViewModel>>(entities.ResultValue);
 
             return Request.CreateResponse(HttpStatusCode.OK
                    , DataTablesJson(items: dataSource
@@ -118,37 +99,33 @@ namespace Neutrino.Portal.WebApiControllers
             }
 
             var mapper = GetMapper();
-            RegisterViewModel dataModelView = mapper.Map<NeutrinoUser, RegisterViewModel>(entity.ResultValue);
+            RegisterViewModel dataModelView = mapper.Map<User, RegisterViewModel>(entity.ResultValue);
             return CreateViewModelResponse(dataModelView, entity);
         }
-        [Route("register"), HttpPost]
-        public async Task<HttpResponseMessage> RegisterAsync(HttpRequestMessage request, RegisterViewModel postedViewModel)
+        [Route("registerOrModify"), HttpPost]
+        public async Task<HttpResponseMessage> RegisterOrModifyAsync(RegisterViewModel postedViewModel)
         {
-            var user = new ApplicationUser
+            var mapper = GetMapper();
+            var user = mapper.Map<RegisterViewModel, User>(postedViewModel);
+            IdentityResult result = null;
+            if (user.Id == 0)
             {
-                UserName = postedViewModel.UserName,
-                Email = postedViewModel.Email,
-                Name = postedViewModel.Name,
-                LastName = postedViewModel.LastName,
-                PhoneNumber = postedViewModel.MobileNumber,
-
-            };
-            postedViewModel.Roles.ForEach((item) =>
+                result = await _userManager.CreateAsync(user, postedViewModel.Password);
+            }
+            else
             {
-                IdentityUserRole<int> role = new IdentityUserRole<int>();
-                role.RoleId = item.Id;
-                user.Roles.Add(role);
-            });
-            var result = await userManager.CreateAsync(user, postedViewModel.Password);
+                result = await _userManager.UpdateAsync(user);
+            }
 
-            postedViewModel.ActionResult.ReturnStatus = result.Succeeded;
-            if (postedViewModel.ActionResult.ReturnStatus == false)
+            postedViewModel.ActionResult = new BusinessResult();
+            if (result.Succeeded == false)
             {
                 postedViewModel.ActionResult.ReturnMessage.AddRange(result.Errors);
                 return CreateErrorResponse(postedViewModel.ActionResult);
             }
             postedViewModel.ActionResult.ReturnMessage.Add("اطلاعات کاربری با موفقیت ثبت شد");
             postedViewModel.Id = user.Id;
+
 
             return Request.CreateResponse(HttpStatusCode.OK, postedViewModel);
         }
@@ -158,15 +135,15 @@ namespace Neutrino.Portal.WebApiControllers
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await signInManager.PasswordSignInAsync(postedViewModel.UserName, postedViewModel.Password, postedViewModel.RememberMe, shouldLockout: false);
+            var result = await _signInManager.PasswordSignInAsync(postedViewModel.UserName, postedViewModel.Password, postedViewModel.RememberMe, shouldLockout: false);
             postedViewModel.ActionResult = new BusinessResult();
             switch (result)
             {
                 case SignInStatus.Success:
-                    
+
                     postedViewModel.ActionResult.ReturnStatus = true;
-                    var user = userManager.Find(postedViewModel.UserName, postedViewModel.Password);
-                    List<string> roles = await userManager.GetRolesAsync(user.Id) as List<string>;
+                    var user = _userManager.Find(postedViewModel.UserName, postedViewModel.Password);
+                    List<string> roles = await _userManager.GetRolesAsync(user.Id) as List<string>;
                     //var userPermissions = PermissionManager.Instance.GetUserAccess(user.Id);
                     //userPermissions.ForEach(x => {
                     //    postedViewModel.UserAccessTokens.Add(new UserAccessToken
@@ -202,40 +179,7 @@ namespace Neutrino.Portal.WebApiControllers
             return Request.CreateResponse(HttpStatusCode.OK, postedViewModel);
         }
 
-        [Route("edit"), HttpPost]
-        public async Task<HttpResponseMessage> Edit(HttpRequestMessage request, RegisterViewModel postedViewModel)
-        {
-            var user = new ApplicationUser
-            {
-                Id = postedViewModel.Id,
-                UserName = postedViewModel.UserName,
-                Email = postedViewModel.Email,
-                Name = postedViewModel.Name,
-                LastName = postedViewModel.LastName,
-                PhoneNumber = postedViewModel.MobileNumber,
 
-            };
-            postedViewModel.Roles.ForEach((item) =>
-            {
-                IdentityUserRole<int> role = new IdentityUserRole<int>();
-                role.RoleId = item.Id;
-                user.Roles.Add(role);
-            });
-            var result = await userManager.UpdateAsync(user);
-
-
-
-            postedViewModel.ActionResult.ReturnStatus = result.Succeeded;
-            if (postedViewModel.ActionResult.ReturnStatus == false)
-            {
-                postedViewModel.ActionResult.ReturnMessage.AddRange(result.Errors);
-                return CreateErrorResponse(postedViewModel.ActionResult);
-            }
-            postedViewModel.ActionResult.ReturnMessage.Add("اطلاعات کاربری با موفقیت ویرایش شد");
-            postedViewModel.Id = user.Id;
-
-            return Request.CreateResponse<RegisterViewModel>(HttpStatusCode.OK, postedViewModel); ;
-        }
 
 
         //[Route("delete"), HttpPost]
@@ -261,9 +205,8 @@ namespace Neutrino.Portal.WebApiControllers
         #region [ Role ]
 
         [Route("getRoles"), HttpGet]
-        public HttpResponseMessage GetRoles(HttpRequestMessage request)
+        public HttpResponseMessage GetRoles()
         {
-
             bool loadRoleSystem = appSettingManager.GetValue<bool>("loadRoleSystem").Value;
             var entities = roleBusinessService.EntityListLoader.LoadList(where: x => x.IsUsingBySystem == false || loadRoleSystem);
 
@@ -273,9 +216,9 @@ namespace Neutrino.Portal.WebApiControllers
             }
 
             var mapper = GetMapper();
-            List<RoleViewModel> dataSource = mapper.Map<List<NeutrinoRole>, List<RoleViewModel>>(entities.ResultValue);
+            List<RoleViewModel> dataSource = mapper.Map<List<Role>, List<RoleViewModel>>(entities.ResultValue);
 
-            return CreateSuccessedListResponse<RoleViewModel>(dataSource);
+            return CreateSuccessedListResponse(dataSource);
         }
 
         [Route("getRoleInfo"), HttpGet]
@@ -289,7 +232,7 @@ namespace Neutrino.Portal.WebApiControllers
             }
 
             var mapper = GetMapper();
-            var dataViewModel = mapper.Map<NeutrinoRole, RoleViewModel>(entity.ResultValue);
+            var dataViewModel = mapper.Map<Role, RoleViewModel>(entity.ResultValue);
             return CreateViewModelResponse(dataViewModel, entity);
         }
 
@@ -309,7 +252,7 @@ namespace Neutrino.Portal.WebApiControllers
             }
 
             var mapper = GetMapper();
-            List<RoleViewModel> dataSource = mapper.Map<List<NeutrinoRole>, List<RoleViewModel>>(entities.ResultValue);
+            List<RoleViewModel> dataSource = mapper.Map<List<Role>, List<RoleViewModel>>(entities.ResultValue);
 
 
             return Request.CreateResponse(HttpStatusCode.OK
@@ -331,7 +274,7 @@ namespace Neutrino.Portal.WebApiControllers
             });
             return config.CreateMapper();
         }
-       
+
         #endregion
 
 

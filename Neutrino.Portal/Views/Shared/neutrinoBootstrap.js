@@ -4,19 +4,21 @@ console.log("Neutrino Bootstrap");
 (function () {
 
     var app = angular.module('neutrinoProject', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ui.router', 'ui.bootstrap'
-    , 'ui.select', 'ngToast', 'blockUI', 'oc.lazyLoad'
+        , 'ui.select', 'ngToast', 'blockUI', 'oc.lazyLoad'
         , 'jsTree.directive', 'ADM-dateTimePicker', 'dynamicNumber', 'multipleSelect'
         , 'rzModule', 'mgcrea.ngStrap', 'sticky', 'angularFileUpload', 'mgo-angular-wizard'
         , 'angular-icheck', 'angular.filter'
     ]);
     var animationClassNameFilter = /vnd-animated/
+
     app.config(['$controllerProvider', '$provide', 'ADMdtpProvider', 'dynamicNumberStrategyProvider', '$httpProvider', '$animateProvider',
         function ($controllerProvider, $provide, ADMdtpProvider, dynamicNumberStrategyProvider, $httpProvider, $animateProvider) {
+
             app.register =
-              {
-                  controller: $controllerProvider.register,
-                  service: $provide.service
-              };
+                {
+                    controller: $controllerProvider.register,
+                    service: $provide.service
+                };
 
             $httpProvider.defaults.useXDomain = true;
             $httpProvider.defaults.withCredentials = true;
@@ -30,6 +32,8 @@ console.log("Neutrino Bootstrap");
                     }
                 };
             }]);
+
+            
 
             $animateProvider.classNameFilter(animationClassNameFilter)
 
@@ -87,7 +91,7 @@ console.log("Neutrino Bootstrap");
 
 
         }]);
-    app.run(function ($http, $location, $rootScope, $locale, permissions) {
+    app.run(function ($http, $location,$route, $rootScope, $locale, permissions) {
         $http.defaults.headers.common['X-XSRF-Token'] =
             angular.element('input[name="__RequestVerificationToken"]').attr('value');
 
@@ -109,6 +113,18 @@ console.log("Neutrino Bootstrap");
 
         $locale.NUMBER_FORMATS.GROUP_SEP = "'";
         $locale.NUMBER_FORMATS.DECIMAL_SEP = ".";
+
+        var original = $location.path;
+        $location.path = function (path, reload) {
+            if (reload === false) {
+                var lastRoute = $route.current;
+                var un = $rootScope.$on('$locationChangeSuccess', function () {
+                    $route.current = lastRoute;
+                    un();
+                });
+            }
+            return original.apply($location, [path]);
+        };
     });
 })();
 

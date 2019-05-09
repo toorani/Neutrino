@@ -13,14 +13,14 @@ namespace Neutrino.Data.EntityFramework.DataServices
     public class QuantityConditionDataService : NeutrinoRepositoryBase<QuantityCondition>, IQuantityConditionDS
     {
         #region [ Varibale(s) ]
-        private readonly IEntityRepository<GoodsQuantityCondition> goodsQuantityConditionDS;
-        private readonly IEntityRepository<BranchQuantityCondition> branchQuantityConditionDS;
+        private readonly IEntityBaseRepository<GoodsQuantityCondition> goodsQuantityConditionDS;
+        private readonly IEntityBaseRepository<BranchQuantityCondition> branchQuantityConditionDS;
         #endregion
 
         #region [ Constructor(s) ]
         public QuantityConditionDataService(NeutrinoContext context
-            , IEntityRepository<GoodsQuantityCondition> goodsQuantityConditionDS
-            , IEntityRepository<BranchQuantityCondition> branchQuantityConditionDS) : base(context)
+            , IEntityBaseRepository<GoodsQuantityCondition> goodsQuantityConditionDS
+            , IEntityBaseRepository<BranchQuantityCondition> branchQuantityConditionDS) : base(context)
         {
             this.branchQuantityConditionDS = branchQuantityConditionDS;
             this.goodsQuantityConditionDS = goodsQuantityConditionDS;

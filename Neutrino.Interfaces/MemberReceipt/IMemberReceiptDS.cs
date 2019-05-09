@@ -5,7 +5,7 @@ using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface IMemberReceiptDS : IEntityRepository<MemberReceipt>
+    public interface IMemberReceiptDS : IEntityBaseRepository<MemberReceipt>
     {
         Task<MemberReceipt> GetLatestYearMonthAsync();
         Task<List<MemberReceipt>> GetMonthYearListAsync();

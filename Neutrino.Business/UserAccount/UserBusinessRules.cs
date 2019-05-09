@@ -7,7 +7,7 @@ using Neutrino.Interfaces;
 
 namespace Neutrino.Business
 {
-    public class UserBusinessRules : NeutrinoValidator<NeutrinoUser>
+    public class UserBusinessRules : NeutrinoValidator<User>
     {
         #region [ Protected Property(ies) ]
         
@@ -26,7 +26,7 @@ namespace Neutrino.Business
                 .NotNull()
                 .WithMessage("نام خانوادگی مشخص نشده است");
 
-            RuleFor(entity => entity.MobileNumber)
+            RuleFor(entity => entity.PhoneNumber)
                 .NotNull()
                 .WithMessage(".شماره موبایل مشخص نشده است");
 
@@ -38,7 +38,7 @@ namespace Neutrino.Business
                 .NotNull()
                 .WithMessage(".نام کاربری مشخص نشده است");
 
-            RuleFor(entity => entity.UserRoles)
+            RuleFor(entity => entity.Roles)
                 .Must(x => x.Count != 0)
                 .WithMessage(".نقش کاربری مشخص نشده است");
 
@@ -56,13 +56,13 @@ namespace Neutrino.Business
 
         }
 
-        private bool IsMobileDuplicate(NeutrinoUser entity)
+        private bool IsMobileDuplicate(User entity)
         {
             var dbEntity = unitOfWork.UserDataService
                 .GetQuery()
                 .AsNoTracking()
                 .Where(
-                    gal => gal.MobileNumber == entity.MobileNumber
+                    gal => gal.PhoneNumber == entity.PhoneNumber
                     && gal.Deleted == false).FirstOrDefault();
 
 
@@ -70,7 +70,7 @@ namespace Neutrino.Business
                 return false;
             return !(dbEntity.Id == entity.Id);
         }
-        private bool IsUserNameDuplicate(NeutrinoUser entity)
+        private bool IsUserNameDuplicate(User entity)
         {
             //TODO shift to repo
             var dbEntity = unitOfWork.UserDataService
@@ -89,7 +89,7 @@ namespace Neutrino.Business
         #endregion
 
         #region [ Private Method(s) ]
-        private bool IsEmailDuplicate(NeutrinoUser user)
+        private bool IsEmailDuplicate(User user)
         {
             var dbEntity = unitOfWork.UserDataService
                 .GetQuery()

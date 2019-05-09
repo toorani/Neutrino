@@ -23,7 +23,7 @@ namespace Neutrino.InjectModules
 
             //GoalStep
             Bind<IGoalStepBS>().To<GoalStepBS>();
-            Bind(typeof(IEntityRepository<GoalStep>)).To(typeof(GoalStepDataService));
+            Bind(typeof(IEntityBaseRepository<GoalStep>)).To(typeof(GoalStepDataService));
             Bind(typeof(AbstractValidator<GoalStep>)).To(typeof(GoalStepBusinessRules));
 
 
@@ -72,9 +72,8 @@ namespace Neutrino.InjectModules
             Bind(typeof(AbstractValidator<OrgStructureShareDTO>)).To(typeof(OrgStructureShareDTOBR));
 
             //User account
-            Bind<INeutrinoUserDS>().To<UserDataService>();
-            Bind<INeutrinoUserBS>().To<NeutrinoUserBS>();
-            Bind(typeof(AbstractValidator<NeutrinoUser>)).To(typeof(UserBusinessRules));
+            Bind<IUserBS>().To<UserBS>();
+            Bind(typeof(AbstractValidator<User>)).To(typeof(UserBusinessRules));
             Bind<INeutrinoRoleDS>().To<RoleDataService>();
             Bind<INeutrinoRoleBS>().To<NeutrinoRoleBS>();
 
@@ -93,7 +92,7 @@ namespace Neutrino.InjectModules
 
             //GoalNonFulfillmentPercent
             Bind<IGoalNonFulfillmentPercentBS>().To<GoalNonFulfillmentPercentBS>();
-            Bind(typeof(IEntityRepository<GoalNonFulfillmentPercent>)).To(typeof(GoalNonFulfillmentPercentDataService));
+            Bind(typeof(IEntityBaseRepository<GoalNonFulfillmentPercent>)).To(typeof(GoalNonFulfillmentPercentDataService));
             Bind(typeof(AbstractValidator<GoalNonFulfillmentPercent>)).To(typeof(GoalNonFulfillmentPercentBR));
             
 

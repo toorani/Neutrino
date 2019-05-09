@@ -1,16 +1,12 @@
 ﻿namespace Neutrino.DataAccess.Migrations
 {
-    using System;
+    using Entities;
+    using Espresso.DataAccess;
     using System.Collections.Generic;
-
     using System.Data.Entity.Migrations;
     using System.Data.Entity.Migrations.Model;
     using System.Data.Entity.SqlServer;
     using System.Linq;
-    using Entities;
-    using Espresso.DataAccess;
-    using Espresso.Entites;
-    using Espresso.Identity.Models;
 
 
     internal sealed class Configuration : DbMigrationsConfiguration<Neutrino.Data.EntityFramework.NeutrinoContext>
@@ -148,7 +144,7 @@
                        Parent = systemItem,
                        ParentId = systemItem.Id
                    }
-                   
+
                );
 
             AppMenu reportItem = context.AppMenuItems.SingleOrDefault(x => x.Title == "گزارشات");
@@ -163,7 +159,7 @@
                     {
                         Title = "عملکرد نهایی",
                         Icon = "fa fa-file-text-o",
-                        Url = "/promotion/overviewrpt/index" ,
+                        Url = "/promotion/overviewrpt/index",
                         OrderId = 1,
                         Parent = reportItem,
                         ParentId = reportItem.Id
@@ -258,21 +254,35 @@
                 new ApplicationAction { FaTitle = "نوترینو", HtmlUrl = "/home" });
 
 
-            NeutrinoRole adminRole = new NeutrinoRole { Name = "Admin", IsUsingBySystem = true };
+            var roles = new List<Role>()
+            {
+                new Role{Name="Admin",FaName= "مدیر سیستم", IsUsingBySystem = true},
+                new Role{Name="CEO",FaName= "مدیر عامل", IsUsingBySystem = false},
+                new Role{Name="ViceCEO",FaName= "قائم مقام مدیرعامل", IsUsingBySystem = false},
+                new Role{Name="CommercialManager",FaName= "مدیر بازرگانی", IsUsingBySystem = false},
+                new Role{Name="CommercialEmployee",FaName= "پرسنل بازرگانی", IsUsingBySystem = false},
+                new Role{Name="FinancialManager",FaName= "مدیر مالی", IsUsingBySystem = false},
+                new Role{Name="FinancialEmployee",FaName= "پرسنل مالی", IsUsingBySystem = false},
+                new Role{Name="SalesEmployee",FaName= "پرسنل فروش", IsUsingBySystem = false},
+                new Role{Name="ZoneSalesManager",FaName= "مدیر فروش مناطق", IsUsingBySystem = false},
+                new Role{Name="BranchManager",FaName= "رئیس مرکز", IsUsingBySystem = false}
+            };
+
+
             UserRole userRole = new UserRole();
-            userRole.Role = new NeutrinoRole { Name = "Admin", IsUsingBySystem = true };
-            userRole.User = new NeutrinoUser
+            userRole.Role = new Role { Name = "Admin", IsUsingBySystem = true };
+            userRole.User = new User
             {
                 UserName = "admin",
                 PasswordHash = "AKT/sERhGF/k9CnbDnrWhNeG5nuQZRuLFQAqLrqq8cHBvAQcEFaKO6Yma3kn5qW86g==",
-                MobileNumber = "09125139301",
+                PhoneNumber = "09125139301",
                 Name = "admin",
                 LastName = "admin",
                 Email = "elit.neutrino@gmail.com"
             };
-            //context.Roles.AddOrUpdate(
-            //    x => x.Name,
-            //    adminRole, new NeutrinoRole { FaName = "مدیر سیستم", Name = "Manager", IsUsingBySystem = false });
+            context.Roles.AddOrUpdate(x => x.Name, roles.ToArray());
+
+
             //NeutrinoUser adminUser = new NeutrinoUser
             //{
             //    UserName = "admin",
@@ -282,7 +292,6 @@
             //    LastName = "admin",
             //    Email = "elit.neutrino@gmail.com"
             //};
-
 
             //userRole.Role = adminRole
             //adminUser.UserRoles.Add(adminRole);

@@ -5,9 +5,9 @@ using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface INeutrinoRoleBS : IBusinessService,IEnabledEntityListLoader<NeutrinoRole>
-        ,IEnabledEntityLoader<NeutrinoRole>
-        ,IEnabledEntityListByPagingLoader<NeutrinoRole>
+    public interface INeutrinoRoleBS : IBusinessService,IEnabledEntityListLoader<Role>
+        ,IEnabledEntityLoader<Role>
+        ,IEnabledEntityListByPagingLoader<Role>
     {
         Task<IBusinessResultValue<List<int>>> LoadRoleIdsByUserIdAsync(int userId);
         

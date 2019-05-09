@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using AutoMapper;
-using Espresso.Core;
-using Espresso.Identity.Models;
-
+﻿using AutoMapper;
 using Neutrino.Entities;
 using Neutrino.Portal.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neutrino.Portal.ProfileMapper
 {
@@ -16,50 +11,27 @@ namespace Neutrino.Portal.ProfileMapper
         #region [ Constructor(s) ]
         public AccountMapperProfile()
         {
-            CreateMap<RegisterViewModel, NeutrinoUser>()
-                .ForMember(x => x.UserRoles, opt => opt.ResolveUsing<List<UserRole>>((vm) =>
-                {
-                    List<UserRole> userRoles = new List<UserRole>();
-                    vm.Roles.ForEach(x => userRoles.Add(new UserRole { RoleId = x.Id, UserId = vm.Id }));
-                    return userRoles;
-                }))
+            CreateMap<RegisterViewModel, User>()
+                .ForMember(x => x.Roles, opt => opt.ResolveUsing((vm) => new List<UserRole>() { new UserRole { RoleId = vm.RoleId, UserId = vm.Id } }))
+                .ForMember(x => x.Claims, opt => opt.ResolveUsing((vm) => vm.BranchesUnderControl.Select(x => new UserClaim { ClaimType = "branch", ClaimValue = x.ToString(), UserId = vm.Id }).ToList()))
                 .ReverseMap()
-                .ConstructUsing(x => new RegisterViewModel())
-                .ForMember(x => x.Roles, opt => opt.ResolveUsing<List<RoleViewModel>>((dto) =>
-                {
-                    List<RoleViewModel> roles = new List<RoleViewModel>();
-                    dto.UserRoles
-                    .ToList()
-                    .ForEach(x =>
-                    {
-                        NeutrinoRole neutrinoRole = x.Role as NeutrinoRole;
-                        roles.Add(new RoleViewModel()
-                        {
-                            Id = neutrinoRole.Id,
-                            FaName = neutrinoRole.FaName != null ? neutrinoRole.FaName : neutrinoRole.Name,
-                            Name = neutrinoRole.Name != null ? neutrinoRole.Name : neutrinoRole.FaName
-                        });
-                    });
-                    return roles;
-                }));
+                .ForMember(x => x.RoleId, opt => opt.ResolveUsing((dto) => dto.Roles.FirstOrDefault().RoleId))
+                .ForMember(x => x.BranchesUnderControl, opt => opt.ResolveUsing((dto) => dto.Claims.Select(x => x.ClaimValue)));
 
-            CreateMap<RegisterViewModel, ApplicationUser>()
-                .ReverseMap()
-                .ConstructUsing(x => new RegisterViewModel());
+            CreateMap<User, UserIndexViewModel>()
+                .ForMember(x => x.FullName, opt => opt.ResolveUsing(x => x.Name + " " + x.LastName))
+                .ForMember(x => x.RoleName, opt => opt.ResolveUsing(x => x.Roles.FirstOrDefault().Role.FaName));
 
-            CreateMap<NeutrinoRole, RoleViewModel>()
+
+            CreateMap<Role, RoleViewModel>()
                 .ConstructUsing(x => new RoleViewModel())
                 .ForMember(x => x.FaName, opt => opt.ResolveUsing(x => x.FaName == null ? x.Name : x.FaName))
                 .ReverseMap();
 
-            CreateMap<DataList<NeutrinoUser>, DataList<RegisterViewModel>>();
-            CreateMap<DataList<NeutrinoRole>, DataList<RoleViewModel>>();
-            //CreateMap<DataList<Role>, DataList<NeutrinoRoleViewModel>>();
-
         }
         #endregion
 
-      
+
     }
 
 

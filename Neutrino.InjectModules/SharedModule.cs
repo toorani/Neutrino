@@ -3,6 +3,7 @@ using System.Threading;
 using System.Web;
 using Espresso.BusinessService;
 using Espresso.BusinessService.Interfaces;
+using Espresso.DataAccess;
 using Espresso.DataAccess.Interfaces;
 using Neutrino.Business;
 using Neutrino.Data.EntityFramework;
@@ -17,7 +18,8 @@ namespace Neutrino.InjectModules
     {
         public override void Load()
         {
-            Bind(typeof(IEntityRepository<>)).To(typeof(NeutrinoRepositoryBase<>));
+            Bind(typeof(IDataRepository<>)).To(typeof(NeutrinoDataRepositoryBase<>));
+            Bind(typeof(IEntityBaseRepository<>)).To(typeof(NeutrinoRepositoryBase<>));
             Bind(typeof(IEntityEraser<>)).To(typeof(SimpleEntityEraser<>));
             Bind(typeof(IEntityCreator<>)).To(typeof(SimpleEntityCreator<>));
             Bind(typeof(IEntityModifer<>)).To(typeof(SimpleEntityModifer<>));

@@ -4,12 +4,12 @@ using Espresso.Entites;
 
 namespace Neutrino.Data.EntityFramework
 {
-    public class NeutrinoRepositoryBase<TEntity> : EntityBaseRepository<TEntity>
-        where TEntity : EntityBase, new()
+    public class NeutrinoDataRepositoryBase<TEntity> : DataRepository<TEntity>
+        where TEntity : class
     {
         protected readonly NeutrinoContext dbContext;
 
-        public NeutrinoRepositoryBase(NeutrinoContext context) : base(context)
+        public NeutrinoDataRepositoryBase(NeutrinoContext context) : base(context)
         {
             dbContext = context;
         }

@@ -14,7 +14,7 @@ namespace Neutrino.Business
         where TEntity : EntityBase, new()
     {
         #region [ Varibale(s) ]
-        private readonly IEntityRepository<TEntity> dataRepository;
+        private readonly IEntityBaseRepository<TEntity> dataRepository;
         #endregion
 
 

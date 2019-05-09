@@ -11,18 +11,17 @@ angular.module("neutrinoProject").config(['$routeProvider', '$locationProvider',
         var baseSiteUrlPath = applicationConfigurationProvider.getBaseURL();
         $routeProvider.when('/:rootSection/:section/item/:id', {
             templateUrl: function (rp) {
-                return baseSiteUrlPath + 'views/' + rp.rootSection + '/item.' + rp.section + '.html?v=' + this.getApplicationVersion();
+                return baseSiteUrlPath + 'views/' + rp.rootSection + '/' + rp.section + '/item.html?v=' + this.getApplicationVersion();
             },
 
             resolve: {
-                loadMyCtrl: ['$q', '$rootScope', '$location', '$ocLazyLoad', function ($q, $rootScope, $location, $ocLazyLoad) {
+                loadMyCtrl: ['$location', '$ocLazyLoad', function ($location, $ocLazyLoad) {
 
                     var path = $location.path().split("/");
                     var root_directory = path[1];
                     var directory = path[2];
-                    var controllerName = path[3];
 
-                    var controllerToLoad = "Views/" + root_directory + "/" + controllerName + '.' + directory + "Controller.js?v=" + this.getApplicationVersion();
+                    var controllerToLoad = "Views/" + root_directory + "/" + directory + '/' + "itemController.js?v=" + this.getApplicationVersion();
                     return $ocLazyLoad.load(controllerToLoad);
                 }]
             }
@@ -145,7 +144,7 @@ angular.module("neutrinoProject").config(['$routeProvider', '$locationProvider',
                     var controllerName = path[3];
 
                     //var controllerToLoad = "Views/" + root_directory + "/" + controllerName + '.' + directory + "Controller.js?v=" + this.getApplicationVersion();
-                    var controllerToLoad = "Views/" + root_directory + "/" + directory +'/'+ controllerName + "Controller.js?v=" + this.getApplicationVersion();
+                    var controllerToLoad = "Views/" + root_directory + "/" + directory + '/' + controllerName + "Controller.js?v=" + this.getApplicationVersion();
                     return $ocLazyLoad.load(controllerToLoad);
                 }]
             }

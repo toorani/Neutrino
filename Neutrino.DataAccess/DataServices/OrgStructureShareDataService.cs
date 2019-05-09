@@ -13,13 +13,13 @@ namespace Neutrino.Data.EntityFramework.DataServices
     public class OrgStructureShareDataService : NeutrinoRepositoryBase<OrgStructureShare>, IOrgStructureShareDS
     {
         #region [ Varibale(s) ]
-        private readonly IEntityRepository<OrgStructure> orgStructureDataService;
+        private readonly IEntityBaseRepository<OrgStructure> orgStructureDataService;
         #endregion
 
 
         #region [ Constructor(s) ]
         public OrgStructureShareDataService(NeutrinoContext context
-            , IEntityRepository<OrgStructure> orgStructureDataService)
+            , IEntityBaseRepository<OrgStructure> orgStructureDataService)
             : base(context)
         {
             this.orgStructureDataService = orgStructureDataService;

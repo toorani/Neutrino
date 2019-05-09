@@ -6,7 +6,7 @@ using Neutrino.Data.EntityFramework;
 
 namespace Neutrino.Identity
 {
-    public class UserStore<TIdentityUser> : Espresso.Identity.IUserStore<TIdentityUser>
+    public class UserStore : Espresso.Identity.IUserStore<TIdentityUser>
     where TIdentityUser : IdentityUser
     {
         private readonly UserRepository<TIdentityUser> _userRepository;

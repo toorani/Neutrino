@@ -24,8 +24,8 @@ namespace Neutrino.InjectModules
         {
             Bind<NeutrinoContext>().ToSelf().InRequestScope();
             Bind<NeutrinoUnitOfWork>().ToSelf().InRequestScope();
-            //Bind<IPermissionManager>().To<PermissionManager>().InSessionScope();
-            Bind<IPermissionManager>().ToProvider<PermissionManagerProvider>();
+            Bind<IPermissionManager>().To<PermissionManager>().InSessionScope();
+            //Bind<IPermissionManager>().ToProvider<PermissionManagerProvider>();
 
         }
     }

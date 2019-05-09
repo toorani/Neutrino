@@ -29,14 +29,14 @@
                             </div>
                             <label class="col-md-2 control-label">
                                 <i class="red fa fa-asterisk"></i>
-                                نقش کاربری
+                                پست کاربر
                             </label>
                             <div class="col-md-4">
-                                <multiple-autocomplete ng-model="user.roles"
-                                                       class="validate[funcCall[ifSelectMultiSelectNotEmpty]]"
-                                                       object-property="faName"
-                                                       suggestions-arr="roles">
-                                </multiple-autocomplete>
+                                <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                        ng-options="item.id as item.faName for item in roles"
+                                        ng-model="user.roleId">
+                                    <option value="" selected>[ انتخاب کنید ]</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -101,11 +101,33 @@
                                 شماره موبایل
                             </label>
                             <div class="col-md-4">
-                                <input type="text" class="form-control validate[required,custom[phone]]"
+                                <input type="text" class="form-control"
                                        ng-model="user.mobileNumber"
                                        ng-trim=false
                                        awnum="phone"
                                        placeholder="شماره موبایل را وارد کنید">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row ls_divider">
+                        <div class="col-md-12">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">  مراکز تحت کنترل کاربر</h3>
+                                    <ul class="panel-control">
+                                        <li>
+                                            <i-check click="onclick_selectAll()" ng-model="selectAll">انتخاب همه</i-check>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="panel-body">
+                                    <ul class="checkbox">
+                                        <li ng-repeat="branch in branches">
+                                            <i-check id="{{branch.id}}" ng-model="branchChecked[branch.id]">{{branch.name}}</i-check>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
 
@@ -121,7 +143,7 @@
                             <span>حذف</span>
                         </button>
                         <button type="button" class="btn btn-default" ng-click="cancel()">
-                            <i class="fa fa-close"></i>
+                            <i class="fa fa-mail-forward"></i>
                             <span>بازگشت</span>
                         </button>
 

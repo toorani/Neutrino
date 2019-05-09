@@ -1,18 +1,12 @@
-﻿using Espresso.Core;
-using FluentValidation;
-using Neutrino.Interfaces;
-using Espresso.Identity.Models;
-using Neutrino.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
-using System.Linq;
-using System.Data.Entity.Validation;
-using Espresso.BusinessService;
+﻿using Espresso.BusinessService;
 using Espresso.BusinessService.Interfaces;
 using Neutrino.Data.EntityFramework;
-using System.Data.Entity;
-using Z.EntityFramework.Plus;
+using Neutrino.Entities;
+using Neutrino.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Threading.Tasks;
 
 namespace Neutrino.Business
 {

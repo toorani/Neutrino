@@ -1,11 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Espresso.DataAccess.Interfaces;
+using Microsoft.AspNet.Identity;
 using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface INeutrinoUserDS :IEntityRepository<NeutrinoUser>
+    public interface IUserDS  
     {
-        Task<NeutrinoUser> GetUserAsync(int userId);
+        void Insert(User entity);
+
     }
 }

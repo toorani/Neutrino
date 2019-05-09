@@ -1,17 +1,13 @@
-﻿using Espresso.DataAccess.Interfaces;
-using Espresso.DataAccess;
-using Espresso.Identity.Models;
-using Neutrino.Entities;
+﻿using Neutrino.Entities;
 using Neutrino.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neutrino.Data.EntityFramework.DataServices
 {
-    public class RoleDataService : NeutrinoRepositoryBase<NeutrinoRole>,INeutrinoRoleDS
+    public class RoleDataService : NeutrinoRepositoryBase<Role>,INeutrinoRoleDS
     {
         #region [ Constructor(s) ]
         public RoleDataService(NeutrinoContext context) 
@@ -25,7 +21,7 @@ namespace Neutrino.Data.EntityFramework.DataServices
         {
             return dbContext.Users
                 .Where(user => user.Id == userId)
-                .SelectMany(role => role.UserRoles)
+                .SelectMany(role => role.Roles)
                 .Select(r => r.RoleId).ToListAsync();
         }
         #endregion

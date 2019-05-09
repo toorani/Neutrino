@@ -1,6 +1,5 @@
 ﻿using Espresso.DataAccess.Interfaces;
 using Espresso.DataAccess;
-using Espresso.Identity.Models;
 using Neutrino.Entities;
 using Neutrino.Interfaces;
 using System;
@@ -24,7 +23,7 @@ namespace Neutrino.Data.EntityFramework.DataServices
         {
             
             var roleIds = dbContext.Users.Where(x => x.Id == userId)
-                .SelectMany(x => x.UserRoles)
+                .SelectMany(x => x.Roles)
                 .Select(x => x.RoleId);
             var result = dbContext.Permissions
                 .Where(x => roleIds.Contains(x.RoleId) && x.Deleted == false)
@@ -37,7 +36,7 @@ namespace Neutrino.Data.EntityFramework.DataServices
         public List<Permission> GetUserAccess(int userId)
         {
             var roleIds = dbContext.Users.Where(x => x.Id == userId)
-               .SelectMany(x => x.UserRoles)
+               .SelectMany(x => x.Roles)
                .Select(x => x.RoleId);
             return dbContext.Permissions
                 .Where(x => roleIds.Contains(x.RoleId) && x.Deleted == false)

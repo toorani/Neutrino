@@ -8,7 +8,7 @@ using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface ICostCoefficientDS : IEntityRepository<CostCoefficient>
+    public interface ICostCoefficientDS : IEntityBaseRepository<CostCoefficient>
     {
         Task<List<CostCoefficient>> GetCoefficientList();
     }

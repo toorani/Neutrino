@@ -12,7 +12,7 @@ namespace Neutrino.Entities
         #region [ Public Property(ies) ]
         public int RoleId { get; set; }
         public int ApplicationActionId { get; set; }
-        public virtual NeutrinoRole Role { get; set; }
+        public virtual Role Role { get; set; }
         public virtual ApplicationAction ApplicationAction { get; set; }
         #endregion
 
