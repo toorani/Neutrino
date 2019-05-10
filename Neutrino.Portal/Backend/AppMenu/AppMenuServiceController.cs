@@ -1,16 +1,15 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Espresso.Core;
-
-using Neutrino.Entities;
-using Neutrino.Interfaces;
-using Neutrino.Portal.Models;
-using AutoMapper;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using Espresso.BusinessService.Interfaces;
+using Espresso.Core;
 using Espresso.Portal;
+using Neutrino.Entities;
+using Neutrino.Portal.Models;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace Neutrino.Portal.WebApiControllers
 {
@@ -31,7 +30,7 @@ namespace Neutrino.Portal.WebApiControllers
 
 
         [Route("getAppMenu"), HttpGet]
-        public async Task<HttpResponseMessage> GetAppMenuAsync(HttpRequestMessage request)
+        public async Task<HttpResponseMessage> GetAppMenuAsync()
         {
 
             IBusinessResultValue<List<AppMenu>> entities = await appMenuLoader.LoadListAsync(
@@ -48,6 +47,46 @@ namespace Neutrino.Portal.WebApiControllers
             DataList<ApplicationMenuViewModel> dataSource = mapper.Map<List<AppMenu>, DataList<ApplicationMenuViewModel>>(entities.ResultValue);
             return Request.CreateResponse(HttpStatusCode.OK, dataSource);
         }
+
+        [Route("getTreeAppMenu"), HttpGet]
+        public async Task<HttpResponseMessage> GetTreeAppMenuAsync()
+        {
+            var entities = await appMenuLoader.LoadListAsync(
+            orderBy: Utilities.GetOrderBy<AppMenu>("OrderId", "desc")
+            , includes: x => new { x.ChildItems });
+
+            if (entities.ReturnStatus == false)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+
+            var result = new List<jsTreeStaticViewModel>();
+            
+            result.AddRange(from menu in entities.ResultValue
+                            where menu.ParentId == null
+                            select new jsTreeStaticViewModel()
+                            {
+                                Text = menu.Title,
+                                Id = menu.Id.ToString(),
+                                Parent = "0",
+                                ExtraData = menu.Url,
+                                State = new NodeState { Opened = false }
+                            });
+
+            result.AddRange(from menu in entities.ResultValue
+                            where menu.ParentId != null
+                            select new jsTreeStaticViewModel()
+                            {
+                                Text = menu.Title,
+                                Id = menu.Id.ToString(),
+                                Parent = menu.ParentId.ToString(),
+                                ExtraData = menu.Url,
+                                State = new NodeState { Opened = false }
+                            });
+
+            return Request.CreateResponse(HttpStatusCode.OK, result);
+        }
+
 
         private IMapper GetMapper()
         {

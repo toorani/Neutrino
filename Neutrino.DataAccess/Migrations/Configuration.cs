@@ -251,7 +251,7 @@
 
             context.ApplicationActions.AddOrUpdate(
                 x => new { x.HtmlUrl, x.ActionUrl },
-                new ApplicationAction { FaTitle = "نوترینو", HtmlUrl = "/home" });
+                new ApplicationAction { HtmlUrl = "/home" });
 
 
             var roles = new List<Role>()

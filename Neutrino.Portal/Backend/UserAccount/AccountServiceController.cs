@@ -1,31 +1,24 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-
-using jQuery.DataTables.WebApi;
-
-using Neutrino.Entities;
+﻿using AutoMapper;
+using Espresso.BusinessService;
 using Espresso.Core;
-using Neutrino.Portal.Models;
-using Ninject;
-using AutoMapper;
-using Neutrino.Portal.ProfileMapper;
+using Espresso.Portal;
+using Espresso.Utilities.Interfaces;
+using jQuery.DataTables.WebApi;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using System.Web;
-using Espresso.Portal;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System.Collections.Generic;
 using Microsoft.Owin.Security;
-using System;
-using Espresso.Utilities.Interfaces;
+using Neutrino.Entities;
 using Neutrino.Interfaces;
-using Espresso.BusinessService;
-using System.Linq;
-using System.Text;
+using Neutrino.Portal.Models;
+using Neutrino.Portal.ProfileMapper;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Hosting;
+using System.Web.Http;
 
 namespace Neutrino.Portal.WebApiControllers
 {
@@ -202,27 +195,22 @@ namespace Neutrino.Portal.WebApiControllers
             return Request.CreateResponse(HttpStatusCode.OK, postedViewModel);
         }
 
+        [Route("delete"), HttpPost]
+        public async Task<HttpResponseMessage> DeleteAsync(RegisterViewModel postedViewModel)
+        {
+            var user = await _userManager.FindByIdAsync(postedViewModel.Id);
+            var result = await _userManager.DeleteAsync(user);
 
+            postedViewModel.ActionResult = new BusinessResult();
+            if (result.Succeeded == false)
+            {
+                postedViewModel.ActionResult.ReturnMessage.AddRange(result.Errors);
+                return CreateErrorResponse(postedViewModel.ActionResult);
+            }
 
-
-        //[Route("delete"), HttpPost]
-        //public HttpResponseMessage Delete(HttpRequestMessage request, [FromBody]TViewModel postedViewModel)
-        //{
-        //    InitialBusinessService();
-        //    var mapper = GetMapper();
-        //    TEntity entityDeleteing = mapper.Map<TViewModel, TEntity>(postedViewModel);
-        //    Delete(entityDeleteing, postedViewModel);
-
-        //    postedViewModel.transactionalData = TransactionalData;
-        //    if (TransactionalData.ReturnStatus == false)
-        //    {
-        //        var responseError = Request.CreateResponse<TViewModel>(HttpStatusCode.BadRequest, postedViewModel);
-        //        return responseError;
-        //    }
-
-        //    var response = Request.CreateResponse<TViewModel>(HttpStatusCode.OK, postedViewModel);
-        //    return response;
-        //}
+            postedViewModel.ActionResult.ReturnMessage.Add("کاربر انتخاب شده با موفقیت حذف شد");
+            return Request.CreateResponse(HttpStatusCode.OK, postedViewModel);
+        }
         #endregion
 
         #region [ Role ]

@@ -1,0 +1,47 @@
+﻿<div ng-controller="item.permissionController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form novalidate role="form" esp-validate-complete="submit()"
+                      esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                      class="form-horizontal ls_form" name="form">
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                عنوان نقش
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control"
+                                       ng-model="roleName"
+                                       readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div should-apply="true" tree="treeInstance" ng-model="appMenu" js-tree="treeConfig"></div>
+
+                    <div class="modal-footer">
+                        <button type="submit" name="Add" class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            <span>ثبت</span>
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="cancel()">
+                            <i class="fa fa-mail-forward"></i>
+                            <span>بازگشت</span>
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

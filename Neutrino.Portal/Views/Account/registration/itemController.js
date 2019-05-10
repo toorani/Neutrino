@@ -66,7 +66,7 @@ angular.module("neutrinoProject").register.controller('item.registrationControll
                                 ajaxService.ajaxPost($scope.user, "api/accountService/delete",
                                     function (response) {
                                         alertService.showSuccess(response.data.actionResult.returnMessage);
-                                        $location.url('orgStructure/index');
+                                        $location.url('account/registration/index');
                                     },
                                     function (response) {
                                         alertService.showError(response);

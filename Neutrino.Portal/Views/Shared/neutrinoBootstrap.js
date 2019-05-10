@@ -5,7 +5,7 @@ console.log("Neutrino Bootstrap");
 
     var app = angular.module('neutrinoProject', ['ngRoute', 'ngAnimate', 'ngSanitize', 'ui.router', 'ui.bootstrap'
         , 'ui.select', 'ngToast', 'blockUI', 'oc.lazyLoad'
-        , 'jsTree.directive', 'ADM-dateTimePicker', 'dynamicNumber', 'multipleSelect'
+        , 'ngJsTree', 'ADM-dateTimePicker', 'dynamicNumber', 'multipleSelect'
         , 'rzModule', 'mgcrea.ngStrap', 'sticky', 'angularFileUpload', 'mgo-angular-wizard'
         , 'angular-icheck', 'angular.filter'
     ]);
@@ -33,7 +33,7 @@ console.log("Neutrino Bootstrap");
                 };
             }]);
 
-            
+
 
             $animateProvider.classNameFilter(animationClassNameFilter)
 
@@ -91,7 +91,7 @@ console.log("Neutrino Bootstrap");
 
 
         }]);
-    app.run(function ($http, $location,$route, $rootScope, $locale, permissions) {
+    app.run(function ($http, $location, $route, $rootScope, $locale, permissions) {
         $http.defaults.headers.common['X-XSRF-Token'] =
             angular.element('input[name="__RequestVerificationToken"]').attr('value');
 

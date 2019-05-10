@@ -591,6 +591,8 @@
     <Content Include="Scripts\jquery.dataTables\media\js\jquery.dataTables.min1.js" />
     <Content Include="Scripts\jquery\jquery.smartWizard.js" />
     <Content Include="Scripts\plugins\icheck\angular-icheck.js" />
+    <Content Include="Scripts\plugins\ngJsTree\jstree.min.js" />
+    <Content Include="Scripts\plugins\ngJsTree\ngJsTree.min.js" />
     <Content Include="Scripts\plugins\persianDate\persian-date.js" />
     <Content Include="Scripts\plugins\persianDate\persian-date.min.js" />
     <Content Include="Scripts\plugins\ngStrap\angular-strap.compat.js" />
@@ -754,9 +756,7 @@
     <Content Include="Scripts\layout.js" />
     <Content Include="Scripts\multipleAccordion.js" />
     <Content Include="Scripts\plugins\jsLazyLoading\ocLazyLoad.min.js" />
-    <Content Include="Scripts\plugins\jstree\jsTree.directive.js" />
-    <Content Include="Scripts\plugins\jstree\jstree.js" />
-    <Content Include="Scripts\plugins\jstree\jstree.min.js" />
+    <Content Include="Scripts\plugins\ngJsTree\jstree.js" />
     <Content Include="Scripts\validationEngine\jquery\jquery.validationEngine.js" />
     <Content Include="Scripts\validationEngine\jquery\languages\jquery.validationEngine-en.js" />
     <Content Include="Scripts\validationEngine\jquery\languages\jquery.validationEngine-fa.js" />
@@ -847,14 +847,14 @@
     <Content Include="Views\Promotion\overviewrpt\excelTemplate.html" />
     <Content Include="Views\QuantityConditions\index.html" />
     <Content Include="Views\QuantityConditions\indexController.js" />
-    <Content Include="Views\Security\index.permission.html" />
-    <Content Include="Views\Security\index.action.html" />
-    <Content Include="Views\Security\index.permissionController.js" />
-    <Content Include="Views\Security\index.actionController.js" />
-    <Content Include="Views\Security\item.permission.html" />
-    <Content Include="Views\Security\item.action.html" />
-    <Content Include="Views\Security\item.permissionController.js" />
-    <Content Include="Views\Security\item.actionController.js" />
+    <Content Include="Views\Security\permission\index.html" />
+    <Content Include="Views\Security\action\index.html" />
+    <Content Include="Views\Security\permission\indexController.js" />
+    <Content Include="Views\Security\action\indexController.js" />
+    <Content Include="Views\Security\permission\item.html" />
+    <Content Include="Views\Security\action\item.html" />
+    <Content Include="Views\Security\permission\itemController.js" />
+    <Content Include="Views\Security\action\itemController.js" />
     <Content Include="Views\Shared\neutrinoServices.js" />
     <Content Include="Views\Shared\modal.tmpl.html" />
     <Content Include="Views\Shared\angular.dataTable.tmpl.html" />
@@ -907,7 +907,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\images\" />
-    <Folder Include="Scripts\plugins\ng-tree-dnd\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Neutrino.Business.Entities\Neutrino.Entities.csproj">

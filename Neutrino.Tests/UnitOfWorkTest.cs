@@ -88,11 +88,10 @@ namespace Neutrino.Portal.Tests
             Assert.AreNotEqual(goal.Id, 0);
         }
         [TestMethod]
-        public void CreateInastanceRewardTypeService()
+        public void GetAllAction()
         {
-            ISimpleBusinessService<RewardType> businessService = _kernel.Get<ISimpleBusinessService<RewardType>>();
-            //RewardTypeServiceController rewardTypeServiceController = new RewardTypeServiceController(businessService);
-
+            AppActionServiceController appActionServiceController = new AppActionServiceController();
+            appActionServiceController.GetAllActions();
         }
     }
 }

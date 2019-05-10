@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
@@ -31,6 +32,10 @@ namespace Neutrino.Portal.WebApiControllers
             this.appActionListByPagingLoader = appActionListByPagingLoader;
             this.appActionListLoader = appActionListLoader;
             this.appActionLoader = appActionLoader;
+        }
+        public AppActionServiceController()
+        {
+
         }
         #endregion
 
@@ -94,7 +99,7 @@ namespace Neutrino.Portal.WebApiControllers
         public async Task<HttpResponseMessage> GetActionForPermission(HttpRequestMessage request, int roleId)
         {
             var entities = await appActionListLoader.LoadAsync(includes: x => x.Permissions);
-            
+
             if (entities.ReturnStatus == false)
             {
                 return CreateErrorResponse(entities);
@@ -131,6 +136,31 @@ namespace Neutrino.Portal.WebApiControllers
             var dataModelView = mapper.Map<ApplicationActionViewModel>(entity.ResultValue);
 
             return CreateViewModelResponse(dataModelView, entity);
+        }
+
+        [Route("getAllAction"), HttpGet]
+        public HttpResponseMessage GetAllActions()
+        {
+            Assembly asm = Assembly.GetExecutingAssembly();
+            var api_actions = asm.GetTypes()
+                .Where(type => typeof(ApiControllerBase).IsAssignableFrom(type))
+                .SelectMany(type => type.GetMethods())
+                .Where(method => method.IsPublic && method.IsDefined(typeof(RouteAttribute)))
+                .GroupBy(x => x.DeclaringType.CustomAttributes.Select(z => z.ConstructorArguments).FirstOrDefault().FirstOrDefault().Value)
+                .Select(x => new
+                {
+                    Api = x.Key,
+                    Actions = x.Select(y => y.CustomAttributes.Where(z => z.AttributeType == typeof(RouteAttribute))
+                    .Select(u => u.ConstructorArguments)
+                    .FirstOrDefault()
+                    .FirstOrDefault().Value).ToList()
+                });
+            //var result = (from api in api_actions
+            //              from act in api.Actions
+            //              select api.Api + "/" + act);
+
+
+            return Request.CreateResponse(HttpStatusCode.OK, api_actions);
         }
 
         #endregion

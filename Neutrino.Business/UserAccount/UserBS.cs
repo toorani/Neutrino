@@ -43,13 +43,13 @@ namespace Neutrino.Business
                     .Where(x => (x.UserName.Contains(searchExpr) || x.Email.Contains(searchExpr)
                     || x.Name.Contains(searchExpr) || x.LastName.Contains(searchExpr)
                     || x.Roles.Any(r => r.Role.FaName.Contains(searchExpr))) && x.Deleted == false);
-                
+
                 entites.TotalRows = await query.CountAsync();
 
                 query = orderBy(query);
                 query = query.Skip(pageNumber).Take(pageSize);
                 entites.ResultValue = await query.ToListAsync();
-                
+
                 entites.ReturnStatus = true;
             }
             catch (Exception ex)
@@ -136,7 +136,21 @@ namespace Neutrino.Business
         public async Task DeleteAsync(User user)
         {
             user.LastUpdated = DateTime.Now;
-            user.Deleted = false;
+            user.Deleted = true;
+            foreach (var item in user.Claims)
+            {
+                item.Deleted = true;
+                item.LastUpdated = DateTime.Now;
+                unitOfWork.UserClaimDataService.Delete(item);
+            }
+
+            foreach (var item in user.Roles)
+            {
+                item.Deleted = true;
+                item.LastUpdated = DateTime.Now;
+                unitOfWork.UserRoleDataService.Delete(item);
+            }
+
             unitOfWork.UserDataService.Delete(user);
             await unitOfWork.CommitAsync();
         }
@@ -148,7 +162,9 @@ namespace Neutrino.Business
         public Task<User> FindByIdAsync(int userId)
         {
             return unitOfWork.UserDataService.GetQuery()
-                .AsNoTracking().FirstOrDefaultAsync(x => x.Id == userId);
+                .IncludeFilter(x => x.Claims.Where(cl => cl.Deleted == false))
+                .IncludeFilter(x => x.Roles.Where(r => r.Deleted == false))
+                .AsNoTracking().SingleOrDefaultAsync(x => x.Id == userId);
         }
         public Task<User> FindByNameAsync(string userName)
         {
