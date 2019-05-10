@@ -101,7 +101,7 @@
     <Compile Include="BranchGoal\IBranchGoalDS.cs" />
     <Compile Include="GoalGoodsCategory\IGoalGoodsCategoryBS.cs" />
     <Compile Include="UserAccount\INeutrinoRoleBS.cs" />
-    <Compile Include="UserAccount\INeutrinoRoleDS.cs" />
+    <Compile Include="UserAccount\IRoleDS.cs" />
     <Compile Include="UserAccount\IUserBS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

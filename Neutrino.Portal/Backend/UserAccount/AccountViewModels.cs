@@ -28,7 +28,7 @@ namespace Neutrino.Portal.Models
         public string ConfirmPassword { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
-        public string MobileNumber { get; set; }
+        public string PhoneNumber { get; set; }
         public int RoleId { get; set; }
         public List<UserAccessToken> UserAccessTokens { get; set; }
         public List<int> BranchesUnderControl { get; set; }
@@ -66,7 +66,6 @@ namespace Neutrino.Portal.Models
         {
         }
     }
-    
 
     public class ResetPasswordViewModel
     {

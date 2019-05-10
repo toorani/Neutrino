@@ -15,7 +15,7 @@ namespace Neutrino.Interfaces
         IUserEmailStore<User, int>
     {
         Task<IBusinessResultValue<User>> LoadUserAsync(int userId);
-        Task<IBusinessLoadByPagingResult<User>> LoadAsync(Expression<Func<User, bool>> where = null
+        Task<IBusinessLoadByPagingResult<User>> LoadAsync(string searchExpr
            , Func<IQueryable<User>, IOrderedQueryable<User>> orderBy = null
            , int pageNumber = 0
            , int pageSize = 15);

@@ -104,7 +104,7 @@
     <Compile Include="GoalStep.cs" />
     <Compile Include="GoalType.cs" />
     <Compile Include="GoalGoodsCategory.cs" />
-    <Compile Include="NeutrinoRole.cs" />
+    <Compile Include="Role.cs" />
     <Compile Include="Permission.cs" />
     <Compile Include="OrgStructureShare.cs" />
     <Compile Include="OrgStructure.cs" />

@@ -28,7 +28,7 @@ namespace Neutrino.Business
         #endregion
 
         #region [ Public Method(s) ]
-        public async Task<IBusinessLoadByPagingResult<User>> LoadAsync(Expression<Func<User, bool>> where = null
+        public async Task<IBusinessLoadByPagingResult<User>> LoadAsync(string searchExpr
            , Func<IQueryable<User>, IOrderedQueryable<User>> orderBy = null
            , int pageNumber = 0
            , int pageSize = 15)
@@ -37,22 +37,19 @@ namespace Neutrino.Business
 
             try
             {
-                if (where != null)
-                    where = where.And(x => x.Deleted == false);
-                else
-                    where = x => x.Deleted == false;
-
                 var query = unitOfWork.UserDataService.GetQuery()
                     .IncludeFilter(x => x.Roles.Where(r => r.Deleted == false))
                     .IncludeFilter(x => x.Roles.Select(r => r.Role))
-                    .Where(where);
+                    .Where(x => (x.UserName.Contains(searchExpr) || x.Email.Contains(searchExpr)
+                    || x.Name.Contains(searchExpr) || x.LastName.Contains(searchExpr)
+                    || x.Roles.Any(r => r.Role.FaName.Contains(searchExpr))) && x.Deleted == false);
+                
+                entites.TotalRows = await query.CountAsync();
+
                 query = orderBy(query);
-
-
                 query = query.Skip(pageNumber).Take(pageSize);
                 entites.ResultValue = await query.ToListAsync();
-
-                entites.TotalRows = await unitOfWork.UserDataService.GetCountAsync(where);
+                
                 entites.ReturnStatus = true;
             }
             catch (Exception ex)
@@ -81,16 +78,35 @@ namespace Neutrino.Business
         }
         public async Task UpdateAsync(User user)
         {
-            var roleExists = await unitOfWork.UserRoleDataService.FirstOrDefaultAsync(x => x.UserId == user.Id && x.Deleted == false);
-            if (user.Roles.Any(x => x.RoleId == roleExists.RoleId) == false)
+            var userExist = await unitOfWork.UserDataService.GetQuery()
+                .IncludeFilter(x => x.Roles.Where(r => r.Deleted == false))
+                .IncludeFilter(x => x.Claims.Where(r => r.Deleted == false && r.ClaimType == "branch"))
+                .FirstOrDefaultAsync(x => x.Id == user.Id);
+
+            userExist.Name = user.Name;
+            userExist.LastName = user.LastName;
+            userExist.UserName = user.UserName;
+            userExist.Email = user.Email;
+            userExist.PhoneNumber = user.PhoneNumber;
+
+            var lst_newrole = user.Roles.Except(userExist.Roles, x => x.RoleId);
+            var lst_removerole = userExist.Roles.Except(user.Roles, x => x.RoleId);
+
+            foreach (var item in lst_newrole)
             {
-                roleExists.Deleted = false;
-                roleExists.LastUpdated = DateTime.Now;
-                unitOfWork.UserRoleDataService.Delete(roleExists);
+                item.DateCreated = DateTime.Now;
+                item.LastUpdated = DateTime.Now;
+                unitOfWork.UserRoleDataService.Insert(item);
             }
-            var lst_claimExists = await unitOfWork.UserClaimDataService.GetAsync(x => x.UserId == user.Id && x.ClaimType == "branch" && x.Deleted == false);
-            var lst_newclaims = user.Claims.Except(lst_claimExists, x => x.ClaimValue);
-            var lst_removeclaims = lst_claimExists.Except(user.Claims, x => x.ClaimValue);
+            foreach (var item in lst_removerole)
+            {
+                item.LastUpdated = DateTime.Now;
+                item.Deleted = true;
+                unitOfWork.UserRoleDataService.Delete(item);
+            }
+
+            var lst_newclaims = user.Claims.Except(userExist.Claims, x => x.ClaimValue);
+            var lst_removeclaims = userExist.Claims.Except(user.Claims, x => x.ClaimValue);
             foreach (var item in lst_newclaims)
             {
                 item.DateCreated = DateTime.Now;
@@ -100,14 +116,14 @@ namespace Neutrino.Business
 
             foreach (var item in lst_removeclaims)
             {
-                item.Deleted = false;
+                item.Deleted = true;
                 item.LastUpdated = DateTime.Now;
                 unitOfWork.UserClaimDataService.Delete(item);
             }
-            
+
             user.LastUpdated = DateTime.Now;
-            unitOfWork.UserDataService.Update(user);
-            
+            unitOfWork.UserDataService.Update(userExist);
+
             await unitOfWork.CommitAsync();
         }
         public async Task CreateAsync(User user)

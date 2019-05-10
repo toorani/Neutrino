@@ -34,7 +34,7 @@ namespace Neutrino.Portal
                 RequireLowercase = false,
                 RequireUppercase = false,
             };
-
+            EmailService = new EmailService();
             // Configure user lockout defaults
             UserLockoutEnabledByDefault = true;
             DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);

@@ -23,6 +23,9 @@ using Espresso.Utilities.Interfaces;
 using Neutrino.Interfaces;
 using Espresso.BusinessService;
 using System.Linq;
+using System.Text;
+using System.IO;
+using System.Web.Hosting;
 
 namespace Neutrino.Portal.WebApiControllers
 {
@@ -67,12 +70,11 @@ namespace Neutrino.Portal.WebApiControllers
         [Route("getUsers"), HttpPost]
         public async Task<HttpResponseMessage> GetGridData(JQueryDataTablesModel dataTablesModel)
         {
-            var entities = await userBusinessService.LoadAsync(
-                where: x => x.UserName.Contains(dataTablesModel.sSearch) || x.Email.Contains(dataTablesModel.sSearch) 
-                || x.Name.Contains(dataTablesModel.sSearch) || x.LastName.Contains(dataTablesModel.sSearch)
-                ,orderBy: UIHelper.GetOrderBy<User, RegisterViewModel>(dataTablesModel.GetSortedColumns())
-                ,pageNumber: dataTablesModel.iDisplayStart
-                ,pageSize: dataTablesModel.iDisplayLength);
+            var entities = await userBusinessService.LoadAsync(dataTablesModel.sSearch
+
+                , orderBy: UIHelper.GetOrderBy<User, RegisterViewModel>(dataTablesModel.GetSortedColumns())
+                , pageNumber: dataTablesModel.iDisplayStart
+                , pageSize: dataTablesModel.iDisplayLength);
             if (entities.ReturnStatus == false)
             {
                 return CreateErrorResponse(entities);
@@ -126,6 +128,27 @@ namespace Neutrino.Portal.WebApiControllers
             postedViewModel.ActionResult.ReturnMessage.Add("اطلاعات کاربری با موفقیت ثبت شد");
             postedViewModel.Id = user.Id;
 
+
+            return Request.CreateResponse(HttpStatusCode.OK, postedViewModel);
+        }
+        [Route("resetPassword"), HttpPost]
+        public async Task<HttpResponseMessage> ResetPasswordAsync(RegisterViewModel postedViewModel)
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(postedViewModel.Id);
+            IdentityResult result = await _userManager.ResetPasswordAsync(postedViewModel.Id, token, postedViewModel.Password);
+
+            postedViewModel.ActionResult = new BusinessResult();
+            if (result.Succeeded == false)
+            {
+                postedViewModel.ActionResult.ReturnMessage.AddRange(result.Errors);
+                return CreateErrorResponse(postedViewModel.ActionResult);
+            }
+            var resetPasswordEmailBody = File.ReadAllText(HostingEnvironment.MapPath("/Backend/UserAccount/RestpasswordTemplate.html"));
+            resetPasswordEmailBody = resetPasswordEmailBody.Replace("$DateTime$", Utilities.ToPersianDateTime(DateTime.Now))
+                .Replace("$UserName$", postedViewModel.UserName)
+                .Replace("$password$", postedViewModel.Password);
+            await _userManager.SendEmailAsync(postedViewModel.Id, "تغییر رمز عبور", resetPasswordEmailBody);
+            postedViewModel.ActionResult.ReturnMessage.Add("رمز عبور با موفقیت تغییر داده شد");
 
             return Request.CreateResponse(HttpStatusCode.OK, postedViewModel);
         }

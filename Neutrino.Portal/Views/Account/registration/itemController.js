@@ -128,7 +128,7 @@ angular.module("neutrinoProject").register.controller('item.registrationControll
                             $scope.user.branchesUnderControl.forEach(function (braId) {
                                 $scope.branchChecked[braId] = true;
                             });
-                        }, 100);
+                        }, 800);
                     },
                     function (response) {
                         alertService.showError(response);

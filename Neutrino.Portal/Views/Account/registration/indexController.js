@@ -17,12 +17,18 @@ angular.module("neutrinoProject").register.controller('index.registrationControl
                 dataTableColumns.add({
                     isKey: true, fnRenderCallBack: function (data, type, full) {
                         return $compile("<div class='btn-group'>"
-                            + "<button type='button' ng-click='editUser(" + JSON.stringify(full) + ")'  class='btn ls-light-blue-btn dropdown-toggle' data-toggle='dropdown' aria-expanded='false'> <i class='fa fa-magic'></i><span>جزئیات</span></button>"
+                            + "<button type='button' class='btn ls-light-blue-btn dropdown-toggle' data-toggle='dropdown'>"
+                            + "<i class='glyphicon glyphicon-user'></i> عملیات <span class='caret'></span></button>"
+                            + "<ul class='dropdown-menu' role='menu'>"
+                            + "<li> <a role='button' ng-click='editUser(" + JSON.stringify(full) + ")'>جزییات</a></li>"
+                            + "<li> <a role='button' ng-click='changePassword(" + JSON.stringify(full) + ")'>تغییر رمز عبور</a></li>"
+                            + "</ul></div>"
                         )($scope);
 
                     }
                 });
 
+                
                 $scope.dataColumns = dataTableColumns.getItems();
                 $scope.serverUrl = '/api/accountService/getUsers';
 
@@ -35,7 +41,7 @@ angular.module("neutrinoProject").register.controller('index.registrationControl
             $scope.editUser = function (dataSelected) {
                 $location.url('account/registration/item/' + dataSelected.id);
             }
-
-
-
+            $scope.changePassword = function (dataSelected) {
+                $location.url('account/changepassword/item/' + dataSelected.id);
+            }
         }]);

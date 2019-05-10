@@ -45,7 +45,7 @@ namespace Neutrino.Data.EntityFramework
         public IEntityBaseRepository<Promotion> PromotionDataService { get; private set; }
         public IQuantityConditionDS QuantityConditionDataService { get; private set; }
         public IEntityBaseRepository<BranchQuntityGoal> BranchQuntityGoalDataService { get; private set; }
-        public INeutrinoRoleDS RoleDataService { get; private set; }
+        public IRoleDS RoleDataService { get; private set; }
         public IDataRepository<User> UserDataService { get; private set; }
         public IDataRepository<UserRole> UserRoleDataService { get; private set; }
         public IDataRepository<UserClaim> UserClaimDataService { get; private set; }
@@ -90,7 +90,7 @@ namespace Neutrino.Data.EntityFramework
             , IEntityBaseRepository<Promotion> promotionDS
             , IQuantityConditionDS quantityConditionDS
             , IEntityBaseRepository<BranchQuntityGoal> branchQuntityGoalDS
-            , INeutrinoRoleDS roleDS
+            , IRoleDS roleDS
             , IDataRepository<User> userDS
             , IDataRepository<UserRole> userRoleDS
             , IDataRepository<UserClaim> userClaimDS

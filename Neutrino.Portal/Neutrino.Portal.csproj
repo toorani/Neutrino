@@ -65,6 +65,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\Espresso.BusinessService.dll</HintPath>
     </Reference>
+    <Reference Include="Espresso.Communication">
+      <HintPath>..\build\Espresso.Communication.dll</HintPath>
+    </Reference>
     <Reference Include="Espresso.Core, Version=2018.10.16.290, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\Espresso.Core.dll</HintPath>
@@ -366,6 +369,7 @@
     <Compile Include="Backend\Goods\GoodsMapperProfile.cs" />
     <Compile Include="Backend\TypeEntities\PositionTypeServiceController.cs" />
     <Compile Include="Backend\TypeEntities\GoalGoodsCategoryTypeServiceController.cs" />
+    <Compile Include="Backend\UserAccount\IdentityConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="ExceptionHandling\GlobalExceptionLogger.cs" />
@@ -436,6 +440,9 @@
     <Compile Include="Backend\UserAccount\UserValidator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Backend\UserAccount\RestpasswordTemplate.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\account.css" />
     <Content Include="Content\angular\angular-block-ui.css" />
     <Content Include="Content\angular\angular-block-ui.min.css" />
@@ -753,6 +760,8 @@
     <Content Include="Scripts\validationEngine\jquery\jquery.validationEngine.js" />
     <Content Include="Scripts\validationEngine\jquery\languages\jquery.validationEngine-en.js" />
     <Content Include="Scripts\validationEngine\jquery\languages\jquery.validationEngine-fa.js" />
+    <Content Include="Views\Account\changepassword\item.html" />
+    <Content Include="Views\Account\changepassword\itemController.js" />
     <Content Include="Views\Account\registration\index.html" />
     <Content Include="Views\Account\registration\itemController.js" />
     <Content Include="Views\Account\registration\item.html" />

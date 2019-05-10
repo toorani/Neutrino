@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Neutrino.Data.EntityFramework.DataServices
 {
-    public class RoleDataService : NeutrinoRepositoryBase<Role>,INeutrinoRoleDS
+    public class RoleDataService : NeutrinoRepositoryBase<Role>,IRoleDS
     {
         #region [ Constructor(s) ]
         public RoleDataService(NeutrinoContext context) 
