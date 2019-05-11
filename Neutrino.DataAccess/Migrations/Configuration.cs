@@ -269,16 +269,18 @@
             };
 
 
-            UserRole userRole = new UserRole();
-            userRole.Role = new Role { Name = "Admin", IsUsingBySystem = true };
-            userRole.User = new User
+            UserRole userRole = new UserRole
             {
-                UserName = "admin",
-                PasswordHash = "AKT/sERhGF/k9CnbDnrWhNeG5nuQZRuLFQAqLrqq8cHBvAQcEFaKO6Yma3kn5qW86g==",
-                PhoneNumber = "09125139301",
-                Name = "admin",
-                LastName = "admin",
-                Email = "elit.neutrino@gmail.com"
+                Role = new Role { Name = "Admin", IsUsingBySystem = true },
+                User = new User
+                {
+                    UserName = "admin",
+                    PasswordHash = "AKT/sERhGF/k9CnbDnrWhNeG5nuQZRuLFQAqLrqq8cHBvAQcEFaKO6Yma3kn5qW86g==",
+                    PhoneNumber = "09125139301",
+                    Name = "admin",
+                    LastName = "admin",
+                    Email = "elit.neutrino@gmail.com"
+                }
             };
             context.Roles.AddOrUpdate(x => x.Name, roles.ToArray());
 

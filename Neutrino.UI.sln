@@ -19,6 +19,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neutrino.InjectModules", "N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neutrino.Core", "Neutrino.Core\Neutrino.Core.csproj", "{EF06262A-DF23-43D5-A928-A3426CBEF854}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{D3C8D91E-2107-4858-BA34-9AEF26965C0D}"
+	ProjectSection(SolutionItems) = preProject
+		build\Espresso.BusinessService.dll = build\Espresso.BusinessService.dll
+		build\Espresso.Communication.dll = build\Espresso.Communication.dll
+		build\Espresso.Core.dll = build\Espresso.Core.dll
+		build\Espresso.DataAccess.dll = build\Espresso.DataAccess.dll
+		build\Espresso.Entites.dll = build\Espresso.Entites.dll
+		build\Espresso.InjectModules.dll = build\Espresso.InjectModules.dll
+		build\Espresso.Portal.dll = build\Espresso.Portal.dll
+		build\Espresso.Utilities.dll = build\Espresso.Utilities.dll
+		build\jQuery.DataTables.WebApi.dll = build\jQuery.DataTables.WebApi.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
