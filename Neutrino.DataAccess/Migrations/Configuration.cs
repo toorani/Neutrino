@@ -305,15 +305,15 @@
 
 #if (DEBUG == false)
    
-            context.UserRoles.AddOrUpdate(x => new { x.UserId, x.RoleId }, userRole);
-            List<AppSetting> logItems = new List<AppSetting>();
-            logItems.Add(new AppSetting() { Key = "serviceLog", Value = "true" });
-            context.AppSettings.AddOrUpdate(
-                x => x.Key,
-                new AppSetting { Key = "loadRoleSystem", Value = "true" },
-                new AppSetting { Key = "checkAccess", Value = "true" },
-                new AppSetting { Key = "applicationMode", Value = "debug" },
-                new AppSetting { Key = "Log", Childern = logItems });
+            //context.UserRoles.AddOrUpdate(x => new { x.UserId, x.RoleId }, userRole);
+            //List<AppSetting> logItems = new List<AppSetting>();
+            //logItems.Add(new AppSetting() { Key = "serviceLog", Value = "true" });
+            //context.AppSettings.AddOrUpdate(
+            //    x => x.Key,
+            //    new AppSetting { Key = "loadRoleSystem", Value = "true" },
+            //    new AppSetting { Key = "checkAccess", Value = "true" },
+            //    new AppSetting { Key = "applicationMode", Value = "debug" },
+            //    new AppSetting { Key = "Log", Childern = logItems });
 
 #endif
 

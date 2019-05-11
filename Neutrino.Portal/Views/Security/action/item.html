@@ -14,52 +14,52 @@
                       esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
                                   ,autoHidePrompt:true}"
                       class="form-horizontal ls_form" name="form">
-                    <div class="row ls_divider">
-                        <div class="col-md-6" should-apply="true" tree="treeInstance" ng-model="appMenu"
-                             tree-events='select_node: selectNodeCB'
-                             js-tree="treeConfig"></div>
-                        <label class="col-md-2 control-label">
-                            Html Url
-                        </label>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control dir-ltr" 
-                                   readonly
-                                   ng-model="viewModel.htmlUrl">
-                        </div>
-                    </div>
-                    <br />
                     <div class="row">
-                        <label class="col-md-2 control-label">
-                            <i class="red fa fa-asterisk"></i>
-                            فعالیت های مرتبط
-                        </label>
-                        <div class="col-md-9">
-                            <ui-select multiple ng-model="viewModel.appActions"
-                                       append-to-body="true"
-                                       ng-disabled="viewModel.htmlUrl == null"
-                                       reset-search-input="true">
-                                <ui-select-match allow-clear="true">
-                                    <span ng-bind="$item"></span>
-                                </ui-select-match>
-                                <ui-select-choices repeat="item in (allAppActions.actions | filter: $select.search) track by $index">
-                                    <span ng-bind="item"></span>
-                                </ui-select-choices>
-                                <ui-select-no-choice>
-                                    موردی یافت نشد
-                                </ui-select-no-choice>
-                            </ui-select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" ng-show="viewModel.htmlUrl != null" class="btn btn-success">
-                            <i class="fa fa-check"></i>
-                            <span>ثبت</span>
-                        </button>
-                        <button type="button" class="btn btn-default" ng-click="cancel()">
-                            <i class="fa fa-close"></i>
-                            <span>بازگشت</span>
-                        </button>
+                        <div class="col-md-6">
+                            <div class="col-md-12" should-apply="true" tree="treeInstance_menu" ng-model="appMenu"
+                                 tree-events='select_node: selectMenuNode'
+                                 js-tree="treeConfig_menu"></div>
+                            <div class="col-md-12">
+                                <label class="col-md-4 control-label">
+                                    Html Url
+                                </label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control dir-ltr"
+                                           readonly
+                                           ng-model="viewModel.htmlUrl">
+                                </div>
+                            </div>
+                           
+                            <div class="col-md-12">
+                                <br />
+                                <div class="modal-footer">
+                                    <button type="submit" ng-show="viewModel.htmlUrl != null" class="btn btn-success">
+                                        <i class="fa fa-check"></i>
+                                        <span>ثبت</span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" ng-click="cancel()">
+                                        <i class="fa fa-close"></i>
+                                        <span>بازگشت</span>
+                                    </button>
 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-12">
+                                <label class="col-md-4 control-label">
+                                    جستجو
+                                </label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control dir-ltr"
+                                           ng-keyup="searchAction_keyup()"
+                                           ng-model="searchAction">
+                                </div>
+                            </div>
+                            <div class="col-md-12" should-apply="true" tree="treeInstance_action" ng-model="allAppActions"
+                                 tree-events='select_node: selectActionNode'
+                                 js-tree="treeConfig_action"></div>
+                        </div>
                     </div>
                 </form>
             </div>

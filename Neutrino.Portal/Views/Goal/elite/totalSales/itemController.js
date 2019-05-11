@@ -100,7 +100,7 @@ function ($scope, $location, $filter, $timeout, $routeParams, ajaxService, modal
                                     month: $scope.goal.month,
                                     year: $scope.goal.year,
                                 };
-                                ajaxService.ajaxPost(totalFulfillPromotion, "api/totalFulfillPromotionService/delete",
+                                ajaxService.ajaxPost(totalFulfillPromotion, "api/fulfillmentPromotionConditionService/delete",
                                 function (response) {
                                     alertService.showSuccess(response.data.returnMessage);
                                     $location.url('goal/elite/totalSales/index');

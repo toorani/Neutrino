@@ -130,12 +130,6 @@ namespace Neutrino.Data.EntityFramework
             //        cs.MapLeftKey("UserId");
             //        cs.MapRightKey("RoleId");
             //    });
-
-            modelBuilder.Entity<ApplicationAction>()
-                   .HasOptional(i => i.Parent)
-                   .WithMany(i => i.ChildActions)
-                   .HasForeignKey(i => i.ParentId);
-
             
             
 

@@ -7,23 +7,20 @@ angular.module("neutrinoProject").register.controller('item.actionController',
             "use strict";
             $scope.viewModel = {
                 htmlUrl: null,
-                appActions: []
+                actions: []
             }
 
             $scope.appMenu = [{ "id": "0", "text": "نوترینو", "parent": "#", "state": { "opened": true, "disabled": false } }];
-
-            $scope.treeConfig = {
-                core: {
-                    multiple: false,
-                    animation: true,
-                    error: function (error) {
-                        $log.error('treeCtrl: error from js tree - ' + angular.toJson(error));
-                    },
-                    check_callback: true,
-                    worker: true
-                }
+            $scope.allAppActions = [{ "id": "0", "text": "نوترینو", "parent": "#", "state": { "opened": true, "disabled": false } }];
+            $scope.treeConfig_menu = {
+                core: { check_callback: true, worker: true }
             };
-            
+            $scope.treeConfig_action = {
+                core: { check_callback: true, worker: true },
+                plugins: ['checkbox', "search"]
+            };
+
+            $scope.searchAction = '';
 
             $scope.initializeController = function () {
                 $scope.title = 'تعریف فعالیت';
@@ -31,12 +28,16 @@ angular.module("neutrinoProject").register.controller('item.actionController',
                 $timeout(function () {
                     getAppMenu();
                 }, 500);
-                if ($scope.viewModel.id != 0) {
-                    loadEntity();
-                }
-                else {
-                    getTreeActionsList();
-                }
+                $timeout(function () {
+                    getTreeActions();
+                }, 500);
+
+                //if ($scope.viewModel.id != 0) {
+                //    loadEntity();
+                //}
+                //else {
+                //    getTreeActionsList();
+                //}
 
             }
 
@@ -52,24 +53,14 @@ angular.module("neutrinoProject").register.controller('item.actionController',
                     })
 
             }
-            $scope.selectNodeCB = function (node, selected, event) {
-                $scope.viewModel.htmlUrl = selected.node.original.extraData;
-                $scope.viewModel.appActions = [];
-            };
-            var getTreeActionsList = function () {
 
-                //return ajaxService.ajaxCall({ selectedId: ($scope.viewModel.parentId || 1) }, "api/appActionService/getTreeActionsList", 'get',
-                //    function (response) {
-                //        $scope.treeModel = response.data;
-                //    },
-                //    function (response) {
-                //        alertService.showError(response);
-                //        alertService.setValidationErrors($scope, response.data.validationErrors);
-                //    });
-
+            var getTreeActions = function () {
                 ajaxService.ajaxCall({}, "api/appActionService/getAllAction", 'get',
                     function (response) {
-                        $scope.allAppActions = response.data;
+                        response.data.forEach(act => {
+                            $scope.allAppActions.push(act)
+                        });
+
                     },
                     function (response) {
                         alertService.showError(response);
@@ -88,31 +79,43 @@ angular.module("neutrinoProject").register.controller('item.actionController',
                     });
             }
 
+            $scope.searchAction_keyup = function () {
+                var to = false;
+                if (to) {
+                    clearTimeout(to);
+                }
+                to = setTimeout(function () {
+                    if ($scope.treeInstance_action) {
+                        $scope.treeInstance_action.jstree(true).search($scope.searchAction);
+                    }
+                }, 250);
+            }
+
+            $scope.selectMenuNode = function (node, selected, event) {
+                $scope.viewModel.htmlUrl = selected.node.original.extraData;
+                $scope.viewModel.actions = [];
+            };
+            $scope.selectActionNode = function (node, selected, event) {
+
+            };
+
             $scope.submit = function () {
-                if ($scope.viewModel.id == 0) {
-                    ajaxService.ajaxPost($scope.viewModel, "api/appActionService/add",
-                        function (response) {
-                            alertService.showSuccess(response.data.actionResult.returnMessage);
-                            $scope.viewModel.id = response.data.id;
-                        },
-                        function (response) {
-                            alertService.showError(response);
-                            alertService.setValidationErrors($scope, response.data.validationErrors);
-                        });
-                    getTreeActionsList();
-                }
-                else {
-                    ajaxService.ajaxPost($scope.viewModel, "api/appActionService/edit",
-                        function (response) {
-                            alertService.showSuccess(response.data.actionResult.returnMessage);
-                        },
-                        function (response) {
-                            alertService.showError(response);
-                            alertService.setValidationErrors($scope, response.data.validationErrors);
-                        });
-                }
+                let selected_actions = $scope.treeInstance_action.jstree(true).get_selected(true);
+                $scope.viewModel.appActions = [];
+                selected_actions.filter((act) => act.parent != 0).forEach(act => {
+                    $scope.viewModel.actions.push(act.text);
+                })
 
-
+                
+                //ajaxService.ajaxPost($scope.viewModel, "api/appActionService/add",
+                //    function (response) {
+                //        alertService.showSuccess(response.data.actionResult.returnMessage);
+                //        $scope.viewModel.id = response.data.id;
+                //    },
+                //    function (response) {
+                //        alertService.showError(response);
+                //        alertService.setValidationErrors($scope, response.data.validationErrors);
+                //    });
             }
 
             $scope.cancel = function () {
