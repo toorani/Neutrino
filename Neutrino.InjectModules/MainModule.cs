@@ -120,7 +120,11 @@ namespace Neutrino.InjectModules
             Bind<IMemberPayrollBS>().To<MemberPayrollBS>();
             Bind<IMemberPayrollDS>().To<MemberPayrollDataService>();
 
-            
+            //ApplicationAction
+            Bind<IApplicationActionBS>().To<ApplicationActionBS>();
+            Bind(typeof(AbstractValidator<List<ApplicationAction>>)).To(typeof(ApplicationActionBR));
+
+
         }
     }
 }

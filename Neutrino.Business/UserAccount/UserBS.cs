@@ -42,7 +42,7 @@ namespace Neutrino.Business
                     .IncludeFilter(x => x.Roles.Select(r => r.Role))
                     .Where(x => (x.UserName.Contains(searchExpr) || x.Email.Contains(searchExpr)
                     || x.Name.Contains(searchExpr) || x.LastName.Contains(searchExpr)
-                    || x.Roles.Any(r => r.Role.FaName.Contains(searchExpr))) && x.Deleted == false);
+                    || x.Roles.Any(r => r.Role.FaName.Contains(searchExpr))) && x.Deleted == false && x.Roles.Any(r=>r.Role.IsUsingBySystem == false));
 
                 entites.TotalRows = await query.CountAsync();
 

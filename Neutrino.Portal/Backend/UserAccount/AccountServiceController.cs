@@ -216,10 +216,10 @@ namespace Neutrino.Portal.WebApiControllers
         #region [ Role ]
 
         [Route("getRoles"), HttpGet]
-        public HttpResponseMessage GetRoles()
+        public async Task<HttpResponseMessage> GetRoles()
         {
             bool loadRoleSystem = appSettingManager.GetValue<bool>("loadRoleSystem").Value;
-            var entities = roleBusinessService.EntityListLoader.LoadList(where: x => x.IsUsingBySystem == false || loadRoleSystem);
+            var entities = await roleBusinessService.EntityListLoader.LoadListAsync(where: x => x.IsUsingBySystem == false || loadRoleSystem);
 
             if (entities.ReturnStatus == false)
             {
@@ -245,33 +245,6 @@ namespace Neutrino.Portal.WebApiControllers
             var mapper = GetMapper();
             var dataViewModel = mapper.Map<Role, RoleViewModel>(entity.ResultValue);
             return CreateViewModelResponse(dataViewModel, entity);
-        }
-
-        [Route("getRoleDataGrid"), HttpPost]
-        public async Task<HttpResponseMessage> GetRoleDataGrid(HttpRequestMessage request, [FromBody]JQueryDataTablesModel dataTablesModel)
-        {
-            bool loadRoleSystem = appSettingManager.GetValue<bool>("loadRoleSystem").Value;
-            var entities = await roleBusinessService.EntityListByPagingLoader.LoadAsync(where: x => (x.IsUsingBySystem == false || loadRoleSystem)
-            && (x.FaName.Contains(dataTablesModel.sSearch)
-            || x.Name.Contains(dataTablesModel.sSearch)
-            || dataTablesModel.sSearch == "")
-            );
-
-            if (entities.ReturnStatus == false)
-            {
-                return CreateErrorResponse(entities);
-            }
-
-            var mapper = GetMapper();
-            List<RoleViewModel> dataSource = mapper.Map<List<Role>, List<RoleViewModel>>(entities.ResultValue);
-
-
-            return Request.CreateResponse(HttpStatusCode.OK
-                  , DataTablesJson(items: dataSource
-                  , totalRecords: entities.TotalRows
-                  , totalDisplayRecords: entities.TotalRows
-                  , sEcho: dataTablesModel.sEcho));
-
         }
 
         #endregion

@@ -583,6 +583,14 @@
     <Compile Include="Migrations\201905091338400_alter_useraccountentities.Designer.cs">
       <DependentUpon>201905091338400_alter_useraccountentities.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905120501001_alterApplicationAction_removeparentid.cs" />
+    <Compile Include="Migrations\201905120501001_alterApplicationAction_removeparentid.Designer.cs">
+      <DependentUpon>201905120501001_alterApplicationAction_removeparentid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905121443409_alterbranchpromotion_remove_startenddate.cs" />
+    <Compile Include="Migrations\201905121443409_alterbranchpromotion_remove_startenddate.Designer.cs">
+      <DependentUpon>201905121443409_alterbranchpromotion_remove_startenddate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NeutrinoDataRepositoryBase.cs" />
     <Compile Include="NeutrinoRepositoryBase.cs" />
@@ -967,6 +975,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905091338400_alter_useraccountentities.resx">
       <DependentUpon>201905091338400_alter_useraccountentities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905120501001_alterApplicationAction_removeparentid.resx">
+      <DependentUpon>201905120501001_alterApplicationAction_removeparentid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905121443409_alterbranchpromotion_remove_startenddate.resx">
+      <DependentUpon>201905121443409_alterbranchpromotion_remove_startenddate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

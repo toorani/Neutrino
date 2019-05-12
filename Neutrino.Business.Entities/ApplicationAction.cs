@@ -9,7 +9,7 @@ namespace Neutrino.Entities
         #region [ Public Property(ies) ]
         [StringLength(200),Required]
         public string HtmlUrl { get; set; }
-        [StringLength(200), Required]
+        [StringLength(200)]
         public string ActionUrl { get; set; }
         public virtual ICollection<Permission> Permissions { get; set; }
         #endregion

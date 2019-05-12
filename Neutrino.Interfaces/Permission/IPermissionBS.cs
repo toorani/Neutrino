@@ -8,8 +8,7 @@ namespace Neutrino.Interfaces
 {
     public interface IPermissionBS : IBusinessService
     {
-        Task<IBusinessResult> ModifyPermissionAsync(List<Permission> lstAddPermissions, List<Permission> lstRemovePermissions);
-        Task<IBusinessResult> DeleteAsync(int roleId);
-        
+        Task<IBusinessResult> CreateOrModifyPermissionAsync(Permission permission);
+        Task<IBusinessResultValue<List<Permission>>> LoadRolePermission(int roleId);
     }
 }

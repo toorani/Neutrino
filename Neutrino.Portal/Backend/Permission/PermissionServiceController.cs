@@ -24,39 +24,47 @@ namespace Neutrino.Portal.WebApiControllers
         #region [ Varibale(s) ]
         private readonly IPermissionManager permissionManager;
         private readonly IPermissionBS businessService;
-        private readonly IEntityListLoader<ApplicationAction> appActionLoader;
         #endregion
 
         #region [ Constructor(s) ]
-        public PermissionServiceController(IPermissionManager permissionManager
-            , IPermissionBS permissionBS
-            , IEntityListLoader<ApplicationAction> appActionLoader)
+        public PermissionServiceController(IPermissionManager permissionManager, IPermissionBS permissionBS)
         {
             this.permissionManager = permissionManager;
             businessService = permissionBS;
-            this.appActionLoader = appActionLoader;
         }
         #endregion
 
         #region [ Public Method(s) ]
-      
-        public async Task<HttpResponseMessage> RemovePermission(HttpRequestMessage request, PermissionViewModel postedModel)
+        [Route("addOrModifyPermission"),HttpPost]
+        public async Task<HttpResponseMessage> AddOrModifyPermission(PermissionViewModel postedModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "the model is invalid");
-            }
+            var mapper = GetMapper();
+            var entity = mapper.Map<PermissionViewModel, Permission>(postedModel);
 
-            IBusinessResult result = await businessService.DeleteAsync(postedModel.RoleId);
+            IBusinessResult result = await businessService.CreateOrModifyPermissionAsync(entity);
             if (result.ReturnStatus == false)
             {
                 return CreateErrorResponse(result);
             }
-            return Request.CreateResponse(HttpStatusCode.OK, result.ReturnMessage);
+            return Request.CreateResponse(HttpStatusCode.OK, result);
+        }
+
+        [Route("getRolePermission")]
+        public async Task<HttpResponseMessage> GetRolePermission(int roleId)
+        {
+            var lst_permissions = await businessService.LoadRolePermission(roleId);
+            if (lst_permissions.ReturnStatus == false)
+            {
+                return CreateErrorResponse(lst_permissions);
+            }
+            var mapper = GetMapper();
+            var result = mapper.Map<List<Permission>, PermissionViewModel>(lst_permissions.ResultValue);
+            result.RoleId = roleId;
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
         [Route("getUserPermission"), HttpPost]
-        public HttpResponseMessage GetUserPermission(HttpRequestMessage request)
+        public HttpResponseMessage GetUserPermission()
         {
             List<UserAccessToken> userAccess = new List<UserAccessToken>();
             int userId = User.GetUserId();
@@ -83,14 +91,12 @@ namespace Neutrino.Portal.WebApiControllers
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Permission, PermissionViewModel>()
-                .ReverseMap();
-                cfg.CreateMap<DataList<Permission>, DataList<PermissionViewModel>>();
+                cfg.AddProfile(new PermissionMapperProfile());
                 cfg.AddProfile(new AccountMapperProfile());
             });
             return config.CreateMapper();
         }
-        
+
         #endregion
 
     }

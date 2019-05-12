@@ -11,12 +11,11 @@ namespace Neutrino.Portal.Models
     public class PermissionViewModel : ViewModelBase
     {
         public int RoleId { get; set; }
-        public List<AppActionPermissionViewModel> Actions { get; set; }
-        public RoleViewModel Role { get; set; }
+        public List<string> Urls { get; set; }
 
         public PermissionViewModel() 
         {
-            Actions = new List<AppActionPermissionViewModel>();
+            Urls = new List<string>();
         }
     }
 

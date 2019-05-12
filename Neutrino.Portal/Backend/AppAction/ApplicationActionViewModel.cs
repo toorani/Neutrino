@@ -17,18 +17,6 @@ namespace Neutrino.Portal.Models
         
     }
 
-    public class AppActionPermissionViewModel : ViewModelBase
-    {
-        public string HtmlUrl { get; set; }
-        
-        public AppActionPermissionViewModel()
-            : base()
-        {
-           
-        }
-
-    }
-
     public class UrlActionViewModel : ViewModelBase
     {
         public string HtmlUrl { get; set; }

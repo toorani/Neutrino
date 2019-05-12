@@ -23,6 +23,7 @@ namespace Neutrino.Data.EntityFramework
 
         #region [ Public Property(ies) ]
         public IEntityBaseRepository<AppMenu> AppMenuDataService { get; private set; }
+        public IEntityBaseRepository<ApplicationAction> ApplicationActionDataService { get; private set; }
         public IEntityBaseRepository<AppSetting> AppSettingDataService { get; private set; }
         public IEntityBaseRepository<Branch> BranchDataService { get; private set; }
         public IBranchGoalDS BranchGoalDataService { get; private set; }
@@ -69,6 +70,7 @@ namespace Neutrino.Data.EntityFramework
         #region [ Constructor(s) ]
         public NeutrinoUnitOfWork(NeutrinoContext context
             , IEntityBaseRepository<AppMenu> appMenuDS
+            , IEntityBaseRepository<ApplicationAction> applicationActionDS
             , IEntityBaseRepository<AppSetting> appSettingDS
             , IBranchReceiptDS branchReceiptDS
             , IBranchGoalDS branchGoalDS
@@ -114,6 +116,7 @@ namespace Neutrino.Data.EntityFramework
             this.context = context;
             AppMenuDataService = appMenuDS;
             AppSettingDataService = appSettingDS;
+            ApplicationActionDataService = applicationActionDS;
             BranchReceiptDataService = branchReceiptDS;
             BranchGoalDataService = branchGoalDS;
             BranchDataService = branchDS;
@@ -153,7 +156,7 @@ namespace Neutrino.Data.EntityFramework
             BranchGoalPromotionDataService = branchGoalPromotionDS;
             PositionReceiptPromotionDataService = positionReceiptPromotionDS;
             PositionTypeDataService = positionTypeDS;
-    }
+        }
         #endregion
 
         #region [ Public Method(s) ]

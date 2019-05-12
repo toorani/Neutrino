@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
+using Espresso.Portal;
+using Neutrino.Entities;
+using Neutrino.Interfaces;
+using Neutrino.Portal.Models;
+using Neutrino.Portal.ProfileMapper;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Http;
-using AutoMapper;
-using Espresso.BusinessService.Interfaces;
-using Espresso.Portal;
-using jQuery.DataTables.WebApi;
-using Neutrino.Entities;
-using Neutrino.Interfaces;
-using Neutrino.Portal.Models;
 
 namespace Neutrino.Portal.WebApiControllers
 {
@@ -19,19 +18,13 @@ namespace Neutrino.Portal.WebApiControllers
     public class AppActionServiceController : ApiControllerBase
     {
         #region [ Varibale(s) ]
-        private readonly IEntityListByPagingLoader<ApplicationAction> appActionListByPagingLoader;
-        private readonly IEntityListByPagingLoader<ApplicationAction> appActionListLoader;
-        private readonly IEntityLoader<ApplicationAction> appActionLoader;
+        private readonly IApplicationActionBS applicationActionBS;
         #endregion
 
         #region [ Constructor(s) ]
-        public AppActionServiceController(IEntityListByPagingLoader<ApplicationAction> appActionListByPagingLoader
-            , IEntityListByPagingLoader<ApplicationAction> appActionListLoader
-            , IEntityLoader<ApplicationAction> appActionLoader)
+        public AppActionServiceController(IApplicationActionBS applicationActionBS)
         {
-            this.appActionListByPagingLoader = appActionListByPagingLoader;
-            this.appActionListLoader = appActionListLoader;
-            this.appActionLoader = appActionLoader;
+            this.applicationActionBS = applicationActionBS;
         }
         public AppActionServiceController()
         {
@@ -40,68 +33,6 @@ namespace Neutrino.Portal.WebApiControllers
         #endregion
 
         #region [ Public Method(s) ]
-        [Route("getDataGrid"), HttpPost]
-        public virtual async Task<HttpResponseMessage> GetDataGrid(JQueryDataTablesModel dataTablesModel)
-        {
-            var entities = await appActionListByPagingLoader.LoadAsync(
-                    pageNumber: dataTablesModel.iDisplayStart
-                    , pageSize: dataTablesModel.iDisplayLength
-                    , orderBy: UIHelper.GetOrderBy<ApplicationAction, ApplicationActionViewModel>(dataTablesModel.GetSortedColumns())
-                    , where: or => or.ActionUrl.Contains(dataTablesModel.sSearch)
-                    || or.HtmlUrl.Contains(dataTablesModel.sSearch)
-                    || dataTablesModel.sSearch == "");
-
-            if (entities.ReturnStatus == false)
-            {
-                return CreateErrorResponse(entities);
-            }
-
-            var mapper = GetMapper();
-            List<ApplicationActionViewModel> dataSource = mapper.Map<List<ApplicationAction>, List<ApplicationActionViewModel>>(entities.ResultValue);
-
-            return Request.CreateResponse(HttpStatusCode.OK
-                , DataTablesJson(items: dataSource
-                , totalRecords: entities.TotalRows
-                , totalDisplayRecords: entities.TotalRows
-                , sEcho: dataTablesModel.sEcho));
-
-        }
-        [Route("getTreeActionsList")]
-        public async Task<HttpResponseMessage> GetTreeActionList(int? selectedId)
-        {
-            var entities = await appActionListLoader.LoadAsync();
-
-            if (entities.ReturnStatus == false)
-            {
-                return CreateErrorResponse(entities);
-            }
-
-            List<jsTreeStaticViewModel> result = new List<jsTreeStaticViewModel>();
-            result.AddRange(from act in entities.ResultValue
-                            select new jsTreeStaticViewModel()
-                            {
-                                Id = act.Id.ToString(),
-                                ExtraData = act.ActionUrl + "," + act.HtmlUrl,
-                                State = new NodeState { Opened = true, Selected = selectedId == act.Id }
-                            });
-
-
-            return Request.CreateResponse(HttpStatusCode.OK, result);
-        }
-        [Route("getDataItem")]
-        public async Task<HttpResponseMessage> GetDataItem(int id)
-        {
-            var entity = await appActionLoader.LoadAsync(id);
-            if (entity.ReturnStatus == false)
-            {
-                return CreateErrorResponse(entity);
-            }
-
-            var mapper = GetMapper();
-            var dataModelView = mapper.Map<ApplicationActionViewModel>(entity.ResultValue);
-
-            return CreateViewModelResponse(dataModelView, entity);
-        }
         [Route("getAllAction"), HttpGet]
         public HttpResponseMessage GetAllActions()
         {
@@ -150,13 +81,32 @@ namespace Neutrino.Portal.WebApiControllers
 
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
-
-        [Route("addOrModify"),HttpPost]
-        public Task<HttpResponseMessage> AddOrModify(UrlActionViewModel postedViewModel)
+        [Route("getActionsByUrl"), HttpGet]
+        public async Task<HttpResponseMessage> GetActionsByUrl(string htmlUrl)
         {
+            var entity = await applicationActionBS.EntityListLoader.LoadListAsync(x => x.HtmlUrl == htmlUrl);
+            if (entity.ReturnStatus == false)
+            {
+                return CreateErrorResponse(entity);
+            }
+            var mapper = GetMapper();
+            var result = mapper.Map<List<ApplicationAction>, UrlActionViewModel>(entity.ResultValue);
 
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
+        [Route("addOrModify"), HttpPost]
+        public async Task<HttpResponseMessage> AddOrModify(UrlActionViewModel postedViewModel)
+        {
+            var mapper = GetMapper();
+            var applicationActions = mapper.Map<UrlActionViewModel, List<ApplicationAction>>(postedViewModel);
+            var businessResult = await applicationActionBS.CreateOrModify(applicationActions);
+            if (businessResult.ReturnStatus == false)
+            {
+                return CreateErrorResponse(businessResult);
+            }
 
+            return Request.CreateResponse(HttpStatusCode.OK, businessResult);
+        }
         #endregion
 
         #region [ Private Method(s) ]
@@ -164,14 +114,7 @@ namespace Neutrino.Portal.WebApiControllers
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<ApplicationAction, AppActionPermissionViewModel>()
-                .ConstructUsing(vm => new AppActionPermissionViewModel())
-                .ReverseMap();
-
-                cfg.CreateMap<ApplicationAction, ApplicationActionViewModel>()
-                .ConstructUsing(vm => new ApplicationActionViewModel())
-                .ReverseMap();
-
+                cfg.AddProfile(new ApplicationActionMapperProfile());
             });
             return config.CreateMapper();
         }

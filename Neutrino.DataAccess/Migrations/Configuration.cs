@@ -269,20 +269,24 @@
             };
 
 
-            UserRole userRole = new UserRole
+            //UserRole userRole = new UserRole
+            //{
+            //    Role = new Role { Name = "Admin", IsUsingBySystem = true },
+            //    User = new User
+            //    {
+            //        UserName = "admin",
+            //        PasswordHash = "AKT/sERhGF/k9CnbDnrWhNeG5nuQZRuLFQAqLrqq8cHBvAQcEFaKO6Yma3kn5qW86g==",
+            //        PhoneNumber = "09125139301",
+            //        Name = "admin",
+            //        LastName = "admin",
+            //        Email = "elit.neutrino@gmail.com"
+            //    }
+            //};
+            roles.ForEach(x =>
             {
-                Role = new Role { Name = "Admin", IsUsingBySystem = true },
-                User = new User
-                {
-                    UserName = "admin",
-                    PasswordHash = "AKT/sERhGF/k9CnbDnrWhNeG5nuQZRuLFQAqLrqq8cHBvAQcEFaKO6Yma3kn5qW86g==",
-                    PhoneNumber = "09125139301",
-                    Name = "admin",
-                    LastName = "admin",
-                    Email = "elit.neutrino@gmail.com"
-                }
-            };
-            context.Roles.AddOrUpdate(x => x.Name, roles.ToArray());
+                context.Roles.AddOrUpdate(r => r.Name, x);
+            });
+
 
 
             //NeutrinoUser adminUser = new NeutrinoUser

@@ -23,14 +23,6 @@ namespace Neutrino.Entities
         /// </summary>
         public int Year { get; set; }
         /// <summary>
-        /// تاریخ شروع
-        /// </summary>
-        public DateTime StartDate { get; set; }
-        /// <summary>
-        /// تاریخ پایان
-        /// </summary>
-        public DateTime EndDate { get; set; }
-        /// <summary>
         ///  مقدار مشخص شده مرکز برای دستیابی به هدف وصول کل
         /// </summary>
         public decimal TotalReceiptSpecifiedAmount { get; set; }

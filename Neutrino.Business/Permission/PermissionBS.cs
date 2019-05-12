@@ -1,11 +1,13 @@
 ﻿using Espresso.BusinessService;
 using Espresso.BusinessService.Interfaces;
+using Espresso.Core;
 using Neutrino.Data.EntityFramework;
 using Neutrino.Entities;
 using Neutrino.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Neutrino.Business
@@ -21,14 +23,42 @@ namespace Neutrino.Business
         #endregion
 
         #region [ Public Method(s) ]
-        public async Task<IBusinessResult> ModifyPermissionAsync(List<Permission> lstAddPermissions, List<Permission> lstRemovePermissions)
+        public async Task<IBusinessResult> CreateOrModifyPermissionAsync(Permission permission)
         {
             var result = new BusinessResult();
 
             try
             {
-                lstAddPermissions.ForEach(x => unitOfWork.PermissionDataService.Insert(x));
-                lstRemovePermissions.ForEach(x => unitOfWork.PermissionDataService.Delete(x));
+                var lst_existPermissions = await unitOfWork.PermissionDataService.GetAsync(x => x.RoleId == permission.RoleId
+                , includes: x => x.ApplicationAction);
+
+                var lst_newAppActions = await unitOfWork.ApplicationActionDataService
+                    .GetAsync(x => permission.Urls.Contains(x.HtmlUrl));
+
+                var lst_existAppActions = lst_existPermissions.Select(x => x.ApplicationAction);
+
+                var lst_removeAppActions = lst_existAppActions.Except(lst_newAppActions, x => x.Id);
+                var lst_insertAppActions = lst_newAppActions.Except(lst_existAppActions, x => x.Id);
+
+                (from revAct in lst_removeAppActions
+                 join extPermission in lst_existPermissions
+                 on revAct.Id equals extPermission.ApplicationActionId
+                 select extPermission)
+                .ToList()
+                .ForEach(extPermission =>
+                {
+                    unitOfWork.PermissionDataService.Delete(extPermission);
+                });
+
+                foreach (var act in lst_insertAppActions)
+                {
+                    unitOfWork.PermissionDataService.Insert(new Permission
+                    {
+                        RoleId = permission.RoleId,
+                        ApplicationActionId = act.Id
+                    });
+                }
+
                 await unitOfWork.CommitAsync();
                 result.ReturnStatus = true;
                 result.ReturnMessage.Add("سطوح دسترسی برای نقش اننخاب شده با موفقیت تعریف شد");
@@ -44,23 +74,14 @@ namespace Neutrino.Business
             return result;
 
         }
-        public async Task<IBusinessResult> DeleteAsync(int roleId)
+        
+        public async Task<IBusinessResultValue<List<Permission>>> LoadRolePermission(int roleId)
         {
-            var result = new BusinessResult();
+            var result = new BusinessResultValue<List<Permission>>();
             try
             {
-                List<Permission> permissions = await unitOfWork.PermissionDataService.GetAsync(where: x => x.RoleId == roleId);
-                permissions.ForEach(x =>
-                {
-                    unitOfWork.PermissionDataService.Delete(x);
-                });
-                await unitOfWork.CommitAsync();
-                result.ReturnStatus = true;
-                result.ReturnMessage.Add("سطوح دسترسی برای نقش اننخاب شده با موفقیت حذف شد");
-            }
-            catch (DbEntityValidationException ex)
-            {
-                result.PopulateValidationErrors(ex);
+                result.ResultValue = await unitOfWork.PermissionDataService.GetAsync(x => x.RoleId == roleId
+                , includes: x => x.ApplicationAction);
             }
             catch (Exception ex)
             {
@@ -68,7 +89,7 @@ namespace Neutrino.Business
             }
             return result;
         }
-        
+
         #endregion
 
 

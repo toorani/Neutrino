@@ -32,13 +32,6 @@ angular.module("neutrinoProject").register.controller('item.actionController',
                     getTreeActions();
                 }, 500);
 
-                //if ($scope.viewModel.id != 0) {
-                //    loadEntity();
-                //}
-                //else {
-                //    getTreeActionsList();
-                //}
-
             }
 
             var getAppMenu = function () {
@@ -67,18 +60,6 @@ angular.module("neutrinoProject").register.controller('item.actionController',
                     });
             }
 
-            var loadEntity = function () {
-                ajaxService.ajaxCall({ id: $scope.viewModel.id }, "api/appActionService/getDataItem", 'get',
-                    function (response) {
-                        $scope.viewModel = response.data;
-                        getTreeActionsList();
-                    },
-                    function (response) {
-                        alertService.showError(response);
-                        alertService.setValidationErrors($scope, response.data.validationErrors);
-                    });
-            }
-
             $scope.searchAction_keyup = function () {
                 var to = false;
                 if (to) {
@@ -94,6 +75,30 @@ angular.module("neutrinoProject").register.controller('item.actionController',
             $scope.selectMenuNode = function (node, selected, event) {
                 $scope.viewModel.htmlUrl = selected.node.original.extraData;
                 $scope.viewModel.actions = [];
+                $scope.searchAction = '';
+                $scope.searchAction_keyup();
+
+                $scope.treeInstance_action.jstree(true).close_all();
+                $scope.treeInstance_action.jstree(true).open_node(0);
+                $scope.treeInstance_action.jstree(true).deselect_all(true);
+
+                if ($scope.viewModel.htmlUrl !== null) {
+                    ajaxService.ajaxCall({ htmlUrl: $scope.viewModel.htmlUrl }, "api/appActionService/getActionsByUrl", 'get',
+                        function (response) {
+                            response.data.actions.forEach(selAct => {
+                                var findItems = $scope.allAppActions.filter((act) => act.text == selAct);
+                                if (findItems.length == 1) {
+                                    $scope.viewModel.actions.push(findItems[0]);
+                                    $scope.treeInstance_action.jstree(true).select_node(findItems[0].id);
+                                }
+                            });
+
+                        },
+                        function (response) {
+                            alertService.showError(response);
+                        });
+                }
+               
             };
             $scope.selectActionNode = function (node, selected, event) {
 
@@ -101,21 +106,17 @@ angular.module("neutrinoProject").register.controller('item.actionController',
 
             $scope.submit = function () {
                 let selected_actions = $scope.treeInstance_action.jstree(true).get_selected(true);
-                $scope.viewModel.appActions = [];
+                $scope.viewModel.actions = [];
                 selected_actions.filter((act) => act.parent != 0).forEach(act => {
                     $scope.viewModel.actions.push(act.text);
                 })
-
-                
-                //ajaxService.ajaxPost($scope.viewModel, "api/appActionService/add",
-                //    function (response) {
-                //        alertService.showSuccess(response.data.actionResult.returnMessage);
-                //        $scope.viewModel.id = response.data.id;
-                //    },
-                //    function (response) {
-                //        alertService.showError(response);
-                //        alertService.setValidationErrors($scope, response.data.validationErrors);
-                //    });
+                ajaxService.ajaxPost($scope.viewModel, "api/appActionService/addOrModify",
+                    function (response) {
+                        alertService.showSuccess(response.data.returnMessage);
+                    },
+                    function (response) {
+                        alertService.showError(response);
+                    });
             }
 
             $scope.cancel = function () {

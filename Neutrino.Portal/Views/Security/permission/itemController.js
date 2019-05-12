@@ -1,17 +1,17 @@
 ﻿console.log("security item.permissionController")
 
 angular.module("neutrinoProject").register.controller('item.permissionController',
-    ['$scope', '$location', '$filter', '$timeout', '$routeParams', 'ajaxService', 'modalService', 'alertService',
-        function ($scope, $location, $filter, $timeout, $routeParams, ajaxService, modalService, alertService) {
+    ['$scope', '$location', '$timeout', '$routeParams', 'ajaxService', 'modalService', 'alertService',
+        function ($scope, $location, $timeout, $routeParams, ajaxService, modalService, alertService) {
 
             "use strict";
             $scope.viewModel = {
-                roleId: 0,
-                actions: []
+                roleId: null,
+                urls: []
             }
             $scope.roleName = '';
             $scope.appMenu = [{ "id": "0", "text": "نوترینو", "parent": "#", "state": { "opened": true, "disabled": false } }];
-            
+            $scope.roles = [];
             $scope.treeConfig = {
                 core: {
                     multiple: false,
@@ -28,8 +28,8 @@ angular.module("neutrinoProject").register.controller('item.permissionController
 
             $scope.initializeController = function () {
                 $scope.title = 'تعیین سطوح دسترسی';
-                $scope.viewModel.roleId = $routeParams.id;
-                getRoleInfo();
+                
+                getRoles();
                 $timeout(function () {
                     getAppMenu();
                 }, 500);
@@ -37,10 +37,35 @@ angular.module("neutrinoProject").register.controller('item.permissionController
             }
 
             
-            var getRoleInfo = function () {
-                ajaxService.ajaxCall({ roleId: $scope.viewModel.roleId }, "api/accountService/getRoleInfo", 'get',
+            $scope.role_changed = function () {
+                $scope.treeInstance.jstree(true).deselect_all(true);
+                getRolePermission();
+            }
+            $scope.submit = function () {
+                var selected_nodes = $scope.treeInstance.jstree(true).get_selected(true);
+                $scope.viewModel.urls = [];
+                selected_nodes.forEach(menuNode => {
+                    if (menuNode.original.extraData != null) {
+                        $scope.viewModel.urls.push(menuNode.original.extraData);
+                    }
+                    
+                });
+                ajaxService.ajaxPost($scope.viewModel, "api/permissionService/addOrModifyPermission",
                     function (response) {
-                        $scope.roleName = response.data.faName;
+                        alertService.showSuccess(response.data.returnMessage);
+                    },
+                    function (response) {
+                        alertService.showError(response);
+                    });
+            }
+            $scope.cancel = function () {
+                $location.url('security/permission/index');
+            }
+
+            var getRoles = function () {
+                ajaxService.ajaxCall({ roleId: $scope.viewModel.roleId }, "api/accountService/getRoles", 'get',
+                    function (response) {
+                        $scope.roles = response.data;
                     },
                     function (response) {
                         alertService.showError(response);
@@ -56,35 +81,26 @@ angular.module("neutrinoProject").register.controller('item.permissionController
                     function (response) {
                         alertService.showError(response);
                     })
-                
+
             }
-            
-            var loadEntity = function () {
-                ajaxService.ajaxPost($scope.viewModel.id, "api/appActionService/getDataItem",
+            var getRolePermission = function () {
+                ajaxService.ajaxCall({ roleId: $scope.viewModel.roleId}, "api/permissionService/getRolePermission",'get',
                     function (response) {
                         $scope.viewModel = response.data;
+                        $scope.treeInstance.jstree(true).get_selected(true);
+                        $scope.viewModel.urls.forEach(htmlUrl => {
+                            var findItems = $scope.appMenu.filter((mni) => mni.extraData == htmlUrl);
+                            if (findItems.length == 1) {
+                                $scope.treeInstance.jstree(true).select_node(findItems[0].id);
+                            }
+                        });
+                        //$scope.treeInstance.jstree(true).close_all();
+                        //$scope.treeInstance.jstree(true).open_node(0);
+                        
                     },
                     function (response) {
-                        alertService.showError(response.data.transactionalData.returnMessage);
-                        alertService.setValidationErrors($scope, response.data.validationErrors);
+                        alertService.showError(response);
                     });
             }
-
-            $scope.submit = function () {
-                var selected_nodes = $scope.treeInstance.jstree(true).get_selected();
-                ajaxService.ajaxPost($scope.viewModel, "api/permissionService/addPermission",
-                    function (response) {
-                        alertService.showSuccess(response.data.returnMessage);
-                    },
-                    function (response) {
-                        alertService.showError(response.data.returnMessage);
-                        alertService.setValidationErrors($scope, response.data.validationErrors);
-                    });
-            }
-            $scope.cancel = function () {
-                $location.url('security/permission/index');
-            }
-            
-
 
         }]);
