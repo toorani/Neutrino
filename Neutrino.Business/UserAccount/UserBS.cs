@@ -229,13 +229,10 @@ namespace Neutrino.Business
                 await unitOfWork.CommitAsync();
             }
         }
-
-
         public void Dispose()
         {
             //
         }
-
         #endregion
 
         #region [ NotImplemented ]
@@ -243,7 +240,6 @@ namespace Neutrino.Business
         {
             throw new NotImplementedException();
         }
-
         public Task<bool> GetEmailConfirmedAsync(User user)
         {
             throw new NotImplementedException();

@@ -442,7 +442,7 @@
     <Compile Include="Backend\UserAccount\UserValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Backend\UserAccount\RestpasswordTemplate.html">
+    <Content Include="Views\Account\changepassword\RestpasswordTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\account.css" />
@@ -593,7 +593,7 @@
     <Content Include="Scripts\jquery.dataTables\media\js\jquery.dataTables.min1.js" />
     <Content Include="Scripts\jquery\jquery.smartWizard.js" />
     <Content Include="Scripts\plugins\icheck\angular-icheck.js" />
-    <Content Include="Scripts\plugins\ngJsTree\jstree.min.js" />
+    <Content Include="Scripts\plugins\ngJsTree\jsTree.directive.js" />
     <Content Include="Scripts\plugins\ngJsTree\ngJsTree.min.js" />
     <Content Include="Scripts\plugins\persianDate\persian-date.js" />
     <Content Include="Scripts\plugins\persianDate\persian-date.min.js" />

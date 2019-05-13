@@ -25,8 +25,7 @@
                             <div class="col-md-8">
                                 <ui-select ng-model="titleSelected.item"
                                            reset-search-input="false" required="true"
-                                           on-select="ontitleSelected_selected($item)"
-                                           >
+                                           on-select="ontitleSelected_selected($item)">
                                     <ui-select-match placeholder="نام دسته دارویی را انتخاب کنید">
                                         <span>
                                             {{$select.selected.name || $select.search}}

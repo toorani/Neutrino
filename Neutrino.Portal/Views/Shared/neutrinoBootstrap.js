@@ -7,7 +7,7 @@ console.log("Neutrino Bootstrap");
         , 'ui.select', 'ngToast', 'blockUI', 'oc.lazyLoad'
         , 'ngJsTree', 'ADM-dateTimePicker', 'dynamicNumber', 'multipleSelect'
         , 'rzModule', 'mgcrea.ngStrap', 'sticky', 'angularFileUpload', 'mgo-angular-wizard'
-        , 'angular-icheck', 'angular.filter'
+        , 'angular-icheck', 'angular.filter', 'jsTree.directive'
     ]);
     var animationClassNameFilter = /vnd-animated/
 

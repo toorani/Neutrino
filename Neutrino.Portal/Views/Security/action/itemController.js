@@ -10,8 +10,8 @@ angular.module("neutrinoProject").register.controller('item.actionController',
                 actions: []
             }
 
-            $scope.appMenu = [{ "id": "0", "text": "نوترینو", "parent": "#", "state": { "opened": true, "disabled": false } }];
-            $scope.allAppActions = [{ "id": "0", "text": "نوترینو", "parent": "#", "state": { "opened": true, "disabled": false } }];
+            $scope.appMenu = [{ "id": "0", "text": "نوترینو", "parent": "#", "state": { "opened": true } }];
+            $scope.allAppActions = [{ "id": "0", "text": "نوترینو", "parent": "#", "state": { "opened": true} }];
             $scope.treeConfig_menu = {
                 core: { check_callback: true, worker: true }
             };

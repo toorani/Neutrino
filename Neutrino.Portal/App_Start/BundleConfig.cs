@@ -95,8 +95,9 @@ namespace Neutrino.Portal
            ));
 
             bundles.Add(new ScriptBundle("~/bundles/jPlugins").Include(
-               "~/Scripts/plugins/ngJsTree/jstree.min.js"
+               "~/Scripts/plugins/ngJsTree/jstree.js"
                , "~/Scripts/plugins/ngJsTree/ngJsTree.min.js"
+               , "~/Scripts/plugins/ngJsTree/jsTree.directive.js"
                , "~/Scripts/plugins/datepicker/ADM-dateTimePicker.min.js"
                , "~/Scripts/plugins/number/dynamic-number.min.js"
                , "~/Scripts/plugins/multiSelect/multiple-select.min.js"
