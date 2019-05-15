@@ -9,7 +9,8 @@ using Neutrino.Entities;
 
 namespace Neutrino.Interfaces
 {
-    public interface IAppMenuBS : IBusinessService, IEnabledEntityListLoader<AppMenu>
+    public interface IAppMenuBS : IBusinessService
     {
+        Task<IBusinessResultValue<List<AppMenu>>> LoadApplicationMenu(List<string> lstUrlPermission, bool checkAccess);
     }
 }

@@ -50,7 +50,6 @@ namespace Neutrino.Data.EntityFramework
         public DbSet<Branch> Branches { get; set; }
         public DbSet<BranchGoal> BranchGoals { get; set; }
         public DbSet<GoalType> GoalTypes { get; set; }
-        public DbSet<AppSetting> AppSettings { get; set; }
         public DbSet<OrgStructure> OrgStructures { get; set; }
         public DbSet<OrgStructureShare> OrgStructureShare { get; set; }
         public DbSet<SupplierType> SupplierTypes { get; set; }

@@ -1,4 +1,4 @@
-/// <reference path="jquery.validationEngine-hr.js" />
+
 (function ($) {
     $.fn.validationEngineLanguage = function () {
     };

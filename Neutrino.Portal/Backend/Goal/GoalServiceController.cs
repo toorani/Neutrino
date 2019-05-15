@@ -5,6 +5,7 @@ using Espresso.Portal;
 using jQuery.DataTables.WebApi;
 using Neutrino.Entities;
 using Neutrino.Interfaces;
+using Neutrino.Portal.Attributes;
 using Neutrino.Portal.Models;
 using Neutrino.Portal.ProfileMapper;
 using System;
@@ -49,7 +50,7 @@ namespace Neutrino.Portal.WebApiControllers
             var result = mapper.Map<Goal, GoalViewModel>(goalEntity.ResultValue);
             return CreateViewModelResponse(result, goalEntity);
         }
-        [Route("getDataGrid"), HttpPost]
+        [Route("getDataGrid"), HttpPost, WebApiAuthorize]
         public async Task<HttpResponseMessage> GetDataGrid(JQueryDataTablesModel dataTablesModel)
         {
             GoalTypeEnum? goalTypeId = GoalTypeEnum.Distributor;

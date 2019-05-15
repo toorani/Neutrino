@@ -103,8 +103,8 @@
                                     <br />
 
                                     <div class="modal-footer">
-                                        <button type="submit" name="Add"
-                                                ng-if="checkActionUrlPermissionByHtmlUrl('api/goalNonFulfillment/') && !viewModel.isGoalUsed"
+                                        <button type="submit" 
+                                                ng-if="!viewModel.isGoalUsed"
                                                 class="btn btn-success">
                                             <i class="fa fa-check"></i>
                                             <span>ثبت</span>

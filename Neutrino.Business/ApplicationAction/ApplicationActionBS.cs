@@ -25,6 +25,8 @@ namespace Neutrino.Business
             , AbstractValidator<List<ApplicationAction>> validator) : base(unitOfWork)
         {
             this.validator = validator;
+            
+            
         }
 
         [Inject]

@@ -12,14 +12,17 @@ namespace Neutrino.Interfaces
     public interface IUserBS : IBusinessService, IUserRoleStore<User, int>,
         IUserStore<User, int>,
         IUserPasswordStore<User, int>,
-        IUserEmailStore<User, int>
+        IUserEmailStore<User, int>,
+        IUserLockoutStore<User, int>,
+        IUserTwoFactorStore<User,int>,
+        IUserClaimStore<User,int>
     {
         Task<IBusinessResultValue<User>> LoadUserAsync(int userId);
         Task<IBusinessLoadByPagingResult<User>> LoadAsync(string searchExpr
            , Func<IQueryable<User>, IOrderedQueryable<User>> orderBy = null
            , int pageNumber = 0
            , int pageSize = 15);
-        
+
 
     }
 }

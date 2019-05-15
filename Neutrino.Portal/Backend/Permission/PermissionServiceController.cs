@@ -1,20 +1,16 @@
-﻿using System;
+﻿using AutoMapper;
+using Espresso.BusinessService.Interfaces;
+using Espresso.Core;
+using Espresso.Portal;
+using Neutrino.Entities;
+using Neutrino.Interfaces;
+using Neutrino.Portal.Models;
+using Neutrino.Portal.ProfileMapper;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using AutoMapper;
-using Espresso.Core;
-
-using Neutrino.Entities;
-using Neutrino.Portal.Models;
-using Neutrino.Portal.ProfileMapper;
-using Neutrino.Core.SecurityManagement;
-using Espresso.Portal;
-using Neutrino.Interfaces;
-using Espresso.BusinessService.Interfaces;
 
 namespace Neutrino.Portal.WebApiControllers
 {
@@ -22,14 +18,12 @@ namespace Neutrino.Portal.WebApiControllers
     public class PermissionServiceController : ApiControllerBase
     {
         #region [ Varibale(s) ]
-        private readonly IPermissionManager permissionManager;
         private readonly IPermissionBS businessService;
         #endregion
 
         #region [ Constructor(s) ]
-        public PermissionServiceController(IPermissionManager permissionManager, IPermissionBS permissionBS)
+        public PermissionServiceController(IPermissionBS permissionBS)
         {
-            this.permissionManager = permissionManager;
             businessService = permissionBS;
         }
         #endregion
@@ -62,28 +56,6 @@ namespace Neutrino.Portal.WebApiControllers
             result.RoleId = roleId;
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
-
-        [Route("getUserPermission"), HttpPost]
-        public HttpResponseMessage GetUserPermission()
-        {
-            List<UserAccessToken> userAccess = new List<UserAccessToken>();
-            int userId = User.GetUserId();
-            List<Permission> userPermissions = permissionManager.GetUserAccess(userId);
-
-            userPermissions.ForEach(x =>
-            {
-                userAccess.Add(new UserAccessToken
-                {
-                    ActionId = x.ApplicationActionId,
-                    RoleId = x.RoleId,
-                    HtmlUrl = x.ApplicationAction.HtmlUrl,
-                    ActionUrl = x.ApplicationAction.ActionUrl,
-
-                });
-            });
-            return Request.CreateResponse(HttpStatusCode.OK, userAccess);
-        }
-
         #endregion
 
         #region [ Private Method(s) ]

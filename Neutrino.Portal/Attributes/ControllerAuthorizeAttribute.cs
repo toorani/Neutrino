@@ -9,24 +9,20 @@ namespace Neutrino.Portal.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     public class ControllerAuthorizeAttribute : AuthorizeAttribute
     {
-
-        private IAppSettingManager appSettingManager;
-
         #region [ Varibale(s) ]
-
+        private readonly bool checkAccessEnabled = true;
         #endregion
 
         #region [ Constructor(s) ]
         public ControllerAuthorizeAttribute()
         {
-            //appSettingManager = NinjectHttpContainer.Resolve<IAppSettingManager>();
+            checkAccessEnabled = IdentityConfig.CheckAccessEnabled;
         }
         #endregion
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            appSettingManager = NinjectHttpContainer.Resolve<IAppSettingManager>();
-            if (getCheckAccess().Value)
+            if (checkAccessEnabled)
             {
                 return base.AuthorizeCore(httpContext);
             }
@@ -35,17 +31,10 @@ namespace Neutrino.Portal.Attributes
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            appSettingManager = NinjectHttpContainer.Resolve<IAppSettingManager>();
-            if (getCheckAccess().Value)
+            if (checkAccessEnabled)
             {
                 base.OnAuthorization(filterContext);
             }
-        }
-
-        private bool? getCheckAccess()
-        {
-            bool? checkAccess = appSettingManager.GetValue<bool>("checkAccess");
-            return checkAccess == null ? true : checkAccess.Value;
         }
     }
 }

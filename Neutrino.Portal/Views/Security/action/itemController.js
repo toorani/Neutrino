@@ -23,7 +23,7 @@ angular.module("neutrinoProject").register.controller('item.actionController',
             $scope.searchAction = '';
 
             $scope.initializeController = function () {
-                $scope.title = 'تعریف فعالیت';
+                $scope.title = 'مدیریت فعالیت ها';
                 $scope.viewModel.id = ($routeParams.id || 0);
                 $timeout(function () {
                     getAppMenu();

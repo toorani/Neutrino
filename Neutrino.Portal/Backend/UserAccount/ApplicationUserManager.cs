@@ -47,7 +47,7 @@ namespace Neutrino.Portal
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-
+            
             // Add custom user claims here
             return userIdentity;
         }

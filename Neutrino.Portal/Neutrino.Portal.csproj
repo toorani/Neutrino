@@ -80,10 +80,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\Espresso.Entites.dll</HintPath>
     </Reference>
-    <Reference Include="Espresso.Identity, Version=2018.10.16.260, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\build\Espresso.Identity.dll</HintPath>
-    </Reference>
     <Reference Include="Espresso.InjectModules, Version=2018.10.16.33, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\Espresso.InjectModules.dll</HintPath>
@@ -780,8 +776,6 @@
     <Content Include="Views\BranchGoal\itemController.js" />
     <Content Include="Views\BranchReceiptGoalPercent\item.html" />
     <Content Include="Views\BranchReceiptGoalPercent\itemController.js" />
-    <Content Include="Views\FinalOperationRpt\item.html" />
-    <Content Include="Views\FinalOperationRpt\itemController.js" />
     <Content Include="Views\GoalNonFulfillment\item.html" />
     <Content Include="Views\GoalNonFulfillment\itemController.js" />
     <Content Include="Views\Goal\elite\aggregation\index.html" />
@@ -847,10 +841,6 @@
     <Content Include="Views\Promotion\overviewrpt\excelTemplate.html" />
     <Content Include="Views\QuantityConditions\index.html" />
     <Content Include="Views\QuantityConditions\indexController.js" />
-    <Content Include="Views\Security\permission\index.html" />
-    <Content Include="Views\Security\action\index.html" />
-    <Content Include="Views\Security\permission\indexController.js" />
-    <Content Include="Views\Security\action\indexController.js" />
     <Content Include="Views\Security\permission\item.html" />
     <Content Include="Views\Security\action\item.html" />
     <Content Include="Views\Security\permission\itemController.js" />
@@ -916,10 +906,6 @@
     <ProjectReference Include="..\Neutrino.Business\Neutrino.Business.csproj">
       <Project>{02298fdd-ee84-47b1-97e9-11cf68b03adc}</Project>
       <Name>Neutrino.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Neutrino.Core\Neutrino.Core.csproj">
-      <Project>{ef06262a-df23-43d5-a928-a3426cbef854}</Project>
-      <Name>Neutrino.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Neutrino.DataAccess\Neutrino.Data.EntityFramework.csproj">
       <Project>{f58dba9d-0b74-4ac6-b3c8-be32769d2d7f}</Project>

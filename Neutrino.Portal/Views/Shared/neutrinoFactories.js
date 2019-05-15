@@ -121,18 +121,6 @@
                 return false;
             }
             return true;
-
-
-            //if (this.isLoadPermission() == false) {
-            //    this.loadUserPermission().
-            //    then(function (permission) {
-            //        var hasAccess = $filter('filter')(permission, { htmlUrl: htmlUrl, actionTypeId: actionTypeId }, true);
-            //        return hasAccess.length != 0;
-            //    });
-            //}
-            //else {
-
-            //}
         },
         checkActionUrlPermissionByHtmlUrl: function (htmlUrl, actionUrl) {
             if (checkAccess) {

@@ -1,12 +1,4 @@
-﻿using System.Collections.Generic;
-using Espresso.DataAccess.Interfaces;
-using FluentValidation;
-using Neutrino.Business;
-using Neutrino.Core.SecurityManagement;
-using Neutrino.Data.EntityFramework;
-using Neutrino.Data.EntityFramework.DataServices;
-using Neutrino.Entities;
-using Neutrino.Interfaces;
+﻿using Neutrino.Data.EntityFramework;
 using Ninject.Modules;
 
 namespace Neutrino.InjectModules

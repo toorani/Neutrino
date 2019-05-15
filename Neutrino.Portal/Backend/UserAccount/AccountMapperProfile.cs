@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Neutrino.Business;
 using Neutrino.Entities;
 using Neutrino.Portal.Models;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Neutrino.Portal.ProfileMapper
         {
             CreateMap<RegisterViewModel, User>()
                 .ForMember(x => x.Roles, opt => opt.ResolveUsing((vm) => new List<UserRole>() { new UserRole { RoleId = vm.RoleId, UserId = vm.Id } }))
-                .ForMember(x => x.Claims, opt => opt.ResolveUsing((vm) => vm.BranchesUnderControl.Select(x => new UserClaim { ClaimType = "branch", ClaimValue = x.ToString(), UserId = vm.Id }).ToList()))
+                .ForMember(x => x.Claims, opt => opt.ResolveUsing((vm) => vm.BranchesUnderControl.Select(x => new UserClaim { ClaimType = ApplicationClaimTypes.BranchId, ClaimValue = x.ToString(), UserId = vm.Id }).ToList()))
                 .ReverseMap()
                 .ForMember(x => x.RoleId, opt => opt.ResolveUsing((dto) => dto.Roles.FirstOrDefault().RoleId))
                 .ForMember(x => x.BranchesUnderControl, opt => opt.ResolveUsing((dto) => dto.Claims.Select(x => x.ClaimValue)));

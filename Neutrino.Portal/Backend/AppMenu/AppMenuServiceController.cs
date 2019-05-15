@@ -3,6 +3,7 @@ using Espresso.BusinessService.Interfaces;
 using Espresso.Core;
 using Espresso.Portal;
 using Neutrino.Entities;
+using Neutrino.Portal.Attributes;
 using Neutrino.Portal.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace Neutrino.Portal.WebApiControllers
         #endregion
 
 
-        [Route("getAppMenu"), HttpGet]
+        [Route("getAppMenu"), HttpGet, WebApiAuthorize]
         public async Task<HttpResponseMessage> GetAppMenuAsync()
         {
 

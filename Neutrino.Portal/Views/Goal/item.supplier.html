@@ -114,15 +114,14 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" name="Add"
-                                    ng-if="(checkActionUrlPermissionByHtmlUrl('/api/GoalService/add') && goal.id == 0) || ( goal.id != 0 && checkActionUrlPermissionByHtmlUrl('/api/GoalService/edit'))"
+                            <button type="submit" 
                                     class="btn btn-success">
                                 <i class="fa fa-check"></i>
                                 <span>ثبت</span>
                             </button>
                            
                             <button type="button" class="btn btn-danger"
-                                    ng-if="goal.id != 0 && checkActionUrlPermissionByHtmlUrl('/api/GoalService/delete')"
+                                    ng-if="goal.id != 0"
                                     data-ng-click="delete_goal()">
                                 <i class="fa fa-trash-o"></i>
                                 <span>حذف</span>
@@ -329,15 +328,14 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="submit"
-                                                        ng-if="(checkActionUrlPermissionByHtmlUrl('/api/GoalService/add') && goal.id == 0) || ( goal.id != 0 && checkActionUrlPermissionByHtmlUrl('/api/GoalService/edit'))"
-                                                        name="Add" class="btn btn-success">
+                                                        class="btn btn-success">
                                                     <i class="fa fa-check"></i>
                                                     <span>ثبت</span>
                                                 </button>
 
                                                 <button class="btn btn-danger" type="button"
                                                         ng-click="goalStepDelete(step.id,$index)"
-                                                        ng-if="goal.id != 0 && checkActionUrlPermissionByHtmlUrl('/api/GoalService/delete')">
+                                                        ng-if="goal.id != 0">
                                                     <i class="fa fa-trash-o"></i>
                                                     <span>حذف</span>
                                                 </button>

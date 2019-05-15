@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="ApplicationAction\ApplicationActionBR.cs" />
     <Compile Include="ApplicationAction\ApplicationActionBS.cs" />
+    <Compile Include="AppMenu\AppMenuBS.cs" />
     <Compile Include="BranchReceiptGoalPercent\BranchReceiptGoalPercentBS.cs" />
     <Compile Include="BranchReceiptGoalPercent\BranchReceiptGoalPercentBR.cs" />
     <Compile Include="BranchReceipt\BranchReceiptBS.cs" />

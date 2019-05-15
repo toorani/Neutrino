@@ -22,7 +22,7 @@ namespace Neutrino.Entities
         public User()
             :base()
         {
-           
+            LockoutEnabled = false;
         }
     }
 }

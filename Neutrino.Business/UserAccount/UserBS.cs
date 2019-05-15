@@ -13,9 +13,18 @@ using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Espresso.Core;
+using System.Security.Claims;
 
 namespace Neutrino.Business
 {
+    public class ApplicationClaimTypes
+    {
+        public const string BranchId = "branchId";
+        public const string FullName = "fullName";
+        public const string HtmlUrl = "htmlUrl";
+        public const string ActionUrl = "actionUrl";
+    }
+
     public class UserBS : NeutrinoBusinessService, IUserBS
     {
 
@@ -42,7 +51,7 @@ namespace Neutrino.Business
                     .IncludeFilter(x => x.Roles.Select(r => r.Role))
                     .Where(x => (x.UserName.Contains(searchExpr) || x.Email.Contains(searchExpr)
                     || x.Name.Contains(searchExpr) || x.LastName.Contains(searchExpr)
-                    || x.Roles.Any(r => r.Role.FaName.Contains(searchExpr))) && x.Deleted == false && x.Roles.Any(r=>r.Role.IsUsingBySystem == false));
+                    || x.Roles.Any(r => r.Role.FaName.Contains(searchExpr))) && x.Deleted == false && x.Roles.Any(r => r.Role.IsUsingBySystem == false));
 
                 entites.TotalRows = await query.CountAsync();
 
@@ -80,7 +89,7 @@ namespace Neutrino.Business
         {
             var userExist = await unitOfWork.UserDataService.GetQuery()
                 .IncludeFilter(x => x.Roles.Where(r => r.Deleted == false))
-                .IncludeFilter(x => x.Claims.Where(r => r.Deleted == false && r.ClaimType == "branch"))
+                .IncludeFilter(x => x.Claims.Where(r => r.Deleted == false && r.ClaimType == ApplicationClaimTypes.BranchId))
                 .FirstOrDefaultAsync(x => x.Id == user.Id);
 
             userExist.Name = user.Name;
@@ -199,13 +208,14 @@ namespace Neutrino.Business
         public async Task<IList<string>> GetRolesAsync(User user)
         {
             var userFind = await (from usr in unitOfWork.UserDataService.GetQuery()
-                                  .AsNoTracking()
                                   .IncludeFilter(x => x.Roles.Where(r => r.Deleted == false))
                                   .IncludeFilter(x => x.Roles.Select(r => r.Role))
+                                  .AsNoTracking()
+
                                   where usr.Id == user.Id
                                   select usr).FirstOrDefaultAsync();
 
-            return userFind != null ? user.Roles.Select(x => x.Role.Name).ToList() : new List<string>();
+            return userFind != null ? userFind.Roles.Select(x => x.Role.Name).ToList() : new List<string>();
         }
         public async Task<bool> IsInRoleAsync(User user, string roleName)
         {
@@ -226,6 +236,117 @@ namespace Neutrino.Business
                 userFind.Email = email;
                 userFind.LastUpdated = DateTime.Now;
                 unitOfWork.UserDataService.Update(userFind);
+                await unitOfWork.CommitAsync();
+            }
+        }
+        public async Task<DateTimeOffset> GetLockoutEndDateAsync(User user)
+        {
+            var userloaded = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
+            return userloaded.LockoutEndDateUtc.Value;
+        }
+
+        public async Task SetLockoutEndDateAsync(User user, DateTimeOffset lockoutEnd)
+        {
+            var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
+            dbuser.LockoutEndDateUtc = lockoutEnd.DateTime;
+            unitOfWork.UserDataService.Update(dbuser);
+            await unitOfWork.CommitAsync();
+        }
+
+        public async Task<int> IncrementAccessFailedCountAsync(User user)
+        {
+            var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
+            dbuser.AccessFailedCount++;
+            unitOfWork.UserDataService.Update(dbuser);
+            await unitOfWork.CommitAsync();
+            return dbuser.AccessFailedCount;
+        }
+
+        public async Task ResetAccessFailedCountAsync(User user)
+        {
+            var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
+            dbuser.AccessFailedCount = 0;
+            unitOfWork.UserDataService.Update(dbuser);
+            await unitOfWork.CommitAsync();
+        }
+
+        public async Task<int> GetAccessFailedCountAsync(User user)
+        {
+            var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
+            return dbuser.AccessFailedCount;
+        }
+
+        public async Task<bool> GetLockoutEnabledAsync(User user)
+        {
+            var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
+            return dbuser.LockoutEnabled;
+        }
+
+        public async Task SetLockoutEnabledAsync(User user, bool enabled)
+        {
+            var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
+            dbuser.LockoutEnabled = enabled;
+            unitOfWork.UserDataService.Update(dbuser);
+            await unitOfWork.CommitAsync();
+        }
+
+        public async Task SetTwoFactorEnabledAsync(User user, bool enabled)
+        {
+            var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
+            dbuser.TwoFactorEnabled = enabled;
+            unitOfWork.UserDataService.Update(dbuser);
+            await unitOfWork.CommitAsync();
+        }
+
+        public async Task<bool> GetTwoFactorEnabledAsync(User user)
+        {
+            var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
+            return dbuser.TwoFactorEnabled;
+        }
+        public async Task<IList<Claim>> GetClaimsAsync(User user)
+        {
+            var dbuser = await unitOfWork.UserDataService.GetQuery()
+                .IncludeFilter(x => x.Claims.Where(cl => cl.Deleted == false))
+                .IncludeFilter(x => x.Roles.Where(cl => cl.Deleted == false))
+                .SingleAsync(x => x.Id == user.Id);
+
+            var roleIds = dbuser.Roles.Select(x => x.RoleId);
+            var permissions = await (from per in unitOfWork.PermissionDataService.GetQuery()
+                                     join act in unitOfWork.ApplicationActionDataService.GetQuery()
+                                     on per.ApplicationActionId equals act.Id
+                                     where roleIds.Contains(per.RoleId)
+                                     select new
+                                     {
+                                         act.HtmlUrl,
+                                         act.ActionUrl
+                                     }).ToListAsync();
+
+            var result = new List<Claim>() { new Claim(ApplicationClaimTypes.FullName, user.Name + " " + user.LastName) };
+            result.AddRange(permissions.Select(x => x.HtmlUrl).Distinct().Select(x => new Claim(ApplicationClaimTypes.HtmlUrl, x)));
+            result.AddRange(permissions.Select(x => new Claim(ApplicationClaimTypes.ActionUrl, x.ActionUrl)));
+            result.AddRange(dbuser.Claims.Select(x => new Claim(x.ClaimType, x.ClaimValue)));
+            return result;
+        }
+
+        public async Task AddClaimAsync(User user, Claim claim)
+        {
+            UserClaim userClaim = new UserClaim
+            {
+                ClaimType = claim.Type,
+                ClaimValue = claim.Value,
+                UserId = user.Id
+            };
+            unitOfWork.UserClaimDataService.Insert(userClaim);
+            await unitOfWork.CommitAsync();
+        }
+
+        public async Task RemoveClaimAsync(User user, Claim claim)
+        {
+            var dbData = await unitOfWork.UserClaimDataService.FirstOrDefaultAsync(x => x.UserId == user.Id
+            && x.ClaimType == claim.Type && x.ClaimValue == claim.Value);
+            if (dbData != null)
+            {
+                unitOfWork.UserClaimDataService.Delete(dbData);
                 await unitOfWork.CommitAsync();
             }
         }
@@ -252,6 +373,11 @@ namespace Neutrino.Business
         {
             throw new NotImplementedException();
         }
+
+
+
+
+
         #endregion
 
     }

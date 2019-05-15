@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using Espresso.DataAccess.Interfaces;
+﻿using Espresso.DataAccess.Interfaces;
 using FluentValidation;
 using Neutrino.Business;
-using Neutrino.Core.SecurityManagement;
 using Neutrino.Data.EntityFramework.DataServices;
 using Neutrino.Entities;
 using Neutrino.Interfaces;
 using Ninject.Modules;
+using System.Collections.Generic;
 
 namespace Neutrino.InjectModules
 {
@@ -94,8 +93,9 @@ namespace Neutrino.InjectModules
             Bind<IGoalNonFulfillmentPercentBS>().To<GoalNonFulfillmentPercentBS>();
             Bind(typeof(IEntityBaseRepository<GoalNonFulfillmentPercent>)).To(typeof(GoalNonFulfillmentPercentDataService));
             Bind(typeof(AbstractValidator<GoalNonFulfillmentPercent>)).To(typeof(GoalNonFulfillmentPercentBR));
-            
 
+            //AppMenu
+            Bind<IAppMenuBS>().To<AppMenuBS>();
 
 
             //Service data

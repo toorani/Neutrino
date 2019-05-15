@@ -120,9 +120,7 @@ function ($scope, $location, $filter, $timeout, $routeParams, ajaxService, modal
 
         }
     }
-    $scope.quantityCondition_onlick = function () {
-        $location.url('quantityConditions/index/' + $scope.goal.id);
-    }
+    
     $scope.branchGoal_onlick = function () {
         $location.url('branchGoal/item/' + $scope.goal.id);
     }

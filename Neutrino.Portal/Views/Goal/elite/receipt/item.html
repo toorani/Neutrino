@@ -75,7 +75,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="submit"
-                                    ng-if="((checkActionUrlPermissionByHtmlUrl('/api/GoalService/add') && goal.id == 0) || ( goal.id != 0 && checkActionTypePermission(3))) && !goal.isUsed"
+                                    ng-if="!goal.isUsed"
                                     name="Add"
                                     class="btn btn-success">
                                 <i class="fa fa-check"></i>
@@ -96,7 +96,7 @@
                                 <span>تعریف درصد مراکز</span>
                             </button>
                             <button type="button" class="btn btn-danger"
-                                    ng-if="goal.id != 0 && checkActionUrlPermissionByHtmlUrl('/api/GoalService/delete') && !goal.isUsed"
+                                    ng-if="goal.id != 0 && !goal.isUsed"
                                     data-ng-click="onDeleteGoal()">
                                 <i class="fa fa-trash-o"></i>
                                 <span>حذف</span>

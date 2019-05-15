@@ -56,8 +56,7 @@
 
 
                 new AppMenu { Title = "اطلاعات پایه", Icon = "fa fa-book", OrderId = 20 },
-                new AppMenu { Title = "امنیت", Icon = "fa fa-key", OrderId = 21 },
-                new AppMenu { Title = "مدیریت سیستم", Icon = "fa fa fa-gear", OrderId = 22 }
+                new AppMenu { Title = "امنیت", Icon = "fa fa-key", OrderId = 21 }
                 );
 
 
@@ -83,8 +82,17 @@
                     {
                         Title = "تعیین سطوح دسترسی",
                         Icon = "fa fa-magic",
-                        Url = "/security/permission/index",
+                        Url = "/security/permission/item",
                         OrderId = 2,
+                        Parent = securityItem,
+                        ParentId = securityItem.Id
+                    },
+                    new AppMenu
+                    {
+                        Title = "مدیریت فعالیت ها",
+                        Icon = "fa fa-magic",
+                        Url = "/security/action/item",
+                        OrderId = 3,
                         Parent = securityItem,
                         ParentId = securityItem.Id
                     }
@@ -127,26 +135,7 @@
                );
 
 
-            AppMenu systemItem = context.AppMenuItems.SingleOrDefault(x => x.Title == "مدیریت سیستم");
-            if (systemItem == null)
-            {
-                systemItem = context.AppMenuItems.Local.SingleOrDefault(x => x.Title == "مدیریت سیستم");
-            }
-
-            context.AppMenuItems.AddOrUpdate(
-               x => new { x.Title, x.Url },
-                   new AppMenu
-                   {
-                       Title = "لیست فعالیت ها",
-                       Icon = "fa fa-flash",
-                       Url = "/security/action/index",
-                       OrderId = 1,
-                       Parent = systemItem,
-                       ParentId = systemItem.Id
-                   }
-
-               );
-
+           
             AppMenu reportItem = context.AppMenuItems.SingleOrDefault(x => x.Title == "گزارشات");
             if (reportItem == null)
             {
@@ -303,23 +292,6 @@
             //adminUser.UserRoles.Add(adminRole);
             //context.Users.AddOrUpdate(x => x.UserName, adminUser);
 
-
-
-
-
-#if (DEBUG == false)
-   
-            //context.UserRoles.AddOrUpdate(x => new { x.UserId, x.RoleId }, userRole);
-            //List<AppSetting> logItems = new List<AppSetting>();
-            //logItems.Add(new AppSetting() { Key = "serviceLog", Value = "true" });
-            //context.AppSettings.AddOrUpdate(
-            //    x => x.Key,
-            //    new AppSetting { Key = "loadRoleSystem", Value = "true" },
-            //    new AppSetting { Key = "checkAccess", Value = "true" },
-            //    new AppSetting { Key = "applicationMode", Value = "debug" },
-            //    new AppSetting { Key = "Log", Childern = logItems });
-
-#endif
 
         }
 

@@ -184,7 +184,7 @@ namespace Neutrino.Portal.WebApiControllers
         }
 
         [Route("logOff"), HttpPut]
-        public HttpResponseMessage LogOff(HttpRequestMessage request, RegisterViewModel postedViewModel)
+        public HttpResponseMessage LogOff(RegisterViewModel postedViewModel)
         {
             authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             postedViewModel.ActionResult = new BusinessResult();

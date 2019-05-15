@@ -152,10 +152,6 @@
       <Project>{02298fdd-ee84-47b1-97e9-11cf68b03adc}</Project>
       <Name>Neutrino.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Neutrino.Core\Neutrino.Core.csproj">
-      <Project>{EF06262A-DF23-43D5-A928-A3426CBEF854}</Project>
-      <Name>Neutrino.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Neutrino.DataAccess\Neutrino.Data.EntityFramework.csproj">
       <Project>{f58dba9d-0b74-4ac6-b3c8-be32769d2d7f}</Project>
       <Name>Neutrino.Data.EntityFramework</Name>

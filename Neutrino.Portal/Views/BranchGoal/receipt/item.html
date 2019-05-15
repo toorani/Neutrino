@@ -72,7 +72,7 @@
                       class="form-horizontal ls_form" name="form">
                     <div class="modal-footer" ng-if="computingValue != 0 ">
                         <button type="submit" name="Add"
-                                ng-if="checkActionUrlPermissionByHtmlUrl('api/branchBenefitService/batchUpdate') && !viewModel.goal.isUsed"
+                                ng-if="!viewModel.goal.isUsed"
                                 class="btn btn-success">
                             <i class="fa fa-check"></i>
                             <span>ثبت</span>
@@ -113,7 +113,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" name="Add"
-                                ng-if="computingValue != 0 && checkActionUrlPermissionByHtmlUrl('api/branchBenefitService/batchUpdate') && !viewModel.goal.isUsed"
+                                ng-if="computingValue != 0 && !viewModel.goal.isUsed"
                                 class="btn btn-success">
                             <i class="fa fa-check"></i>
                             <span>ثبت</span>

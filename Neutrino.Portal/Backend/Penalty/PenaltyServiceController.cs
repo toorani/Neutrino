@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AutoMapper;
+using Espresso.Portal;
+using Neutrino.Data.EntityFramework;
+using Neutrino.Portal.Models;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using AutoMapper;
-using Espresso.Core;
-
-using Neutrino.Entities;
-using Neutrino.Portal.Models;
-using Neutrino.Portal.ProfileMapper;
-using Neutrino.Core.SecurityManagement;
-using Espresso.Portal;
-using Neutrino.Interfaces;
-using Espresso.BusinessService.Interfaces;
-using Neutrino.Data.EntityFramework;
-using System.Data.Entity;
 
 namespace Neutrino.Portal.WebApiControllers
 {
