@@ -42,6 +42,6 @@ angular.module("neutrinoProject").register.controller('index.registrationControl
                 $location.url('account/registration/item/' + dataSelected.id);
             }
             $scope.changePassword = function (dataSelected) {
-                $location.url('account/changepassword/item/' + dataSelected.id);
+                $location.url('account/resetpassword/item/' + dataSelected.id);
             }
         }]);

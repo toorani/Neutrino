@@ -1,0 +1,77 @@
+﻿<div ng-controller="account.changeassword.itemController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form novalidate role="form" esp-validate-complete="submit()"
+                      esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                      class="form-horizontal ls_form" name="form">
+
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                نام کاربری
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" disabled  ng-model="user.userName"/>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row ls_divider">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                رمز عبور
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group ls-group-input" > 
+                                    <span class="input-group-addon" ng-click="changeIcon($event)"><i   class="fa fa-eye-slash"></i></span>
+                                    <input type="password" class="form-control validate[required]"
+                                           ng-model="user.password"
+                                           show-password="showPassword"
+                                           id="password"
+                                           placeholder="رمز عبور را وارد کنید">
+                                </div>
+                            </div>
+                            <label class="col-md-2 control-label">
+                                <i class="red fa fa-asterisk"></i>
+                                تایید رمز عبور
+                            </label>
+                            <div class="col-md-4">
+                                <div class="input-group ls-group-input">
+                                    <span class="input-group-addon" ng-click="changeIcon($event)"><i class="fa fa-eye-slash"></i></span>
+                                    <input type="password" class="form-control validate[required,equals[password]]"
+                                           ng-model="user.confirmPassword"
+                                           show-password="showPassword"
+                                           placeholder="رمز عبور را وارد کنید">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" name="Add" class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            <span>تغییر رمز عبور</span>
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="cancel()">
+                            <i class="fa fa-mail-forward"></i>
+                            <span>بازگشت</span>
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

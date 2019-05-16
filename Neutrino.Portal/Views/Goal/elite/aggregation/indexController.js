@@ -9,7 +9,7 @@ angular.module("neutrinoProject").register.controller('aggregation.indexControll
         var goalGoodsCatType = ($routeParams.id || 'total');
 
         $scope.initializeController = function () {
-            
+            $scope.title = 'هدف گذاری تجمیعی';
             dataTableColumns.initialize();
 
             dataTableColumns.add({ mappingData: 'year', title: 'سال' });

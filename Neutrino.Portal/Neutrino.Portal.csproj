@@ -438,7 +438,12 @@
     <Compile Include="Backend\UserAccount\UserValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Account\changepassword\RestpasswordTemplate.html">
+    <Content Include="Views\Account\changeassword\item.html" />
+    <Content Include="Views\Account\changeassword\itemController.js" />
+    <Content Include="Views\Account\changeassword\changePasswordTemplate.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\Account\resetpassword\restpasswordTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\account.css" />
@@ -758,8 +763,8 @@
     <Content Include="Scripts\validationEngine\jquery\jquery.validationEngine.js" />
     <Content Include="Scripts\validationEngine\jquery\languages\jquery.validationEngine-en.js" />
     <Content Include="Scripts\validationEngine\jquery\languages\jquery.validationEngine-fa.js" />
-    <Content Include="Views\Account\changepassword\item.html" />
-    <Content Include="Views\Account\changepassword\itemController.js" />
+    <Content Include="Views\Account\resetpassword\item.html" />
+    <Content Include="Views\Account\resetpassword\itemController.js" />
     <Content Include="Views\Account\registration\index.html" />
     <Content Include="Views\Account\registration\itemController.js" />
     <Content Include="Views\Account\registration\item.html" />

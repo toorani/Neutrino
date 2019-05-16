@@ -1,6 +1,6 @@
-﻿console.log("account/registration/item")
+﻿console.log("account/resetpass/item")
 
-angular.module("neutrinoProject").register.controller('item.registrationController',
+angular.module("neutrinoProject").register.controller('account.resetpass.itemController',
     ['$scope', '$location', '$routeParams', 'ajaxService', 'alertService',
         function ($scope, $location, $routeParams, ajaxService, alertService) {
 
