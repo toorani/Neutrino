@@ -183,12 +183,15 @@ namespace Neutrino.External.Sevices
         #endregion
 
         #region [ Member Method(s) ]
-        public async Task<List<Member>> LoadMembersAsync(DateTime? startDate, DateTime endDate, List<Branch> lstBranches)
+        public async Task<Tuple<List<Member>, List<PostionMapping>>> LoadMembersAsync(DateTime? startDate, DateTime endDate
+            , List<Branch> lstBranches
+            , List<PostionMapping> lstPostionMappings)
         {
             var externalService = ExternalServices.Members;
-            List<Member> result = new List<Member>();
-            MemberInfo[] serviceDataInfos;
             List<Member> lstMembers = new List<Member>();
+            List<PostionMapping> lstnewPostionMapping = new List<PostionMapping>();
+            MemberInfo[] serviceDataInfos;
+
             if (lstBranches.Count == 0)
             {
                 logger.Warn(externalService, "There isn't any branch");
@@ -199,16 +202,51 @@ namespace Neutrino.External.Sevices
                 try
                 {
                     serviceDataInfos = await eliteClient.GetMembersAsync(userName, password, startDate, endDate, item.RefId);
-                    lstMembers = mapper.Map<MemberInfo[], List<Member>>(serviceDataInfos);
-                    lstMembers.ForEach(x => x.BranchId = item.Id);
-                    result.AddRange(lstMembers);
+
+                    foreach (var memberInfo in serviceDataInfos)
+                    {
+                        var member = new Member
+                        {
+                            BranchId = item.Id,
+                            BranchRefId = memberInfo.BranchId,
+                            Group = memberInfo.ccgoroh,
+                            LastName = memberInfo.LastName,
+                            Name = memberInfo.Name,
+                            NationalCode = memberInfo.NationalCode,
+                            RefId = memberInfo.MemberId,
+                        };
+
+
+                        var postionMapping = lstPostionMappings.SingleOrDefault(pm => pm.BranchRefId == memberInfo.BranchId &&
+                        pm.PostionRefId == memberInfo.ccpost);
+                        if (postionMapping != null)
+                        {
+                            member.PositionTypeId = postionMapping.PositionTypeId.Value;
+                        }
+                        else
+                        {
+                            member.Deleted = true;
+                            lstnewPostionMapping.Add(new PostionMapping
+                            {
+                                BranchId = item.Id,
+                                BranchRefId = memberInfo.BranchId,
+                                Name = memberInfo.NamePost,
+                                PostionRefId = memberInfo.ccpost
+                            });
+                        }
+                        lstMembers.Add(member);
+                    }
+
+
+
                 }
                 catch (Exception ex)
                 {
                     logger.Error(externalService, ex, "An error happened at loading the branch's members,the branchid is {0}", item.RefId);
                 }
             }
-            return result;
+
+            return new Tuple<List<Member>, List<PostionMapping>>(lstMembers, lstnewPostionMapping);
         }
         #endregion
 
@@ -392,7 +430,7 @@ namespace Neutrino.External.Sevices
 
         #endregion
 
-    
+
         #region [ Private Method(s) ]
         private IMapper getMapper()
         {

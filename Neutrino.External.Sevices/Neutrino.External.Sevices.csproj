@@ -34,12 +34,13 @@
       <HintPath>..\packages\AutoMapper.6.1.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Espresso.Core, Version=2018.11.16.304, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Espresso.Core, Version=2019.4.9.328, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.Core.dll</HintPath>
+      <HintPath>..\build\Espresso.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Espresso.Entites">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.Entites.dll</HintPath>
+    <Reference Include="Espresso.Entites, Version=2019.4.9.344, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\build\Espresso.Entites.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.13\lib\net45\NLog.dll</HintPath>
@@ -124,10 +125,6 @@
     <ProjectReference Include="..\Neutrino.Business.Entities\Neutrino.Entities.csproj">
       <Project>{223c1caf-caa4-4ffd-8e22-11566858a8fb}</Project>
       <Name>Neutrino.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Neutrino.Core\Neutrino.Core.csproj">
-      <Project>{ef06262a-df23-43d5-a928-a3426cbef854}</Project>
-      <Name>Neutrino.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

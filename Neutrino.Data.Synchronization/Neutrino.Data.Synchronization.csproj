@@ -48,23 +48,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Espresso.BusinessService">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.BusinessService.dll</HintPath>
+    <Reference Include="Espresso.BusinessService, Version=2019.4.9.614, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\build\Espresso.BusinessService.dll</HintPath>
     </Reference>
     <Reference Include="Espresso.Communication">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.Communication.dll</HintPath>
+      <HintPath>..\build\Espresso.Communication.dll</HintPath>
     </Reference>
-    <Reference Include="Espresso.Core">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.Core.dll</HintPath>
+    <Reference Include="Espresso.Core, Version=2019.4.9.328, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\build\Espresso.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Espresso.DataAccess">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.DataAccess.dll</HintPath>
+    <Reference Include="Espresso.DataAccess, Version=2019.4.9.494, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\build\Espresso.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="Espresso.Entites">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.Entites.dll</HintPath>
+      <HintPath>..\build\Espresso.Entites.dll</HintPath>
     </Reference>
     <Reference Include="Espresso.InjectModules">
-      <HintPath>..\..\..\..\New Espresso\build\Espresso.InjectModules.dll</HintPath>
+      <HintPath>..\build\Espresso.InjectModules.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
@@ -185,10 +188,6 @@
     <ProjectReference Include="..\Neutrino.Business\Neutrino.Business.csproj">
       <Project>{02298fdd-ee84-47b1-97e9-11cf68b03adc}</Project>
       <Name>Neutrino.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Neutrino.Core\Neutrino.Core.csproj">
-      <Project>{ef06262a-df23-43d5-a928-a3426cbef854}</Project>
-      <Name>Neutrino.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Neutrino.DataAccess\Neutrino.Data.EntityFramework.csproj">
       <Project>{f58dba9d-0b74-4ac6-b3c8-be32769d2d7f}</Project>

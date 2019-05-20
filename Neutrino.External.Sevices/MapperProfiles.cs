@@ -52,11 +52,8 @@ namespace Neutrino.External.Sevices
             CreateMap<MemberInfo, Member>()
                 .ForMember(x => x.RefId, opt => opt.MapFrom(x => x.MemberId))
                 .ForMember(x => x.BranchRefId, opt => opt.MapFrom(x => x.BranchId))
-                .Ignore(x => x.BranchId)
-                .ForMember(x => x.PositionTypeId, opt => opt.ResolveUsing<PositionTypeEnum>((vm) =>
-                {
-                    return (PositionTypeEnum)Enum.Parse(typeof(PositionTypeEnum), vm.Position.ToString(), true);
-                }));
+                .ForMember(x => x.Group, opt => opt.MapFrom(x => x.ccgoroh))
+                .Ignore(x => x.BranchId);
 
 
             CreateMap<BranchSalesInfo, BranchSales>()

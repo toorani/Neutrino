@@ -44,7 +44,10 @@ namespace Neutrino.Entities
         public virtual PositionTypeEnum PositionTypeId { get; set; }
         [ForeignKey("PositionTypeId")]
         public virtual PositionType PositionType { get; set; }
-
+        /// <summary>
+        /// اطلاعات سرور میباشد ccgoroh  معادل فیلد 
+        /// </summary>
+        public int? Group { get; set; }
     }
     
 }

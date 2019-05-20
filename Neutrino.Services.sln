@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elite.Neutrino.Services", "Elite.Neutrino.Services\Elite.Neutrino.Services.csproj", "{C1777E7D-D5D3-4539-81D3-FF8878818F9B}"
 EndProject
@@ -12,8 +12,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDebuggerHelper", "ServiceDebuggerHelper\ServiceDebuggerHelper.csproj", "{E058864C-20A7-43C0-8EFF-0E4EB9D02855}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neutrino.Business", "Neutrino.Business\Neutrino.Business.csproj", "{02298FDD-EE84-47B1-97E9-11CF68B03ADC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neutrino.Core", "Neutrino.Core\Neutrino.Core.csproj", "{EF06262A-DF23-43D5-A928-A3426CBEF854}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neutrino.Interfaces", "Neutrino.Interfaces\Neutrino.Interfaces.csproj", "{D0E43A2B-7E07-4FF8-B2CB-6B3BA58CCF47}"
 EndProject
@@ -51,10 +49,6 @@ Global
 		{02298FDD-EE84-47B1-97E9-11CF68B03ADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02298FDD-EE84-47B1-97E9-11CF68B03ADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02298FDD-EE84-47B1-97E9-11CF68B03ADC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF06262A-DF23-43D5-A928-A3426CBEF854}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF06262A-DF23-43D5-A928-A3426CBEF854}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF06262A-DF23-43D5-A928-A3426CBEF854}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF06262A-DF23-43D5-A928-A3426CBEF854}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0E43A2B-7E07-4FF8-B2CB-6B3BA58CCF47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0E43A2B-7E07-4FF8-B2CB-6B3BA58CCF47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0E43A2B-7E07-4FF8-B2CB-6B3BA58CCF47}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -78,5 +72,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {94A96031-EC8C-4388-849F-BA90A0E09BB1}
 	EndGlobalSection
 EndGlobal

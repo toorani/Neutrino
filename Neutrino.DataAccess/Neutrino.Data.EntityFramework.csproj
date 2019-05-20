@@ -591,6 +591,10 @@
     <Compile Include="Migrations\201905121443409_alterbranchpromotion_remove_startenddate.Designer.cs">
       <DependentUpon>201905121443409_alterbranchpromotion_remove_startenddate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905162032040_addPostionMapping.cs" />
+    <Compile Include="Migrations\201905162032040_addPostionMapping.Designer.cs">
+      <DependentUpon>201905162032040_addPostionMapping.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NeutrinoDataRepositoryBase.cs" />
     <Compile Include="NeutrinoRepositoryBase.cs" />
@@ -981,6 +985,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905121443409_alterbranchpromotion_remove_startenddate.resx">
       <DependentUpon>201905121443409_alterbranchpromotion_remove_startenddate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905162032040_addPostionMapping.resx">
+      <DependentUpon>201905162032040_addPostionMapping.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

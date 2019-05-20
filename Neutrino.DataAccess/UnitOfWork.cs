@@ -64,6 +64,7 @@ namespace Neutrino.Data.EntityFramework
         public IEntityBaseRepository<BranchGoalPromotion> BranchGoalPromotionDataService { get; private set; }
         public IEntityBaseRepository<PositionReceiptPromotion> PositionReceiptPromotionDataService { get; private set; }
         public IEntityBaseRepository<PositionType> PositionTypeDataService { get; private set; }
+        public IEntityBaseRepository<PostionMapping> PostionMappingDataService { get; set; }
 
         #endregion
 
@@ -111,6 +112,8 @@ namespace Neutrino.Data.EntityFramework
             , IEntityBaseRepository<BranchGoalPromotion> branchGoalPromotionDS
             , IEntityBaseRepository<PositionReceiptPromotion> positionReceiptPromotionDS
             , IEntityBaseRepository<PositionType> positionTypeDS
+            ,IEntityBaseRepository<PostionMapping> postionMappingDS
+
            )
         {
             this.context = context;
@@ -156,6 +159,7 @@ namespace Neutrino.Data.EntityFramework
             BranchGoalPromotionDataService = branchGoalPromotionDS;
             PositionReceiptPromotionDataService = positionReceiptPromotionDS;
             PositionTypeDataService = positionTypeDS;
+            PostionMappingDataService = postionMappingDS;
         }
         #endregion
 

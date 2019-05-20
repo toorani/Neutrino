@@ -395,7 +395,6 @@
     <Compile Include="Backend\Models\TreeGoodsViewModel.cs" />
     <Compile Include="Backend\Goods\GoodsViewModel.cs" />
     <Compile Include="Backend\Goal\GoalViewModel.cs" />
-    <Compile Include="Backend\Models\ManageViewModels.cs" />
     <Compile Include="Backend\BranchGoal\BranchGoalMapperProfile.cs" />
     <Compile Include="Backend\FulfillmentPercent\FulfillmentPercentMapperProfile.cs" />
     <Compile Include="Backend\QuantityCondition\QuantityConditionMapperProfile.cs" />
@@ -440,10 +439,7 @@
   <ItemGroup>
     <Content Include="Views\Account\changeassword\item.html" />
     <Content Include="Views\Account\changeassword\itemController.js" />
-    <Content Include="Views\Account\changeassword\changePasswordTemplate.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Views\Account\resetpassword\restpasswordTemplate.html">
+    <Content Include="Views\Account\resetpassword\resetpasswordTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\account.css" />

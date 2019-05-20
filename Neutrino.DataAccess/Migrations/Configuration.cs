@@ -95,6 +95,15 @@
                         OrderId = 3,
                         Parent = securityItem,
                         ParentId = securityItem.Id
+                    },
+                    new AppMenu
+                    {
+                        Title = "تغییر رمز عبور",
+                        Icon = "fa fa-key",
+                        Url = "/account/changeassword/item",
+                        OrderId = 3,
+                        Parent = securityItem,
+                        ParentId = securityItem.Id
                     }
                 );
 

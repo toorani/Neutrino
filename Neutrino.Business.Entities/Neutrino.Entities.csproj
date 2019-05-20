@@ -57,6 +57,7 @@
     <Compile Include="AppMenu.cs" />
     <Compile Include="ApprovePromotionType.cs" />
     <Compile Include="CustomerGoal.cs" />
+    <Compile Include="PostionMapping.cs" />
     <Compile Include="MemberPromotion.cs" />
     <Compile Include="MemberSales.cs" />
     <Compile Include="PositionReceiptPromotion.cs" />

@@ -1,15 +1,9 @@
-﻿using System;
+﻿using Neutrino.Entities;
+using Neutrino.External.Sevices;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Espresso.Core;
-using Neutrino.Entities;
-using Neutrino.External.Sevices;
-using Neutrino.Core;
-
-using Neutrino.Interfaces;
-using Espresso.BusinessService.Interfaces;
-using Espresso.Core.Ninject;
-using System.Collections.Generic;
 
 namespace Neutrino.Data.Synchronization.ServiceJobs
 {

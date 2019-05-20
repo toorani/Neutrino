@@ -85,6 +85,7 @@ namespace Neutrino.Data.EntityFramework
         public DbSet<MemberSales> MemberSales { get; set; }
         public DbSet<MemberPromotion> MemberPromotions { get; set; }
         public DbSet<CustomerGoal> CustomerGoals { get; set; }
+        public DbSet<PostionMapping> PostionMappings { get; set; }
         #endregion
 
         #region [ Override Method(s) ]

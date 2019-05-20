@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Espresso.BusinessService.Interfaces;
+﻿using Espresso.BusinessService.Interfaces;
 using Espresso.Communication;
 using Espresso.Communication.Model;
 using Espresso.Core;
-using Espresso.Core.ConfigurationManagement;
 using Espresso.Core.Ninject;
 using Neutrino.Entities;
 using Quartz;
+using System;
+using System.Configuration;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Neutrino.Data.Synchronization
 {

@@ -1,16 +1,10 @@
-﻿using System;
+﻿using Espresso.Core;
+using Neutrino.Entities;
+using Neutrino.External.Sevices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Espresso.Core;
-using Neutrino.Business;
-using Neutrino.Entities;
-using Neutrino.External.Sevices;
-using Neutrino.Core;
-
-using Quartz;
-using Espresso.BusinessService.Interfaces;
-using Espresso.Core.Ninject;
 
 namespace Neutrino.Data.Synchronization.ServiceJobs
 {
@@ -42,9 +36,14 @@ namespace Neutrino.Data.Synchronization.ServiceJobs
             // load exist branches
             var lstBranches = await unitOfWork.BranchDataService.GetAsync(where: x => x.RefId != 0);
 
+            //load exist postionmapping 
+            List<PostionMapping> lstPostionMappings = await unitOfWork.PostionMappingDataService.GetAllAsync();
 
             //call web service 
-            var lstEliteData = await ServiceWrapper.Instance.LoadMembersAsync(startDate, endDate, lstBranches);
+            var tupleResultData = await ServiceWrapper.Instance.LoadMembersAsync(startDate, endDate, lstBranches,lstPostionMappings);
+
+            var lstServerMembers = tupleResultData.Item1;
+            var lstNewPostionMappings = tupleResultData.Item2;
 
             //seperation the new data
             var lstExistMembers = await unitOfWork.MemberDataService.GetAllAsync();
@@ -52,20 +51,23 @@ namespace Neutrino.Data.Synchronization.ServiceJobs
             var lstNewMembers = new List<Member>();
             if (lstExistMembers.Count != 0)
             {
-                lstNewMembers.AddRange(lstEliteData.Except(lstExistMembers, x => x.Code));
+                lstServerMembers.AddRange(lstServerMembers.Except(lstExistMembers, x => x.Code));
             }
             else
             {
-                lstNewMembers.AddRange(lstEliteData);
+                lstServerMembers.AddRange(lstServerMembers);
             }
 
             //insert batch data
             var newDataInserted = await unitOfWork.MemberDataService.InsertBulkAsync(lstNewMembers);
+            
+            //insert postion mappings
+            var newPostionMappingInserted = await unitOfWork.PostionMappingDataService.InsertBulkAsync(lstNewPostionMappings);
 
-            LogInsertedData(lstEliteData.Count, newDataInserted);
+            LogInsertedData(lstNewMembers.Count, newDataInserted);
             
             //insert/update data sync status
-            await RecordDataSyncStatusAsync(newDataInserted, lstEliteData.Count);
+            await RecordDataSyncStatusAsync(newDataInserted, lstNewMembers.Count);
         }
         #endregion
     }

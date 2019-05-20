@@ -14,6 +14,7 @@ using Neutrino.Portal.ProfileMapper;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -59,7 +60,6 @@ namespace Neutrino.Portal.WebApiControllers
         #endregion
 
         #region [ User Method(s) ]
-
         [Route("getUsers"), HttpPost]
         public async Task<HttpResponseMessage> GetGridData(JQueryDataTablesModel dataTablesModel)
         {
@@ -82,7 +82,6 @@ namespace Neutrino.Portal.WebApiControllers
                    , totalDisplayRecords: entities.TotalRows
                    , sEcho: dataTablesModel.sEcho));
         }
-
         [Route("getDataItem")]
         public async Task<HttpResponseMessage> GetDataItem(int id)
         {
@@ -136,11 +135,41 @@ namespace Neutrino.Portal.WebApiControllers
                 postedViewModel.ActionResult.ReturnMessage.AddRange(result.Errors);
                 return CreateErrorResponse(postedViewModel.ActionResult);
             }
-            var resetPasswordEmailBody = File.ReadAllText(HostingEnvironment.MapPath("/Backend/UserAccount/RestpasswordTemplate.html"));
+            var resetPasswordEmailBody = File.ReadAllText(HostingEnvironment.MapPath("/views/account/resetpassword/restpasswordTemplate.html"));
             resetPasswordEmailBody = resetPasswordEmailBody.Replace("$DateTime$", Utilities.ToPersianDateTime(DateTime.Now))
                 .Replace("$UserName$", postedViewModel.UserName)
                 .Replace("$password$", postedViewModel.Password);
             await _userManager.SendEmailAsync(postedViewModel.Id, "تغییر رمز عبور", resetPasswordEmailBody);
+            postedViewModel.ActionResult.ReturnMessage.Add("رمز عبور با موفقیت تغییر داده شد");
+
+            return Request.CreateResponse(HttpStatusCode.OK, postedViewModel);
+        }
+        [Route("changePassword"), HttpPost]
+        public async Task<HttpResponseMessage> ChangePasswordAsync(ChangePasswordViewModel postedViewModel)
+        {
+            int userId = User.Identity.GetUserId<int>();
+            IdentityResult result = await _userManager.ChangePasswordAsync(userId, postedViewModel.CurrentPassword, postedViewModel.NewPassword);
+
+            postedViewModel.ActionResult = new BusinessResult();
+            if (result.Succeeded == false)
+            {
+                if (result.Errors.Any(x=> x=="Incorrect password."))
+                {
+                    postedViewModel.ActionResult.ReturnMessage.Add("رمز عبور جاری معتبر نمیباشد");
+                }
+                else
+                {
+                    postedViewModel.ActionResult.ReturnMessage.AddRange(result.Errors);
+                }
+                
+                return CreateErrorResponse(postedViewModel.ActionResult);
+            }
+            
+            var resetPasswordEmailBody = File.ReadAllText(HostingEnvironment.MapPath("/views/account/resetpassword/resetpasswordTemplate.html"));
+            resetPasswordEmailBody = resetPasswordEmailBody.Replace("$DateTime$", Utilities.ToPersianDateTime(DateTime.Now))
+                .Replace("$UserName$", User.Identity.GetUserName())
+                .Replace("$password$", postedViewModel.NewPassword);
+            await _userManager.SendEmailAsync(userId, "تغییر رمز عبور", resetPasswordEmailBody);
             postedViewModel.ActionResult.ReturnMessage.Add("رمز عبور با موفقیت تغییر داده شد");
 
             return Request.CreateResponse(HttpStatusCode.OK, postedViewModel);

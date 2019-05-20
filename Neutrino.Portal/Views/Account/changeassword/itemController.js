@@ -7,50 +7,48 @@ angular.module("neutrinoProject").register.controller('account.changeassword.ite
             "use strict";
             $scope.user = {
                 id: 0,
-                userName: null,
-                oldPassword: null,
-                password: null,
+                newPassword: null,
                 confirmPassword: null,
+                currentPasswrod: null
             }
+
+            $scope.show_newPassword = false;
+            $scope.show_confirmPassword = false;
+            $scope.show_currentPassword = false;
+            
 
             $scope.initializeController = function () {
                 $scope.title = 'تغییر رمز عبور';
-                if ($scope.user.id != 0) {
-                    loadEntity();
-                }
-
             }
             $scope.submit = function () {
-                ajaxService.ajaxPost($scope.user, "api/accountService/resetPassword",
+                ajaxService.ajaxPost($scope.user, "api/accountService/changePassword",
                     function (response) {
                         alertService.showSuccess(response.data.actionResult.returnMessage);
-                        $location.path("account/registration/index/");
                     },
                     function (response) {
                         alertService.showError(response);
                     });
             }
-            $scope.cancel = function () {
-                $location.url('account/registration/index');
-            }
             $scope.changeIcon = function (event) {
-                $scope.showPassword = !$scope.showPassword;
+                let showPassword = $(event.currentTarget.nextElementSibling).attr('show-password');
+                switch (showPassword) {
+
+                    case 'show_currentPassword':
+                        $scope.show_currentPassword = !$scope.show_currentPassword;
+                        break;
+                    case 'show_newPassword':
+                        $scope.show_newPassword = !$scope.show_newPassword;
+                        break;
+                    case 'show_confirmPassword':
+                        $scope.show_confirmPassword = !$scope.show_confirmPassword;
+                        break;
+                }
+
                 $(event.currentTarget).find('i').remove();
                 if ($scope.showPassword) {
                     $(event.currentTarget).html('<i class="fa fa-eye"></i>');
                 } else {
                     $(event.currentTarget).html('<i class="fa fa-eye-slash"></i>');
                 }
-            }
-
-            var loadEntity = function () {
-                ajaxService.ajaxCall({ id: $scope.user.id }, "api/accountService/getDataItem", 'get',
-                    function (response) {
-                        $scope.user = response.data;
-                    },
-                    function (response) {
-                        alertService.showError(response);
-
-                    });
             }
         }]);
