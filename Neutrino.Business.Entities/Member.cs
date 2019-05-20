@@ -48,6 +48,10 @@ namespace Neutrino.Entities
         /// اطلاعات سرور میباشد ccgoroh  معادل فیلد 
         /// </summary>
         public int? Group { get; set; }
+        /// <summary>
+        /// شناسه پست در اطلاعات شرکت الیت
+        /// </summary>
+        public int RefPositionId { get; set; }
     }
     
 }

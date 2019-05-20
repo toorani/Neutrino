@@ -53,9 +53,6 @@ namespace Neutrino.Data.Synchronization
 
             mainScheduler = await mainSchehulerFactory.GetScheduler();
 
-            //mainScheduler.ListenerManager.AddJobListener(new GlobalJobListener());
-            //mainScheduler.ListenerManager.AddTriggerListener(new GlobalTriggerListener());
-
             if (dataSyncConfiguration.Services[ExternalServices.Company].IsAcquireExecute)
                 // this service doesn't have any pre-required to get data
                 await AddAcquireJobAsync<CompanyJob>(10);
@@ -137,81 +134,68 @@ namespace Neutrino.Data.Synchronization
         private async Task AddAcquireJobAsync<TServiceJobName>(int priority)
             where TServiceJobName : ServiceJob, new()
         {
-            Dictionary<string, object> jobDataMap = new Dictionary<string, object>();
-            jobDataMap.Add("jobCallTypes", JobCallTypes.AcquireData);
+            Dictionary<string, object> jobDataMap = new Dictionary<string, object>
+            {
+                { "jobCallTypes", JobCallTypes.AcquireData }
+            };
             IJobDetail job = JobBuilder.Create<TServiceJobName>()
                 .WithIdentity(typeof(TServiceJobName).Name)
                 .Build();
             job.JobDataMap.PutAll(jobDataMap);
 
+            var serviceJob = new TServiceJobName();
 
+
+            DateTimeOffset startTime = DateBuilder.NextGivenSecondDate(null, 5);
             /*
             Seconds Minutes Hours Day-of-Month Month Day-of-Week Year (optional field)
             the value “L” in the day-of-month field means “the last day of the month” - day 31 for January,
-            day 28 for February on non-leap years
-            */
-#if (DEBUG == true)
-            DateTimeOffset startTime = DateBuilder.NextGivenSecondDate(null, 5);
-            int jobRepeatCount = ConfigurationManager.AppSettings["JobRepeatCount"].ToInt(defaultValue: 0);
-            int repeatInterval = ConfigurationManager.AppSettings["RepeatInterval"].ToInt(defaultValue: 60);
+            day 28 for February on non-leap years */
+
+            var schedulePattern = dataSyncConfiguration.SchedulePattern.AcquireMode;
+            if (string.IsNullOrWhiteSpace(dataSyncConfiguration.Services[serviceJob.serviceName].AcquireSchedulePattern) == false)
+            {
+                schedulePattern = dataSyncConfiguration.Services[serviceJob.serviceName].AcquireSchedulePattern;
+            }
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity("trigger_" + typeof(TServiceJobName).Name + "_" + priority)
                 .StartAt(startTime)
-                .WithPriority(priority)
-                .WithSimpleSchedule(x => x.WithRepeatCount(jobRepeatCount).WithInterval(TimeSpan.FromMinutes(repeatInterval)))
-                .ForJob(job)
-                .Build();
-
-
-
-#elif (DEBUG == false)
-
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("trigger_" + typeof(TServiceJobName).Name + "_" + priority)
-                .WithCronSchedule(dataSyncConfiguration.SchedulePattern.AcquireMode)
+                .WithCronSchedule(schedulePattern)
                 .WithPriority(priority)
                 .ForJob(job)
                 .Build();
-#endif
+
             await mainScheduler.ScheduleJob(job, trigger);
 
         }
         private async Task AddCheckNotCompletedJobAsync<TServiceJobName>()
             where TServiceJobName : ServiceJob, new()
         {
-            Dictionary<string, object> jobDataMap = new Dictionary<string, object>();
-            jobDataMap["jobCallTypes"] = JobCallTypes.CheckNotCompleted;
+            Dictionary<string, object> jobDataMap = new Dictionary<string, object>
+            {
+                ["jobCallTypes"] = JobCallTypes.CheckNotCompleted
+            };
             IJobDetail job = JobBuilder.Create<TServiceJobName>()
                 .WithIdentity(typeof(TServiceJobName).Name + "_chk")
                 .Build();
             job.JobDataMap.PutAll(jobDataMap);
+            var serviceJob = new TServiceJobName();
 
-#if (DEBUG == true)
             DateTimeOffset startTime = DateBuilder.NextGivenSecondDate(null, 5);
-            int jobRepeatCount = ConfigurationManager.AppSettings["JobRepeatCount"].ToInt(defaultValue: 0);
-            int repeatInterval = ConfigurationManager.AppSettings["RepeatInterval"].ToInt(defaultValue: 60);
+            var schedulePattern = dataSyncConfiguration.SchedulePattern.CheckFailureMode;
+            if (string.IsNullOrWhiteSpace(dataSyncConfiguration.Services[serviceJob.serviceName].AcquireSchedulePattern) == false)
+            {
+                schedulePattern = dataSyncConfiguration.Services[serviceJob.serviceName].AcquireSchedulePattern;
+            }
 
             ITrigger trigger = TriggerBuilder.Create()
+               .WithIdentity("trigger_chk_" + typeof(TServiceJobName).Name + "_")
+               .StartAt(startTime)
+               .WithCronSchedule(dataSyncConfiguration.SchedulePattern.CheckFailureMode)
+               .ForJob(job)
+               .Build();
 
-                .WithIdentity("trigger_chk_" + typeof(TServiceJobName).Name + "_")
-                .StartAt(startTime)
-                //.WithPriority(priority)
-                .WithSimpleSchedule(x => x.WithRepeatCount(jobRepeatCount)
-                                           .WithInterval(TimeSpan.FromMinutes(repeatInterval)))
-                .ForJob(job)
-
-                .Build();
-
-#elif (DEBUG == false)
-
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("trigger_chk_" + typeof(TServiceJobName).Name + "_" )
-                .WithCronSchedule(dataSyncConfiguration.SchedulePattern.CheckFailureMode)
-                //.WithPriority(priority)
-                .ForJob(job)
-                .Build();
-#endif
             await mainScheduler.ScheduleJob(job, trigger);
 
         }
@@ -224,30 +208,15 @@ namespace Neutrino.Data.Synchronization
                 .WithIdentity(typeof(TServiceJobName).Name + "_rpt")
                 .Build();
 
-#if (DEBUG == true)
             DateTimeOffset startTime = DateBuilder.NextGivenSecondDate(null, 5);
-            int jobRepeatCount = ConfigurationManager.AppSettings["JobRepeatCount"].ToInt(defaultValue: 0);
-            int repeatInterval = ConfigurationManager.AppSettings["RepeatInterval"].ToInt(defaultValue: 60);
 
             ITrigger trigger = TriggerBuilder.Create()
-
                 .WithIdentity("trigger__rpt_" + typeof(TServiceJobName).Name + "_")
                 .StartAt(startTime)
-                .WithSimpleSchedule(x => x.WithRepeatCount(jobRepeatCount)
-                                           .WithInterval(TimeSpan.FromMinutes(repeatInterval)))
-                .ForJob(job)
-
-                .Build();
-
-#elif (DEBUG == false)
-            
-
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("trigger__rpt_" + typeof(TServiceJobName).Name + "_")
                 .WithCronSchedule(dataSyncConfiguration.SchedulePattern.ReportSummery)
                 .ForJob(job)
                 .Build();
-#endif
+
             await mainScheduler.ScheduleJob(job, trigger);
 
         }

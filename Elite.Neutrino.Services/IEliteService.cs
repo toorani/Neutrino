@@ -164,6 +164,22 @@ namespace Elite.Neutrino.Services
         /// </returns>
         [OperationContract]
         List<CustomerGoalsInfo> GetCustomerGoalsInfo(string userName, string password, int year, int month);
+        /// <summary>
+        /// لیست واحدهای کاری موجود در شرکت الیت
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        [OperationContract]
+        List<DepartmentInfo> GetDepartmentInfo(string userName, string password);
+        /// <summary>
+        /// لیست پست های سازمانی موجود در شرکت الیت
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        [OperationContract]
+        List<PositionInfo> GetPositionInfo(string userName, string password);
 
     }
 

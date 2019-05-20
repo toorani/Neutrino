@@ -30,6 +30,13 @@ namespace Neutrino.Data.Synchronization.Configuration
 
         [ConfigurationProperty("isCheckNotCompletedExecute", IsRequired = false, DefaultValue = true)]
         public bool IsCheckNotCompletedExecute => (bool)base["isCheckNotCompletedExecute"];
+
+        [ConfigurationProperty("acquireSchedulePattern", IsRequired = false, DefaultValue = "0 0 1 * * ?")]
+        public string AcquireSchedulePattern => (string)base["acquireSchedulePattern"];
+
+        [ConfigurationProperty("checkFailureSchedulePattern", IsRequired = false, DefaultValue = "0 0 3 * * ?")]
+        public string CheckFailureSchedulePattern => (string)base["checkFailureSchedulePattern"];
+
         public ServiceConfigElement()
         {
 

@@ -214,6 +214,7 @@ namespace Neutrino.External.Sevices
                             Name = memberInfo.Name,
                             NationalCode = memberInfo.NationalCode,
                             RefId = memberInfo.MemberId,
+                            
                         };
 
 

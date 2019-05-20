@@ -595,6 +595,10 @@
     <Compile Include="Migrations\201905162032040_addPostionMapping.Designer.cs">
       <DependentUpon>201905162032040_addPostionMapping.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905201739355_alterMemebr.cs" />
+    <Compile Include="Migrations\201905201739355_alterMemebr.Designer.cs">
+      <DependentUpon>201905201739355_alterMemebr.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NeutrinoDataRepositoryBase.cs" />
     <Compile Include="NeutrinoRepositoryBase.cs" />
@@ -988,6 +992,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905162032040_addPostionMapping.resx">
       <DependentUpon>201905162032040_addPostionMapping.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905201739355_alterMemebr.resx">
+      <DependentUpon>201905201739355_alterMemebr.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
