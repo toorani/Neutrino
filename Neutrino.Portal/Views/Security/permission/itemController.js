@@ -13,22 +13,14 @@ angular.module("neutrinoProject").register.controller('item.permissionController
             $scope.appMenu = [{ "id": "0", "text": "نوترینو", "parent": "#", "state": { "opened": true, "disabled": false } }];
             $scope.roles = [];
             $scope.treeConfig = {
-                core: {
-                    multiple: false,
-                    animation: true,
-                    error: function (error) {
-                        $log.error('treeCtrl: error from js tree - ' + angular.toJson(error));
-                    },
-                    check_callback: true,
-                    worker: true
-                },
+                core: { check_callback: true, worker: true },
                 types: { default: { icon: 'fa fa-sitemap' } },
                 plugins: ['types', 'checkbox']
             };
 
             $scope.initializeController = function () {
                 $scope.title = 'تعیین سطوح دسترسی';
-                
+
                 getRoles();
                 $timeout(function () {
                     getAppMenu();
@@ -36,7 +28,7 @@ angular.module("neutrinoProject").register.controller('item.permissionController
 
             }
 
-            
+
             $scope.role_changed = function () {
                 $scope.treeInstance.jstree(true).deselect_all(true);
                 getRolePermission();
@@ -48,7 +40,7 @@ angular.module("neutrinoProject").register.controller('item.permissionController
                     if (menuNode.original.extraData != null) {
                         $scope.viewModel.urls.push(menuNode.original.extraData);
                     }
-                    
+
                 });
                 ajaxService.ajaxPost($scope.viewModel, "api/permissionService/addOrModifyPermission",
                     function (response) {
@@ -84,7 +76,7 @@ angular.module("neutrinoProject").register.controller('item.permissionController
 
             }
             var getRolePermission = function () {
-                ajaxService.ajaxCall({ roleId: $scope.viewModel.roleId}, "api/permissionService/getRolePermission",'get',
+                ajaxService.ajaxCall({ roleId: $scope.viewModel.roleId }, "api/permissionService/getRolePermission", 'get',
                     function (response) {
                         $scope.viewModel = response.data;
                         $scope.treeInstance.jstree(true).get_selected(true);
@@ -96,7 +88,7 @@ angular.module("neutrinoProject").register.controller('item.permissionController
                         });
                         //$scope.treeInstance.jstree(true).close_all();
                         //$scope.treeInstance.jstree(true).open_node(0);
-                        
+
                     },
                     function (response) {
                         alertService.showError(response);

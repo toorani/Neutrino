@@ -835,12 +835,8 @@
     <Content Include="Scripts\jquery\respond.js" />
     <Content Include="Scripts\jquery\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\OrgStructure\index.html" />
-    <Content Include="Views\OrgStructure\indexController.js" />
     <Content Include="Views\OrgStructure\item.html" />
     <Content Include="Views\OrgStructure\itemController.js" />
-    <Content Include="Views\OrgStructureShare\index.html" />
-    <Content Include="Views\OrgStructureShare\indexController.js" />
     <Content Include="Views\OrgStructureShare\item.html" />
     <Content Include="Views\OrgStructureShare\itemController.js" />
     <Content Include="Views\Promotion\overviewrpt\excelTemplate.html" />
@@ -861,8 +857,6 @@
     <Content Include="Views\Shared\neutrinoFilters.js" />
     <Content Include="Views\Shared\neutrinoRouting-debug.js" />
     <Content Include="Views\Shared\neutrinoRouting-production.js" />
-    <Content Include="Views\SharePromotion\index.html" />
-    <Content Include="Views\SharePromotion\indexController.js" />
     <Content Include="Views\FulfillmentPromotionCondition\item.html" />
     <Content Include="Views\FulfillmentPromotionCondition\itemController.js" />
     <Content Include="Web.config">

@@ -49,7 +49,7 @@
 
                 new AppMenu { Title = "پورسانت", Icon = "fa fa-flag-checkered", OrderId = 5 },
 
-                new AppMenu { Title = "مدیریت پرداخت و کسورات", Icon = "fa fa-percent", Url = "/penalty/index", OrderId = 8 },
+
                 new AppMenu { Title = "گزارشات", Icon = "fa fa-list-alt", OrderId = 9 },
                 new AppMenu { Title = "ضریب نوع محصول", Icon = "fa fa-medkit", Url = "/costCoefficient/index", OrderId = 10, Deleted = true },
 
@@ -273,10 +273,28 @@
                     },
                     new AppMenu
                     {
+                        Title = "پرداخت و کسورات",
+                        Icon = "fa fa-percent",
+                        Url = "/penalty/index",
+                        OrderId = 3,
+                        Parent = promosionlItem,
+                        ParentId = promosionlItem.Id
+                    },
+                    new AppMenu
+                    {
                         Title = "سهم پرسنل مراکز",
                         Icon = "fa fa-group",
                         Url = "/promotion/branchShare/ceo/index",
-                        OrderId = 3,
+                        OrderId = 4,
+                        Parent = promosionlItem,
+                        ParentId = promosionlItem.Id
+                    },
+                    new AppMenu
+                    {
+                        Title = "سهم پرسنل",
+                        Icon = "fa fa-group",
+                        Url = "/promotion/branchShare/manager/index",
+                        OrderId = 5,
                         Parent = promosionlItem,
                         ParentId = promosionlItem.Id
                     }

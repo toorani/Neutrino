@@ -187,18 +187,7 @@ namespace Neutrino.Portal.WebApiControllers
                 case SignInStatus.Success:
 
                     postedViewModel.ActionResult.ReturnStatus = true;
-                    var user = _userManager.Find(postedViewModel.UserName, postedViewModel.Password);
-                    List<string> roles = await _userManager.GetRolesAsync(user.Id) as List<string>;
-                    //var userPermissions = PermissionManager.Instance.GetUserAccess(user.Id);
-                    //userPermissions.ForEach(x => {
-                    //    postedViewModel.UserAccessTokens.Add(new UserAccessToken
-                    //    {
-                    //        ActionId = x.ApplicationActionId,
-                    //        RoleId = x.RoleId,
-                    //        HtmlUrl = x.ApplicationAction.HtmlUrl,
-                    //        ActionUrl = x.ApplicationAction.ActionUrl
-                    //    });
-                    //});
+                    
                     if (string.IsNullOrWhiteSpace(postedViewModel.ReturnUrl))
                         postedViewModel.ReturnUrl = "/home/index";
                     break;

@@ -20,11 +20,11 @@ angular.module("neutrinoProject").register.controller('promotion.branchreceiptrp
                 $scope.title = 'گزارش اهداف وصول';
 
                 var perDate = new persianDate();
-                //$scope.viewModel.year = perDate.year();
-                //$scope.viewModel.month = perDate.month();
+                $scope.viewModel.year = perDate.year();
+                $scope.viewModel.month = perDate.month();
 
-                $scope.viewModel.year = 1397;
-                $scope.viewModel.month = 10;
+                //$scope.viewModel.year = 1397;
+                //$scope.viewModel.month = 10;
             }
 
 

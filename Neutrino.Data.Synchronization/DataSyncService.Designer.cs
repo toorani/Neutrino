@@ -32,7 +32,7 @@
             // DataSyncService
             // 
             this.CanPauseAndContinue = true;
-            this.ServiceName = "Service1";
+            this.ServiceName = "Load and sync Elite data";
 
         }
 

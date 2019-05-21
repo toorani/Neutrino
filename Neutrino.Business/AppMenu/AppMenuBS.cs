@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Espresso.BusinessService;
@@ -11,6 +12,7 @@ using Neutrino.Data.EntityFramework;
 using Neutrino.Entities;
 using Neutrino.Interfaces;
 using Ninject.Extensions.Logging;
+using Z.EntityFramework.Plus;
 
 namespace Neutrino.Business
 {
@@ -30,10 +32,13 @@ namespace Neutrino.Business
             {
                 if (checkAccess)
                 {
-                    result.ResultValue = await unitOfWork.AppMenuDataService
-                    .GetAsync(where: x => x.ChildItems.Any(y => lstUrlPermission.Contains(y.Url))
-                    , includes: x => x.ChildItems
-                    , orderBy: x => x.OrderBy(y => y.OrderId));
+                    result.ResultValue = await unitOfWork.AppMenuDataService.GetQuery()
+                                               .IncludeFilter(x => x.ChildItems.Where(y => lstUrlPermission.Contains(y.Url)))
+                                               .OrderBy(x => x.OrderId)
+                                               .Where(x => x.ChildItems.Any(y => lstUrlPermission.Contains(y.Url)))
+                                               .ToListAsync();
+
+
                 }
                 else
                 {

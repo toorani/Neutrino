@@ -119,8 +119,4 @@ angular.module("neutrinoProject").register.controller('item.actionController',
                     });
             }
 
-            $scope.cancel = function () {
-                $location.url('security/action/index');
-            }
-
         }]);
