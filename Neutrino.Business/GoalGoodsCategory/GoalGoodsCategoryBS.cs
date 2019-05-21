@@ -1,22 +1,19 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Espresso.Core;
-using Espresso.DataAccess.Interfaces;
 using Espresso.BusinessService;
+using Espresso.BusinessService.Interfaces;
+using Espresso.Core;
 using FluentValidation;
+using FluentValidation.Results;
+using Neutrino.Data.EntityFramework;
 using Neutrino.Entities;
 using Neutrino.Interfaces;
-using System.Data.Entity;
 using Ninject;
-using Espresso.BusinessService.Interfaces;
-using Neutrino.Data.EntityFramework;
-using FluentValidation.Results;
-using System.Data.Entity.Validation;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Z.EntityFramework.Plus;
 
 namespace Neutrino.Business
@@ -116,6 +113,26 @@ namespace Neutrino.Business
                     where = x => (x.IsVisible == true);
                 }
                 result.ResultValue = await unitOfWork.GoalGoodsCategoryDataService.GetAsync(where);
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
+
+        public async Task<IBusinessResultValue<List<GoalGoodsCategory>>> LoadGoalGoodsCategoryForReportAsync(GoalGoodsCategoryTypeEnum goodsCategoryTypeId, GoalTypeEnum goalTypeId, DateTime startDate, DateTime endDate)
+        {
+            var result = new BusinessResultValue<List<GoalGoodsCategory>>();
+            try
+            {
+                result.ResultValue = await (from goal in unitOfWork.GoalDataService.GetQuery()
+                                            join ggc in unitOfWork.GoalGoodsCategoryDataService.GetQuery()
+                                            on goal.GoalGoodsCategoryId equals ggc.Id
+                                            where goal.StartDate >= startDate && goal.EndDate <= endDate
+                                            && goal.GoalGoodsCategoryTypeId == goodsCategoryTypeId
+                                            && goal.GoalTypeId == goalTypeId
+                                            select ggc).ToListAsync();
             }
             catch (Exception ex)
             {

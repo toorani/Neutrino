@@ -25,12 +25,6 @@ namespace Neutrino.Data.Synchronization.Configuration
         [ConfigurationProperty("dateSensitive", IsRequired = true, DefaultValue = false)]
         public bool DateSensitive => (bool)base["dateSensitive"];
 
-        [ConfigurationProperty("isAcquireExecute", IsRequired = false, DefaultValue = true)]
-        public bool IsAcquireExecute => (bool)base["isAcquireExecute"];
-
-        [ConfigurationProperty("isCheckNotCompletedExecute", IsRequired = false, DefaultValue = true)]
-        public bool IsCheckNotCompletedExecute => (bool)base["isCheckNotCompletedExecute"];
-
         [ConfigurationProperty("acquireSchedulePattern", IsRequired = false, DefaultValue = "0 0 1 * * ?")]
         public string AcquireSchedulePattern => (string)base["acquireSchedulePattern"];
 

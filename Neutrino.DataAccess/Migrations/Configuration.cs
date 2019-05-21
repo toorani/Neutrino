@@ -46,10 +46,9 @@
                 x => new { x.Title, x.Url },
                 new AppMenu { Title = "هدف گذاری تامین کننده", Icon = "fa fa-line-chart", Url = "/goal/supplier/index", OrderId = 1 },
                 new AppMenu { Title = "هدف گذاری الیت دارو", Icon = "fa fa-line-chart", OrderId = 2 },
-                new AppMenu { Title = "ضریب تحقق پورسانت", OrderId = 3, Url = "/fulfillmentPercent/item", Icon = "fa fa-money" },
-                new AppMenu { Title = "محاسبه پورسانت", Icon = "fa fa-gears", Url = "/promotion/index", OrderId = 5 },
 
-                new AppMenu { Title = "تقسیم پورسانت بین اعضا", Icon = "fa fa-percent", Url = "/sharePromotion/index", OrderId = 7 },
+                new AppMenu { Title = "پورسانت", Icon = "fa fa-flag-checkered", OrderId = 5 },
+
                 new AppMenu { Title = "مدیریت پرداخت و کسورات", Icon = "fa fa-percent", Url = "/penalty/index", OrderId = 8 },
                 new AppMenu { Title = "گزارشات", Icon = "fa fa-list-alt", OrderId = 9 },
                 new AppMenu { Title = "ضریب نوع محصول", Icon = "fa fa-medkit", Url = "/costCoefficient/index", OrderId = 10, Deleted = true },
@@ -144,7 +143,7 @@
                );
 
 
-           
+
             AppMenu reportItem = context.AppMenuItems.SingleOrDefault(x => x.Title == "گزارشات");
             if (reportItem == null)
             {
@@ -246,6 +245,42 @@
                     }
                 );
 
+            AppMenu promosionlItem = context.AppMenuItems.SingleOrDefault(x => x.Title == "پورسانت");
+            if (promosionlItem == null)
+            {
+                promosionlItem = context.AppMenuItems.Local.SingleOrDefault(x => x.Title == "پورسانت");
+            }
+
+            context.AppMenuItems.AddOrUpdate(
+                x => new { x.Title, x.Url },
+                    new AppMenu
+                    {
+                        Title = "محاسبه پورسانت",
+                        Icon = "fa fa-tachometer",
+                        Url = "/promotion/index/",
+                        OrderId = 1,
+                        Parent = promosionlItem,
+                        ParentId = promosionlItem.Id
+                    },
+                    new AppMenu
+                    {
+                        Title = "ضریب تحقق",
+                        OrderId = 2,
+                        Url = "/fulfillmentPercent/item",
+                        Icon = "fa fa-money",
+                        Parent = promosionlItem,
+                        ParentId = promosionlItem.Id
+                    },
+                    new AppMenu
+                    {
+                        Title = "سهم پرسنل مراکز",
+                        Icon = "fa fa-group",
+                        Url = "/promotion/branchShare/ceo/index",
+                        OrderId = 3,
+                        Parent = promosionlItem,
+                        ParentId = promosionlItem.Id
+                    }
+                );
 
             context.ApplicationActions.AddOrUpdate(
                 x => new { x.HtmlUrl, x.ActionUrl },

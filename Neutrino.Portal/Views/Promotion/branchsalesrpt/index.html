@@ -16,16 +16,49 @@
                                 <div class="row">
                                     <label class="col-md-2 control-label">
                                         <i class="red fa fa-asterisk"></i>
+                                        از تاریخ
+                                    </label>
+                                    <div class="col-md-4">
+                                        <adm-dtp full-data="startDate_detail"
+                                                 on-datechange="resetGoalGoodsCatgories()"
+                                                 ng-model='viewModel.startDate'></adm-dtp>
+                                    </div>
+                                    <label class="col-md-2 control-label">
+                                        <i class="red fa fa-asterisk"></i>
+                                        تا تاریخ
+                                    </label>
+                                    <div class="col-md-4">
+                                        <adm-dtp disable='{{!viewModel.startDate}}'
+                                                 on-datechange="resetGoalGoodsCatgories()"
+                                                 mindate="{{startDate_detail.unix + 1}}"
+                                                 ng-model='viewModel.endDate'></adm-dtp>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <label class="col-md-2 control-label">
+                                        <i class="red fa fa-asterisk"></i>
                                         نوع هدف
                                     </label>
                                     <div class="col-md-4">
                                         <select class="form-control"
                                                 ng-options="item.id as item.description for item in goalGoodsCategoryTypes "
-                                                data-ng-change="onGoalGoodsCategoryTypeChanged()"
+                                                data-ng-change="resetGoalGoodsCatgories()"
                                                 ng-model="viewModel.goalGoodsCategoryTypeId">
                                             <option value="" selected>[ انتخاب کنید ]</option>
                                         </select>
                                     </div>
+                                    <div class="col-md-6 align-center">
+                                        <button type="button" ng-click="getGoalGoodsCategories()"
+                                                ng-show="viewModel.goalGoodsCategoryTypeId != null && viewModel.startDate != null && viewModel.endDate != null"
+                                                class="btn btn-info">
+                                            <i class="fa fa-filter"></i>
+                                            <span>بارگذاری اهداف</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row" ng-show="goalGoodsCategories.length != 0">
                                     <label class="col-md-2 control-label">
                                         <i class="red fa fa-asterisk"></i>
                                         نام هدف
@@ -37,46 +70,28 @@
                                             <option value="" selected>[ انتخاب کنید ]</option>
                                         </select>
                                     </div>
+                                    <div class="col-md-6 align-center">
+                                        <button type="button" ng-click="showReport()"
+                                                ng-show="viewModel.goalGoodsCategoryId != null"
+                                                class="btn btn-info">
+                                            <i class="fa fa-filter"></i>
+                                            <span>نمایش گزارش</span>
+                                        </button>
+                                        <button type="button" ng-click="exportReport()" ng-show="reportData.length != 0"
+                                                class="btn btn-info">
+                                            <i class="fa fa-file-excel-o"></i>
+                                            <span>خروجی اکسل</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="alert alert-warning" ng-if="isEmpyData">
+                                    هدفی جهت نمایش وجود ندارد
                                 </div>
                                 <br />
 
-                                <div class="row">
-                                    <label class="col-md-2 control-label">
-                                        <i class="red fa fa-asterisk"></i>
-                                        از تاریخ
-                                    </label>
-                                    <div class="col-md-4">
-                                        <adm-dtp full-data="startDate_detail"
-                                                 ng-model='viewModel.startDate'></adm-dtp>
-                                    </div>
-                                    <label class="col-md-2 control-label">
-                                        <i class="red fa fa-asterisk"></i>
-                                        تا تاریخ
-                                    </label>
-                                    <div class="col-md-4">
-                                        <adm-dtp disable='{{!viewModel.startDate}}'
-                                                 mindate="{{startDate_detail.unix + 1}}"
-                                                 ng-model='viewModel.endDate'></adm-dtp>
-                                    </div>
-                                </div>
-
-                                <br />
-                                <br />
-                                <div class="modal-footer">
-                                    <button type="button" ng-click="showReport()"
-                                            class="btn btn-info">
-                                        <i class="fa fa-filter"></i>
-                                        <span>نمایش گزارش</span>
-                                    </button>
-                                    <button type="button" ng-click="exportReport()" ng-show="reportData.length != 0"
-                                            class="btn btn-info">
-                                        <i class="fa fa-file-excel-o"></i>
-                                        <span>خروجی اکسل</span>
-                                    </button>
-                                </div>
 
                                 <div class="table-responsive text-nowrap" ng-show="reportData.length != 0">
-                                    <table class="table table-striped" >
+                                    <table class="table table-striped">
                                         <thead>
                                             <tr>
                                                 <td class="align-center"><input type="text" ng-model="filter_branchName" class="form-control" /></td>

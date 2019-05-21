@@ -11,12 +11,17 @@ using Neutrino.Entities;
 namespace Neutrino.Interfaces
 {
     public interface IGoalGoodsCategoryBS : IBusinessService
-        ,IEnabledEntityListLoader<GoalGoodsCategory>
+        , IEnabledEntityListLoader<GoalGoodsCategory>
         , IEnabledEntityLoader<GoalGoodsCategory>
-        
+
     {
-        Task<IBusinessResultValue<GoalGoodsCategory>> CreateGoalGoodsCategoryAsync(GoalGoodsCategory goalGoodsCategory,int goalCategorySimilarId);
+        Task<IBusinessResultValue<GoalGoodsCategory>> CreateGoalGoodsCategoryAsync(GoalGoodsCategory goalGoodsCategory, int goalCategorySimilarId);
         Task<IBusinessResultValue<GoalGoodsCategory>> LoadGoalGoodsCategoryAsync(int goalGoodsCategoryId);
         Task<IBusinessResultValue<List<GoalGoodsCategory>>> LoadVisibleGoalGoodsCategoryListAsync(Expression<Func<GoalGoodsCategory, bool>> where = null);
+        Task<IBusinessResultValue<List<GoalGoodsCategory>>> LoadGoalGoodsCategoryForReportAsync(GoalGoodsCategoryTypeEnum goodsCategoryTypeId
+            , GoalTypeEnum goalTypeId
+            , DateTime startDate
+            , DateTime endDate);
     }
+
 }

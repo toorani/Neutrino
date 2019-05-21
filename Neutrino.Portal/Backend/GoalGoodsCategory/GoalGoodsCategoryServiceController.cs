@@ -93,6 +93,31 @@ namespace Neutrino.Portal.WebApiControllers
             return CreateViewModelResponse(postedViewModel, entityCreated);
 
         }
+
+        [Route("getListforReport"), HttpGet]
+        public async Task<HttpResponseMessage> GetListforReport(int goodsCategoryTypeId, int iGoalTypeId
+            , string startDate
+            , string endDate)
+        {
+            GoalGoodsCategoryTypeEnum catTypeId = Utilities.ToEnum<GoalGoodsCategoryTypeEnum>(goodsCategoryTypeId).Value;
+            GoalTypeEnum goalTypeId = Utilities.ToEnum<GoalTypeEnum>(iGoalTypeId).Value;
+
+            IBusinessResultValue<List<GoalGoodsCategory>> entities = await businessService.LoadGoalGoodsCategoryForReportAsync(catTypeId
+                , goalTypeId
+                , Utilities.ToDateTime(startDate).Value
+                , Utilities.ToDateTime(endDate).Value
+                );
+
+            if (entities.ReturnStatus == false)
+            {
+                CreateErrorResponse(entities);
+            }
+            var mapper = GetMapper();
+            var dataSource = mapper.Map<List<GoalGoodsCategoryViewModel>>(entities.ResultValue);
+
+            return CreateSuccessedListResponse(dataSource);
+        }
+
         #endregion
 
         #region [ Private Method(s) ]

@@ -11,17 +11,17 @@ angular.module("neutrinoProject").register.controller('promotion.branchsalesrpt.
             }
 
             $scope.reportData = [];
+            $scope.goalGoodsCategories = [];
+            $scope.isEmpyData = false;
 
             $scope.initializeController = function () {
                 $scope.title = 'گزارش عملکرد اهداف فروش ';
                 getGoalGoodsCategoryTypes();
-                
-                
             }
 
-            $scope.onGoalGoodsCategoryTypeChanged = function () {
-                $scope.viewModel.goalGoodsCategoryId = null;
-                getGoalGoodsCategories();
+            $scope.resetGoalGoodsCatgories = function () {
+                $scope.goalGoodsCategories = [];
+                $scope.reportData = [];
             }
             $scope.isFulfillGoalStep = function (reportRecord) {
                 let metCount = 0;
@@ -54,16 +54,19 @@ angular.module("neutrinoProject").register.controller('promotion.branchsalesrpt.
                 exportExcel.loadfile(url);
             }
 
-            var getGoalGoodsCategories = function () {
-                return ajaxService.ajaxCall({ goodsCategoryTypeId: $scope.viewModel.goalGoodsCategoryTypeId, isActive: true, iGoalTypeId: 1 }
-                    , "api/goalGoodsCategoryService/getDataList", 'get',
+            $scope.getGoalGoodsCategories = function () {
+                $scope.viewModel.goalGoodsCategoryId = null;
+                $scope.isEmpyData = false;
+                ajaxService.ajaxCall({ goodsCategoryTypeId: $scope.viewModel.goalGoodsCategoryTypeId, iGoalTypeId: 1, startDate: $scope.viewModel.startDate, endDate: $scope.viewModel.endDate }
+                    , "api/goalGoodsCategoryService/getListforReport", 'get',
                     function (response) {
                         $scope.goalGoodsCategories = response.data;
+                        $scope.isEmpyData = $scope.goalGoodsCategories.length == 0;
                     },
                     function (response) {
-                        $scope.goodsCategories = [];
                         alertService.showError(response);
                     });
+
             }
             var getGoalGoodsCategoryTypes = function () {
                 $scope.goalGoodsCategoryTypes = [

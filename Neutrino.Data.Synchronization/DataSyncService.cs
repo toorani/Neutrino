@@ -53,71 +53,58 @@ namespace Neutrino.Data.Synchronization
 
             mainScheduler = await mainSchehulerFactory.GetScheduler();
 
-            if (dataSyncConfiguration.Services[ExternalServices.Company].IsAcquireExecute)
-                // this service doesn't have any pre-required to get data
-                await AddAcquireJobAsync<CompanyJob>(10);
 
-            if (dataSyncConfiguration.Services[ExternalServices.Branch].IsAcquireExecute)
-                //this service doesn't have any pre-required to get data
-                await AddAcquireJobAsync<BranchJob>(10);
+            // this service doesn't have any pre-required to get data
+            await AddAcquireJobAsync<CompanyJob>(10);
 
-            if (dataSyncConfiguration.Services[ExternalServices.GoodsCatType].IsAcquireExecute)
-                // this service doesn't have any pre-required to get data
-                await AddAcquireJobAsync<GoodsCategoryTypesJob>(10);
 
-            if (dataSyncConfiguration.Services[ExternalServices.Goods].IsAcquireExecute)
-                //this service needs a companyId to get data
-                await AddAcquireJobAsync<GoodsJob>(9);
+            //this service doesn't have any pre-required to get data
+            await AddAcquireJobAsync<BranchJob>(10);
 
-            if (dataSyncConfiguration.Services[ExternalServices.Members].IsAcquireExecute)
-                //this service needs a branchId to get data
-                await AddAcquireJobAsync<MembersJob>(8);
 
-            if (dataSyncConfiguration.Services[ExternalServices.GoodsCat].IsAcquireExecute)
-                //this service needs a companyId, a goodsId and the goodsCategoryType's Ids to get data
-                await AddAcquireJobAsync<GoodsCategoryJob>(8);
+            // this service doesn't have any pre-required to get data
+            await AddAcquireJobAsync<GoodsCategoryTypesJob>(10);
 
-            if (dataSyncConfiguration.Services[ExternalServices.BranchSales].IsAcquireExecute)
-                //this service needs the goods and branches data to save data
-                await AddAcquireJobAsync<BranchSalesJob>(7);
+            //this service needs a companyId to get data
+            await AddAcquireJobAsync<GoodsJob>(9);
 
-            if (dataSyncConfiguration.Services[ExternalServices.Invoice].IsAcquireExecute)
-                //this service needs the members and goods data to save data
-                await AddAcquireJobAsync<InvoiceJob>(7);
+            //this service needs a branchId to get data
+            await AddAcquireJobAsync<MembersJob>(8);
 
-            if (dataSyncConfiguration.Services[ExternalServices.Payroll].IsAcquireExecute)
-                //this service needs the members and goods data to save data 
-                await AddAcquireJobAsync<PayrollJob>(7);
+            //this service needs a companyId, a goodsId and the goodsCategoryType's Ids to get data
+            await AddAcquireJobAsync<GoodsCategoryJob>(8);
+
+            //this service needs the goods and branches data to save data
+            await AddAcquireJobAsync<BranchSalesJob>(7);
+
+            //this service needs the members and goods data to save data
+            await AddAcquireJobAsync<InvoiceJob>(7);
+
+            //this service needs the members and goods data to save data 
+            await AddAcquireJobAsync<PayrollJob>(7);
 
             //this service needs the members data to save data 
             //await AddAcquireJobAsync<MemberReceiptJob>(7, jobExternalData);
 
-            if (dataSyncConfiguration.Services[ExternalServices.BranchReceipts].IsAcquireExecute)
-                //this service needs the branch data to save data 
-                await AddAcquireJobAsync<BranchReceiptJob>(7);
+            //this service needs the branch data to save data 
+            await AddAcquireJobAsync<BranchReceiptJob>(7);
 
             await mainScheduler.Start();
 
 
             //check not completed jobs
-
-            if (dataSyncConfiguration.Services[ExternalServices.Payroll].IsCheckNotCompletedExecute)
-                await AddCheckNotCompletedJobAsync<PayrollJob>();
+            await AddCheckNotCompletedJobAsync<PayrollJob>();
 
             //await AddCheckFailureJobAsync<MemberReceiptJob>(jobExternalData);
 
-            if (dataSyncConfiguration.Services[ExternalServices.BranchReceipts].IsCheckNotCompletedExecute)
-                await AddCheckNotCompletedJobAsync<BranchReceiptJob>();
+            await AddCheckNotCompletedJobAsync<BranchReceiptJob>();
 
-            if (dataSyncConfiguration.Services[ExternalServices.Invoice].IsCheckNotCompletedExecute)
-                await AddCheckNotCompletedJobAsync<InvoiceJob>();
+            await AddCheckNotCompletedJobAsync<InvoiceJob>();
 
-            if (dataSyncConfiguration.Services[ExternalServices.BranchSales].IsCheckNotCompletedExecute)
-                await AddCheckNotCompletedJobAsync<BranchSalesJob>();
+            await AddCheckNotCompletedJobAsync<BranchSalesJob>();
 
-            if (dataSyncConfiguration.Services[ExternalServices.ReportSummery].IsAcquireExecute)
-                //add report summery job
-                await AddReportSummeryJobAsync<ReportSummeryJob>();
+            //add report summery job
+            await AddReportSummeryJobAsync<ReportSummeryJob>();
         }
         protected override async void OnStop()
         {

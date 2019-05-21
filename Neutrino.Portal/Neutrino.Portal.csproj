@@ -794,6 +794,10 @@
     <Content Include="Views\Promotion\branchsalesrpt\index.html" />
     <Content Include="Views\Promotion\branchsalesrpt\indexController.js" />
     <Content Include="Views\Promotion\branchsalesrpt\excelTemplate.html" />
+    <Content Include="Views\Promotion\branchShare\ceo\index.html" />
+    <Content Include="Views\Promotion\branchShare\ceo\indexController.js" />
+    <Content Include="Views\Promotion\branchShare\manager\index.html" />
+    <Content Include="Views\Promotion\branchShare\manager\indexController.js" />
     <Content Include="Views\Promotion\overviewrpt\index.html" />
     <Content Include="Views\Promotion\index.html" />
     <Content Include="Views\Promotion\overviewrpt\indexController.js" />
