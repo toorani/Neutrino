@@ -47,20 +47,28 @@
                                 رمز عبور
                             </label>
                             <div class="col-md-4">
-                                <input type="password" class="form-control validate[required]"
-                                       ng-model="user.password"
-                                       name="password"
-                                       id="password"
-                                       placeholder="رمز عبور را وارد کنید">
+                                <div class="input-group ls-group-input">
+                                    <span class="input-group-addon" ng-click="changeIcon($event)"><i class="fa fa-eye-slash"></i></span>
+                                    <input type="password" class="form-control validate[required]"
+                                           ng-model="user.password"
+                                           name="password"
+                                           id="password"
+                                           show-password="show_password"
+                                           placeholder="رمز عبور را وارد کنید">
+                                </div>
                             </div>
                             <label class="col-md-2 control-label">
                                 <i class="red fa fa-asterisk"></i>
                                 تایید رمز عبور
                             </label>
                             <div class="col-md-4">
-                                <input type="password" class="form-control validate[required,equals[password]]"
-                                       ng-model="user.confirmPassword"
-                                       placeholder="رمز عبور را وارد کنید">
+                                <div class="input-group ls-group-input">
+                                    <span class="input-group-addon" ng-click="changeIcon($event)"><i class="fa fa-eye-slash"></i></span>
+                                    <input type="password" class="form-control validate[required,equals[password]]"
+                                           ng-model="user.confirmPassword"
+                                           show-password="show_confirmPassword"
+                                           placeholder="رمز عبور را وارد کنید">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -108,13 +116,13 @@
                                        placeholder="شماره موبایل را وارد کنید">
                             </div>
                         </div>
-                        
+
                     </div>
                     <div class="row ls_divider">
                         <div class="col-md-12">
                             <div class="panel panel-info">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">  مراکز تحت کنترل کاربر</h3>
+                                    <h3 class="panel-title">   مراکز تحت کنترل کاربر</h3>
                                     <ul class="panel-control">
                                         <li>
                                             <i-check click="onclick_selectAll()" ng-model="selectAll">انتخاب همه</i-check>

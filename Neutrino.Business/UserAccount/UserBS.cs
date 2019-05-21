@@ -204,6 +204,10 @@ namespace Neutrino.Business
                 unitOfWork.UserDataService.Update(userFind);
                 await unitOfWork.CommitAsync();
             }
+            else
+            {
+                user.PasswordHash = passwordHash;
+            }
         }
         public async Task<IList<string>> GetRolesAsync(User user)
         {
@@ -238,56 +242,82 @@ namespace Neutrino.Business
                 unitOfWork.UserDataService.Update(userFind);
                 await unitOfWork.CommitAsync();
             }
+            else
+            {
+                user.Email = email;
+            }
         }
         public async Task<DateTimeOffset> GetLockoutEndDateAsync(User user)
         {
             var userloaded = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
-            return userloaded.LockoutEndDateUtc.Value;
+            return userloaded != null ? user.LockoutEndDateUtc.Value : user.LockoutEndDateUtc.Value;
         }
 
         public async Task SetLockoutEndDateAsync(User user, DateTimeOffset lockoutEnd)
         {
             var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
-            dbuser.LockoutEndDateUtc = lockoutEnd.DateTime;
-            unitOfWork.UserDataService.Update(dbuser);
-            await unitOfWork.CommitAsync();
+            if (dbuser != null)
+            {
+                dbuser.LockoutEndDateUtc = lockoutEnd.DateTime;
+                unitOfWork.UserDataService.Update(dbuser);
+                await unitOfWork.CommitAsync();
+            }
+            else
+            {
+                user.LockoutEndDateUtc = lockoutEnd.DateTime;
+            }
         }
 
         public async Task<int> IncrementAccessFailedCountAsync(User user)
         {
             var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
-            dbuser.AccessFailedCount++;
-            unitOfWork.UserDataService.Update(dbuser);
-            await unitOfWork.CommitAsync();
-            return dbuser.AccessFailedCount;
+            if (dbuser != null)
+            {
+                dbuser.AccessFailedCount++;
+                unitOfWork.UserDataService.Update(dbuser);
+                await unitOfWork.CommitAsync();
+                return dbuser.AccessFailedCount;
+            }
+            else
+            {
+                user.AccessFailedCount++;
+                return user.AccessFailedCount;
+            }
         }
 
         public async Task ResetAccessFailedCountAsync(User user)
         {
             var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
-            dbuser.AccessFailedCount = 0;
-            unitOfWork.UserDataService.Update(dbuser);
-            await unitOfWork.CommitAsync();
+            if (dbuser != null)
+            {
+                dbuser.AccessFailedCount = 0;
+                unitOfWork.UserDataService.Update(dbuser);
+                await unitOfWork.CommitAsync();
+            }
+
         }
 
         public async Task<int> GetAccessFailedCountAsync(User user)
         {
             var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
-            return dbuser.AccessFailedCount;
+            return dbuser != null ? dbuser.AccessFailedCount : user.AccessFailedCount;
         }
 
         public async Task<bool> GetLockoutEnabledAsync(User user)
         {
             var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
-            return dbuser.LockoutEnabled;
+            return dbuser != null ? dbuser.LockoutEnabled : user.LockoutEnabled;
         }
 
         public async Task SetLockoutEnabledAsync(User user, bool enabled)
         {
             var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
-            dbuser.LockoutEnabled = enabled;
-            unitOfWork.UserDataService.Update(dbuser);
-            await unitOfWork.CommitAsync();
+            if (dbuser != null)
+            {
+                dbuser.LockoutEnabled = enabled;
+                unitOfWork.UserDataService.Update(dbuser);
+                await unitOfWork.CommitAsync();
+            }
         }
 
         public async Task SetTwoFactorEnabledAsync(User user, bool enabled)
@@ -301,7 +331,7 @@ namespace Neutrino.Business
         public async Task<bool> GetTwoFactorEnabledAsync(User user)
         {
             var dbuser = await unitOfWork.UserDataService.FirstOrDefaultAsync(x => x.Id == user.Id);
-            return dbuser.TwoFactorEnabled;
+            return dbuser != null ? dbuser.TwoFactorEnabled : user.TwoFactorEnabled;
         }
         public async Task<IList<Claim>> GetClaimsAsync(User user)
         {

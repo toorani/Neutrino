@@ -21,6 +21,9 @@ angular.module("neutrinoProject").register.controller('item.registrationControll
             $scope.selectAll = false;
             $scope.branchChecked = []
 
+            $scope.show_password = false;
+            $scope.show_confirmPassword = false;
+
             $scope.initializeController = function () {
                 $scope.title = 'تعریف کاربر ';
                 $scope.user.id = ($routeParams.id || 0);
@@ -29,7 +32,7 @@ angular.module("neutrinoProject").register.controller('item.registrationControll
                 if ($scope.user.id != 0) {
                     loadEntity();
                 }
-               
+
             }
             $scope.submit = function () {
                 $scope.user.branchesUnderControl = [];
@@ -44,9 +47,9 @@ angular.module("neutrinoProject").register.controller('item.registrationControll
                         alertService.showSuccess(response.data.actionResult.returnMessage);
                         if ($scope.user.id == 0) {
                             $scope.user.id = response.data.id;
-                            $location.path("account/registration/item/" + $scope.user.id,false);
+                            $location.path("account/registration/item/" + $scope.user.id, false);
                         }
-                        
+
                     },
                     function (response) {
                         alertService.showError(response);
@@ -81,6 +84,26 @@ angular.module("neutrinoProject").register.controller('item.registrationControll
             }
             $scope.cancel = function () {
                 $location.url('account/registration/index');
+            }
+
+            $scope.changeIcon = function (event) {
+                let showPassword = $(event.currentTarget.nextElementSibling).attr('show-password');
+                switch (showPassword) {
+
+                    case 'show_password':
+                        $scope.show_password = !$scope.show_password;
+                        break;
+                    case 'show_confirmPassword':
+                        $scope.show_confirmPassword = !$scope.show_confirmPassword;
+                        break;
+                }
+
+                $(event.currentTarget).find('i').remove();
+                if ($scope.showPassword) {
+                    $(event.currentTarget).html('<i class="fa fa-eye"></i>');
+                } else {
+                    $(event.currentTarget).html('<i class="fa fa-eye-slash"></i>');
+                }
             }
 
             var getBranches = function () {

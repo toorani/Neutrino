@@ -48,14 +48,17 @@
             <!--Logo text start-->
             <div class="header-logo">
                 @{
-
-                    var claimsPrincipal = Context.User as ClaimsPrincipal;
-                    if (claimsPrincipal != null)
+                    if (IdentityConfig.CheckAccessEnabled)
                     {
-                        <h1>
-                            @claimsPrincipal.FindFirst(x => x.Type == ApplicationClaimTypes.FullName).Value
-                        </h1>
+                        var claimsPrincipal = Context.User as ClaimsPrincipal;
+                        if (claimsPrincipal != null)
+                        {
+                            <h1>
+                                @claimsPrincipal.FindFirst(x => x.Type == ApplicationClaimTypes.FullName).Value
+                            </h1>
+                        }
                     }
+
                 }
             </div>
             <!--Logo text End-->
