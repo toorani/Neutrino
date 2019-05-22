@@ -60,7 +60,6 @@ namespace Neutrino.Data.EntityFramework
         public IEntityBaseRepository<GoalNonFulfillmentPercent> GoalNonFulfillmentPercentDataService { get; private set; }
         public IEntityBaseRepository<GoalNonFulfillmentBranch> GoalNonFulfillmentBranchDataService { get; private set; }
         public IEntityBaseRepository<GoalGoodsCategoryGoods> GoalGoodsCategoryGoodsDataService { get; private set; }
-        public IEntityBaseRepository<MemberSales> MemberSalesDataService { get; private set; }
         public IEntityBaseRepository<BranchGoalPromotion> BranchGoalPromotionDataService { get; private set; }
         public IEntityBaseRepository<PositionReceiptPromotion> PositionReceiptPromotionDataService { get; private set; }
         public IEntityBaseRepository<PositionType> PositionTypeDataService { get; private set; }
@@ -108,7 +107,6 @@ namespace Neutrino.Data.EntityFramework
             , IEntityBaseRepository<GoalNonFulfillmentPercent> goalNonFulfillmentPercentDS
             , IEntityBaseRepository<GoalNonFulfillmentBranch> goalNonFulfillmentBranchDS
             , IEntityBaseRepository<GoalGoodsCategoryGoods> goalGoodsCategoryGoodsDS
-            , IEntityBaseRepository<MemberSales> memberSalesDS
             , IEntityBaseRepository<BranchGoalPromotion> branchGoalPromotionDS
             , IEntityBaseRepository<PositionReceiptPromotion> positionReceiptPromotionDS
             , IEntityBaseRepository<PositionType> positionTypeDS
@@ -155,7 +153,6 @@ namespace Neutrino.Data.EntityFramework
             GoalNonFulfillmentPercentDataService = goalNonFulfillmentPercentDS;
             GoalNonFulfillmentBranchDataService = goalNonFulfillmentBranchDS;
             GoalGoodsCategoryGoodsDataService = goalGoodsCategoryGoodsDS;
-            MemberSalesDataService = memberSalesDS;
             BranchGoalPromotionDataService = branchGoalPromotionDS;
             PositionReceiptPromotionDataService = positionReceiptPromotionDS;
             PositionTypeDataService = positionTypeDS;

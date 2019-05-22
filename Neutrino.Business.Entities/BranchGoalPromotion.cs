@@ -25,12 +25,13 @@ namespace Neutrino.Entities
         /// <summary>
         /// شناسه هدف مرکز
         /// </summary>
-        public int BranchGoalId { get; set; }
-        public virtual BranchGoal BranchGoal { get; set; }
+        public int BranchId { get; set; }
+        public virtual Branch Branch { get; set; }
         
         public virtual ICollection<PositionReceiptPromotion> PositionReceiptPromotions { get; set; }
         public decimal TotalSales { get; set; }
         public int TotalQuantity { get; set; }
+        public decimal FulfilledPercent { get; set; }
 
         public BranchGoalPromotion() => PositionReceiptPromotions = new HashSet<PositionReceiptPromotion>();
 

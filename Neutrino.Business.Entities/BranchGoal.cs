@@ -32,8 +32,8 @@ namespace Neutrino.Entities
         /// هدف
         /// </summary>
         public virtual Goal Goal { get; set; }
-        public virtual ICollection<BranchGoalPromotion> BranchGoalPromotions { get; private set; }
+        
 
-        public BranchGoal() => BranchGoalPromotions = new HashSet<BranchGoalPromotion>();
+        
     }
 }

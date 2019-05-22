@@ -20,11 +20,13 @@ namespace Neutrino.Entities
         public virtual ICollection<BranchGoal> BranchGoals { get; set; }
         public virtual ICollection<FulfillmentPercent> GoalFulfillments { get; set; }
         public virtual ICollection<BranchReceiptGoalPercent> BranchReceiptGoalPercent { get; set; }
+        public virtual ICollection<BranchGoalPromotion> BranchGoalPromotions { get; private set; }
         public Branch()
         {
             BranchGoals = new HashSet<BranchGoal>();
             GoalFulfillments = new HashSet<FulfillmentPercent>();
             BranchReceiptGoalPercent = new HashSet<BranchReceiptGoalPercent>();
+            BranchGoalPromotions = new HashSet<BranchGoalPromotion>();
         }
     }
 }

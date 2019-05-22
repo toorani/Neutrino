@@ -599,6 +599,14 @@
     <Compile Include="Migrations\201905201739355_alterMemebr.Designer.cs">
       <DependentUpon>201905201739355_alterMemebr.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905221246589_remove_branchgoalId_add_branchId.cs" />
+    <Compile Include="Migrations\201905221246589_remove_branchgoalId_add_branchId.Designer.cs">
+      <DependentUpon>201905221246589_remove_branchgoalId_add_branchId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905222008576_addFulfillPercent_branchgoalpromotion.cs" />
+    <Compile Include="Migrations\201905222008576_addFulfillPercent_branchgoalpromotion.Designer.cs">
+      <DependentUpon>201905222008576_addFulfillPercent_branchgoalpromotion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NeutrinoDataRepositoryBase.cs" />
     <Compile Include="NeutrinoRepositoryBase.cs" />
@@ -995,6 +1003,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905201739355_alterMemebr.resx">
       <DependentUpon>201905201739355_alterMemebr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905221246589_remove_branchgoalId_add_branchId.resx">
+      <DependentUpon>201905221246589_remove_branchgoalId_add_branchId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905222008576_addFulfillPercent_branchgoalpromotion.resx">
+      <DependentUpon>201905222008576_addFulfillPercent_branchgoalpromotion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

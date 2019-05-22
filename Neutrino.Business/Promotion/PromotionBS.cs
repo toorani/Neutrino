@@ -41,6 +41,7 @@ namespace Neutrino.Business
             /// </summary>
             public int TotalQuantity { get; set; }
             public decimal? SellerFulfillmentPercent { get; set; }
+            public decimal FulfillPercent { get; set; }
         }
         class AggregationInfo
         {
@@ -296,21 +297,31 @@ namespace Neutrino.Business
                                 //اطلاعات فروش مرکز
                                 var branchSalesInfo = lst_branch_salesInfo.Single(x => x.BranchId == branchGoal.BranchId);
                                 branchSalesInfo.BranchGoalId = branchGoal.Id;
+                                var computingValue = 0.0M;
+
                                 if (goal.ComputingTypeId == ComputingTypeEnum.Quantities)
                                 {
                                     //در صورتیکه معیار هدف تعدادی باشد ،باید تعداد فروش مقایسه شود
-                                    goalStep = goal.GoalSteps.OrderByDescending(step => step.ComputingValue)
-                                        .Where(step => (step.ComputingValue * branchGoal.Percent * 0.01M) <= branchSalesInfo.TotalQuantity)
-                                        .FirstOrDefault();
+                                    computingValue = branchSalesInfo.TotalQuantity;
                                 }
                                 else if (goal.ComputingTypeId == ComputingTypeEnum.Amount)
                                 {
                                     //در صورتیکه معیار هدف تعدادی باشد ،باید مقدار فروش مقایسه شود
-                                    goalStep = goal.GoalSteps.OrderByDescending(step => step.ComputingValue)
-                                        .Where(step => (step.ComputingValue * branchGoal.Percent * 0.01M) <= branchSalesInfo.TotalSales)
-                                        .FirstOrDefault();
+                                    computingValue = branchSalesInfo.TotalSales;
                                 }
 
+                                goalStep = goal.GoalSteps.OrderByDescending(step => step.ComputingValue)
+                                        .Where(step => (step.ComputingValue * branchGoal.Percent * 0.01M) <= computingValue)
+                                        .FirstOrDefault();
+
+                                if (goalStep != null)
+                                {
+                                    branchSalesInfo.FulfillPercent = (computingValue / (goalStep.ComputingValue * branchGoal.Percent.Value * 0.01M)) * 100;
+                                }
+                                else if (goal.GoalSteps.Count != 0)
+                                {
+                                    branchSalesInfo.FulfillPercent = (computingValue / (goal.GoalSteps.FirstOrDefault().ComputingValue * branchGoal.Percent.Value * 0.01M)) * 100;
+                                }
                                 addBranchGoalPromotion(entity, goal, goalStep, branchSalesInfo);
                             }
                         });
@@ -321,7 +332,7 @@ namespace Neutrino.Business
                         .ForEach(goal =>
                         {
                             var quantityConditions = goal.QuantityConditions.Single();
-
+                            //لیست فروش هر محصول در مرکز به همراه فیلد اینکه محصول به تعداد مورد نظر رسیده است یا خیر؟
                             var lst_branchConditions = (from gdsqc in quantityConditions.GoodsQuantityConditions
                                                         join brsa in unitOfWork.BranchSalesDataService.GetQuery()
                                                         on gdsqc.GoodsId equals brsa.GoodsId
@@ -332,15 +343,18 @@ namespace Neutrino.Business
                                                             brsa.GoodsId,
                                                             Amount = brsa.TotalAmount,
                                                             Quantity = brsa.TotalNumber,
-                                                            IsGoodsFulfilled = gdsqc.BranchQuantityConditions.SingleOrDefault(x => x.BranchId == brsa.BranchId) != null ? gdsqc.BranchQuantityConditions.SingleOrDefault(x => x.BranchId == brsa.BranchId).Quantity > brsa.TotalNumber : false
+                                                            BranchQuantity = gdsqc.BranchQuantityConditions.SingleOrDefault(x => x.BranchId == brsa.BranchId)?.Quantity,
+                                                            IsGoodsFulfilled = (gdsqc.BranchQuantityConditions.SingleOrDefault(x => x.BranchId == brsa.BranchId)?.Quantity <= brsa.TotalNumber)
                                                         }).ToList();
-
+                            //درصد دستیابی هر مرکز به هدف تعدادی
                             var lst_branchFulfillInfo = (from br_cd in lst_branchConditions
+                                                         group br_cd by br_cd.BranchId into grp
                                                          select new
                                                          {
-                                                             br_cd.BranchId,
-                                                             FulFillPercent = (lst_branchConditions.Count(x => x.IsGoodsFulfilled) / quantityConditions.Quantity) * 100
+                                                             BranchId = grp.Key,
+                                                             FulFillPercent = ((decimal)(grp.Count(x => x.IsGoodsFulfilled) / (decimal)quantityConditions.Quantity)) * 100M
                                                          }).ToList();
+
 
                             lst_branchFulfillInfo.ForEach(branchFulfillInfo =>
                             {
@@ -353,8 +367,9 @@ namespace Neutrino.Business
                                     TotalSales = lst_branchConditions.Sum(x => x.Amount),
                                     TotalQuantity = lst_branchConditions.Sum(x => x.Quantity),
                                     BranchId = branchFulfillInfo.BranchId,
-                                    SellerFulfillmentPercent = lst_fulfillmentPercents.Any(x => x.BranchId == branchFulfillInfo.BranchId) ?
-                                            lst_fulfillmentPercents.Single(x => x.BranchId == branchFulfillInfo.BranchId).SellerFulfillmentPercent : null
+                                    FulfillPercent = branchFulfillInfo.FulFillPercent,
+                                    SellerFulfillmentPercent = lst_fulfillmentPercents.SingleOrDefault(x => x.BranchId == branchFulfillInfo.BranchId)?.SellerFulfillmentPercent
+
                                 };
 
                                 addBranchGoalPromotion(entity, goal, goalStep, branchSalesInfo);
@@ -375,19 +390,19 @@ namespace Neutrino.Business
                             //به دلیل اینکه ممکن است اهدافی تعریف شود که طول زمان آن بیشتر از یکماه باشد 
                             //باید به ازای هر هدف و تاریخ آن فروش محاسبه شود
                             var lst_MemebrSales = (from ggcg in unitOfWork.GoalGoodsCategoryGoodsDataService.GetQuery()
-                                                   join brsa in unitOfWork.MemberSalesDataService.GetQuery()
+                                                   join brsa in unitOfWork.InvoiceDataService.GetQuery()
                                                    on ggcg.GoodsId equals brsa.GoodsId
                                                    join member in unitOfWork.MemberDataService.GetQuery()
-                                                   on brsa.MemberId equals member.Id
+                                                   on brsa.SellerId equals member.Id
                                                    where brsa.StartDate >= goal.StartDate && brsa.EndDate <= goal.EndDate
                                                    && ggcg.GoalGoodsCategoryId == goal.GoalGoodsCategoryId
                                                    select new
                                                    {
                                                        brsa.GoodsId,
-                                                       brsa.Quantity,
-                                                       brsa.Amount,
+                                                       Quantity = brsa.TotalCount,
+                                                       Amount = brsa.TotalAmount,
                                                        member.BranchId,
-                                                       brsa.MemberId
+                                                       MemberId = brsa.SellerId
                                                    }).ToList();
                             lst_MemebrSales.ForEach(memberSales =>
                             {
@@ -517,14 +532,17 @@ namespace Neutrino.Business
                     //لیست سهم پست های سازمانی برای مرکز
                     lst_orgStructureShare_branch = lst_orgStructureShare.Where(x => x.BranchId == braReceipt.BranchId).ToList();
 
+                    decimal fulfilledPercent = 0;
                     //محاسبه پورسانت هدف وصول کل
-                    promotion = getReceiptPromotion(braReceipt, receiptTotalGoal);
+                    promotion = getReceiptPromotion(braReceipt, receiptTotalGoal,ref fulfilledPercent);
                     //محاسبه سهم پورسانت پست های سازمانی از هدف وصول کل
                     branchPromotion.BranchGoalPromotions.Add(new BranchGoalPromotion
                     {
                         GoalId = receiptTotalGoal.Id,
+                        FulfilledPercent = fulfilledPercent,
                         FinalPromotion = promotion,
-                        BranchGoalId = receiptTotalGoal.BranchGoals.Single(x => x.BranchId == braReceipt.BranchId).Id,
+                        //BranchGoalId = receiptTotalGoal.BranchGoals.Single(x => x.BranchId == braReceipt.BranchId).Id,
+                        BranchId = braReceipt.BranchId,
                         PromotionWithOutFulfillmentPercent = promotion,
                         PositionReceiptPromotions = lst_orgStructureShare_branch
                         .Where(x => x.TotalReceiptPercent != null)
@@ -536,16 +554,19 @@ namespace Neutrino.Business
                         }).ToList()
                     });
 
+                    fulfilledPercent = 0;
                     //محاسبه پورسانت هدف وصول خصوصی
-                    promotion = getReceiptPromotion(braReceipt, receiptPrivateGoal);
+                    promotion = getReceiptPromotion(braReceipt, receiptPrivateGoal,ref fulfilledPercent);
 
                     //محاسبه سهم پورسانت پست های سازمانی از هدف وصول خصوصی
                     branchPromotion.BranchGoalPromotions.Add(new BranchGoalPromotion
                     {
                         GoalId = receiptPrivateGoal.Id,
+                        FulfilledPercent = fulfilledPercent,
                         FinalPromotion = promotion,
                         PromotionWithOutFulfillmentPercent = promotion,
-                        BranchGoalId = receiptPrivateGoal.BranchGoals.Single(x => x.BranchId == braReceipt.BranchId).Id,
+                        //BranchGoalId = receiptPrivateGoal.BranchGoals.Single(x => x.BranchId == braReceipt.BranchId).Id,
+                        BranchId = braReceipt.BranchId,
                         PositionReceiptPromotions = lst_orgStructureShare_branch
                         .Where(x => x.PrivateReceiptPercent != null)
                         .Select(x => new PositionReceiptPromotion
@@ -588,6 +609,12 @@ namespace Neutrino.Business
             var result = new BusinessResultValue<List<ReportBranchSalesGoal>>();
             try
             {
+                var computingTypeId = await (from gl in unitOfWork.GoalDataService.GetQuery()
+                                             join ggc in unitOfWork.GoalGoodsCategoryDataService.GetQuery()
+                                             on gl.GoalGoodsCategoryId equals ggc.Id
+                                             where gl.GoalGoodsCategoryId == goalGoodsCategoryId
+                                             && gl.StartDate >= startDate && gl.EndDate <= endDate
+                                             select gl.ComputingTypeId).FirstOrDefaultAsync();
 
                 var query = await (from gl in unitOfWork.GoalDataService.GetQuery()
                                    join ggc in unitOfWork.GoalGoodsCategoryDataService.GetQuery()
@@ -599,14 +626,11 @@ namespace Neutrino.Business
                                    join br in unitOfWork.BranchDataService.GetQuery()
                                    on brgl.BranchId equals br.Id
                                    join brglp in unitOfWork.BranchGoalPromotionDataService.GetQuery()
-                                   on brgl.Id equals brglp.BranchGoalId
+                                   on new { brgl.GoalId, brgl.BranchId } equals new { brglp.GoalId, brglp.BranchId }
                                    where (gl.ComputingTypeId == ComputingTypeEnum.Amount ||
                                    gl.ComputingTypeId == ComputingTypeEnum.Quantities)
-                                   &&
-                                   gl.GoalTypeId == GoalTypeEnum.Distributor &&
-                                   gl.GoalGoodsCategoryId == goalGoodsCategoryId
-                                   && gl.StartDate >= startDate && gl.EndDate <= gl.EndDate
                                    && gl.GoalGoodsCategoryId == goalGoodsCategoryId
+                                   && gl.StartDate >= startDate && gl.EndDate <= endDate
                                    select new
                                    {
                                        gl.ComputingTypeId,
@@ -618,9 +642,19 @@ namespace Neutrino.Business
                                        GoalAmount = gls.ComputingValue,
                                        GoalGoodsCategoryName = ggc.Name,
                                        AmountSpecified = brgl.Percent.HasValue ? brgl.Percent.Value * 0.01M * gls.ComputingValue : brgl.Amount.Value
-                                   })
-                                   .ToListAsync();
+                                   }).ToListAsync();
 
+
+                if (computingTypeId == ComputingTypeEnum.Amount || computingTypeId == ComputingTypeEnum.Amount)
+                {
+
+
+                }
+                else if (computingTypeId == ComputingTypeEnum.Percentage)
+                {
+
+
+                }
                 result.ResultValue = query.Select(x => new ReportBranchSalesGoal
                 {
                     AmountSpecified = x.AmountSpecified,
@@ -654,7 +688,7 @@ namespace Neutrino.Business
                                    where gl.StartDate >= startDate && gl.EndDate <= endDate
                                    //&& (gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Group || gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single)
                                    join brglp in unitOfWork.BranchGoalPromotionDataService.GetQuery()
-                                   on brgl.Id equals brglp.BranchGoalId
+                                   on new { brgl.GoalId, brgl.BranchId } equals new { brglp.GoalId, brglp.BranchId }
                                    join brp in unitOfWork.BranchPromotionDataService.GetQuery()
                                    on brglp.BranchPromotionId equals brp.Id
                                    join br in unitOfWork.BranchDataService.GetQuery()
@@ -694,7 +728,7 @@ namespace Neutrino.Business
             }
             return result;
         }
-                public async Task<IBusinessResultValue<List<ReportBranchReceiptGoal>>> LoadReportBranchReceipt(int year, int month, GoalGoodsCategoryTypeEnum goalGoodsCategoryTypeId)
+        public async Task<IBusinessResultValue<List<ReportBranchReceiptGoal>>> LoadReportBranchReceipt(int year, int month, GoalGoodsCategoryTypeEnum goalGoodsCategoryTypeId)
         {
             var result = new BusinessResultValue<List<ReportBranchReceiptGoal>>();
             try
@@ -706,7 +740,7 @@ namespace Neutrino.Business
                                    join br in unitOfWork.BranchDataService.GetQuery()
                                    on brgl.BranchId equals br.Id
                                    join brglp in unitOfWork.BranchGoalPromotionDataService.GetQuery()
-                                   on brgl.Id equals brglp.BranchGoalId
+                                   on new { brgl.GoalId, brgl.BranchId } equals new { brglp.GoalId, brglp.BranchId }
                                    join prp in unitOfWork.PositionReceiptPromotionDataService.GetQuery()
                                    on brglp.Id equals prp.BranchGoalPromotionId
                                    join brr in unitOfWork.BranchReceiptDataService.GetQuery()
@@ -884,10 +918,10 @@ namespace Neutrino.Business
                          on ggcg.GoodsId equals brsa.GoodsId
                          where brsa.StartDate >= goal.StartDate && brsa.EndDate <= goal.EndDate
                          && ggcg.GoalGoodsCategoryId == goal.GoalGoodsCategoryId
-                         group brsa by new { brsa.BranchId } into grp
+                         group brsa by brsa.BranchId into grp
                          select new
                          {
-                             grp.Key.BranchId,
+                             BranchId = grp.Key,
                              TotalSales = grp.Sum(x => x.TotalAmount),
                              TotalQuantity = grp.Sum(x => x.TotalNumber),
                          }).ToList();
@@ -938,6 +972,7 @@ namespace Neutrino.Business
                     {
                         //به ازای فروش این تعداد
                         promotion = goalStepItem.Amount.Value * (branchSalesInfo.TotalQuantity / goalStepItem.EachValue.Value);
+
                     }
                 }
 
@@ -948,10 +983,11 @@ namespace Neutrino.Business
                 {
                     GoalId = goal.Id,
                     PromotionWithOutFulfillmentPercent = promotion,
-                    BranchGoalId = branchSalesInfo.BranchGoalId,
+                    BranchId = branchSalesInfo.BranchId,
                     TotalSales = branchSalesInfo.TotalSales,
                     TotalQuantity = branchSalesInfo.TotalQuantity,
-                    FinalPromotion = branchSalesInfo.SellerFulfillmentPercent.HasValue ? promotion * branchSalesInfo.SellerFulfillmentPercent.Value * 0.01M: promotion
+                    FulfilledPercent = branchSalesInfo.FulfillPercent,
+                    FinalPromotion = branchSalesInfo.SellerFulfillmentPercent.HasValue ? promotion * branchSalesInfo.SellerFulfillmentPercent.Value * 0.01M : promotion
                 });
             }
             else if (goal.GoalNonFulfillmentPercents.Count != 0)
@@ -968,9 +1004,11 @@ namespace Neutrino.Business
                    {
                        GoalId = goal.Id,
                        PromotionWithOutFulfillmentPercent = promotion,
-                       BranchGoalId = branchSalesInfo.BranchGoalId,
+                       //BranchGoalId = branchSalesInfo.BranchGoalId,
+                       BranchId = branchSalesInfo.BranchId,
                        TotalSales = branchSalesInfo.TotalSales,
                        TotalQuantity = branchSalesInfo.TotalQuantity,
+                       FulfilledPercent = branchSalesInfo.FulfillPercent,
                        FinalPromotion = branchSalesInfo.SellerFulfillmentPercent.HasValue ? promotion * branchSalesInfo.SellerFulfillmentPercent.Value * 0.01M : promotion
                    });
                 }
@@ -983,15 +1021,17 @@ namespace Neutrino.Business
                    .Add(new BranchGoalPromotion
                    {
                        GoalId = goal.Id,
-                       BranchGoalId = branchSalesInfo.BranchGoalId,
+                       //BranchGoalId = branchSalesInfo.BranchGoalId,
+                       BranchId = branchSalesInfo.BranchId,
                        TotalSales = branchSalesInfo.TotalSales,
                        TotalQuantity = branchSalesInfo.TotalQuantity,
+                       FulfilledPercent = branchSalesInfo.FulfillPercent,
                        FinalPromotion = 0,
                        PromotionWithOutFulfillmentPercent = 0
                    });
             }
         }
-        private decimal getReceiptPromotion(BranchReceipt braReceipt, Goal receiptGoal)
+        private decimal getReceiptPromotion(BranchReceipt braReceipt, Goal receiptGoal, ref decimal fulfilledPerecnt)
         {
             var receiptTotal_branchGoal = receiptGoal.BranchGoals.Single(x => x.BranchId == braReceipt.BranchId);
             var receiptTotal_branchReceiptGoalPercent = receiptGoal.BranchReceiptGoalPercent.Single(x => x.BranchId == braReceipt.BranchId);
@@ -1006,12 +1046,14 @@ namespace Neutrino.Business
             {
                 //مرکز به هدف وصول دست یافته  
                 promotion = amount * receiptTotal_branchReceiptGoalPercent.ReachedPercent * 0.01M;
+                
             }
             else
             {
                 promotion = amount * receiptTotal_branchReceiptGoalPercent.NotReachedPercent * 0.01M;
             }
 
+            fulfilledPerecnt = (amount / receiptTotal_branchGoal.Amount.Value) * 100;
             return promotion;
         }
         #endregion
