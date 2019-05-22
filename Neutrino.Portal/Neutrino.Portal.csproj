@@ -437,9 +437,9 @@
     <Compile Include="Backend\UserAccount\UserValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Account\changeassword\item.html" />
-    <Content Include="Views\Account\changeassword\itemController.js" />
-    <Content Include="Views\Account\resetpassword\resetpasswordTemplate.html" />
+    <Content Include="Views\Account\changePassword\item.html" />
+    <Content Include="Views\Account\changePassword\itemController.js" />
+    <Content Include="Views\Account\resetPassword\resetpasswordTemplate.html" />
     <Content Include="Content\account.css" />
     <Content Include="Content\angular\angular-block-ui.css" />
     <Content Include="Content\angular\angular-block-ui.min.css" />
@@ -757,8 +757,8 @@
     <Content Include="Scripts\validationEngine\jquery\jquery.validationEngine.js" />
     <Content Include="Scripts\validationEngine\jquery\languages\jquery.validationEngine-en.js" />
     <Content Include="Scripts\validationEngine\jquery\languages\jquery.validationEngine-fa.js" />
-    <Content Include="Views\Account\resetpassword\item.html" />
-    <Content Include="Views\Account\resetpassword\itemController.js" />
+    <Content Include="Views\Account\resetPassword\item.html" />
+    <Content Include="Views\Account\resetPassword\itemController.js" />
     <Content Include="Views\Account\registration\index.html" />
     <Content Include="Views\Account\registration\itemController.js" />
     <Content Include="Views\Account\registration\item.html" />
@@ -844,6 +844,7 @@
     <Content Include="Views\Security\action\item.html" />
     <Content Include="Views\Security\permission\itemController.js" />
     <Content Include="Views\Security\action\itemController.js" />
+    <Content Include="Views\Shared\404.html" />
     <Content Include="Views\Shared\neutrinoServices.js" />
     <Content Include="Views\Shared\modal.tmpl.html" />
     <Content Include="Views\Shared\angular.dataTable.tmpl.html" />

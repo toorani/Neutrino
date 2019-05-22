@@ -99,7 +99,7 @@
                     {
                         Title = "تغییر رمز عبور",
                         Icon = "fa fa-key",
-                        Url = "/account/changeassword/item",
+                        Url = "/account/changePassword/item",
                         OrderId = 3,
                         Parent = securityItem,
                         ParentId = securityItem.Id

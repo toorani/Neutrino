@@ -31,7 +31,6 @@ namespace Neutrino.Data.EntityFramework
 
         public void ScalarExecuted(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
         {
-            
         }
 
         public void ScalarExecuting(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)

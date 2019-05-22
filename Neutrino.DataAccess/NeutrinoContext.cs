@@ -5,6 +5,8 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure.Interception;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Neutrino.Data.EntityFramework
@@ -15,7 +17,7 @@ namespace Neutrino.Data.EntityFramework
         public NeutrinoContext()
             : this("name=DefaultConnection")
         {
-            
+
         }
 
         public NeutrinoContext(string nameOrConnectionString)
@@ -130,8 +132,8 @@ namespace Neutrino.Data.EntityFramework
             //        cs.MapLeftKey("UserId");
             //        cs.MapRightKey("RoleId");
             //    });
-            
-            
+
+
 
             modelBuilder.Entity<BranchGoal>()
                 .Property(p => p.Percent)
@@ -149,7 +151,7 @@ namespace Neutrino.Data.EntityFramework
                 .Property(p => p.TotalSalesSpecifiedPercent)
                 .HasPrecision(9, 5);
 
-           
+
             modelBuilder.Entity<OrgStructureShare>()
                 .Property(p => p.PrivateReceiptPercent)
                 .HasPrecision(9, 5);
@@ -159,7 +161,7 @@ namespace Neutrino.Data.EntityFramework
             modelBuilder.Entity<OrgStructureShare>()
                 .Property(p => p.TotalReceiptPercent)
                 .HasPrecision(9, 5);
-           
+
 
 
 
@@ -183,17 +185,21 @@ namespace Neutrino.Data.EntityFramework
         }
         public override int SaveChanges()
         {
-            SetLastUpdated();
+
+            FillEspecialFields();
             return base.SaveChanges();
         }
         public override Task<int> SaveChangesAsync()
         {
-            SetLastUpdated();
+            FillEspecialFields();
             return base.SaveChangesAsync();
         }
 
-        private void SetLastUpdated()
+        private void FillEspecialFields()
         {
+            var principal = Thread.CurrentPrincipal as ClaimsPrincipal;
+            var userId = Convert.ToInt32(principal?.Claims?.SingleOrDefault(cl => cl.Type == ClaimTypes.NameIdentifier)?.Value);
+
             ChangeTracker.Entries()
                 .Where(t => t.State == EntityState.Modified)
                 .ToList()
@@ -201,7 +207,21 @@ namespace Neutrino.Data.EntityFramework
                 {
                     if (x.Entity is EntityBase)
                     {
-                        ((EntityBase)x.Entity).LastUpdated = DateTime.Now;
+                        var entityBase = x.Entity as EntityBase;
+                        entityBase.LastUpdated = DateTime.Now;
+                        entityBase.EditorId = userId;
+                    }
+                });
+            ChangeTracker.Entries()
+                .Where(t => t.State == EntityState.Added)
+                .ToList()
+                .ForEach(x =>
+                {
+                    if (x.Entity is EntityBase)
+                    {
+                        var entityBase = x.Entity as EntityBase;
+                        entityBase.DateCreated = DateTime.Now;
+                        entityBase.CreatorID = userId;
                     }
                 });
         }
