@@ -50,34 +50,22 @@ namespace Neutrino.Business
             When(x => x.PrivateReceiptPercent.HasValue, () =>
             {
                 RuleFor(x => x.PrivateReceiptPercent)
-                .LessThanOrEqualTo(100)
-                .WithMessage(".لطفا مقداری بین صفر تا صد برای سهم وصول خصوصی مشخص کنید");
-
-                RuleFor(entity => entity.PrivateReceiptPercent)
-                   .GreaterThanOrEqualTo(0)
-                   .WithMessage(".لطفا مقداری بین صفر تا صد برای سهم وصول خصوصی مشخص کنید");
+                 .GreaterThanOrEqualTo(0)
+                 .WithMessage(".لطفا عددی بزرگتر از صفر برای درصد سهم وصول خصوصی مشخص کنید");
             });
 
             When(x => x.TotalReceiptPercent.HasValue, () =>
             {
-                RuleFor(x => x.TotalReceiptPercent)
-                .LessThanOrEqualTo(100)
-                .WithMessage(".لطفا مقداری بین صفر تا صد برای سهم وصول کل مشخص کنید");
-
                 RuleFor(entity => entity.TotalReceiptPercent)
                    .GreaterThanOrEqualTo(0)
-                   .WithMessage(".لطفا مقداری بین صفر تا صد برای سهم وصول کل مشخص کنید");
+                   .WithMessage(".لطفا عددی بزرگتر از صفر برای سهم وصول کل مشخص کنید");
             });
 
             When(x => x.SalesPercent.HasValue, () =>
             {
-                RuleFor(x => x.SalesPercent)
-                .LessThanOrEqualTo(100)
-                .WithMessage(".لطفا مقداری بین صفر تا صد برای سهم فروش مشخص کنید");
-
                 RuleFor(entity => entity.SalesPercent)
                    .GreaterThanOrEqualTo(0)
-                   .WithMessage(".لطفا مقداری بین صفر تا صد برای سهم فروش مشخص کنید");
+                   .WithMessage(".لطفا عددی بزرگتر از صفر برای سهم فروش مشخص کنید");
             });
         }
 

@@ -21,7 +21,7 @@ namespace Neutrino.Business
             RuleFor(entity => entity.ManagerFulfillmentPercent)
                 .GreaterThanOrEqualTo(0)
                 //.LessThan(100)
-                .WithMessage(".لطفا عددی بزرگتر از صفر برای درصد رییس مشخص نماید");
+                .WithMessage(".لطفا عددی بزرگتر از صفر برای درصد مشمول رییس مشخص نماید");
 
             RuleFor(entity => entity.ManagerFulfillmentPercent)
                 .GreaterThanOrEqualTo(0)
@@ -30,7 +30,7 @@ namespace Neutrino.Business
             RuleFor(entity => entity.ManagerReachedPercent)
                 .GreaterThanOrEqualTo(0)
                 //.LessThan(100)
-                .WithMessage(".لطفا مقداری بین صفر تا صد برای درصد مشخص کنید");
+                .WithMessage(".لطفا عددی بزرگتر از صفر برای درصد معیار رییس مشخص کنید");
 
             RuleFor(entity => entity.Month)
                 .NotNull()
