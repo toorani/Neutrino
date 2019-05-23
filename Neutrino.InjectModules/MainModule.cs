@@ -74,7 +74,7 @@ namespace Neutrino.InjectModules
             Bind<IUserBS>().To<UserBS>();
             Bind(typeof(AbstractValidator<User>)).To(typeof(UserBusinessRules));
             //Bind<IRoleDS>().To<RoleDataService>();
-            Bind<INeutrinoRoleBS>().To<NeutrinoRoleBS>();
+            //Bind<INeutrinoRoleBS>().To<NeutrinoRoleBS>();
 
             //TotalFulfillPromotionPercent
             Bind<IFulfillmentPromotionConditionBS>().To<FulfillmentPromotionConditionBS>();

@@ -141,7 +141,6 @@
     <Compile Include="OrgStructure\OrgStructureBR.cs" />
     <Compile Include="Permission\PermissionBS.cs" />
     <Compile Include="UserAccount\UserBusinessRules.cs" />
-    <Compile Include="UserAccount\NeutrinoRoleBS.cs" />
     <Compile Include="UserAccount\UserBS.cs" />
     <Compile Include="BranchGoal\BranchGoalBS.cs" />
     <Compile Include="BranchGoal\BranchGoalBR.cs" />
@@ -159,9 +158,9 @@
       <Project>{223c1caf-caa4-4ffd-8e22-11566858a8fb}</Project>
       <Name>Neutrino.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Neutrino.DataAccess\Neutrino.Data.EntityFramework.csproj">
-      <Project>{f58dba9d-0b74-4ac6-b3c8-be32769d2d7f}</Project>
-      <Name>Neutrino.Data.EntityFramework</Name>
+    <ProjectReference Include="..\Neutrino.Data.EntityFramework.DataServices\Neutrino.Data.EntityFramework.DataServices.csproj">
+      <Project>{265cf4b2-cab1-4505-9a47-c27d8302b1be}</Project>
+      <Name>Neutrino.Data.EntityFramework.DataServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\Neutrino.Interfaces\Neutrino.Interfaces.csproj">
       <Project>{d0e43a2b-7e07-4ff8-b2cb-6b3ba58ccf47}</Project>

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Espresso.BusinessService;
+using Espresso.BusinessService.Interfaces;
 using Espresso.Core;
 using Espresso.Portal;
 using Espresso.Utilities.Interfaces;
@@ -33,7 +34,7 @@ namespace Neutrino.Portal.WebApiControllers
         private readonly IAuthenticationManager authenticationManager;
         private readonly IAppSettingManager appSettingManager;
         private readonly IUserBS userBusinessService;
-        private readonly INeutrinoRoleBS roleBusinessService;
+        private readonly IEntityListLoader<Role> roleBusinessService;
         #endregion
 
         #region [ Public Property(ies) ]
@@ -42,7 +43,7 @@ namespace Neutrino.Portal.WebApiControllers
 
         #region [ Constructor(s) ]
         public AccountServiceController(IAppSettingManager appSettingManager
-            , INeutrinoRoleBS roleBusinessService
+            , IEntityListLoader<Role> roleBusinessService
             , IUserBS userBusinessService
             , ApplicationUserManager userManager
             , ApplicationSignInManager signInManager
@@ -54,6 +55,7 @@ namespace Neutrino.Portal.WebApiControllers
             _userManager = userManager;
             _signInManager = signInManager;
             this.authenticationManager = authenticationManager;
+            this.roleBusinessService = roleBusinessService;
 
         }
 
@@ -237,7 +239,7 @@ namespace Neutrino.Portal.WebApiControllers
         public async Task<HttpResponseMessage> GetRoles()
         {
             bool loadRoleSystem = appSettingManager.GetValue<bool>("loadRoleSystem").Value;
-            var entities = await roleBusinessService.EntityListLoader.LoadListAsync(where: x => x.IsUsingBySystem == false || loadRoleSystem);
+            var entities = await roleBusinessService.LoadListAsync(where: x => x.IsUsingBySystem == false || loadRoleSystem);
 
             if (entities.ReturnStatus == false)
             {
@@ -248,21 +250,6 @@ namespace Neutrino.Portal.WebApiControllers
             List<RoleViewModel> dataSource = mapper.Map<List<Role>, List<RoleViewModel>>(entities.ResultValue);
 
             return CreateSuccessedListResponse(dataSource);
-        }
-
-        [Route("getRoleInfo"), HttpGet]
-        public async Task<HttpResponseMessage> GetRoleInfo(HttpRequestMessage request, int roleId)
-        {
-            var entity = await roleBusinessService.EntityLoader.LoadAsync(roleId);
-
-            if (entity.ReturnStatus == false)
-            {
-                return CreateErrorResponse(entity);
-            }
-
-            var mapper = GetMapper();
-            var dataViewModel = mapper.Map<Role, RoleViewModel>(entity.ResultValue);
-            return CreateViewModelResponse(dataViewModel, entity);
         }
 
         #endregion

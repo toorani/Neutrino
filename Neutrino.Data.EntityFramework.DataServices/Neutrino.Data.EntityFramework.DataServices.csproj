@@ -76,9 +76,12 @@
     <Compile Include="InvoiceDataService.cs" />
     <Compile Include="MemberPayrollDataService.cs" />
     <Compile Include="MemberReceiptDataService.cs" />
+    <Compile Include="NeutrinoDataRepositoryBase.cs" />
+    <Compile Include="NeutrinoRepositoryBase.cs" />
     <Compile Include="OrgStructureShareDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuantityConditionDataService.cs" />
+    <Compile Include="UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

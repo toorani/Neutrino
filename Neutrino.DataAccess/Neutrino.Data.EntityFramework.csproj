@@ -594,11 +594,8 @@
       <DependentUpon>201905230512259_addQau_amount_memberPer.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="NeutrinoDataRepositoryBase.cs" />
-    <Compile Include="NeutrinoRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NeutrinoContext.cs" />
-    <Compile Include="UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

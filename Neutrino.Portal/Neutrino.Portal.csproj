@@ -906,9 +906,9 @@
       <Project>{02298fdd-ee84-47b1-97e9-11cf68b03adc}</Project>
       <Name>Neutrino.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Neutrino.DataAccess\Neutrino.Data.EntityFramework.csproj">
-      <Project>{f58dba9d-0b74-4ac6-b3c8-be32769d2d7f}</Project>
-      <Name>Neutrino.Data.EntityFramework</Name>
+    <ProjectReference Include="..\Neutrino.Data.EntityFramework.DataServices\Neutrino.Data.EntityFramework.DataServices.csproj">
+      <Project>{265cf4b2-cab1-4505-9a47-c27d8302b1be}</Project>
+      <Name>Neutrino.Data.EntityFramework.DataServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\Neutrino.InjectModules\Neutrino.InjectModules.csproj">
       <Project>{849503c2-8e18-4a8a-9897-647e4ce2e3d7}</Project>
