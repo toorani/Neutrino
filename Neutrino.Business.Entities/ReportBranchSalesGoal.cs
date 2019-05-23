@@ -17,6 +17,7 @@ namespace Neutrino.Entities
         public decimal AmountSpecified { get; set; }
         public decimal FulfilledPercent { get; set; }
         public ComputingTypeEnum ComputingTypeId { get; set; }
+        public ApprovePromotionTypeEnum ApprovePromotionTypeId { get; set; }
         public int TotalQuantity { get; set; }
 
     }

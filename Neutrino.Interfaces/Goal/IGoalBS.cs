@@ -17,5 +17,6 @@ namespace Neutrino.Interfaces
         Task<IBusinessResult> UpdateGoalAsync(Goal goalEntity);
         Task<IBusinessResultValue<decimal>> LoadPreviousAggregationValueAync(int month, int year);
         Task<IBusinessLoadByPagingResult<GroupByStartEndDate>> LoadGroupByStartEndDateGoalsAync(bool? isUsedint,int pageNumber = 0, int pageSize = 15);
+        
     }
 }

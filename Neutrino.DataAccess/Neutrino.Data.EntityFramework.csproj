@@ -607,6 +607,10 @@
     <Compile Include="Migrations\201905222008576_addFulfillPercent_branchgoalpromotion.Designer.cs">
       <DependentUpon>201905222008576_addFulfillPercent_branchgoalpromotion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905230512259_addQau_amount_memberPer.cs" />
+    <Compile Include="Migrations\201905230512259_addQau_amount_memberPer.Designer.cs">
+      <DependentUpon>201905230512259_addQau_amount_memberPer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NeutrinoDataRepositoryBase.cs" />
     <Compile Include="NeutrinoRepositoryBase.cs" />
@@ -1009,6 +1013,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905222008576_addFulfillPercent_branchgoalpromotion.resx">
       <DependentUpon>201905222008576_addFulfillPercent_branchgoalpromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905230512259_addQau_amount_memberPer.resx">
+      <DependentUpon>201905230512259_addQau_amount_memberPer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -88,9 +88,7 @@
                                     هدفی جهت نمایش وجود ندارد
                                 </div>
                                 <br />
-
-
-                                <div class="table-responsive text-nowrap" ng-show="reportData.length != 0">
+                                <div class="table-responsive text-nowrap" ng-show="reportData.length != 0 && reportData[0].computingTypeId != 3">
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
@@ -113,13 +111,13 @@
                                                 </span>
                                             </td>
 
-                                            <td class="align-center dir-ltr">
+                                            <td class="align-left dir-ltr">
                                                 {{record.totalSales | number}}
                                             </td>
                                             <td class="align-center dir-ltr">
                                                 {{record.totalQuantity | number}}
                                             </td>
-                                            <td ng-repeat-start="gols in record.promotionGoalSteps" class="align-center dir-ltr">
+                                            <td ng-repeat-start="gols in record.promotionGoalSteps" class="align-left dir-ltr">
                                                 {{gols.amountSpecified | number}}
                                             </td>
 
@@ -135,13 +133,55 @@
                                         </tr>
 
                                     </table>
-                                    <div ng-show="reportData.length == 0">
-                                        <table class="table" cellspacing="0">
-                                            <caption>
-                                                <h2>اطلاعاتی وجود ندارد</h2>
-                                            </caption>
-                                        </table>
-                                    </div>
+                                </div>
+                                <div class="table-responsive text-nowrap" ng-show="reportData.length != 0 && reportData[0].computingTypeId == 3">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <td class="align-center"><input type="text" ng-model="filter_branchName" class="form-control" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-center ">نام مرکز</td>
+                                                <td class="align-center ">فروش</td>
+                                                <td class="align-center ">تعداد</td>
+                                                <td class="align-center ">تحقق</td>
+                                                <td class="align-center ">پورسانت</td>
+                                            </tr>
+
+                                        </thead>
+                                        <tr ng-repeat="record in reportData | filter :{branchName: filter_branchName}  ">
+                                            <td style=" position: relative;">
+                                                <span ng-class="{false:'fillTd text-center label-danger', true:'fillTd text-center label-success'}[record.fulfilledPercent >= 100]">
+                                                    {{record.branchName}}
+                                                </span>
+                                            </td>
+
+                                            <td class="align-left dir-ltr">
+                                                {{record.totalSales | number}}
+                                            </td>
+                                            <td class="align-center dir-ltr">
+                                                {{record.totalQuantity | number}}
+                                            </td>
+                                            <td style=" position: relative;">
+                                                <span ng-class="{false:'fillTd text-center dir-ltr label-warning', true:'fillTd text-center dir-ltr label-success'}[record.fulfilledPercent >= 100]">
+                                                    % {{record.fulfilledPercent}}
+                                                </span>
+
+                                            </td>
+                                            <td class="align-center dir-ltr info">
+                                                {{record.promotionWithOutFulfillmentPercent | number}}
+                                            </td>
+                                        </tr>
+
+                                    </table>
+
+                                </div>
+                                <div ng-show="reportData.length == 0">
+                                    <table class="table" cellspacing="0">
+                                        <caption>
+                                            <h2>اطلاعاتی وجود ندارد</h2>
+                                        </caption>
+                                    </table>
                                 </div>
                             </div>
                         </div>

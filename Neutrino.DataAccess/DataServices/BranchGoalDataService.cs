@@ -1,13 +1,9 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using Espresso.DataAccess.Interfaces;
-using Espresso.DataAccess;
-using Neutrino.Entities;
+﻿using Neutrino.Entities;
 using Neutrino.Interfaces;
-using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neutrino.Data.EntityFramework.DataServices
 {
