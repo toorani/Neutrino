@@ -39,7 +39,7 @@ namespace Neutrino.InjectModules
 
 
             //Permission
-            Bind<IPermissionDS>().To<PermissionDataService>();
+            //Bind<IPermissionDS>().To<PermissionDataService>();
             Bind<IPermissionBS>().To<PermissionBS>();
 
             //IGoalGoodsCategory
@@ -73,7 +73,7 @@ namespace Neutrino.InjectModules
             //User account
             Bind<IUserBS>().To<UserBS>();
             Bind(typeof(AbstractValidator<User>)).To(typeof(UserBusinessRules));
-            Bind<IRoleDS>().To<RoleDataService>();
+            //Bind<IRoleDS>().To<RoleDataService>();
             Bind<INeutrinoRoleBS>().To<NeutrinoRoleBS>();
 
             //TotalFulfillPromotionPercent

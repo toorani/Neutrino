@@ -8,7 +8,7 @@ namespace Neutrino.Interfaces
     public interface IPermissionDS : IEntityBaseRepository<Permission>
     {
         Task<List<Permission>> GetUserAccessAsync(int userId);
-        List<Permission> GetUserAccess(int userId);
+        
         
     }
 }

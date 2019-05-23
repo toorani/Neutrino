@@ -98,7 +98,6 @@
     <Compile Include="GoodsCategory\IGoodsCategory.cs" />
     <Compile Include="CostCoefficient\ICostCoefficientDS.cs" />
     <Compile Include="FulfillmentPercent\IFulfillmentPercentDS.cs" />
-    <Compile Include="Permission\IPermissionDS.cs" />
     <Compile Include="OrgStructureShare\IOrgStructureShareDS.cs" />
     <Compile Include="BranchGoal\IBranchGoalDS.cs" />
     <Compile Include="GoalGoodsCategory\IGoalGoodsCategoryBS.cs" />

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Data.Entity;
-using System.Threading.Tasks;
+﻿using Espresso.Core.Ninject.Http;
 using Espresso.DataAccess.Interfaces;
-using Espresso.DataAccess;
-using Neutrino.Data.EntityFramework.DataServices;
-using Neutrino.Interfaces;
 using Espresso.Entites;
 using Neutrino.Entities;
-using Espresso.Core.Ninject;
-using Espresso.Core.Ninject.Http;
+using Neutrino.Interfaces;
+using System;
+using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace Neutrino.Data.EntityFramework
 {
@@ -41,7 +38,7 @@ namespace Neutrino.Data.EntityFramework
         public IMemberReceiptDS MemberReceiptDataService { get; private set; }
         public IEntityBaseRepository<OrgStructure> OrgStructureDataService { get; private set; }
         public IOrgStructureShareDS OrgStructureShareDataService { get; private set; }
-        public IPermissionDS PermissionDataService { get; private set; }
+        public IEntityBaseRepository<Permission> PermissionDataService { get; private set; }
         public IEntityBaseRepository<FulfillmentPromotionCondition> TotalFulfillPromotionPercentDataService { get; private set; }
         public IEntityBaseRepository<Promotion> PromotionDataService { get; private set; }
         public IQuantityConditionDS QuantityConditionDataService { get; private set; }
@@ -88,7 +85,7 @@ namespace Neutrino.Data.EntityFramework
             , IMemberReceiptDS memberReceiptDS
             , IEntityBaseRepository<OrgStructure> orgStructureDS
             , IOrgStructureShareDS orgStructureShareDS
-            , IPermissionDS permissionDS
+            , IEntityBaseRepository<Permission> permissionDS
             , IEntityBaseRepository<FulfillmentPromotionCondition> totalFulfillPromotionPercentDS
             , IEntityBaseRepository<Promotion> promotionDS
             , IQuantityConditionDS quantityConditionDS

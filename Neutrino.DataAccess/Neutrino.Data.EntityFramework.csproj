@@ -81,24 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandInterceptor.cs" />
-    <Compile Include="DataServices\BranchGoalDataService.cs" />
-    <Compile Include="DataServices\BranchReceiptGoalPercentDataService.cs" />
-    <Compile Include="DataServices\GoalNonFulfillmentPercentDataService.cs" />
-    <Compile Include="DataServices\GoalGoodsCategoryDataService.cs" />
-    <Compile Include="DataServices\QuantityConditionDataService.cs" />
-    <Compile Include="DataServices\BranchReceiptDataService.cs" />
-    <Compile Include="DataServices\MemberReceiptDataService.cs" />
-    <Compile Include="DataServices\MemberPayrollDataService.cs" />
-    <Compile Include="DataServices\InvoiceDataService.cs" />
-    <Compile Include="DataServices\BranchSalesDataService.cs" />
-    <Compile Include="DataServices\CostCoefficientDataService.cs" />
-    <Compile Include="DataServices\OrgStructureShareDataService.cs" />
-    <Compile Include="DataServices\GoalStepDataService.cs" />
-    <Compile Include="DataServices\GoalDataService.cs" />
-    <Compile Include="DataServices\PermissionDataService.cs" />
-    <Compile Include="DataServices\FulfillmentPercentDataService.cs" />
-    <Compile Include="DataServices\RoleDataService.cs" />
-    <Compile Include="DataServices\UserDataService.cs" />
     <Compile Include="Migrations\201709142010061_InitialDb.cs" />
     <Compile Include="Migrations\201709142010061_InitialDb.Designer.cs">
       <DependentUpon>201709142010061_InitialDb.cs</DependentUpon>
