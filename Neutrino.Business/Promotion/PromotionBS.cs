@@ -364,7 +364,7 @@ namespace Neutrino.Business
                                 //اطلاعات فروش مرکز 
                                 BranchSalesInfo branchSalesInfo = new BranchSalesInfo
                                 {
-                                    TotalSales = lst_branchConditions.Where(x=>x.BranchId == branchFulfillInfo.BranchId).Sum(x => x.Amount),
+                                    TotalSales = lst_branchConditions.Where(x => x.BranchId == branchFulfillInfo.BranchId).Sum(x => x.Amount),
                                     TotalQuantity = lst_branchConditions.Where(x => x.BranchId == branchFulfillInfo.BranchId).Sum(x => x.Quantity),
                                     BranchId = branchFulfillInfo.BranchId,
                                     FulfillPercent = branchFulfillInfo.FulFillPercent,
@@ -440,12 +440,12 @@ namespace Neutrino.Business
                                         if (goalStepItem.ComputingTypeId.Value == ComputingTypeEnum.Amount)
                                         {
                                             //به ازای فروش این مبلغ
-                                            promotion = goalStepItem.Amount.Value * (memberSales.Amount / goalStepItem.EachValue.Value);
+                                            promotion = goalStepItem.Amount.Value * (int)(memberSales.Amount / goalStepItem.EachValue.Value);
                                         }
                                         else if (goalStepItem.ComputingTypeId.Value == ComputingTypeEnum.Quantities)
                                         {
                                             //به ازای فروش این تعداد
-                                            promotion = goalStepItem.Amount.Value * (memberSales.Quantity / goalStepItem.EachValue.Value);
+                                            promotion = goalStepItem.Amount.Value * (int)(memberSales.Quantity / goalStepItem.EachValue.Value);
                                         }
                                     }
 
@@ -459,7 +459,20 @@ namespace Neutrino.Business
                                         Amount = memberSales.Amount,
                                         MemberId = memberSales.MemberId
                                     });
-                                };
+                                }
+                                else
+                                {
+                                    entity.BranchPromotions.Single(x => x.BranchId == memberSales.BranchId)
+                                    .MemberPromotions
+                                    .Add(new MemberPromotion
+                                    {
+                                        GoalId = goal.Id,
+                                        Promotion = 0,
+                                        Quantity = memberSales.Quantity,
+                                        Amount = memberSales.Amount,
+                                        MemberId = memberSales.MemberId
+                                    });
+                                }
 
                             });
                         });
@@ -711,6 +724,57 @@ namespace Neutrino.Business
             }
             return result;
         }
+        public async Task<IBusinessResultValue<List<ReportSellerGoal>>> LoadReport_Seller_Goal(DateTime startDate, DateTime endDate, int goalGoodsCategoryId)
+        {
+            var result = new BusinessResultValue<List<ReportSellerGoal>>();
+            try
+            {
+                var query = await (from gl in unitOfWork.GoalDataService.GetQuery()
+                                   join glst in unitOfWork.GoalStepDataService.GetQuery()
+                                   on gl.Id equals glst.GoalId
+                                   join mrp in unitOfWork.MemberPomotionDataService.GetQuery()
+                                   on gl.Id equals mrp.GoalId
+                                   join mr in unitOfWork.MemberDataService.GetQuery()
+                                   on mrp.MemberId equals mr.Id
+                                   join br in unitOfWork.BranchDataService.GetQuery()
+                                   on mr.BranchId equals br.Id
+                                   where gl.GoalGoodsCategoryId == goalGoodsCategoryId
+                                   && gl.StartDate >= startDate && gl.EndDate <= endDate
+                                   select new
+                                   {
+                                       gl.ComputingTypeId,
+                                       ApprovePromotionTypeId = gl.ApprovePromotionTypeId.Value,
+                                       SellerName = mr.Name + " " + mr.LastName,
+                                       mrp.Amount,
+                                       mrp.Quantity,
+                                       mrp.Promotion,
+                                       glst.ComputingValue,
+                                       BranchName = br.Name,
+                                   }).ToListAsync();
+
+                result.ResultValue = query.Select(x => new ReportSellerGoal
+                {
+                    SellerName = x.SellerName,
+                    TotalSales = x.Amount,
+                    TotalQuantity = x.Quantity,
+                    ComputingTypeId = x.ComputingTypeId,
+                    ApprovePromotionTypeId = x.ApprovePromotionTypeId,
+                    FinalPromotion = x.Promotion,
+                    ComputingValue = x.ComputingValue,
+                    BranchName = x.BranchName,
+                    FulfilledPercent = Math.Round(x.ComputingTypeId == ComputingTypeEnum.Amount ? (x.Amount * 100) / x.ComputingValue : (x.Quantity * 100) / x.ComputingValue, MidpointRounding.AwayFromZero)
+                }).ToList();
+
+                result.ReturnStatus = true;
+
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
+
         public async Task<IBusinessResultValue<List<ReportBranchPromotionDetail>>> LoadReportBranchPromotionDetail(DateTime startDate, DateTime endDate)
         {
             var result = new BusinessResultValue<List<ReportBranchPromotionDetail>>();

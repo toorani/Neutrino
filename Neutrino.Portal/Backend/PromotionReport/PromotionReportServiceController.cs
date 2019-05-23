@@ -80,51 +80,34 @@ namespace Neutrino.Portal
                 {
                     return CreateErrorResponse(result_goal);
                 }
-                IBusinessResultValue<List<ReportBranchSalesGoal>> result_report = null;
 
 
-                if (result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Amount ||
-                    result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Quantities)
+
+                if (result_goal.ResultValue.ApprovePromotionTypeId == ApprovePromotionTypeEnum.Branch)
                 {
-                    result_report = await promotionBS.LoadReport_Amount_Quantities_Goal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
-
-                    if (result_goal.ReturnStatus == false)
+                    if (result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Amount || result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Quantities)
                     {
-                        return CreateErrorResponse(result_goal);
+                        return await LoadReport_Amount_Quantities_Goal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
                     }
+                    else if (result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Percentage)
+                    {
+                        var result_report = await promotionBS.LoadReport_Percent_Goal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
 
-                    var lst_responses = result_report.ResultValue
-                        .GroupBy(x => new { x.BranchName })
-                        .Select(x => new ReportSales_Amount_Qualntity_ViewModel
+                        if (result_report.ReturnStatus == false)
                         {
-                            BranchName = x.Key.BranchName,
-                            ComputingTypeId = (int)x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).ComputingTypeId,
-                            ApprovePromotionTypeId = (int)x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).ApprovePromotionTypeId,
-                            TotalSales = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalSales,
-                            TotalQuantity = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalQuantity,
-                            FinalPromotion = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).FinalPromotion,
-                            PromotionWithOutFulfillmentPercent = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).PromotionWithOutFulfillmentPercent,
-                            PromotionGoalSteps = x.Select(y => new PromotionGoalStep
-                            {
-                                AmountSpecified = y.AmountSpecified,
-                                FulfilledPercent = Math.Round(y.FulfilledPercent, MidpointRounding.AwayFromZero),
-                                GoalAmount = y.GoalAmount,
-                            }).ToList()
-                        }).ToList();
-                    return CreateSuccessedListResponse(lst_responses);
-                }
-                else if (result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Percentage)
-                {
-                    result_report = await promotionBS.LoadReport_Percent_Goal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+                            return CreateErrorResponse(result_report);
+                        }
 
-                    if (result_goal.ReturnStatus == false)
-                    {
-                        return CreateErrorResponse(result_goal);
+
+                        return Request.CreateResponse(HttpStatusCode.OK, result_report.ResultValue);
                     }
-
-
-                    return Request.CreateResponse(HttpStatusCode.OK, result_report.ResultValue);
                 }
+                else if (result_goal.ResultValue.ApprovePromotionTypeId == ApprovePromotionTypeEnum.Seller)
+                {
+                    return await LoadReport_Seller_Goal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+
+                }
+
 
 
             }
@@ -331,6 +314,63 @@ namespace Neutrino.Portal
         #endregion
 
         #region [ Private Method(s) ]
+        private async Task<HttpResponseMessage> LoadReport_Amount_Quantities_Goal(DateTime startDateTime, DateTime endDateTime, int goalGoodsCategoryId)
+        {
+            var result_report = await promotionBS.LoadReport_Amount_Quantities_Goal(startDateTime, endDateTime, goalGoodsCategoryId);
+
+            if (result_report.ReturnStatus == false)
+            {
+                return CreateErrorResponse(result_report);
+            }
+
+            var lst_responses = result_report.ResultValue
+                .GroupBy(x => new { x.BranchName })
+                .Select(x => new ReportSales_Amount_Qualntity_ViewModel
+                {
+                    BranchName = x.Key.BranchName,
+                    ComputingTypeId = (int)x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).ComputingTypeId,
+                    ApprovePromotionTypeId = (int)x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).ApprovePromotionTypeId,
+                    TotalSales = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalSales,
+                    TotalQuantity = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalQuantity,
+                    FinalPromotion = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).FinalPromotion,
+                    PromotionWithOutFulfillmentPercent = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).PromotionWithOutFulfillmentPercent,
+                    PromotionGoalSteps = x.Select(y => new PromotionGoalStep
+                    {
+                        AmountSpecified = y.AmountSpecified,
+                        FulfilledPercent = Math.Round(y.FulfilledPercent, MidpointRounding.AwayFromZero),
+                        GoalAmount = y.GoalAmount,
+                    }).ToList()
+                }).ToList();
+            return CreateSuccessedListResponse(lst_responses);
+        }
+        private async Task<HttpResponseMessage> LoadReport_Seller_Goal(DateTime startDateTime, DateTime endDateTime, int goalGoodsCategoryId)
+        {
+            var result_report = await promotionBS.LoadReport_Seller_Goal(startDateTime, endDateTime, goalGoodsCategoryId);
+            if (result_report.ReturnStatus == false)
+            {
+                return CreateErrorResponse(result_report);
+            }
+
+
+            var lst_responses = result_report.ResultValue
+                .GroupBy(x => new { x.SellerName })
+                .Select(x => new ReportSellerGoalViewModel
+                {
+                    SellerName = x.Key.SellerName,
+                    ComputingTypeId = (int)x.FirstOrDefault(y => y.SellerName == x.Key.SellerName).ComputingTypeId,
+                    ApprovePromotionTypeId = (int)x.FirstOrDefault(y => y.SellerName == x.Key.SellerName).ApprovePromotionTypeId,
+                    TotalSales = x.FirstOrDefault(y => y.SellerName == x.Key.SellerName).TotalSales,
+                    TotalQuantity = x.FirstOrDefault(y => y.SellerName == x.Key.SellerName).TotalQuantity,
+                    FinalPromotion = x.FirstOrDefault(y => y.SellerName == x.Key.SellerName).FinalPromotion,
+                    BranchName = x.FirstOrDefault(y => y.SellerName == x.Key.SellerName).BranchName,
+                    PromotionGoalSteps = x.Select(y => new SellerPromotionGoalStep
+                    {
+                        ComputingValue = y.ComputingValue,
+                        FulfilledPercent = y.FulfilledPercent
+                    }).ToList()
+                }).ToList();
+            return CreateSuccessedListResponse(lst_responses);
+        }
         private IMapper GetMapper()
         {
             var config = new MapperConfiguration(cfg =>

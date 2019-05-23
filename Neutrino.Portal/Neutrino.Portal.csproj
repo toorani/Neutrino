@@ -356,6 +356,7 @@
     <Compile Include="Backend\PromotionReport\ReportBranchSalesGoalViewModel.cs" />
     <Compile Include="Backend\PromotionReport\PromotionReportMapperProfile.cs" />
     <Compile Include="Backend\PromotionReport\BranchPromotionViewModel.cs" />
+    <Compile Include="Backend\PromotionReport\ReportSallerGoalViewModel.cs" />
     <Compile Include="Backend\Promotion\PromotionMapperProfile.cs" />
     <Compile Include="Backend\PromotionReport\PromotionReportServiceController.cs" />
     <Compile Include="Backend\Promotion\PromotionServiceController.cs" />

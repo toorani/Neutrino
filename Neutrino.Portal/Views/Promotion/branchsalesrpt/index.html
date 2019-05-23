@@ -77,7 +77,7 @@
                                             <i class="fa fa-filter"></i>
                                             <span>نمایش گزارش</span>
                                         </button>
-                                        <button type="button" ng-click="exportReport()" ng-show="reportData.length != 0"
+                                        <button type="button" hidden ng-click="exportReport()" ng-show="reportData.length != 0"
                                                 class="btn btn-info">
                                             <i class="fa fa-file-excel-o"></i>
                                             <span>خروجی اکسل</span>
@@ -88,7 +88,7 @@
                                     هدفی جهت نمایش وجود ندارد
                                 </div>
                                 <br />
-                                <div class="table-responsive text-nowrap" ng-show="reportData.length != 0 && reportData[0].computingTypeId != 3">
+                                <div class="table-responsive text-nowrap" ng-show="reportData.length != 0 && reportData[0].computingTypeId != 3 && reportData[0].approvePromotionTypeId == 1">
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
@@ -134,7 +134,7 @@
 
                                     </table>
                                 </div>
-                                <div class="table-responsive text-nowrap" ng-show="reportData.length != 0 && reportData[0].computingTypeId == 3">
+                                <div class="table-responsive text-nowrap" ng-show="reportData.length != 0 && reportData[0].computingTypeId == 3 && reportData[0].approvePromotionTypeId == 1">
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
@@ -175,6 +175,49 @@
 
                                     </table>
 
+                                </div>
+                                <div class="table-responsive text-nowrap" ng-show="reportData.length != 0 && reportData[0].approvePromotionTypeId == 2">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <td class="align-center"><input type="text" ng-model="filter_branchName" class="form-control" /></td>
+                                                <td class="align-center"><input type="text" ng-model="filter_sellerName" class="form-control" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="align-center ">نام مرکز</td>
+                                                <td class="align-center ">نام فروشنده</td>
+                                                <td class="align-center " ng-show="reportData[0].computingTypeId == 1">تعداد</td>
+                                                <td class="align-center " ng-show="reportData[0].computingTypeId == 2">فروش</td>
+                                                <td class="align-center " ng-repeat="gols in reportData[0].promotionGoalSteps">پله {{$index + 1}} </td>
+                                                <td class="align-center ">پورسانت</td>
+                                            </tr>
+
+                                        </thead>
+                                        <tr ng-repeat="record in reportData | filter :{branchName: filter_branchName,sellerName : filter_sellerName}  ">
+                                            <td class="align-center">
+                                                {{record.branchName}}
+                                            </td>
+                                            <td style=" position: relative;">
+                                                <span ng-class="{false:'fillTd text-center label-danger', true:'fillTd text-center label-success'}[isFulfillGoalStep(record)]">
+                                                    {{record.sellerName}}
+                                                </span>
+                                            </td>
+                                            <td class="align-left dir-ltr" ng-show="record.computingTypeId == 2">
+                                                {{record.totalSales | number}}
+                                            </td>
+                                            <td class="align-center dir-ltr" ng-show="record.computingTypeId == 1">
+                                                {{record.totalQuantity | number}}
+                                            </td>
+                                            <td ng-repeat="gols in record.promotionGoalSteps" class="align-center" style=" position: relative;">
+                                                <span ng-class="{false:'fillTd text-center dir-ltr label-warning', true:'fillTd text-center dir-ltr label-success'}[gols.fulfilledPercent >= 100]">
+                                                    {{gols.computingValue | number}}
+                                                </span>
+                                            <td class="align-center dir-ltr info">
+                                                {{record.finalPromotion | number}}
+                                            </td>
+                                        </tr>
+
+                                    </table>
                                 </div>
                                 <div ng-show="reportData.length == 0">
                                     <table class="table" cellspacing="0">

@@ -46,19 +46,19 @@ namespace Neutrino.Portal.Tests
 
         }
 
-        [TestMethod]
-        public async Task ExportExcelSaleGoalsRept()
-        {
-            //Arrange
-            string startDate = "1397/10/01";
-            string endDate = "1397/10/30";
-            int goalGoodsCategoryId = 5093;
+        //[TestMethod]
+        //public async Task ExportExcelSaleGoalsRept()
+        //{
+        //    //Arrange
+        //    string startDate = "1397/10/01";
+        //    string endDate = "1397/10/30";
+        //    int goalGoodsCategoryId = 5093;
 
-            var promotionBS = _kernel.Get<IPromotionBS>();
+        //    var promotionBS = _kernel.Get<IPromotionBS>();
 
-            PromotionReportServiceController promotionReportServiceController = new PromotionReportServiceController(promotionBS);
-            await promotionReportServiceController.ExportExcelSaleGoals(startDate, endDate, goalGoodsCategoryId);
+        //    PromotionReportServiceController promotionReportServiceController = new PromotionReportServiceController(promotionBS);
+        //    await promotionReportServiceController.ExportExcelSaleGoals(startDate, endDate, goalGoodsCategoryId);
 
-        }
+        //}
     }
 }

@@ -333,7 +333,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="submit"
-                                                        ng-if="!step.isUsed"
+                                                        ng-if="!goal.isUsed"
                                                         name="Add" class="btn btn-success">
                                                     <i class="fa fa-check"></i>
                                                     <span>ثبت</span>
@@ -341,7 +341,7 @@
 
                                                 <button class="btn btn-danger" type="button"
                                                         ng-click="goalStepDelete(step.id,$index)"
-                                                        ng-if="goal.id != 0 && !step.isUsed">
+                                                        ng-if="goal.id != 0 && !goal.isUsed">
                                                     <i class="fa fa-trash-o"></i>
                                                     <span>حذف</span>
                                                 </button>

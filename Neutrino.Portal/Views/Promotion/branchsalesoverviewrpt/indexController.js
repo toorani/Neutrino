@@ -13,8 +13,8 @@ angular.module("neutrinoProject").register.controller('promotion.branchsalesover
 
             $scope.initializeController = function () {
                 $scope.title = 'گزارش پورسانت مراکز از فروش ';
-                $scope.viewModel.startDate = '1397/10/01';
-                $scope.viewModel.endDate = '1397/10/30';
+                //$scope.viewModel.startDate = '1397/10/01';
+                //$scope.viewModel.endDate = '1397/10/30';
             }
             $scope.collapse = function (event, branchId) {
                 $(event.target).toggleClass("green fa fa-minus-circle fa-lg");

@@ -18,21 +18,21 @@ namespace Neutrino.Portal.Tests
         {
         }
         
-        [TestMethod]
-        public async Task LoadReportBranchSalesGoal()
-        {
-            //Arrange
-            var promotionBS = _kernel.Get<IPromotionBS>();
-            DateTime startDate = new DateTime(2018, 12, 22);
-            DateTime endDate = new DateTime(2019, 01, 20);
-            int goalGoodsCategoryId = 5093; // جالینوس
-            //Action
-            var result = await promotionBS.LoadReportBranchSalesGoal(startDate,endDate,goalGoodsCategoryId);
-            if (result.ReturnStatus == false)
-            {
-                Assert.Fail(result.ReturnMessage.ConcatAll());
-            }
-            Assert.IsTrue(result.ReturnStatus);
-        }
+        //[TestMethod]
+        //public async Task LoadReportBranchSalesGoal()
+        //{
+        //    //Arrange
+        //    var promotionBS = _kernel.Get<IPromotionBS>();
+        //    DateTime startDate = new DateTime(2018, 12, 22);
+        //    DateTime endDate = new DateTime(2019, 01, 20);
+        //    int goalGoodsCategoryId = 5093; // جالینوس
+        //    //Action
+        //    var result = await promotionBS.LoadReportBranchSalesGoal(startDate,endDate,goalGoodsCategoryId);
+        //    if (result.ReturnStatus == false)
+        //    {
+        //        Assert.Fail(result.ReturnMessage.ConcatAll());
+        //    }
+        //    Assert.IsTrue(result.ReturnStatus);
+        //}
     }
 }
