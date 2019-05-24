@@ -112,6 +112,8 @@ namespace Neutrino.Portal
                , "~/Scripts/plugins/wizard/angular-wizard.min.js"
                , "~/Scripts/plugins/persianDate/persian-date.min.js"
                , "~/Scripts/plugins/icheck/angular-icheck.js"
+               , "~/Scripts/plugins/easypiechart/angular.easypiechart.min.js"
+
            ));
 
             bundles.Add(new ScriptBundle("~/bundles/shared").Include(

@@ -1,21 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Espresso.DataAccess;
-using Espresso.DataAccess.Interfaces;
-using FluentValidation;
+﻿using Espresso.Core;
+using Espresso.Entites;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Neutrino.Business;
-using Neutrino.Data.EntityFramework;
-using Neutrino.Data.EntityFramework.DataServices;
 using Neutrino.Entities;
 using Neutrino.Interfaces;
 using Ninject;
-using Ninject.MockingKernel.Moq;
-using Espresso.Core;
-using Espresso.BusinessService.Interfaces;
-using Espresso.BusinessService;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neutrino.Portal.Tests
 {
@@ -32,13 +23,15 @@ namespace Neutrino.Portal.Tests
         public async Task AddPromotionWithSpecifiedDate()
         {
             //Arrange
-            int month = 12;
+            int month = 10;
             int year = 1397;
 
             //create a promotion entity
-            Promotion entity = new Promotion();
-            entity.Month = month;
-            entity.Year = year;
+            Promotion entity = new Promotion
+            {
+                Month = month,
+                Year = year
+            };
             //promotion business
             var promotionBS = _kernel.Get<IPromotionBS>();
 
@@ -99,7 +92,7 @@ namespace Neutrino.Portal.Tests
         public async Task CalculateSalesGoals()
         {
             //Arrange
-            int month = 12;
+            int month = 10;
             int year = 1397;
 
 
@@ -117,7 +110,7 @@ namespace Neutrino.Portal.Tests
         public async Task CalculateReceiptGoals()
         {
             //Arrange
-            int month = 12;
+            int month = 10;
             int year = 1397;
 
 
@@ -136,7 +129,7 @@ namespace Neutrino.Portal.Tests
         public async Task CalculatePromotion()
         {
             //Arrange
-            int month = 12;
+            int month = 10;
             int year = 1397;
 
             var promotionBS = _kernel.Get<IPromotionBS>();
@@ -151,6 +144,42 @@ namespace Neutrino.Portal.Tests
             Assert.IsTrue(loaderResult.ResultValue.IsReceiptCalculated);
             Assert.IsTrue(loaderResult.ResultValue.IsSalesCalculated);
             Assert.AreEqual(loaderResult.ResultValue.StatusId, PromotionStatusEnum.GoalCalculated);
+        }
+
+        [TestMethod]
+        public async Task LoadBranchPromotionDetail_Test()
+        {
+            //Arrange
+            int branchId = 2397;
+
+
+            var promotionBS = _kernel.Get<IPromotionBS>();
+            var loaderResult = await promotionBS.LoadBranchPromotionDetail(branchId);
+           
+            loaderResult.ResultValue.Where(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single)
+                .ToList()
+                .ForEach(x => x.GoalGoodsCategoryTypeId = GoalGoodsCategoryTypeEnum.Group);
+            var rs = loaderResult.ResultValue
+                 .GroupBy(x => x.GoalGoodsCategoryTypeId
+                 , (key, result) =>
+                 {
+                     return new BranchPromotionDetailViewModel
+                     {
+                         GoalTypeTitle = key == GoalGoodsCategoryTypeEnum.Group ? " هدف فروش" : key.GetEnumDescription(),
+                         TotalFinalPromotion = result.Sum(x => x.FinalPromotion),
+                         BranchId = result.FirstOrDefault().BranchId,
+                         BranchName = result.FirstOrDefault().BranchName,
+                         PositionPromotions = key != GoalGoodsCategoryTypeEnum.Group ? result.Select(x => new PositionPromotion
+                         {
+                             PositionTitle = x.PositionTitle,
+                             Promotion = x.PositionPromotion.Value
+                         }).ToList() : null
+                     };
+                 }).ToList();
+
+
+            Assert.IsTrue(loaderResult.ReturnStatus, loaderResult.ReturnMessage.ConcatAll());
+
         }
     }
 }

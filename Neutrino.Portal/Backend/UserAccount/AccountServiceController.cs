@@ -178,7 +178,7 @@ namespace Neutrino.Portal.WebApiControllers
         }
 
         [Route("login"), HttpPost, AllowAnonymous]
-        public async Task<HttpResponseMessage> LoginAsync(HttpRequestMessage request, RegisterViewModel postedViewModel)
+        public async Task<HttpResponseMessage> LoginAsync(RegisterViewModel postedViewModel)
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true

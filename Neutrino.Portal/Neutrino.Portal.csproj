@@ -348,6 +348,9 @@
     <Compile Include="Backend\GoalNonFulfillment\GoalNonFulfillmentMapperProfile.cs" />
     <Compile Include="Backend\GoalNonFulfillment\GoalNonFulfillmentServiceController.cs" />
     <Compile Include="Backend\GoalNonFulfillment\GoalNonFulfillmentViewModel.cs" />
+    <Compile Include="Backend\Member\MemberMapperProfile.cs" />
+    <Compile Include="Backend\Member\MemberViewModel.cs" />
+    <Compile Include="Backend\Member\MemberServiceController.cs" />
     <Compile Include="Backend\Penalty\PenaltyServiceController.cs" />
     <Compile Include="Backend\Penalty\PenaltyViewModel.cs" />
     <Compile Include="Backend\Permission\PermissionMapperProfile.cs" />
@@ -356,6 +359,7 @@
     <Compile Include="Backend\PromotionReport\ReportBranchSalesGoalViewModel.cs" />
     <Compile Include="Backend\PromotionReport\PromotionReportMapperProfile.cs" />
     <Compile Include="Backend\PromotionReport\BranchPromotionViewModel.cs" />
+    <Compile Include="Backend\PromotionReport\BranchPromotionDetailViewModel.cs" />
     <Compile Include="Backend\PromotionReport\ReportSallerGoalViewModel.cs" />
     <Compile Include="Backend\Promotion\PromotionMapperProfile.cs" />
     <Compile Include="Backend\PromotionReport\PromotionReportServiceController.cs" />
@@ -438,6 +442,7 @@
     <Compile Include="Backend\UserAccount\UserValidator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\plugins\easypiechart\angular.easypiechart.min.js" />
     <Content Include="Views\Account\changePassword\item.html" />
     <Content Include="Views\Account\changePassword\itemController.js" />
     <Content Include="Views\Account\resetPassword\resetpasswordTemplate.html" />

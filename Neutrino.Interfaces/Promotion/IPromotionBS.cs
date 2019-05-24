@@ -22,5 +22,7 @@ namespace Neutrino.Interfaces
         Task<IBusinessResultValue<List<ReportBranchReceiptGoal>>> LoadReportBranchReceipt(int yar, int month, GoalGoodsCategoryTypeEnum goalGoodsCategoryTypeId);
         Task<IBusinessResultValue<List<ReportBranchPromotionDetail>>> LoadReportBranchPromotionDetail(DateTime startDate, DateTime endDate);
         Task<IBusinessResultValue<List<ReportSellerGoal>>> LoadReport_Seller_Goal(DateTime startDate, DateTime endDate, int goalGoodsCategoryId);
+
+        Task<IBusinessResultValue<List<BranchPromotionDetail>>> LoadBranchPromotionDetail(int branchId);
     }
 }

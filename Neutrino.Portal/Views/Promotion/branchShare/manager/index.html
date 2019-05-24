@@ -13,22 +13,144 @@
                     <div class="col-md-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
+                                <div class="row ls-pricing-table-wrap">
+                                    <div class="col-sm-4 col-md-4">
+                                        <div class="basic free-wrap">
+                                            <ul>
+                                                <li>
+                                                    <div class="ls-hex-bage premium-bage">
+                                                        <span class="ls-pricing">جمع پورسانت</span>
+                                                    </div>
+                                                    <div class="basic-price-simple">
+                                                        <h5 class="dir-ltr"><span></span>{{getTotal() | number}}</h5>
+                                                    </div>
+                                                </li>
+                                                <li ng-repeat="po in branchPromotoinDetail">
+                                                    <div class="basic-bage">
+                                                        <h4>{{po.goalTypeTitle}}</h4>
+                                                        <p class="dir-ltr">{{po.totalFinalPromotion | number}}</p>
+                                                    </div>
 
-                                <form novalidate role="form" esp-validate-complete="submit()"
-                                      esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true
-                                  ,autoHidePrompt:true}"
-                                      class="form-horizontal ls_form" name="form">
+                                                </li>
+                                            </ul>
 
-                                    <div class="modal-footer">
-                                        <button type="button" ng-click="getData()"
-                                                class="btn btn-success">
-                                            <i class="fa fa-check"></i>
-                                            <span> تایید</span>
-                                        </button>
-
+                                        </div>
                                     </div>
 
-                                </form>
+                                    <div class="col-sm-4 col-md-4" ng-repeat="rec in getRecieptPromotions()">
+                                        <div class="basic basic-wrap">
+                                            <ul>
+                                                <li>
+                                                    <div class="ls-hex-bage standard-bage">
+                                                        <span class="ls-pricing">{{rec.goalTypeTitle}}</span>
+                                                    </div>
+                                                    <div class="basic-price-simple">
+                                                        <h5 class="dir-ltr"><span></span>{{rec.totalFinalPromotion | number}}</h5>
+                                                    </div>
+                                                </li>
+                                                <li ng-repeat="po in rec.positionPromotions">
+                                                    <h4>{{po.positionTitle}}</h4>
+                                                    <p class="dir-ltr">{{po.promotion | number}}</p>
+                                                </li>
+                                                <li ng-show="rec.positionPromotions.length<3">
+
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="ls_divider"></div>
+                                <br />
+                                <div class="panel panel-red">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">مشخص کردن پورسانت پرسنل</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="panel-body">
+                                                    <form novalidate role="form" esp-validate-complete="submit()"
+                                                          esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true,autoHidePrompt:true}"
+                                                          class="form-horizontal ls_form" name="form">
+                                                        <div class="row">
+                                                            <div class="col-lg-8 col-sm-8 col-md-8">
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <label class="col-md-2 control-label">
+                                                                            <i class="red fa fa-asterisk"></i>
+                                                                            نام پرسنل
+                                                                        </label>
+                                                                        <div class="col-md-10">
+                                                                            <ui-select ng-model="viewModel.memberId"
+                                                                                       reset-search-input="true">
+                                                                                <ui-select-match placeholder="پرسنل را انتخاب کنید" allow-clear="true">
+                                                                                    <span ng-bind="$select.selected.fullName"></span>
+                                                                                </ui-select-match>
+                                                                                <ui-select-choices repeat="item in branchMembers  | propsFilter: {code: $select.search, fullName: $select.search} ">
+                                                                                    <div ng-bind-html="item.fullName | highlight: $select.search" title="{{item.fullName}}"></div>
+                                                                                    <small>
+                                                                                        کد : <span ng-bind-html="item.code | highlight: $select.search"></span>
+                                                                                    </small>
+                                                                                    <div class="row ls_divider"></div>
+                                                                                </ui-select-choices>
+                                                                                <ui-select-no-choice>
+                                                                                    موردی یافت نشد
+                                                                                </ui-select-no-choice>
+                                                                            </ui-select>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group">
+                                                                        <label class="col-md-2 control-label">
+                                                                            <i class="red fa fa-asterisk"></i>
+                                                                            پورسانت
+                                                                        </label>
+                                                                        <div class="col-md-10">
+                                                                            <input type="text" class="form-control validate[required] dir-ltr"
+                                                                                   ng-model="viewModel.promotion"
+                                                                                   ng-trim=false
+                                                                                   awnum="price">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-sm-4 col-md-4">
+                                                                <div class="pie-widget">
+                                                                    <div class="chart-pie-widget">
+                                                                        <span class="chart"
+                                                                              easypiechart
+                                                                              percent="percent" options="options">
+                                                                            %<span class="percent" ng-bind="percent"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <p>
+                                                                        مقدار مشخص شده
+                                                                    </p>
+                                                                    <h5 class="dir-ltr">{{getTotal() | number}} </h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                        <div class="modal-footer">
+                                                            <button type="button" ng-click="getData()"
+                                                                    class="btn btn-success">
+                                                                <i class="fa fa-check"></i>
+                                                                <span> تایید</span>
+                                                            </button>
+
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                             </div>
                         </div>

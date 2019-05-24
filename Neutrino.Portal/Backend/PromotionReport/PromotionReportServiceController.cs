@@ -2,15 +2,18 @@
 using Espresso.BusinessService;
 using Espresso.BusinessService.Interfaces;
 using Espresso.Core;
+using Espresso.Entites;
 using Espresso.Portal;
 using Neutrino.Entities;
 using Neutrino.Interfaces;
 using Neutrino.Portal.Tools;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -62,8 +65,7 @@ namespace Neutrino.Portal
             var dataModelView = mapper.Map<List<BranchPromotionViewModel>>(entity.ResultValue);
             string caption = $"عملکرد نهایی سال {year} ماه {month} ";
             var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/overviewrpt/excelTemplate.html");
-            var result = ExportToExcel.GetExcelFile<BranchPromotionViewModel>(dataModelView, "OverView", excelTemplate, caption);
-            return result;
+            return ExportToExcel.GetExcelFile(dataModelView, "OverView", excelTemplate, caption);
         }
 
         [Route("getBranchSaleGoals")]
@@ -202,7 +204,29 @@ namespace Neutrino.Portal
                        PositionTitle = y.PositionTitle,
                        Promotion = y.PositionPromotion
                    }).ToList()
-               }).ToList();
+               })
+               .ToList();
+
+            var distinctPositionsCount = lst_responses.Select(x => x.PositionPromotions.Count).Distinct();
+            if (distinctPositionsCount.Count() != 1)
+            {
+                var compeletePositionRecord = lst_responses.Where(x => x.PositionPromotions.Count == distinctPositionsCount.Max()).FirstOrDefault();
+                var notCompeteRecords = lst_responses.Where(x => x.PositionPromotions.Count != compeletePositionRecord.PositionPromotions.Count);
+                foreach (var item in notCompeteRecords)
+                {
+                    compeletePositionRecord.PositionPromotions
+                        .Where(x => !item.PositionPromotions.Any(y => x.PositionTitle == y.PositionTitle))
+                        .ToList()
+                        .ForEach(x =>
+                        {
+                            item.PositionPromotions.Add(new PositionPromotion
+                            {
+                                PositionTitle = x.PositionTitle,
+                                Promotion = -1
+                            });
+                        });
+                }
+            }
             return CreateSuccessedListResponse(lst_responses);
         }
 
@@ -311,6 +335,47 @@ namespace Neutrino.Portal
             return result;
         }
 
+        [Route("getBranchPromotionDetail")]
+        public async Task<HttpResponseMessage> GetBranchPromotionDetail()
+        {
+            int branchId = 2397;
+            //TODO : apply access
+            //var claimPrincipal = User as ClaimsPrincipal;
+            //if (claimPrincipal.HasClaim(x=>x.Type == ApplicationClaimTypes.BranchId))
+            //{
+            //    branchId = Convert.ToInt32(claimPrincipal.FindFirst(x => x.Type == ApplicationClaimTypes.BranchId).Value);
+            //}
+            var entities = await promotionBS.LoadBranchPromotionDetail(branchId);
+            if (entities.ReturnStatus == false)
+            {
+                return CreateErrorResponse(entities);
+            }
+            
+            entities.ResultValue.Where(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single)
+                .ToList()
+                .ForEach(x => x.GoalGoodsCategoryTypeId = GoalGoodsCategoryTypeEnum.Group);
+
+
+            var result = entities.ResultValue
+                 .GroupBy(x => x.GoalGoodsCategoryTypeId
+                 , (key, grping) =>
+                 {
+                     return new BranchPromotionDetailViewModel
+                     {
+                         GoalTypeTitle = key == GoalGoodsCategoryTypeEnum.Group ? " هدف فروش" : key.GetEnumDescription(),
+                         TotalFinalPromotion = grping.Sum(x => x.FinalPromotion),
+                         BranchId = grping.FirstOrDefault().BranchId,
+                         BranchName = grping.FirstOrDefault().BranchName,
+                         PositionPromotions = key != GoalGoodsCategoryTypeEnum.Group ? grping.Select(x => new PositionPromotion
+                         {
+                             PositionTitle = x.PositionTitle,
+                             Promotion = x.PositionPromotion.Value
+                         }).ToList() : null
+                     };
+                 }).ToList();
+
+            return CreateSuccessedListResponse(result);
+        }
         #endregion
 
         #region [ Private Method(s) ]

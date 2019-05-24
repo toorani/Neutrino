@@ -886,6 +886,45 @@ namespace Neutrino.Business
             return result;
         }
 
+        public async Task<IBusinessResultValue<List<BranchPromotionDetail>>> LoadBranchPromotionDetail(int branchId)
+        {
+            var result = new BusinessResultValue<List<BranchPromotionDetail>>();
+            try
+            {
+                result.ResultValue = await (from gl in unitOfWork.GoalDataService.GetQuery()
+                                            join brglp in unitOfWork.BranchGoalPromotionDataService.GetQuery()
+                                            on gl.Id equals brglp.GoalId
+                                            where gl.IsUsed && gl.ApprovePromotionTypeId == ApprovePromotionTypeEnum.Branch
+                                            && (gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Group
+                                            || gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single
+                                            || gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal
+                                            || gl.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal)
+                                            && !gl.Deleted && !brglp.Deleted && brglp.BranchId == branchId
+                                            join br in unitOfWork.BranchDataService.GetQuery()
+                                            on brglp.BranchId equals br.Id
+                                            join prp in unitOfWork.PositionReceiptPromotionDataService.GetQuery()
+                                            on brglp.Id equals prp.BranchGoalPromotionId into leftjoin_brglp_prp
+                                            from brglp_prp in leftjoin_brglp_prp.DefaultIfEmpty()
+                                            join pt in unitOfWork.PositionTypeDataService.GetQuery()
+                                            on brglp_prp.PositionTypeId equals pt.eId into leftjoin_prp_pt
+                                            from prp_pt in leftjoin_prp_pt.DefaultIfEmpty()
+                                            select new BranchPromotionDetail
+                                            {
+                                                BranchId = branchId,
+                                                BranchName = br.Name,
+                                                FinalPromotion = brglp.FinalPromotion,
+                                                GoalGoodsCategoryTypeId = gl.GoalGoodsCategoryTypeId,
+                                                PositionPromotion = brglp_prp.Promotion,
+                                                PositionTypeId = brglp_prp.PositionTypeId,
+                                                PositionTitle = prp_pt.Description
+                                            }).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
         #endregion
 
         #region [ Private Method(s) ]
@@ -1154,6 +1193,8 @@ namespace Neutrino.Business
             fulfilledPerecnt = (amount / receiptTotal_branchGoal.Amount.Value) * 100;
             return promotion;
         }
+
+
 
         #endregion
     }

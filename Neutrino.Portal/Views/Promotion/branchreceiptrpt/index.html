@@ -96,7 +96,7 @@
                                                 </span>
                                             </td>
 
-                                            <td class="align-center dir-ltr" ng-repeat="psp in record.positionPromotions">{{psp.promotion | number}} </td>
+                                            <td class="align-center dir-ltr" ng-repeat="psp in record.positionPromotions">{{psp.promotion == -1 ? '---' : psp.promotion | number }} </td>
                                             <td class="text-center dir-ltr info">
                                                 {{record.finalPromotion | number}}
                                             </td>

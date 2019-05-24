@@ -1,24 +1,24 @@
 ﻿console.log("promotion.branchShare.manager.indexController")
 
 angular.module("neutrinoProject").register.controller('promotion.branchShare.manager.indexController',
-    ['$scope', 'alertService', 'ajaxService', 'persianCalendar',
-        function ($scope, alertService, ajaxService, persianCalendar) {
+    ['$scope', 'alertService', 'ajaxService', '$filter',
+        function ($scope, alertService, ajaxService, $filter) {
 
             "use strict";
+            $scope.branchPromotoinDetail = [];
+            $scope.branchMembers = [];
             $scope.viewModel = {
-                year: null,
-                month: null
+                memberId: null,
+                promotion: null
             }
-
-            $scope.years = persianCalendar.getYears();
-            $scope.months = persianCalendar.getMonthNames();
-
             $scope.initializeController = function () {
                 $scope.title = 'تقسیم پورسانت';
+                getData();
+                getMemebrs();
             }
-            $scope.getData = function () {
 
-            }
+            $scope.percent = 25;
+            $scope.options = { animate: true, barColor: '#269abc', scaleColor: true, lineWidth: 3, lineCap: 'butt' }
 
             $scope.submit = function () {
                 ajaxService.ajaxPost($scope.viewModel, '/api/promotionService/add',
@@ -30,15 +30,37 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                         alertService.showError(response);
                     });
             }
-            var getBranches = function () {
-                $scope.branches = [];
-                return ajaxService.ajaxCall({}, "api/branchService/getBranches", 'get',
+            $scope.getTotal = function () {
+                var total = 0;
+                $scope.branchPromotoinDetail.forEach((prom) => {
+                    total += prom.totalFinalPromotion;
+                });
+                return total;
+            }
+            $scope.getRecieptPromotions = function () {
+                return $scope.branchPromotoinDetail.filter((prom) => prom.positionPromotions != null);
+            }
+
+
+            var getData = function () {
+                ajaxService.ajaxCall({}, "api/promotionReportService/getBranchPromotionDetail", 'get',
                     function (response) {
-                        $scope.branches = response.data;
+                        $scope.branchPromotoinDetail = response.data;
                     },
                     function (response) {
-                        $scope.branches = [];
+                        $scope.branchPromotoinDetail = [];
                         alertService.showError(response);
                     });
             }
+            var getMemebrs = function () {
+                ajaxService.ajaxCall({}, "api/memberService/getBranchMembers", 'get',
+                    function (response) {
+                        $scope.branchMembers = response.data;
+                    },
+                    function (response) {
+                        $scope.branchMembers = [];
+                        alertService.showError(response);
+                    });
+            }
+
         }]);

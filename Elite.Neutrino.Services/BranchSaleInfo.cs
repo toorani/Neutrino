@@ -24,5 +24,15 @@ namespace Elite.Neutrino.Services
         /// </summary>
         [DataMember]
         public decimal TotalAmount { get; set; }
+        /// <summary>
+        /// مبلغ فروش
+        /// </summary>
+        [DataMember]
+        public double TotalTedad { get; set; }
+        /// <summary>
+        /// تاریخ فروش
+        /// </summary>
+        [DataMember]
+        public DateTime SalesDate { get; set; }
     }
 }

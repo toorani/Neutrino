@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace Elite.Neutrino.Services
 {
@@ -28,6 +29,10 @@ namespace Elite.Neutrino.Services
         /// </summary>
         [DataMember]
         public decimal TotalAmount { get; set; }
+        /// <summary>
+        /// تاریخ فروش
+        /// </summary>
+        public DateTime InvoiceDate { get; set; }
     }
 
 }
