@@ -214,7 +214,7 @@ namespace Neutrino.External.Sevices
                             Name = memberInfo.Name,
                             NationalCode = memberInfo.NationalCode,
                             RefId = memberInfo.MemberId,
-                            
+                            PositionRefId = memberInfo.ccpost
                         };
 
 
@@ -237,9 +237,6 @@ namespace Neutrino.External.Sevices
                         }
                         lstMembers.Add(member);
                     }
-
-
-
                 }
                 catch (Exception ex)
                 {

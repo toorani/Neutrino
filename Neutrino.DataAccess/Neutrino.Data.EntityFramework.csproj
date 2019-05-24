@@ -593,6 +593,10 @@
     <Compile Include="Migrations\201905230512259_addQau_amount_memberPer.Designer.cs">
       <DependentUpon>201905230512259_addQau_amount_memberPer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905242020306_alterPositionRefId.cs" />
+    <Compile Include="Migrations\201905242020306_alterPositionRefId.Designer.cs">
+      <DependentUpon>201905242020306_alterPositionRefId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NeutrinoContext.cs" />
@@ -995,6 +999,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905230512259_addQau_amount_memberPer.resx">
       <DependentUpon>201905230512259_addQau_amount_memberPer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905242020306_alterPositionRefId.resx">
+      <DependentUpon>201905242020306_alterPositionRefId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

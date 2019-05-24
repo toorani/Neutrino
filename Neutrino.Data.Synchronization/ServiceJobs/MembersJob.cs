@@ -48,21 +48,31 @@ namespace Neutrino.Data.Synchronization.ServiceJobs
             //seperation the new data
             var lstExistMembers = await unitOfWork.MemberDataService.GetAllAsync();
 
+            lstServerMembers.ForEach(x => {
+                var entityToUpdate = lstExistMembers.FirstOrDefault(en => en.Code == x.Code);
+                if (entityToUpdate != null)
+                    entityToUpdate.PositionRefId = x.PositionRefId;
+                unitOfWork.MemberDataService.Update(entityToUpdate);
+            });
+
+
             var lstNewMembers = new List<Member>();
             if (lstExistMembers.Count != 0)
             {
-                lstServerMembers.AddRange(lstServerMembers.Except(lstExistMembers, x => x.Code));
+                lstNewMembers.AddRange(lstServerMembers.Except(lstExistMembers, x => x.Code));
             }
             else
             {
-                lstServerMembers.AddRange(lstServerMembers);
+                lstNewMembers.AddRange(lstServerMembers);
             }
 
             //insert batch data
-            var newDataInserted = await unitOfWork.MemberDataService.InsertBulkAsync(lstNewMembers);
-            
+            var newDataInserted = lstServerMembers.Count;
+            //var newDataInserted = await unitOfWork.MemberDataService.InsertBulkAsync(lstNewMembers);
+            await unitOfWork.CommitAsync();
+
             //insert postion mappings
-            var newPostionMappingInserted = await unitOfWork.PostionMappingDataService.InsertBulkAsync(lstNewPostionMappings);
+            //var newPostionMappingInserted = await unitOfWork.PostionMappingDataService.InsertBulkAsync(lstNewPostionMappings);
 
             LogInsertedData(lstNewMembers.Count, newDataInserted);
             

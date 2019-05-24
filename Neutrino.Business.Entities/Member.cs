@@ -51,7 +51,7 @@ namespace Neutrino.Entities
         /// <summary>
         /// شناسه پست در اطلاعات شرکت الیت
         /// </summary>
-        public int RefPositionId { get; set; }
+        public int PositionRefId { get; set; }
     }
     
 }
