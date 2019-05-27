@@ -79,6 +79,24 @@
   <wsdl:message name="IEliteService_GetBranchReceipts_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetBranchReceiptsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEliteService_GetCustomerGoalsInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerGoalsInfo" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetCustomerGoalsInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCustomerGoalsInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetDepartmentInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDepartmentInfo" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetDepartmentInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDepartmentInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetPositionInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPositionInfo" />
+  </wsdl:message>
+  <wsdl:message name="IEliteService_GetPositionInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPositionInfoResponse" />
+  </wsdl:message>
   <wsdl:portType name="IEliteService">
     <wsdl:operation name="GetCompanies">
       <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetCompanies" message="tns:IEliteService_GetCompanies_InputMessage" />
@@ -127,6 +145,18 @@
     <wsdl:operation name="GetBranchReceipts">
       <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetBranchReceipts" message="tns:IEliteService_GetBranchReceipts_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetBranchReceiptsResponse" message="tns:IEliteService_GetBranchReceipts_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerGoalsInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetCustomerGoalsInfo" message="tns:IEliteService_GetCustomerGoalsInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetCustomerGoalsInfoResponse" message="tns:IEliteService_GetCustomerGoalsInfo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDepartmentInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetDepartmentInfo" message="tns:IEliteService_GetDepartmentInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetDepartmentInfoResponse" message="tns:IEliteService_GetDepartmentInfo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPositionInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEliteService/GetPositionInfo" message="tns:IEliteService_GetPositionInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEliteService/GetPositionInfoResponse" message="tns:IEliteService_GetPositionInfo_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IEliteService" type="tns:IEliteService">
@@ -232,6 +262,33 @@
     </wsdl:operation>
     <wsdl:operation name="GetBranchReceipts">
       <soap:operation soapAction="http://tempuri.org/IEliteService/GetBranchReceipts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomerGoalsInfo">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetCustomerGoalsInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDepartmentInfo">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetDepartmentInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPositionInfo">
+      <soap:operation soapAction="http://tempuri.org/IEliteService/GetPositionInfo" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

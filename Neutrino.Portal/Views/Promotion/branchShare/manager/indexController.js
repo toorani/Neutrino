@@ -1,30 +1,44 @@
 ﻿console.log("promotion.branchShare.manager.indexController")
 
 angular.module("neutrinoProject").register.controller('promotion.branchShare.manager.indexController',
-    ['$scope', 'alertService', 'ajaxService', '$filter',
-        function ($scope, alertService, ajaxService, $filter) {
+    ['$scope', 'alertService', 'ajaxService', 'modalService',
+        function ($scope, alertService, ajaxService, modalService) {
 
             "use strict";
             $scope.branchPromotoinDetail = [];
             $scope.branchMembers = [];
+            $scope.branchMemberPromotions = [];
+
             $scope.viewModel = {
                 memberId: null,
-                promotion: null
+                managerPromotion: null,
+                fullName: null,
+                member: null
             }
+
             $scope.initializeController = function () {
                 $scope.title = 'تقسیم پورسانت';
-                getData();
+                getBranchPromotionDetail();
                 getMemebrs();
+                getMemberSharePromotion();
+
             }
 
-            $scope.percent = 25;
-            $scope.options = { animate: true, barColor: '#269abc', scaleColor: true, lineWidth: 3, lineCap: 'butt' }
-
             $scope.submit = function () {
-                ajaxService.ajaxPost($scope.viewModel, '/api/promotionService/add',
+                $scope.viewModel.memberId = $scope.viewModel.member.id;
+                ajaxService.ajaxPost($scope.viewModel, '/api/promotionService/addOrModifyMemberPromotion',
                     function (response) {
-                        alertService.showSuccess(response.data.actionResult.returnMessage);
-                        $scope.modalInstance.close();
+                        let filterResults = $scope.branchMemberPromotions.filter((mp) => mp.memberId == $scope.viewModel.memberId);
+                        if (filterResults.length != 0) {
+                            filterResults[0].promotion = $scope.viewModel.promotion;
+                        }
+                        else {
+                            $scope.branchMemberPromotions.push($scope.viewModel)
+                        }
+                        $scope.viewModel = {};
+                        alertService.showSuccess(response.data.returnMessage);
+                        calculateAssigendPromotion();
+
                     },
                     function (response) {
                         alertService.showError(response);
@@ -41,9 +55,46 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                 return $scope.branchPromotoinDetail.filter((prom) => prom.positionPromotions != null);
             }
 
+            $scope.editMemberShare = function (memberSahre) {
+                $scope.viewModel = memberSahre;
+            }
+            $scope.deleteMemberShare = function (memberSahre) {
+                var bodyText = 'آیا برای حذف مطمئن هستید ؟'
 
-            var getData = function () {
-                ajaxService.ajaxCall({}, "api/promotionReportService/getBranchPromotionDetail", 'get',
+                var modalOptions = {
+                    actionButtonText: 'حذف پورسانت',
+                    headerText: 'تقسیم پورسانت',
+                    bodyText: bodyText
+                };
+
+                modalService.showModal({}, modalOptions)
+                    .then(function (result) {
+                        if (result == 'ok') {
+                            ajaxService.ajaxPost(memberSahre, "api/promotionService/deleteMemberSahrePromotion",
+                                function (response) {
+                                    alertService.showSuccess(response.data.returnMessage);
+                                    $scope.branchMemberPromotions = $scope.branchMemberPromotions.filter(item => item.memberId != memberSahre.memberId);
+                                    calculateAssigendPromotion();
+                                },
+                                function (response) {
+                                    alertService.showError(response);
+                                });
+                        }// end of if
+                    }, function () {
+                        // Cancel
+                    });
+            }
+            $scope.releaseManagerStep1 = function () {
+                ajaxService.ajaxPost({}, '/api/promotionService/releaseManagerStep1',
+                    function (response) {
+                        alertService.showSuccess(response.data.returnMessage);
+                    },
+                    function (response) {
+                        alertService.showError(response);
+                    });
+            }
+            var getBranchPromotionDetail = function () {
+                ajaxService.ajaxCall({}, "api/promotionReportService/getBranchPromotionForStep1BranchManager", 'get',
                     function (response) {
                         $scope.branchPromotoinDetail = response.data;
                     },
@@ -52,6 +103,25 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                         alertService.showError(response);
                     });
             }
+            var getMemberSharePromotion = function () {
+                ajaxService.ajaxCall({ statusId: 1 }, "api/promotionService/getMemberSharePromotion", 'get',
+                    function (response) {
+                        $scope.branchMemberPromotions = response.data;
+                        calculateAssigendPromotion();
+                    },
+                    function (response) {
+                        $scope.branchMemberPromotions = [];
+                        alertService.showError(response);
+                    });
+            }
+
+            var calculateAssigendPromotion = function () {
+                $scope.assigendPromotion = 0;
+                $scope.branchMemberPromotions.forEach((mp) => {
+                    $scope.assigendPromotion += mp.managerPromotion;
+                });
+            }
+
             var getMemebrs = function () {
                 ajaxService.ajaxCall({}, "api/memberService/getBranchMembers", 'get',
                     function (response) {

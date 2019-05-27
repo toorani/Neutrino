@@ -75,9 +75,6 @@ function ($scope, $location, $filter, $routeParams, ajaxService, modalService, a
     }
     $scope.onDeleteGoal = function () {
         if ($scope.goal.id != 0) {
-
-           
-           
             var bodyText = 'آیا برای حذف مطمئن هستید ؟'
 
             var modalOptions = {

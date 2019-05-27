@@ -7,6 +7,7 @@ using AutoMapper;
 using Espresso.Core;
 using Espresso.Entites;
 using Neutrino.Entities;
+using Neutrino.Portal.Models;
 
 namespace Neutrino.Portal
 {
@@ -29,6 +30,13 @@ namespace Neutrino.Portal
 
                 .ReverseMap()
                 .Ignore(x => x.Status);
+
+            CreateMap<MemberSharePromotionViewModel, MemberSharePromotion>()
+                .Ignore(x => x.Member)
+                .ReverseMap();
+
+            CreateMap<Member, MemberViewModel>()
+                .ForMember(x => x.FullName, opt => opt.ResolveUsing(x => x.Name + " " + x.LastName));
 
         }
     }

@@ -597,6 +597,18 @@
     <Compile Include="Migrations\201905242020306_alterPositionRefId.Designer.cs">
       <DependentUpon>201905242020306_alterPositionRefId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905270425159_add_membersharepromotion.cs" />
+    <Compile Include="Migrations\201905270425159_add_membersharepromotion.Designer.cs">
+      <DependentUpon>201905270425159_add_membersharepromotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905270611472_add_member_membersharepromotion.cs" />
+    <Compile Include="Migrations\201905270611472_add_member_membersharepromotion.Designer.cs">
+      <DependentUpon>201905270611472_add_member_membersharepromotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905270823451_add_totalromotionvalues_branchpromotion.cs" />
+    <Compile Include="Migrations\201905270823451_add_totalromotionvalues_branchpromotion.Designer.cs">
+      <DependentUpon>201905270823451_add_totalromotionvalues_branchpromotion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NeutrinoContext.cs" />
@@ -1002,6 +1014,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905242020306_alterPositionRefId.resx">
       <DependentUpon>201905242020306_alterPositionRefId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905270425159_add_membersharepromotion.resx">
+      <DependentUpon>201905270425159_add_membersharepromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905270611472_add_member_membersharepromotion.resx">
+      <DependentUpon>201905270611472_add_member_membersharepromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905270823451_add_totalromotionvalues_branchpromotion.resx">
+      <DependentUpon>201905270823451_add_totalromotionvalues_branchpromotion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

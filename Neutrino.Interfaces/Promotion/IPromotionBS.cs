@@ -23,6 +23,10 @@ namespace Neutrino.Interfaces
         Task<IBusinessResultValue<List<ReportBranchPromotionDetail>>> LoadReportBranchPromotionDetail(DateTime startDate, DateTime endDate);
         Task<IBusinessResultValue<List<ReportSellerGoal>>> LoadReport_Seller_Goal(DateTime startDate, DateTime endDate, int goalGoodsCategoryId);
 
-        Task<IBusinessResultValue<List<BranchPromotionDetail>>> LoadBranchPromotionDetail(int branchId);
+        Task<IBusinessResultValue<BranchPromotion>> LoadActiveBranchPromotionDetail(int branchId);
+        Task<IBusinessResult> CreateOrUpdateMemberSharePromotionAsync(MemberSharePromotion entity);
+        Task<IBusinessResultValue<List<MemberSharePromotion>>> LoadMemberSharePromotionAsync(int branchId, PromotionReviewStatusEnum promotionReviewStatusId);
+        Task<IBusinessResult> RemoveMemberSharePromotion(int branchId, int memberId);
+        Task<IBusinessResult> ProceedMemberSharePromotionAsync(PromotionReviewStatusEnum currentStep,PromotionReviewStatusEnum nextStep, int branchId);
     }
 }

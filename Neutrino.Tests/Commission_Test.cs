@@ -146,40 +146,6 @@ namespace Neutrino.Portal.Tests
             Assert.AreEqual(loaderResult.ResultValue.StatusId, PromotionStatusEnum.GoalCalculated);
         }
 
-        [TestMethod]
-        public async Task LoadBranchPromotionDetail_Test()
-        {
-            //Arrange
-            int branchId = 2397;
-
-
-            var promotionBS = _kernel.Get<IPromotionBS>();
-            var loaderResult = await promotionBS.LoadBranchPromotionDetail(branchId);
-           
-            loaderResult.ResultValue.Where(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single)
-                .ToList()
-                .ForEach(x => x.GoalGoodsCategoryTypeId = GoalGoodsCategoryTypeEnum.Group);
-            var rs = loaderResult.ResultValue
-                 .GroupBy(x => x.GoalGoodsCategoryTypeId
-                 , (key, result) =>
-                 {
-                     return new BranchPromotionDetailViewModel
-                     {
-                         GoalTypeTitle = key == GoalGoodsCategoryTypeEnum.Group ? " هدف فروش" : key.GetEnumDescription(),
-                         TotalFinalPromotion = result.Sum(x => x.FinalPromotion),
-                         BranchId = result.FirstOrDefault().BranchId,
-                         BranchName = result.FirstOrDefault().BranchName,
-                         PositionPromotions = key != GoalGoodsCategoryTypeEnum.Group ? result.Select(x => new PositionPromotion
-                         {
-                             PositionTitle = x.PositionTitle,
-                             Promotion = x.PositionPromotion.Value
-                         }).ToList() : null
-                     };
-                 }).ToList();
-
-
-            Assert.IsTrue(loaderResult.ReturnStatus, loaderResult.ReturnMessage.ConcatAll());
-
-        }
+       
     }
 }

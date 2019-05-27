@@ -13,6 +13,7 @@ namespace Neutrino.Portal
         public string GoalTypeTitle { get; set; }
         public decimal TotalFinalPromotion { get; set; }
         public List<PositionPromotion> PositionPromotions { get; set; }
+        public int PromotionReviewStatusId { get; set; }
 
         public BranchPromotionDetailViewModel() { PositionPromotions = new List<PositionPromotion>(); }
 

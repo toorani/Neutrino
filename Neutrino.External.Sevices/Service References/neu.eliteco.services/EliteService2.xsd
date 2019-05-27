@@ -104,13 +104,12 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="BranchId" type="xs:int" />
       <xs:element minOccurs="0" name="Code" type="xs:int" />
+      <xs:element minOccurs="0" name="DepartmentId" type="xs:int" />
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MemberId" type="xs:int" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="NamePost" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="NationalCode" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ccgoroh" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="ccpost" type="xs:int" />
+      <xs:element minOccurs="0" name="PositionId" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="MemberInfo" nillable="true" type="tns:MemberInfo" />
@@ -204,4 +203,50 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="BranchReceiptInfo" nillable="true" type="tns:BranchReceiptInfo" />
+  <xs:complexType name="ArrayOfCustomerGoalsInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomerGoalsInfo" nillable="true" type="tns:CustomerGoalsInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCustomerGoalsInfo" nillable="true" type="tns:ArrayOfCustomerGoalsInfo" />
+  <xs:complexType name="CustomerGoalsInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BranchId" type="xs:int" />
+      <xs:element minOccurs="0" name="CustomerCount" type="xs:int" />
+      <xs:element minOccurs="0" name="GoodsId" type="xs:int" />
+      <xs:element minOccurs="0" name="Promotion" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ReachedCount" type="xs:int" />
+      <xs:element minOccurs="0" name="ReachedPercent" type="xs:decimal" />
+      <xs:element minOccurs="0" name="SalesCount" type="xs:int" />
+      <xs:element minOccurs="0" name="SellerId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CustomerGoalsInfo" nillable="true" type="tns:CustomerGoalsInfo" />
+  <xs:complexType name="ArrayOfDepartmentInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DepartmentInfo" nillable="true" type="tns:DepartmentInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDepartmentInfo" nillable="true" type="tns:ArrayOfDepartmentInfo" />
+  <xs:complexType name="DepartmentInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DepartmentInfo" nillable="true" type="tns:DepartmentInfo" />
+  <xs:complexType name="ArrayOfPositionInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PositionInfo" nillable="true" type="tns:PositionInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPositionInfo" nillable="true" type="tns:ArrayOfPositionInfo" />
+  <xs:complexType name="PositionInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BranchId" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PositionInfo" nillable="true" type="tns:PositionInfo" />
 </xs:schema>

@@ -87,6 +87,8 @@ namespace Neutrino.Data.EntityFramework
         public DbSet<MemberPromotion> MemberPromotions { get; set; }
         public DbSet<CustomerGoal> CustomerGoals { get; set; }
         public DbSet<PostionMapping> PostionMappings { get; set; }
+        public DbSet<PromotionReviewStatus> PromotionReviewStatus { get; set; }
+
         #endregion
 
         #region [ Override Method(s) ]
@@ -146,9 +148,9 @@ namespace Neutrino.Data.EntityFramework
                 .Property(p => p.ReachedPercent)
                 .HasPrecision(9, 5);
 
-            modelBuilder.Entity<BranchPromotion>()
-                .Property(p => p.TotalSalesSpecifiedPercent)
-                .HasPrecision(9, 5);
+            //modelBuilder.Entity<BranchPromotion>()
+            //    .Property(p => p.TotalSalesSpecifiedPercent)
+            //    .HasPrecision(9, 5);
 
 
             modelBuilder.Entity<OrgStructureShare>()
@@ -181,6 +183,8 @@ namespace Neutrino.Data.EntityFramework
             modelBuilder.Entity<PromotionStatus>().Ignore(x => x.Id);
             modelBuilder.Entity<ApprovePromotionType>().Ignore(x => x.Id);
             modelBuilder.Entity<QuantityConditionType>().Ignore(x => x.Id);
+            modelBuilder.Entity<PromotionReviewStatus>().Ignore(x => x.Id);
+
         }
         public override int SaveChanges()
         {

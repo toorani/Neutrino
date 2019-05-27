@@ -335,47 +335,62 @@ namespace Neutrino.Portal
             return result;
         }
 
-        [Route("getBranchPromotionDetail")]
-        public async Task<HttpResponseMessage> GetBranchPromotionDetail()
+        [Route("getBranchPromotionForStep1BranchManager")]
+        public async Task<HttpResponseMessage> GetBranchPromotionDetailForStep1BranchManager()
         {
-            int branchId = 2397;
-            //TODO : apply access
-            //var claimPrincipal = User as ClaimsPrincipal;
-            //if (claimPrincipal.HasClaim(x=>x.Type == ApplicationClaimTypes.BranchId))
-            //{
-            //    branchId = Convert.ToInt32(claimPrincipal.FindFirst(x => x.Type == ApplicationClaimTypes.BranchId).Value);
-            //}
-            var entities = await promotionBS.LoadBranchPromotionDetail(branchId);
+            int branchId = IdentityConfig.GetBranchId(User);
+            var entities = await promotionBS.LoadActiveBranchPromotionDetail(branchId);
             if (entities.ReturnStatus == false)
             {
                 return CreateErrorResponse(entities);
             }
-            
-            entities.ResultValue.Where(x => x.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.Single)
-                .ToList()
-                .ForEach(x => x.GoalGoodsCategoryTypeId = GoalGoodsCategoryTypeEnum.Group);
 
-
-            var result = entities.ResultValue
-                 .GroupBy(x => x.GoalGoodsCategoryTypeId
-                 , (key, grping) =>
-                 {
-                     return new BranchPromotionDetailViewModel
-                     {
-                         GoalTypeTitle = key == GoalGoodsCategoryTypeEnum.Group ? " هدف فروش" : key.GetEnumDescription(),
-                         TotalFinalPromotion = grping.Sum(x => x.FinalPromotion),
-                         BranchId = grping.FirstOrDefault().BranchId,
-                         BranchName = grping.FirstOrDefault().BranchName,
-                         PositionPromotions = key != GoalGoodsCategoryTypeEnum.Group ? grping.Select(x => new PositionPromotion
-                         {
-                             PositionTitle = x.PositionTitle,
-                             Promotion = x.PositionPromotion.Value
-                         }).ToList() : null
-                     };
-                 }).ToList();
+            var result = new List<BranchPromotionDetailViewModel>()
+            {
+                new  BranchPromotionDetailViewModel(){
+                    BranchId = branchId,
+                    BranchName = entities.ResultValue.Branch.Name,
+                    GoalTypeTitle = "پورسانت فروش",
+                    PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
+                    TotalFinalPromotion = entities.ResultValue.TotalSalesPromotion.Value,
+                    PositionPromotions = null
+                },
+                new  BranchPromotionDetailViewModel(){
+                    BranchId = branchId,
+                    PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
+                    BranchName = entities.ResultValue.Branch.Name,
+                    GoalTypeTitle = "پورسانت وصول کل",
+                    TotalFinalPromotion = entities.ResultValue.TotalReceiptPromotion.Value,
+                    PositionPromotions =  (from brgpl in entities.ResultValue.BranchGoalPromotions
+                                          where brgpl.Goal.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal
+                                          from posi in brgpl.PositionReceiptPromotions
+                                          select new PositionPromotion
+                                          {
+                                              PositionTitle = posi.PositionType.Description,
+                                              Promotion= posi.Promotion
+                                          }).ToList()
+                },
+                new  BranchPromotionDetailViewModel(){
+                    BranchId = branchId,
+                    BranchName = entities.ResultValue.Branch.Name,
+                    PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
+                    GoalTypeTitle = "پورسانت وصول خصوصی",
+                    TotalFinalPromotion = entities.ResultValue.PrivateReceiptPromotion.Value,
+                    PositionPromotions =  (from brgpl in entities.ResultValue.BranchGoalPromotions
+                                          where brgpl.Goal.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal
+                                          from posi in brgpl.PositionReceiptPromotions
+                                          select new PositionPromotion
+                                          {
+                                              PositionTitle = posi.PositionType.Description,
+                                              Promotion= posi.Promotion
+                                          }).ToList()
+                }
+            };
+          
 
             return CreateSuccessedListResponse(result);
         }
+        
         #endregion
 
         #region [ Private Method(s) ]

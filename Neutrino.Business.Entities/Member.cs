@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Espresso.Entites;
 
@@ -52,6 +53,12 @@ namespace Neutrino.Entities
         /// شناسه پست در اطلاعات شرکت الیت
         /// </summary>
         public int PositionRefId { get; set; }
+
+        public virtual ICollection<MemberSharePromotion> MemberSharePromotions { get; set; }
+        public Member()
+        {
+            MemberSharePromotions = new HashSet<MemberSharePromotion>();
+        }
     }
     
 }

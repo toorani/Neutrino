@@ -83,6 +83,7 @@ namespace Neutrino.InjectModules
             //Promotion
             Bind<IPromotionBS>().To<PromotionBS>();
             Bind(typeof(AbstractValidator<Promotion>)).To(typeof(PromotionBR));
+            Bind(typeof(AbstractValidator<MemberSharePromotion>)).To(typeof(MemberSharePromotionBR));
 
             //BranchReceiptGoalPercent
             Bind<IBranchReceiptGoalPercentBS>().To<BranchReceiptGoalPercentBS>();

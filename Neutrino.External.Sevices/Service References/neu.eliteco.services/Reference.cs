@@ -697,6 +697,9 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         private int CodeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int DepartmentIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LastNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -706,16 +709,10 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         private string NameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string NamePostField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string NationalCodeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Nullable<int> ccgorohField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int ccpostField;
+        private int PositionIdField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -749,6 +746,19 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
                 if ((this.CodeField.Equals(value) != true)) {
                     this.CodeField = value;
                     this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int DepartmentId {
+            get {
+                return this.DepartmentIdField;
+            }
+            set {
+                if ((this.DepartmentIdField.Equals(value) != true)) {
+                    this.DepartmentIdField = value;
+                    this.RaisePropertyChanged("DepartmentId");
                 }
             }
         }
@@ -793,19 +803,6 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string NamePost {
-            get {
-                return this.NamePostField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.NamePostField, value) != true)) {
-                    this.NamePostField = value;
-                    this.RaisePropertyChanged("NamePost");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
         public string NationalCode {
             get {
                 return this.NationalCodeField;
@@ -819,27 +816,14 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Nullable<int> ccgoroh {
+        public int PositionId {
             get {
-                return this.ccgorohField;
+                return this.PositionIdField;
             }
             set {
-                if ((this.ccgorohField.Equals(value) != true)) {
-                    this.ccgorohField = value;
-                    this.RaisePropertyChanged("ccgoroh");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int ccpost {
-            get {
-                return this.ccpostField;
-            }
-            set {
-                if ((this.ccpostField.Equals(value) != true)) {
-                    this.ccpostField = value;
-                    this.RaisePropertyChanged("ccpost");
+                if ((this.PositionIdField.Equals(value) != true)) {
+                    this.PositionIdField = value;
+                    this.RaisePropertyChanged("PositionId");
                 }
             }
         }
@@ -1412,6 +1396,301 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CustomerGoalsInfo", Namespace="http://schemas.datacontract.org/2004/07/Elite.Neutrino.Services")]
+    [System.SerializableAttribute()]
+    public partial class CustomerGoalsInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int BranchIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int CustomerCountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int GoodsIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal PromotionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ReachedCountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal ReachedPercentField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int SalesCountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int SellerIdField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int BranchId {
+            get {
+                return this.BranchIdField;
+            }
+            set {
+                if ((this.BranchIdField.Equals(value) != true)) {
+                    this.BranchIdField = value;
+                    this.RaisePropertyChanged("BranchId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int CustomerCount {
+            get {
+                return this.CustomerCountField;
+            }
+            set {
+                if ((this.CustomerCountField.Equals(value) != true)) {
+                    this.CustomerCountField = value;
+                    this.RaisePropertyChanged("CustomerCount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int GoodsId {
+            get {
+                return this.GoodsIdField;
+            }
+            set {
+                if ((this.GoodsIdField.Equals(value) != true)) {
+                    this.GoodsIdField = value;
+                    this.RaisePropertyChanged("GoodsId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal Promotion {
+            get {
+                return this.PromotionField;
+            }
+            set {
+                if ((this.PromotionField.Equals(value) != true)) {
+                    this.PromotionField = value;
+                    this.RaisePropertyChanged("Promotion");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ReachedCount {
+            get {
+                return this.ReachedCountField;
+            }
+            set {
+                if ((this.ReachedCountField.Equals(value) != true)) {
+                    this.ReachedCountField = value;
+                    this.RaisePropertyChanged("ReachedCount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal ReachedPercent {
+            get {
+                return this.ReachedPercentField;
+            }
+            set {
+                if ((this.ReachedPercentField.Equals(value) != true)) {
+                    this.ReachedPercentField = value;
+                    this.RaisePropertyChanged("ReachedPercent");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int SalesCount {
+            get {
+                return this.SalesCountField;
+            }
+            set {
+                if ((this.SalesCountField.Equals(value) != true)) {
+                    this.SalesCountField = value;
+                    this.RaisePropertyChanged("SalesCount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int SellerId {
+            get {
+                return this.SellerIdField;
+            }
+            set {
+                if ((this.SellerIdField.Equals(value) != true)) {
+                    this.SellerIdField = value;
+                    this.RaisePropertyChanged("SellerId");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="DepartmentInfo", Namespace="http://schemas.datacontract.org/2004/07/Elite.Neutrino.Services")]
+    [System.SerializableAttribute()]
+    public partial class DepartmentInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TitleField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Title {
+            get {
+                return this.TitleField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TitleField, value) != true)) {
+                    this.TitleField = value;
+                    this.RaisePropertyChanged("Title");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PositionInfo", Namespace="http://schemas.datacontract.org/2004/07/Elite.Neutrino.Services")]
+    [System.SerializableAttribute()]
+    public partial class PositionInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int BranchIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TitleField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int BranchId {
+            get {
+                return this.BranchIdField;
+            }
+            set {
+                if ((this.BranchIdField.Equals(value) != true)) {
+                    this.BranchIdField = value;
+                    this.RaisePropertyChanged("BranchId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Title {
+            get {
+                return this.TitleField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TitleField, value) != true)) {
+                    this.TitleField = value;
+                    this.RaisePropertyChanged("Title");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="neu.eliteco.services.IEliteService")]
     public interface IEliteService {
@@ -1487,6 +1766,24 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEliteService/GetBranchReceipts", ReplyAction="http://tempuri.org/IEliteService/GetBranchReceiptsResponse")]
         System.Threading.Tasks.Task<Neutrino.External.Sevices.neu.eliteco.services.BranchReceiptInfo[]> GetBranchReceiptsAsync(string userName, string password, int year, int month, int branchId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEliteService/GetCustomerGoalsInfo", ReplyAction="http://tempuri.org/IEliteService/GetCustomerGoalsInfoResponse")]
+        Neutrino.External.Sevices.neu.eliteco.services.CustomerGoalsInfo[] GetCustomerGoalsInfo(string userName, string password, int year, int month);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEliteService/GetCustomerGoalsInfo", ReplyAction="http://tempuri.org/IEliteService/GetCustomerGoalsInfoResponse")]
+        System.Threading.Tasks.Task<Neutrino.External.Sevices.neu.eliteco.services.CustomerGoalsInfo[]> GetCustomerGoalsInfoAsync(string userName, string password, int year, int month);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEliteService/GetDepartmentInfo", ReplyAction="http://tempuri.org/IEliteService/GetDepartmentInfoResponse")]
+        Neutrino.External.Sevices.neu.eliteco.services.DepartmentInfo[] GetDepartmentInfo(string userName, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEliteService/GetDepartmentInfo", ReplyAction="http://tempuri.org/IEliteService/GetDepartmentInfoResponse")]
+        System.Threading.Tasks.Task<Neutrino.External.Sevices.neu.eliteco.services.DepartmentInfo[]> GetDepartmentInfoAsync(string userName, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEliteService/GetPositionInfo", ReplyAction="http://tempuri.org/IEliteService/GetPositionInfoResponse")]
+        Neutrino.External.Sevices.neu.eliteco.services.PositionInfo[] GetPositionInfo(string userName, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEliteService/GetPositionInfo", ReplyAction="http://tempuri.org/IEliteService/GetPositionInfoResponse")]
+        System.Threading.Tasks.Task<Neutrino.External.Sevices.neu.eliteco.services.PositionInfo[]> GetPositionInfoAsync(string userName, string password);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1610,6 +1907,30 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         
         public System.Threading.Tasks.Task<Neutrino.External.Sevices.neu.eliteco.services.BranchReceiptInfo[]> GetBranchReceiptsAsync(string userName, string password, int year, int month, int branchId) {
             return base.Channel.GetBranchReceiptsAsync(userName, password, year, month, branchId);
+        }
+        
+        public Neutrino.External.Sevices.neu.eliteco.services.CustomerGoalsInfo[] GetCustomerGoalsInfo(string userName, string password, int year, int month) {
+            return base.Channel.GetCustomerGoalsInfo(userName, password, year, month);
+        }
+        
+        public System.Threading.Tasks.Task<Neutrino.External.Sevices.neu.eliteco.services.CustomerGoalsInfo[]> GetCustomerGoalsInfoAsync(string userName, string password, int year, int month) {
+            return base.Channel.GetCustomerGoalsInfoAsync(userName, password, year, month);
+        }
+        
+        public Neutrino.External.Sevices.neu.eliteco.services.DepartmentInfo[] GetDepartmentInfo(string userName, string password) {
+            return base.Channel.GetDepartmentInfo(userName, password);
+        }
+        
+        public System.Threading.Tasks.Task<Neutrino.External.Sevices.neu.eliteco.services.DepartmentInfo[]> GetDepartmentInfoAsync(string userName, string password) {
+            return base.Channel.GetDepartmentInfoAsync(userName, password);
+        }
+        
+        public Neutrino.External.Sevices.neu.eliteco.services.PositionInfo[] GetPositionInfo(string userName, string password) {
+            return base.Channel.GetPositionInfo(userName, password);
+        }
+        
+        public System.Threading.Tasks.Task<Neutrino.External.Sevices.neu.eliteco.services.PositionInfo[]> GetPositionInfoAsync(string userName, string password) {
+            return base.Channel.GetPositionInfoAsync(userName, password);
         }
     }
 }

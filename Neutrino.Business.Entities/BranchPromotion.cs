@@ -1,6 +1,7 @@
 ﻿using Espresso.Entites;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Neutrino.Entities
 {
@@ -22,61 +23,21 @@ namespace Neutrino.Entities
         /// سال محاسبه شده
         /// </summary>
         public int Year { get; set; }
-        /// <summary>
-        ///  مقدار مشخص شده مرکز برای دستیابی به هدف وصول کل
-        /// </summary>
-        public decimal TotalReceiptSpecifiedAmount { get; set; }
-        /// <summary>
-        /// درصد دست یافته شده هدف وصول کل
-        /// </summary>
-        public decimal TotalReceiptReachedPercent { get; set; }
-        /// <summary>
-        ///  مقدار مشخص شده مرکز برای دستیابی به هدف وصول خصوصی
-        /// </summary>
-        public decimal PrivateReceiptSpecifiedAmount { get; set; }
-        /// <summary>
-        /// مبلغ دست یافته شده برای وصول خصوصی 
-        /// </summary>
-        public decimal PrivateReceiptAmount { get; set; }
-        /// <summary>
-        /// درصد دست یافته شده هدف وصول خصوصی
-        /// </summary>
-        public decimal PrivateReceiptReachedPercent { get; set; }
-        /// <summary>
-        ///  درصد دستیابی هدف کل فروش
-        /// </summary>
-        public decimal TotalSalesReachedPercent { get; set; }
-        /// <summary>
-        /// درصد مشخص شده مرکز برای هدف کل فروش
-        /// </summary>
-        public decimal TotalSalesSpecifiedPercent { get; set; }
-        /// <summary>
-        /// درصد مشخص شده مرکز برای هدف کل فروش
-        /// </summary>
-        public decimal TotalSalesSpecifiedAmount { get; set; }
-     
-        /// <summary>
-        /// مبلغ کل تجمیعی
-        /// </summary>
-        public decimal AggregationSalesAmount { get; set; }
-        /// <summary>
-        ///  درصد دستیابی هدف تجمیعی
-        /// </summary>
-        public decimal AggregationReachedPercent { get; set; }
-        
-        /// <summary>
-        /// مقدار مشخص شده مرکز برای هدف تجمیعی
-        /// </summary>
-        public decimal AggregationSpecifiedAmount { get; set; }
-
+        public decimal? TotalSalesPromotion { get; set; }
+        public decimal? PrivateReceiptPromotion { get; set; }
+        public decimal? TotalReceiptPromotion { get; set; }
+        public PromotionReviewStatusEnum PromotionReviewStatusId { get; set; }
+        [ForeignKey("PromotionReviewStatusId")]
+        public virtual PromotionReviewStatus PromotionReviewStatus { get; set; }
         public virtual ICollection<BranchGoalPromotion> BranchGoalPromotions { get; private set; }
         public virtual ICollection<MemberPromotion> MemberPromotions { get; private set; }
-
+        public virtual ICollection<MemberSharePromotion> MemberSharePromotions { get; private set; }
         #region [ Constructor(s) ]
         public BranchPromotion()
         {
             BranchGoalPromotions = new HashSet<BranchGoalPromotion>();
             MemberPromotions = new HashSet<MemberPromotion>();
+            MemberSharePromotions = new HashSet<MemberSharePromotion>();
         }
         #endregion
     }

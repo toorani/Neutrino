@@ -14,10 +14,10 @@ namespace Neutrino.Portal
     {
         public PromotionReportMapperProfile()
         {
-            CreateMap<BranchPromotion, BranchPromotionViewModel>()
-                .ForMember(x => x.Branch, opt => opt.ResolveUsing(x => x.Branch.Name))
-                .ForMember(x => x.TotalAndAggregationReached, opt => opt.ResolveUsing(x => x.TotalSalesReachedPercent > x.AggregationReachedPercent ? x.TotalSalesReachedPercent : x.AggregationReachedPercent))
-                .ReverseMap();
+            //CreateMap<BranchPromotion, BranchPromotionViewModel>()
+            //    .ForMember(x => x.Branch, opt => opt.ResolveUsing(x => x.Branch.Name))
+            //    .ForMember(x => x.TotalAndAggregationReached, opt => opt.ResolveUsing(x => x.TotalSalesReachedPercent > x.AggregationReachedPercent ? x.TotalSalesReachedPercent : x.AggregationReachedPercent))
+            //    .ReverseMap();
         }
     }
 }

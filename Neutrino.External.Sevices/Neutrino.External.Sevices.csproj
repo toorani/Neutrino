@@ -96,6 +96,12 @@
     <None Include="Service References\neu.eliteco.services\Neutrino.External.Sevices.neu.eliteco.services.CompanyInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\neu.eliteco.services\Neutrino.External.Sevices.neu.eliteco.services.CustomerGoalsInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\neu.eliteco.services\Neutrino.External.Sevices.neu.eliteco.services.DepartmentInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\neu.eliteco.services\Neutrino.External.Sevices.neu.eliteco.services.GoodsCat.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -143,6 +149,9 @@
     <None Include="Service References\neu.eliteco.services\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\neu.eliteco.services\Neutrino.External.Sevices.neu.eliteco.services.PositionInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\neu.eliteco.services\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
