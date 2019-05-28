@@ -17,12 +17,15 @@ namespace Neutrino.Portal.WebApiControllers
     {
         #region [ Varibale(s) ]
         private readonly IEntityListLoader<Branch> branchListLoader;
+        private readonly IEntityLoader<Branch> branchLoader;
         #endregion
 
         #region [ Constructor(s) ]
-        public BranchServiceController(IEntityListLoader<Branch> branchListLoader)
+        public BranchServiceController(IEntityListLoader<Branch> branchListLoader
+            , IEntityLoader<Branch> branchLoader)
         {
             this.branchListLoader = branchListLoader;
+            this.branchLoader = branchLoader;
         }
         #endregion
 
@@ -32,7 +35,7 @@ namespace Neutrino.Portal.WebApiControllers
         {
             var entities = await branchListLoader.LoadAllAsync(
                orderBy: Utilities.GetOrderBy<Branch>("Name", "asc"));
-            
+
             if (entities.ReturnStatus == false)
             {
                 return CreateErrorResponse(entities);
@@ -43,6 +46,23 @@ namespace Neutrino.Portal.WebApiControllers
 
             return CreateSuccessedListResponse(result);
         }
+
+        [Route("getBranchInfo")]
+        public async Task<HttpResponseMessage> GetBranchInfo(int branchId)
+        {
+            var entities = await branchLoader.LoadAsync(x => x.Id == branchId);
+
+            if (entities.ReturnStatus == false)
+            {
+                return CreateErrorResponse(entities);
+            }
+
+            var mapper = GetMapper();
+            var result = mapper.Map<Branch, BranchViewModel>(entities.ResultValue);
+
+            return CreateViewModelResponse(result, entities);
+        }
+
         #endregion
 
         #region [ Private Method(s) ]

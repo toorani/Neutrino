@@ -10,11 +10,9 @@ namespace Neutrino.Portal
     {
         public int Month { get; set; }
         public int Year { get; set; }
-        public string Branch { get; set; }
-        /// <summary>
-        /// درصد دست یافته شده هدف وصول کل
-        /// </summary>
-        public decimal TotalReceiptReachedPercent { get; set; }
+        public int BranchId { get; set; }
+        public string BranchName { get; set; }
+        public decimal TotalPromotion { get; set; }
         /// <summary>
         /// درصد دست یافته شده هدف وصول خصوصی
         /// </summary>
@@ -23,6 +21,9 @@ namespace Neutrino.Portal
         ///  درصد دستیابی هدف تجمیعی
         /// </summary>
         public decimal TotalAndAggregationReached { get; set; }
+        public decimal TotalSalesPromotion { get; set; }
+        public decimal PrivateReceiptPromotion { get; set; }
+        public decimal TotalReceiptPromotion { get; set; }
 
 
         #region [ Constructor(s) ]

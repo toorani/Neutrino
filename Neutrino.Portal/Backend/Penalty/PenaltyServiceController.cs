@@ -48,6 +48,28 @@ namespace Neutrino.Portal.WebApiControllers
 
             return await Task.Run(() => Request.CreateResponse(HttpStatusCode.NotFound));
         }
+        [Route("getPenaltiesForPromotion")]
+        public async Task<HttpResponseMessage> GetPenaltiesForPromotion(int branchId)
+        {
+            if (year != 0 && month != 0 && branchId != 0)
+            {
+                var query = await (from me in unitOfWork.MemberDataService
+                                   .GetQuery()
+                                   .Include(x => x.PositionType)
+                                   .OrderBy(x => x.PositionTypeId)
+                                   where me.BranchId == branchId
+                                   select new PenaltyViewModel
+                                   {
+                                       Id = me.Id,
+                                       EmployeeCode = me.Code,
+                                       EmployeeName = me.Name + " " + me.LastName,
+                                       Position = me.PositionType.Description
+                                   }).ToListAsync();
+                return CreateSuccessedListResponse(query);
+            }
+
+            return await Task.Run(() => Request.CreateResponse(HttpStatusCode.NotFound));
+        }
 
         #endregion
 

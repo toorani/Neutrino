@@ -143,7 +143,6 @@ namespace Neutrino.Portal
 
             return Request.CreateResponse(HttpStatusCode.OK, entities);
         }
-
         [Route("releaseManagerStep1"), HttpPost]
         public async Task<HttpResponseMessage> ReleaseManagerStep1()
         {
@@ -160,6 +159,40 @@ namespace Neutrino.Portal
             return Request.CreateResponse(HttpStatusCode.OK, entities);
         }
 
+        [Route("getMemberSharePromotion")]
+        public async Task<HttpResponseMessage> GetMemberSharePromotionAsync(int statusId,int branchId)
+        {
+            var result_bizloading = await businessService.LoadMemberSharePromotionAsync(branchId, (PromotionReviewStatusEnum)statusId);
+            if (result_bizloading.ReturnStatus == false)
+                return CreateErrorResponse(result_bizloading);
+            var mapper = GetMapper();
+
+            var result = mapper.Map<List<MemberSharePromotion>, List<MemberSharePromotionViewModel>>(result_bizloading.ResultValue);
+            return CreateSuccessedListResponse(result);
+        }
+        [Route("getBranchPromotionsForCEOReview")]
+        public async Task<HttpResponseMessage> GetBranchPromotionsForCEOReviewAsync()
+        {
+            IBusinessResultValue<List<BranchPromotion>> result_bizloading = await businessService.LoadBranchPromotions(PromotionReviewStatusEnum.ReleadedStep1ByBranchManager);
+            if (result_bizloading.ReturnStatus == false)
+                return CreateErrorResponse(result_bizloading);
+            var mapper = GetMapper();
+
+            var result = mapper.Map<List<BranchPromotion>, List<BranchPromotionViewModel>>(result_bizloading.ResultValue);
+            return CreateSuccessedListResponse(result);
+        }
+
+        [Route("getLastBranchPromotion")]
+        public async Task<HttpResponseMessage> GetLastBranchPromotionAsync(int branchId,int statusId)
+        {
+            IBusinessResultValue<BranchPromotion> result_bizloading = await businessService.LoadBranchPromotion(branchId,(PromotionReviewStatusEnum)statusId);
+            if (result_bizloading.ReturnStatus == false)
+                return CreateErrorResponse(result_bizloading);
+            var mapper = GetMapper();
+
+            var result = mapper.Map<BranchPromotion, BranchPromotionViewModel>(result_bizloading.ResultValue);
+            return CreateViewModelResponse(result,result_bizloading);
+        }
 
         #endregion
 

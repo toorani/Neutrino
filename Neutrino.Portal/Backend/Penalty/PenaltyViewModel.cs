@@ -17,7 +17,7 @@ namespace Neutrino.Portal.Models
         /// <summary>
         /// نام پرسنل
         /// </summary>
-        public string EmployeeName { get; set; }
+        public string MemberName { get; set; }
         /// <summary>
         /// پست سازمانی
         /// </summary>
@@ -25,7 +25,7 @@ namespace Neutrino.Portal.Models
         /// <summary>
         /// پورسانت فروش
         /// </summary>
-        public decimal SalesPromotion { get; set; }
+        public decimal ManagerPromotion { get; set; }
         /// <summary>
         /// پورسانت وصول
         /// </summary>
@@ -33,7 +33,7 @@ namespace Neutrino.Portal.Models
         /// <summary>
         /// باقی مانده جریمه
         /// </summary>
-        public decimal PenaltyRemain { get; set; }
+        public decimal RemainingPenalty { get; set; }
         /// <summary>
         /// جریمه
         /// </summary>

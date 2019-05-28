@@ -1,45 +1,30 @@
-﻿console.log("promotion.branchShare.indexController")
+﻿console.log("promotion.branchShare.ceo.indexController")
 
-angular.module("neutrinoProject").register.controller('promotion.branchShare.indexController',
-    ['$scope', 'alertService', 'ajaxService', 'persianCalendar',
-        function ($scope, alertService, ajaxService, persianCalendar) {
+angular.module("neutrinoProject").register.controller('promotion.branchShare.ceo.indexController',
+    ['$scope', 'alertService', 'ajaxService', '$location',
+        function ($scope, alertService, ajaxService, $location) {
 
             "use strict";
-            $scope.viewModel = {
-                branchId: null,
-                year: null,
-                month: null
-            }
 
-            $scope.years = persianCalendar.getYears();
-            $scope.months = persianCalendar.getMonthNames();
+            $scope.branchPromotions = [];
 
             $scope.initializeController = function () {
-                $scope.title = 'مدیریت محاسبه پورسانت';
-                getBranches();
+                $scope.title = ' بررسی و اعلام نظر پورسانت پرسنل مراکز';
+                getBranchPromotions();
+                
             }
-            $scope.getData = function () {
-
+            $scope.auditBranchMemebrPromotion = function (dataSelected) {
+                $location.url('promotion/branchShare/ceo/item/' + dataSelected.branchId);
             }
 
-            $scope.submit = function () {
-                ajaxService.ajaxPost($scope.viewModel, '/api/promotionService/add',
+            
+            var getBranchPromotions = function () {
+                ajaxService.ajaxCall({}, "api/promotionService/getBranchPromotionsForCEOReview", 'get',
                     function (response) {
-                        alertService.showSuccess(response.data.actionResult.returnMessage);
-                        $scope.modalInstance.close();
+                        $scope.branchPromotions = response.data;
                     },
                     function (response) {
-                        alertService.showError(response);
-                    });
-            }
-            var getBranches = function () {
-                $scope.branches = [];
-                return ajaxService.ajaxCall({}, "api/branchService/getBranches", 'get',
-                    function (response) {
-                        $scope.branches = response.data;
-                    },
-                    function (response) {
-                        $scope.branches = [];
+                        $scope.branchPromotions = [];
                         alertService.showError(response);
                     });
             }

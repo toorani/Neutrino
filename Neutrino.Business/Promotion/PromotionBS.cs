@@ -1023,7 +1023,7 @@ namespace Neutrino.Business
             try
             {
                 var entity = await unitOfWork.BranchPromotionDataService.GetQuery()
-                    .IncludeFilter(x=>x.MemberSharePromotions.Where(y=>y.Deleted == false))
+                    .IncludeFilter(x => x.MemberSharePromotions.Where(y => y.Deleted == false))
                     .FirstOrDefaultAsync(x => x.BranchId == branchId && x.PromotionReviewStatusId == currentStep);
                 if (entity != null)
                 {
@@ -1070,7 +1070,34 @@ namespace Neutrino.Business
             return result;
         }
 
-
+        public async Task<IBusinessResultValue<List<BranchPromotion>>> LoadBranchPromotions(PromotionReviewStatusEnum promotionReviewStatusId)
+        {
+            var result = new BusinessResultValue<List<BranchPromotion>>();
+            try
+            {
+                result.ResultValue = await unitOfWork.BranchPromotionDataService.GetAsync(x => x.PromotionReviewStatusId == promotionReviewStatusId
+                , includes: x => x.Branch);
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
+        public async Task<IBusinessResultValue<BranchPromotion>> LoadBranchPromotion(int branchId, PromotionReviewStatusEnum statusId)
+        {
+            var result = new BusinessResultValue<BranchPromotion>();
+            try
+            {
+                result.ResultValue = await unitOfWork.BranchPromotionDataService.FirstOrDefaultAsync(x => x.BranchId == branchId && x.PromotionReviewStatusId == statusId
+                , includes: x => x.Branch);
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
         #endregion
 
         #region [ Private Method(s) ]
