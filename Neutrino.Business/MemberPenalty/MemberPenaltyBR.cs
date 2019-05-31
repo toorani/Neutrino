@@ -19,7 +19,7 @@ namespace Neutrino.Business
                 .Configure(x => x.CascadeMode = CascadeMode.StopOnFirstFailure);
             RuleFor(x => x)
                 .Must(x => lessOrEqualTotalPromotion(x))
-                .WithMessage("جمع پورسانت پرسنل باید از پورسانت مرکز کوچکتر و یا مساوی باشد ");
+                .WithMessage("جمع پورسانت پرسنل باید برابر با پورسانت مرکز باشد ");
 
             RuleForEach(x => x)
                 .SetValidator(x => new MemberPenaltyBR());
@@ -28,7 +28,9 @@ namespace Neutrino.Business
         private bool lessOrEqualTotalPromotion(List<MemberPenalty> memberPenalties)
         {
             var branchPromotionId = memberPenalties.First().BranchPromotionId;
-            var branchPromotion = unitOfWork.BranchPromotionDataService.GetById(branchPromotionId);
+            var branchPromotion = unitOfWork.BranchPromotionDataService.GetQuery()
+                .AsNoTracking()
+                .Single(x=>x.Id == branchPromotionId);
             var totalBranchPromotion = branchPromotion.TotalReceiptPromotion + branchPromotion.TotalSalesPromotion + branchPromotion.PrivateReceiptPromotion;
             return memberPenalties.Sum(x => x.CEOPromotion) <= totalBranchPromotion;
         }

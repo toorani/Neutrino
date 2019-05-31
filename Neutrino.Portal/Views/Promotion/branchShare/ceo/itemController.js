@@ -67,7 +67,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.ceo
                         });
                     },
                     function (response) {
-                        alertService.showError(response.returnMessage);
+                        alertService.showError(response);
                     });
 
 

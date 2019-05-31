@@ -46,7 +46,7 @@ namespace Neutrino.Portal.WebApiControllers
             return CreateSuccessedListResponse(viewModelMapped);
         }
 
-        [Route("addOrModify")]
+        [Route("addOrModify"),HttpPost]
         public async Task<HttpResponseMessage> AddOrModify(List<PenaltyViewModel> postedViewModel)
         {
             var mapper = GetMapper();
@@ -65,7 +65,7 @@ namespace Neutrino.Portal.WebApiControllers
             return Request.CreateResponse(HttpStatusCode.OK, new { returnValue = postedViewModel, returnMessage = result_biz.ReturnMessage.ConcatAll() });
         }
 
-        [Route("releaseCEOPromotion")]
+        [Route("releaseCEOPromotion"), HttpPost]
         public async Task<HttpResponseMessage> ReleaseCEOPromotion(List<PenaltyViewModel> postedViewModel)
         {
             var mapper = GetMapper();

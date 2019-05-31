@@ -808,6 +808,8 @@
     <Content Include="Views\Promotion\branchShare\ceo\itemController.js" />
     <Content Include="Views\Promotion\branchShare\manager\index.html" />
     <Content Include="Views\Promotion\branchShare\manager\indexController.js" />
+    <Content Include="Views\Promotion\branchShare\reviewFinalStep\index.html" />
+    <Content Include="Views\Promotion\branchShare\reviewFinalStep\indexController.js" />
     <Content Include="Views\Promotion\overviewrpt\index.html" />
     <Content Include="Views\Promotion\index.html" />
     <Content Include="Views\Promotion\overviewrpt\indexController.js" />

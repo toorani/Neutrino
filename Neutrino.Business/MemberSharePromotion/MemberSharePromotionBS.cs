@@ -17,13 +17,41 @@ namespace Neutrino.Business
     public class MemberSharePromotionBS : NeutrinoBusinessService, IMemberSharePromotionBS
     {
         private readonly AbstractValidator<MemberSharePromotion> validationRules;
+        private readonly AbstractValidator<List<MemberSharePromotion>>  lstValidationRules;
+
 
         public MemberSharePromotionBS(NeutrinoUnitOfWork unitOfWork
-            , AbstractValidator<MemberSharePromotion> memberShareValidator) : base(unitOfWork)
+            , AbstractValidator<MemberSharePromotion> memberShareValidator
+            , AbstractValidator<List<MemberSharePromotion>> lstValidationRules) : base(unitOfWork)
         {
             validationRules = memberShareValidator;
+            this.lstValidationRules = lstValidationRules;
         }
 
+        public async Task<IBusinessResult> AddOrModfiyFinalPromotionAsync(List<MemberSharePromotion> entities)
+        {
+            var result = new BusinessResult();
+            try
+            {
+                var result_validator = lstValidationRules.Validate(entities);
+                if (!result_validator.IsValid)
+                {
+                    result.PopulateValidationErrors(result_validator.Errors);
+                    return result;
+                }
+
+                entities.ForEach(memshar => {
+                    unitOfWork.MemberSharePromotionDataService.Update(memshar);
+                });
+                await unitOfWork.CommitAsync();
+                result.ReturnMessage.Add(MESSAGE_ADD_ENTITY);
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
         public async Task<IBusinessResult> CreateOrUpdateAsync(MemberSharePromotion entity)
         {
             var result = new BusinessResult();
@@ -62,7 +90,35 @@ namespace Neutrino.Business
             }
             return result;
         }
+        public async Task<IBusinessResultValue<PromotionReviewStatusEnum>> DeterminedPromotion(List<MemberSharePromotion> entities)
+        {
+            var result = new BusinessResultValue<PromotionReviewStatusEnum>();
+            try
+            {
+                var result_validator = lstValidationRules.Validate(entities);
+                if (!result_validator.IsValid)
+                {
+                    result.PopulateValidationErrors(result_validator.Errors);
+                    return result;
+                }
 
+                entities.ForEach(memshar => {
+                    unitOfWork.MemberSharePromotionDataService.Update(memshar);
+                });
+
+                var branchPromotionId = entities.First().BranchPromotionId;
+                var branchPromotion = await unitOfWork.BranchPromotionDataService.GetByIdAsync(branchPromotionId);
+                branchPromotion.PromotionReviewStatusId = PromotionReviewStatusEnum.DeterminedPromotion;
+                unitOfWork.BranchPromotionDataService.Update(branchPromotion);
+                await unitOfWork.CommitAsync();
+                result.ReturnMessage.Add("پورسانت پرسنل نهایی شد");
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
         public async Task<IBusinessResultValue<List<MemberSharePromotion>>> LoadAsync(int branchId, PromotionReviewStatusEnum promotionReviewStatusId)
         {
             var result = new BusinessResultValue<List<MemberSharePromotion>>();
@@ -79,7 +135,6 @@ namespace Neutrino.Business
             }
             return result;
         }
-
         public async Task<IBusinessResult> ProceedMemberSharePromotionAsync(PromotionReviewStatusEnum currentStep, PromotionReviewStatusEnum nextStep, int branchId)
         {
             var result = new BusinessResult();
@@ -116,7 +171,6 @@ namespace Neutrino.Business
             }
             return result;
         }
-
         public async Task<IBusinessResult> RemoveAsync(int branchId, int memberId)
         {
             var result = new BusinessResult();

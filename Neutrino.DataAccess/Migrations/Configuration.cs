@@ -299,6 +299,15 @@
                         OrderId = 5,
                         Parent = promosionlItem,
                         ParentId = promosionlItem.Id
+                    },
+                    new AppMenu
+                    {
+                        Title = "تایید نهایی پورسانت",
+                        Icon = "fa fa-group",
+                        Url = "/promotion/branchShare/reviewFinalStep/index",
+                        OrderId = 6,
+                        Parent = promosionlItem,
+                        ParentId = promosionlItem.Id
                     }
                 );
 

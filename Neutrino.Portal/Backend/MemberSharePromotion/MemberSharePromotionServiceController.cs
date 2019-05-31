@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
 using Espresso.BusinessService.Interfaces;
+using Espresso.Core;
 using Espresso.Portal;
 using jQuery.DataTables.WebApi;
 using Neutrino.Business;
@@ -89,6 +90,35 @@ namespace Neutrino.Portal
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, entities);
+        }
+
+        [Route("addOrModfiyFinalPromotion"), HttpPost]
+        public async Task<HttpResponseMessage> AddOrModfiyFinalPromotion(List<MemberSharePromotionViewModel> promotionViewModels)
+        {
+            var mapper = GetMapper();
+            var entities = mapper.Map<List<MemberSharePromotionViewModel>, List<MemberSharePromotion>>(promotionViewModels);
+
+            var result_biz = await businessService.AddOrModfiyFinalPromotionAsync(entities);
+            if (result_biz.ReturnStatus == false)
+            {
+                return CreateErrorResponse(result_biz);
+            }
+            
+            return Request.CreateResponse(HttpStatusCode.OK, new { returnMessage = result_biz.ReturnMessage.ConcatAll() });
+        }
+        [Route("determinedPromotion"), HttpPost]
+        public async Task<HttpResponseMessage> DeterminedPromotion(List<MemberSharePromotionViewModel> postedViewModels)
+        {
+            var mapper = GetMapper();
+            var entities = mapper.Map<List<MemberSharePromotionViewModel>, List<MemberSharePromotion>>(postedViewModels);
+
+            var result_biz = await businessService.DeterminedPromotion(entities);
+            if (result_biz.ReturnStatus == false)
+            {
+                return CreateErrorResponse(result_biz);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, new { returnValue = (int)result_biz.ResultValue, returnMessage = result_biz.ReturnMessage.ConcatAll() });
         }
         #endregion
 

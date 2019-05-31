@@ -126,6 +126,19 @@ namespace Neutrino.Portal
             return CreateViewModelResponse(result,result_bizloading);
         }
 
+        [Route("getActiveBranchPromotion")]
+        public async Task<HttpResponseMessage> GetActiveBranchPromotion()
+        {
+            int branchId = IdentityConfig.GetBranchId(User);
+            IBusinessResultValue<BranchPromotion> result_bizloading = await businessService.LoadActiveBranchPromotionDetail(branchId);
+            if (result_bizloading.ReturnStatus == false)
+                return CreateErrorResponse(result_bizloading);
+            var mapper = GetMapper();
+
+            var result = mapper.Map<BranchPromotion, BranchPromotionViewModel>(result_bizloading.ResultValue);
+            return CreateViewModelResponse(result, result_bizloading);
+        }
+
         #endregion
 
         #region [ Private Method(s) ]

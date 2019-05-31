@@ -99,6 +99,8 @@ namespace Neutrino.InjectModules
             //MemberSharePromotion
             Bind<IMemberSharePromotionBS>().To<MemberSharePromotionBS>();
             Bind(typeof(AbstractValidator<MemberSharePromotion>)).To(typeof(MemberSharePromotionBR));
+            Bind(typeof(AbstractValidator<List<MemberSharePromotion>>)).To(typeof(MemberSharePromotionCollectionBR));
+            
 
             //MemberPenalty
             Bind<IMemberPenaltyBS>().To<MemberPenaltyBS>();
