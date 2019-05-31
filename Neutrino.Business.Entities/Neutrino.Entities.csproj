@@ -56,6 +56,7 @@
     <Compile Include="ApplicationAction.cs" />
     <Compile Include="AppMenu.cs" />
     <Compile Include="ApprovePromotionType.cs" />
+    <Compile Include="MemberPenalty.cs" />
     <Compile Include="MemberSharePromotion.cs" />
     <Compile Include="PromotionReviewStatus.cs" />
     <Compile Include="CustomerGoal.cs" />

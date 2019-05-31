@@ -24,7 +24,7 @@ namespace Neutrino.Portal
         public decimal TotalSalesPromotion { get; set; }
         public decimal PrivateReceiptPromotion { get; set; }
         public decimal TotalReceiptPromotion { get; set; }
-
+        public int PromotionReviewStatusId { get; set; }
 
         #region [ Constructor(s) ]
         public BranchPromotionViewModel() : base()

@@ -62,7 +62,7 @@ namespace Neutrino.Data.EntityFramework
         public IEntityBaseRepository<PostionMapping> PostionMappingDataService { get; private set; }
         public IEntityBaseRepository<MemberPromotion> MemberPomotionDataService { get; private set; }
         public IEntityBaseRepository<MemberSharePromotion> MemberSharePromotionDataService { get; private set; }
-        
+        public IEntityBaseRepository<MemberPenalty> MemberPenaltyDataService { get; private set; }
 
         #endregion
 
@@ -111,6 +111,7 @@ namespace Neutrino.Data.EntityFramework
             , IEntityBaseRepository<PostionMapping> postionMappingDS
             , IEntityBaseRepository<MemberPromotion> memberPomotionDS
             , IEntityBaseRepository<MemberSharePromotion> memberSharePromotionDS
+            , IEntityBaseRepository<MemberPenalty> memberPenaltyDS
            )
         {
             this.context = context;
@@ -157,6 +158,7 @@ namespace Neutrino.Data.EntityFramework
             PostionMappingDataService = postionMappingDS;
             MemberPomotionDataService = memberPomotionDS;
             MemberSharePromotionDataService = memberSharePromotionDS;
+            MemberPenaltyDataService = memberPenaltyDS;
         }
         #endregion
 

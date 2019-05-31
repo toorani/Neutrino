@@ -75,6 +75,8 @@
     <Compile Include="BranchSales\IBranchSalesBS.cs" />
     <Compile Include="GoalGoodsCategory\IGoalGoodsCategoryDS.cs" />
     <Compile Include="GoalNonFulfillment\IGoalNonFulfillmentPercentBS.cs" />
+    <Compile Include="MemberPenalty\IMemberPenaltyBS.cs" />
+    <Compile Include="MemberSharePromotion\IMemberSharePromotionBS.cs" />
     <Compile Include="OrgStructure\IOrgStructureBS.cs" />
     <Compile Include="Promotion\IPromotionBS.cs" />
     <Compile Include="CostCoefficient\ICostCoefficientBS.cs" />

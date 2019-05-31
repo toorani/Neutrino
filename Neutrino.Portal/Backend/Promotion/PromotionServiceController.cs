@@ -101,75 +101,7 @@ namespace Neutrino.Portal
 
             return CreateViewModelResponse(postedViewModel, entityCreated);
         }
-
-        [Route("addOrModifyMemberPromotion"), HttpPost]
-        public async Task<HttpResponseMessage> AddOrModifyMemberSharePromotion(MemberSharePromotionViewModel postedViewModel)
-        {
-            int branchId = IdentityConfig.GetBranchId(User);
-
-            var mapper = GetMapper();
-            var entityMapped = mapper.Map<MemberSharePromotionViewModel, MemberSharePromotion>(postedViewModel);
-            entityMapped.BranchId = branchId;
-
-            var result_biz = await businessService.CreateOrUpdateMemberSharePromotionAsync(entityMapped);
-            if (result_biz.ReturnStatus == false)
-                return CreateErrorResponse(result_biz);
-
-            return Request.CreateResponse(HttpStatusCode.OK, result_biz);
-
-        }
-        [Route("getMemberSharePromotion")]
-        public async Task<HttpResponseMessage> GetMemberSharePromotionAsync(int statusId)
-        {
-            int branchId = IdentityConfig.GetBranchId(User);
-            var result_bizloading = await businessService.LoadMemberSharePromotionAsync(branchId,(PromotionReviewStatusEnum)statusId);
-            if (result_bizloading.ReturnStatus == false)
-                return CreateErrorResponse(result_bizloading);
-            var mapper = GetMapper();
-
-            var result = mapper.Map<List<MemberSharePromotion>, List<MemberSharePromotionViewModel>>(result_bizloading.ResultValue);
-            return CreateSuccessedListResponse(result);
-        }
-        [Route("deleteMemberSahrePromotion"), HttpPost]
-        public async Task<HttpResponseMessage> DeleteMemberSahrePromotion(MemberSharePromotionViewModel postedViewModel)
-        {
-            int branchId = IdentityConfig.GetBranchId(User);
-
-            var entities = await businessService.RemoveMemberSharePromotion(branchId, postedViewModel.MemberId);
-            if (entities.ReturnStatus == false)
-            {
-                return CreateErrorResponse(entities);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK, entities);
-        }
-        [Route("releaseManagerStep1"), HttpPost]
-        public async Task<HttpResponseMessage> ReleaseManagerStep1()
-        {
-            int branchId = IdentityConfig.GetBranchId(User);
-
-            IBusinessResult entities = await businessService.ProceedMemberSharePromotionAsync(PromotionReviewStatusEnum.WaitingForStep1BranchManagerReview
-                , PromotionReviewStatusEnum.ReleadedStep1ByBranchManager
-                ,branchId);
-            if (entities.ReturnStatus == false)
-            {
-                return CreateErrorResponse(entities);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK, entities);
-        }
-
-        [Route("getMemberSharePromotion")]
-        public async Task<HttpResponseMessage> GetMemberSharePromotionAsync(int statusId,int branchId)
-        {
-            var result_bizloading = await businessService.LoadMemberSharePromotionAsync(branchId, (PromotionReviewStatusEnum)statusId);
-            if (result_bizloading.ReturnStatus == false)
-                return CreateErrorResponse(result_bizloading);
-            var mapper = GetMapper();
-
-            var result = mapper.Map<List<MemberSharePromotion>, List<MemberSharePromotionViewModel>>(result_bizloading.ResultValue);
-            return CreateSuccessedListResponse(result);
-        }
+       
         [Route("getBranchPromotionsForCEOReview")]
         public async Task<HttpResponseMessage> GetBranchPromotionsForCEOReviewAsync()
         {
@@ -182,10 +114,10 @@ namespace Neutrino.Portal
             return CreateSuccessedListResponse(result);
         }
 
-        [Route("getLastBranchPromotion")]
-        public async Task<HttpResponseMessage> GetLastBranchPromotionAsync(int branchId,int statusId)
+        [Route("getActiveBranchPromotion")]
+        public async Task<HttpResponseMessage> GetActiveBranchPromotion(int branchId)
         {
-            IBusinessResultValue<BranchPromotion> result_bizloading = await businessService.LoadBranchPromotion(branchId,(PromotionReviewStatusEnum)statusId);
+            IBusinessResultValue<BranchPromotion> result_bizloading = await businessService.LoadActiveBranchPromotionDetail(branchId);
             if (result_bizloading.ReturnStatus == false)
                 return CreateErrorResponse(result_bizloading);
             var mapper = GetMapper();

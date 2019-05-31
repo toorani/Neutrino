@@ -7,6 +7,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.ceo
             "use strict";
 
             let branchId = 0;
+            $scope.memberPenalties = [];
             $scope.initializeController = function () {
                 $scope.title = ' بررسی پورسانت پرسنل مرکز ';
 
@@ -16,55 +17,58 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.ceo
             }
 
             var getBranchPromotionDetail = function () {
-                ajaxService.ajaxCall({ branchId: branchId, statusId: 2 }, "api/promotionService/getLastBranchPromotion", 'get',
+                ajaxService.ajaxCall({ branchId: branchId }, "api/promotionService/getActiveBranchPromotion", 'get',
                     function (response) {
                         $scope.branchPromotoinDetail = response.data;
-                        
+
                     },
                     function (response) {
                         alertService.showError(response);
                     });
             }
 
-
-
             var getData = function () {
-                ajaxService.ajaxCall({ statusId: 2, branchId: branchId }, "api/promotionService/getMemberSharePromotion", 'get',
+                ajaxService.ajaxCall({ branchId: branchId }, "api/penaltyService/getPenaltiesForPromotion", 'get',
                     function (response) {
-                        $scope.branchMemberPromotions = response.data;
-                        //calculateAssigendPromotion();
+                        $scope.memberPenalties = response.data;
                     },
                     function (response) {
-                        $scope.branchMemberPromotions = [];
+                        $scope.memberPenalties = [];
+                        alertService.showError(response);
+                    });
+            }
+
+            $scope.getTotalCEOPromotion = function () {
+                let totalCEOPormotion = 0;
+                $scope.memberPenalties.forEach(record => {
+                    totalCEOPormotion += record.managerPromotion - record.deduction + record.credit;
+                });
+                return totalCEOPormotion;
+                
+            }
+            $scope.releaseCEO = function () {
+                ajaxService.ajaxPost($scope.memberPenalties, '/api/penaltyService/releaseCEOPromotion',
+                    function (response) {
+                        alertService.showSuccess(response.data.returnMessage);
+                        $scope.branchPromotoinDetail.promotionReviewStatusId = response.data.returnValue;
+                    },
+                    function (response) {
                         alertService.showError(response);
                     });
             }
 
             $scope.submit = function () {
-
-                if ($scope.goal.id == 0) {
-                    ajaxService.ajaxPost($scope.goal, "api/goalService/add",
-                        function (response) {
-                            alertService.showSuccess(response.data.actionResult.returnMessage);
-                            $scope.goal.id = response.data.id;
-                            $location.path('goal/elite/receipt/item/' + $scope.goal.id).replace();
-                            loadGoal();
-                        },
-                        function (response) {
-                            alertService.showError(response);
-                            alertService.setValidationErrors($scope, response.data.validationErrors);
+                ajaxService.ajaxPost($scope.memberPenalties, "api/penaltyService/addOrModify",
+                    function (response) {
+                        alertService.showSuccess(response.data.returnMessage);
+                        $scope.memberPenalties.forEach(vm => {
+                            let returnValue = response.data.returnValue.filter(x => x.memberId == vm.memberId)[0];
+                            vm.id = returnValue.id;
                         });
-                }
-                else {
-                    ajaxService.ajaxPost($scope.goal, "api/goalService/edit",
-                        function (response) {
-                            alertService.showSuccess(response.data.actionResult.returnMessage);
-                        },
-                        function (response) {
-                            alertService.showError(response);
-                            alertService.setValidationErrors($scope, response.data.validationErrors);
-                        });
-                }
+                    },
+                    function (response) {
+                        alertService.showError(response.returnMessage);
+                    });
 
 
             }

@@ -609,6 +609,14 @@
     <Compile Include="Migrations\201905270823451_add_totalromotionvalues_branchpromotion.Designer.cs">
       <DependentUpon>201905270823451_add_totalromotionvalues_branchpromotion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905301734469_addMemebrPlenaty.cs" />
+    <Compile Include="Migrations\201905301734469_addMemebrPlenaty.Designer.cs">
+      <DependentUpon>201905301734469_addMemebrPlenaty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905301814387_alter_MemebrPlenaty_adddesc.cs" />
+    <Compile Include="Migrations\201905301814387_alter_MemebrPlenaty_adddesc.Designer.cs">
+      <DependentUpon>201905301814387_alter_MemebrPlenaty_adddesc.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NeutrinoContext.cs" />
@@ -1023,6 +1031,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905270823451_add_totalromotionvalues_branchpromotion.resx">
       <DependentUpon>201905270823451_add_totalromotionvalues_branchpromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905301734469_addMemebrPlenaty.resx">
+      <DependentUpon>201905301734469_addMemebrPlenaty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905301814387_alter_MemebrPlenaty_adddesc.resx">
+      <DependentUpon>201905301814387_alter_MemebrPlenaty_adddesc.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

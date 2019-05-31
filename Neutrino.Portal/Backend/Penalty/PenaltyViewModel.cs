@@ -15,6 +15,10 @@ namespace Neutrino.Portal.Models
         /// </summary>
         public int EmployeeCode { get; set; }
         /// <summary>
+        /// شناسه پرسنل
+        /// </summary>
+        public int MemberId { get; set; }
+        /// <summary>
         /// نام پرسنل
         /// </summary>
         public string MemberName { get; set; }
@@ -26,6 +30,7 @@ namespace Neutrino.Portal.Models
         /// پورسانت فروش
         /// </summary>
         public decimal ManagerPromotion { get; set; }
+        public decimal CEOPromotion { get; set; }
         /// <summary>
         /// پورسانت وصول
         /// </summary>
@@ -46,7 +51,10 @@ namespace Neutrino.Portal.Models
         /// مطالبات
         /// </summary>
         public decimal Credit { get; set; }
+        public string Description { get; set; }
+        public int BranchPromotionId { get; set; }
 
+        public int MemberSharePromotionId { get; set; }
 
         public PenaltyViewModel() 
         {

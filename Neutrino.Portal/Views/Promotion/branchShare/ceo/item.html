@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="panel panel-dark" >
+                    <div class="panel panel-dark">
                         <div class="panel-heading">
                             <h3 class="panel-title">اطلاعات پورسانت مرکز {{branchPromotoinDetail.branchName}} </h3>
                         </div>
@@ -19,7 +19,7 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <label class="col-md-1 control-label">
-                                            جمع 
+                                            جمع
                                         </label>
                                         <div class="col-md-2 ">
                                             <label class="dir-ltr bold">{{branchPromotoinDetail.totalPromotion | number}}</label>
@@ -37,7 +37,7 @@
                                             <label class="dir-ltr bold">{{branchPromotoinDetail.totalReceiptPromotion | number}}</label>
                                         </div>
                                         <label class="col-md-1 control-label">
-                                             وصول خصوصی
+                                            وصول خصوصی
                                         </label>
                                         <div class="col-md-2 ">
                                             <label class="dir-ltr bold">{{branchPromotoinDetail.privateReceiptPromotion | number}}</label>
@@ -47,15 +47,16 @@
                             </div>
                         </div>
                     </div>
-                    <form novalidate role="form" esp-validate-complete="submit()"
+                    <form novalidate role="form" esp-validate-complete="submit()" 
                           esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true
                                   ,autoHidePrompt:true}"
                           class="form-horizontal ls_form" name="form">
-                        <div class="table-responsive ls-table" style="overflow-y: auto;" ng-if="branchMemberPromotions.length != 0">
+                        <div class="table-responsive ls-table" style="overflow-y: auto;"
+                             ng-show="branchPromotoinDetail.promotionReviewStatusId == 2 && branchMemberPromotions.length != 0">
                             <table class="table table-bordered table-striped " cellspacing="0">
                                 <thead class="bold">
                                     <tr>
-                                        <td class="align-center"  rowspan="2" width="60px">#</td>
+                                        <td class="align-center" rowspan="2" width="60px">#</td>
                                         <td class="align-center" style="vertical-align:middle" rowspan="2"> نام کامل</td>
                                         <td style="vertical-align:middle" class="align-center">پورسانت تایید شده مرکز</td>
                                         <td style="vertical-align:middle" class="align-center" rowspan="2">مانده جرائم</td>
@@ -68,22 +69,21 @@
                                         <td class="align-center">پورسانت پس از کسورات</td>
                                     </tr>
                                 </thead>
-                                <tr ng-repeat="record in branchMemberPromotions">
+                                <tr ng-repeat="record in memberPenalties">
                                     <td class="text-center" style="vertical-align:middle">
                                         {{$index + 1}}
                                     </td>
                                     <td class="text-center" style="vertical-align:middle">
-                                        {{record.member.fullName}}
+                                        {{record.memberName}}
                                     </td>
                                     <td class="align-center dir-ltr">
                                         {{record.managerPromotion | number}}
                                         <div class="ls_divider"></div>
-                                        {{record.managerPromotion - record.deduction +record.stock  | number}}
+                                        {{record.managerPromotion - record.deduction +record.credit  | number}}
                                     </td>
                                     <td class="align-center">
                                         <input type="text" class="form-control dir-ltr"
                                                ng-model="record.remainingPenalty"
-                                               
                                                ng-trim=false
                                                awnum="price">
                                     </td>
@@ -101,31 +101,47 @@
                                     </td>
                                     <td class="align-center">
                                         <input type="text" class="form-control dir-ltr"
-                                               ng-model="record.stock"
+                                               ng-model="record.credit"
                                                ng-trim=false
                                                awnum="price">
                                     </td>
                                     <td class="align-center">
                                         <textarea type="text" class="form-control"
-                                               ng-model="record.description"/>
+                                                  ng-model="record.description" />
+                                    </td>
+                                </tr>
+                                <tr ng-show="memberPenalties.length != 0">
+                                    <td class="text-center" colspan="2" style="vertical-align:middle">
+                                        جمع پورسانت
+                                    </td>
+                                    <td class="align-center dir-ltr">
+                                        {{branchPromotoinDetail.totalPromotion | number}}
+                                        <div class="ls_divider"></div>
+                                        <span class="bold">
+                                            {{ getTotalCEOPromotion() | number}}
+                                        </span>
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        <div class="alert alert-warning">
+                        <div class="alert alert-warning"  ng-show="branchPromotoinDetail.promotionReviewStatusId == 2">
                             <i class="fa fa-warning"></i>
                             لطفا پس از اتمام تعیین پورسانت پرسنل ،جهت ارسال اطلاعات از گزینه <strong>تایید نهایی و ارسال اطلاعات</strong> استفاده نماید.
                             توجه داشته باشید که بعد از زدن این گزینه امکان تغییر اطلاعات وجود ندارد
                         </div>
+                        <div class="alert alert-warning" ng-if="branchPromotoinDetail.promotionReviewStatusId != 2">
+                            <strong>توجه!</strong> پورسانت تقسیم و برای تایید نهایی رییس مرکز به مرکز <strong>{{branchPromotoinDetail.branchName}}</strong> ارسال شده است.
+</div>
                         <div class="modal-footer">
                             <button type="submit"
-                                    ng-if="!goal.isUsed"
+                                    ng-show="branchPromotoinDetail.promotionReviewStatusId == 2"
                                     name="Add"
                                     class="btn btn-success">
                                 <i class="fa fa-check"></i>
                                 <span>ثبت</span>
                             </button>
-                            <button type="button" ng-show="getTotal() - assigendPromotion == 0"
+                            <button type="button"
+                                    ng-show="branchPromotoinDetail.promotionReviewStatusId == 2"
                                     ng-click="releaseCEO()"
                                     class="btn btn-danger">
                                 <i class="fa fa-send-o"></i>

@@ -1,4 +1,5 @@
 ﻿using Espresso.Entites;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,7 +16,12 @@ namespace Neutrino.Entities
         [NotMapped]
         public int BranchId { get; set; }
         public virtual Member Member { get; set; }
+        public virtual ICollection<MemberPenalty> MemberPenalties { get; private set; }
 
+        public MemberSharePromotion()
+        {
+            MemberPenalties = new HashSet<MemberPenalty>();
+        }
 
     }
 }

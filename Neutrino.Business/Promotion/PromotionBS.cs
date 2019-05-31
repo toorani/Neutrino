@@ -21,7 +21,7 @@ namespace Neutrino.Business
     {
         #region [ Varibale(s) ]
         private readonly AbstractValidator<Promotion> validator;
-        private readonly AbstractValidator<MemberSharePromotion> mspValidator;
+        
 
         /// <summary>
         /// اطلاعات فروش کلی مراکز
@@ -114,11 +114,10 @@ namespace Neutrino.Business
         #region [ Constructor(s) ]
         public PromotionBS(NeutrinoUnitOfWork unitOfWork
             , AbstractValidator<Promotion> validator
-            , AbstractValidator<MemberSharePromotion> memberShareValidator)
+            )
             : base(unitOfWork)
         {
             this.validator = validator;
-            mspValidator = memberShareValidator;
         }
         #endregion
 
@@ -829,7 +828,6 @@ namespace Neutrino.Business
             }
             return result;
         }
-
         public async Task<IBusinessResultValue<List<ReportBranchPromotionDetail>>> LoadReportBranchPromotionDetail(DateTime startDate, DateTime endDate)
         {
             var result = new BusinessResultValue<List<ReportBranchPromotionDetail>>();
@@ -951,7 +949,7 @@ namespace Neutrino.Business
                     .IncludeFilter(x => x.BranchGoalPromotions.Select(y => y.PositionReceiptPromotions.Select(z => z.PositionType)))
                     .IncludeFilter(x => x.BranchGoalPromotions.Select(y => y.Goal))
                     .IncludeFilter(x => x.BranchGoalPromotions.Select(y => y.Branch))
-                    .Where(x => x.BranchId == branchId && x.PromotionReviewStatusId != PromotionReviewStatusEnum.ReleadedStep2ByBranchManager)
+                    .Where(x => x.BranchId == branchId && x.PromotionReviewStatusId != PromotionReviewStatusEnum.DeterminedPromotion)
                     .FirstOrDefaultAsync();
 
             }
@@ -961,115 +959,6 @@ namespace Neutrino.Business
             }
             return result;
         }
-        public async Task<IBusinessResult> CreateOrUpdateMemberSharePromotionAsync(MemberSharePromotion entity)
-        {
-            var result = new BusinessResult();
-            try
-            {
-                var branchPromotion = await unitOfWork.BranchPromotionDataService.FirstOrDefaultAsync(x => x.BranchId == entity.BranchId
-                && x.PromotionReviewStatusId == PromotionReviewStatusEnum.WaitingForStep1BranchManagerReview);
-                entity.BranchPromotionId = branchPromotion.Id;
-
-                var result_validate = mspValidator.Validate(entity);
-                if (!result_validate.IsValid)
-                {
-                    result.PopulateValidationErrors(result_validate.Errors);
-                    return result;
-                }
-
-                var existEntity = await unitOfWork.MemberSharePromotionDataService.FirstOrDefaultAsync(x => x.MemberId == entity.MemberId && x.BranchPromotionId == branchPromotion.Id);
-                if (existEntity != null)
-                {
-                    existEntity.CEOPromotion = entity.CEOPromotion;
-                    existEntity.FinalPromotion = entity.FinalPromotion;
-                    existEntity.ManagerPromotion = entity.ManagerPromotion;
-                    unitOfWork.MemberSharePromotionDataService.Update(existEntity);
-                }
-                else
-                    unitOfWork.MemberSharePromotionDataService.Insert(entity);
-
-                await unitOfWork.CommitAsync();
-                result.ReturnMessage.Add(MESSAGE_ADD_ENTITY);
-
-                result.ReturnStatus = true;
-            }
-            catch (Exception ex)
-            {
-                CatchException(ex, result, "");
-            }
-            return result;
-        }
-        public async Task<IBusinessResult> RemoveMemberSharePromotion(int branchId, int memberId)
-        {
-            var result = new BusinessResult();
-            try
-            {
-                var entity = await unitOfWork.MemberSharePromotionDataService.FirstOrDefaultAsync(x => x.MemberId == memberId
-                && x.BranchPromotion.BranchId == branchId && x.BranchPromotion.PromotionReviewStatusId == PromotionReviewStatusEnum.WaitingForStep1BranchManagerReview);
-
-                unitOfWork.MemberSharePromotionDataService.Delete(entity);
-                await unitOfWork.CommitAsync();
-                result.ReturnMessage.Add(MESSAGE_DELETE_ENTITY);
-            }
-            catch (Exception ex)
-            {
-                CatchException(ex, result, "");
-            }
-            return result;
-        }
-        public async Task<IBusinessResult> ProceedMemberSharePromotionAsync(PromotionReviewStatusEnum currentStep, PromotionReviewStatusEnum nextStep, int branchId)
-        {
-            var result = new BusinessResult();
-            try
-            {
-                var entity = await unitOfWork.BranchPromotionDataService.GetQuery()
-                    .IncludeFilter(x => x.MemberSharePromotions.Where(y => y.Deleted == false))
-                    .FirstOrDefaultAsync(x => x.BranchId == branchId && x.PromotionReviewStatusId == currentStep);
-                if (entity != null)
-                {
-                    var assigendValue = entity.MemberSharePromotions.Sum(x => (decimal?)x.ManagerPromotion) ?? 0;
-                    if (assigendValue != entity.PrivateReceiptPromotion.Value + entity.TotalReceiptPromotion.Value + entity.TotalSalesPromotion.Value)
-                    {
-                        result.ReturnStatus = false;
-                        result.ReturnMessage.Add("مبلغ پورسانت مرکز به طور کامل بین پرسنل تقسیم نشده است");
-                        return result;
-                    }
-
-                    entity.PromotionReviewStatusId = nextStep;
-
-                    unitOfWork.BranchPromotionDataService.Update(entity);
-                    await unitOfWork.CommitAsync();
-                    result.ReturnMessage.Add("اطلاعات تایید و ارسال شد");
-                }
-                else
-                {
-                    result.ReturnStatus = false;
-                    result.ReturnMessage.Add("اطلاعات معتبر نمی باشد");
-                }
-            }
-            catch (Exception ex)
-            {
-                CatchException(ex, result, "");
-            }
-            return result;
-        }
-        public async Task<IBusinessResultValue<List<MemberSharePromotion>>> LoadMemberSharePromotionAsync(int branchId, PromotionReviewStatusEnum promotionReviewStatusId)
-        {
-            var result = new BusinessResultValue<List<MemberSharePromotion>>();
-            try
-            {
-                result.ResultValue = await unitOfWork.MemberSharePromotionDataService.GetAsync(x =>
-                x.BranchPromotion.BranchId == branchId &&
-                x.BranchPromotion.PromotionReviewStatusId == promotionReviewStatusId
-                , includes: x => new { x.BranchPromotion, x.Member });
-            }
-            catch (Exception ex)
-            {
-                CatchException(ex, result, "");
-            }
-            return result;
-        }
-
         public async Task<IBusinessResultValue<List<BranchPromotion>>> LoadBranchPromotions(PromotionReviewStatusEnum promotionReviewStatusId)
         {
             var result = new BusinessResultValue<List<BranchPromotion>>();
@@ -1101,7 +990,6 @@ namespace Neutrino.Business
         #endregion
 
         #region [ Private Method(s) ]
-
         private async Task<List<FulfillmentPercent>> calculateFulfillmentPercent(Promotion entity, List<Goal> lstGoals, List<FulfillmentPromotionCondition> lst_totalFulfillPromotion)
         {
             //  هدف کل و وصول و سهم مراکز از اهداف تعریف شده

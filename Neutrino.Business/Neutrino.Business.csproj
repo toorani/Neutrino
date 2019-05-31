@@ -120,6 +120,10 @@
     <Compile Include="GeneralBusinessService\SimpleEntityModifer.cs" />
     <Compile Include="GoalNonFulfillment\GoalNonFulfillmentPercentBR.cs" />
     <Compile Include="GoalNonFulfillment\GoalNonFulfillmentPercentBS.cs" />
+    <Compile Include="MemberPenalty\MemberPenaltyBS.cs" />
+    <Compile Include="MemberPenalty\MemberPenaltyBR.cs" />
+    <Compile Include="MemberSharePromotion\MemberSharePromotionBS.cs" />
+    <Compile Include="MemberSharePromotion\MemberSharePromotionBR.cs" />
     <Compile Include="NeutrinoBusinessService.cs" />
     <Compile Include="OrgStructure\OrgStructureBS.cs" />
     <Compile Include="Promotion\PromotionBR.cs" />

@@ -348,9 +348,12 @@
     <Compile Include="Backend\GoalNonFulfillment\GoalNonFulfillmentMapperProfile.cs" />
     <Compile Include="Backend\GoalNonFulfillment\GoalNonFulfillmentServiceController.cs" />
     <Compile Include="Backend\GoalNonFulfillment\GoalNonFulfillmentViewModel.cs" />
+    <Compile Include="Backend\MemberSharePromotion\MemberSharePromotionServiceController.cs" />
+    <Compile Include="Backend\MemberSharePromotion\MemberSharePromotionMapperProfile.cs" />
     <Compile Include="Backend\Member\MemberMapperProfile.cs" />
     <Compile Include="Backend\Member\MemberViewModel.cs" />
     <Compile Include="Backend\Member\MemberServiceController.cs" />
+    <Compile Include="Backend\Penalty\PenaltyMapperProfile.cs" />
     <Compile Include="Backend\Penalty\PenaltyServiceController.cs" />
     <Compile Include="Backend\Penalty\PenaltyViewModel.cs" />
     <Compile Include="Backend\Permission\PermissionMapperProfile.cs" />
@@ -361,7 +364,7 @@
     <Compile Include="Backend\PromotionReport\BranchPromotionViewModel.cs" />
     <Compile Include="Backend\PromotionReport\BranchPromotionDetailViewModel.cs" />
     <Compile Include="Backend\PromotionReport\ReportSallerGoalViewModel.cs" />
-    <Compile Include="Backend\Promotion\MemberSharePromotionViewModel.cs" />
+    <Compile Include="Backend\MemberSharePromotion\MemberSharePromotionViewModel.cs" />
     <Compile Include="Backend\Promotion\PromotionMapperProfile.cs" />
     <Compile Include="Backend\PromotionReport\PromotionReportServiceController.cs" />
     <Compile Include="Backend\Promotion\PromotionServiceController.cs" />

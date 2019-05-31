@@ -26,7 +26,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
 
             $scope.submit = function () {
                 $scope.viewModel.memberId = $scope.viewModel.member.id;
-                ajaxService.ajaxPost($scope.viewModel, '/api/promotionService/addOrModifyMemberPromotion',
+                ajaxService.ajaxPost($scope.viewModel, '/api/memberSharePromotionService/addOrModify',
                     function (response) {
                         let filterResults = $scope.branchMemberPromotions.filter((mp) => mp.memberId == $scope.viewModel.memberId);
                         if (filterResults.length != 0) {
@@ -70,7 +70,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                 modalService.showModal({}, modalOptions)
                     .then(function (result) {
                         if (result == 'ok') {
-                            ajaxService.ajaxPost(memberSahre, "api/promotionService/deleteMemberSahrePromotion",
+                            ajaxService.ajaxPost(memberSahre, "api/memberSharePromotionService/delete",
                                 function (response) {
                                     alertService.showSuccess(response.data.returnMessage);
                                     $scope.branchMemberPromotions = $scope.branchMemberPromotions.filter(item => item.memberId != memberSahre.memberId);
@@ -85,7 +85,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                     });
             }
             $scope.releaseManagerStep1 = function () {
-                ajaxService.ajaxPost({}, '/api/promotionService/releaseManagerStep1',
+                ajaxService.ajaxPost({}, '/api/memberSharePromotionService/releaseManagerStep1',
                     function (response) {
                         alertService.showSuccess(response.data.returnMessage);
                     },
@@ -104,7 +104,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                     });
             }
             var getMemberSharePromotion = function () {
-                ajaxService.ajaxCall({ statusId: 1 }, "api/promotionService/getMemberSharePromotion", 'get',
+                ajaxService.ajaxCall({ statusId: 1 }, "api/memberSharePromotionService/getMemberSharePromotion", 'get',
                     function (response) {
                         $scope.branchMemberPromotions = response.data;
                         calculateAssigendPromotion();

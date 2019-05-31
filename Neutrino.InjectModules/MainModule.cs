@@ -73,8 +73,6 @@ namespace Neutrino.InjectModules
             //User account
             Bind<IUserBS>().To<UserBS>();
             Bind(typeof(AbstractValidator<User>)).To(typeof(UserBusinessRules));
-            //Bind<IRoleDS>().To<RoleDataService>();
-            //Bind<INeutrinoRoleBS>().To<NeutrinoRoleBS>();
 
             //TotalFulfillPromotionPercent
             Bind<IFulfillmentPromotionConditionBS>().To<FulfillmentPromotionConditionBS>();
@@ -83,7 +81,7 @@ namespace Neutrino.InjectModules
             //Promotion
             Bind<IPromotionBS>().To<PromotionBS>();
             Bind(typeof(AbstractValidator<Promotion>)).To(typeof(PromotionBR));
-            Bind(typeof(AbstractValidator<MemberSharePromotion>)).To(typeof(MemberSharePromotionBR));
+            
 
             //BranchReceiptGoalPercent
             Bind<IBranchReceiptGoalPercentBS>().To<BranchReceiptGoalPercentBS>();
@@ -98,6 +96,14 @@ namespace Neutrino.InjectModules
             //AppMenu
             Bind<IAppMenuBS>().To<AppMenuBS>();
 
+            //MemberSharePromotion
+            Bind<IMemberSharePromotionBS>().To<MemberSharePromotionBS>();
+            Bind(typeof(AbstractValidator<MemberSharePromotion>)).To(typeof(MemberSharePromotionBR));
+
+            //MemberPenalty
+            Bind<IMemberPenaltyBS>().To<MemberPenaltyBS>();
+            Bind(typeof(AbstractValidator<List<MemberPenalty>>)).To(typeof(MemberPenaltyCollectionBR));
+            
 
             //Service data
 
