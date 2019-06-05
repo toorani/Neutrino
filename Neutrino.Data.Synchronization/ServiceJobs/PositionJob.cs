@@ -35,14 +35,14 @@ namespace Neutrino.Data.Synchronization.ServiceJobs
             List<ElitePosition> lstEliteData = await ServiceWrapper.Instance.LoadPositionInfo();
 
             //compare & mapping the exist and just loaded data 
-            var lst_existData = await unitOfWork.ElitePostionDataService.GetAsync(where: x => x.RefId != 0);
+            var lst_existData = await unitOfWork.ElitePositionDataService.GetAsync(where: x => x.RefId != 0);
 
 
             //seperation the new data 
             var lst_newData = lstEliteData.Except(lst_existData, x => x.RefId).ToList();
 
             //insert batch data
-            var newDataInserted = await unitOfWork.ElitePostionDataService.InsertBulkAsync(lst_newData);
+            var newDataInserted = await unitOfWork.ElitePositionDataService.InsertBulkAsync(lst_newData);
 
             LogInsertedData(lstEliteData.Count, newDataInserted, lstEliteData.Count - newDataInserted);
 

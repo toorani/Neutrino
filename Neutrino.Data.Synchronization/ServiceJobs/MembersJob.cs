@@ -45,45 +45,49 @@ namespace Neutrino.Data.Synchronization.ServiceJobs
             //call web service 
             var lstServerMembers = await ServiceWrapper.Instance.LoadMembersAsync(startDate, endDate, lstBranches);
 
-            
+
 
             //seperation the new data
             var lstExistMembers = await unitOfWork.MemberDataService.GetAllAsync();
 
-            var intersectData = lstServerMembers.Intersect(lstExistMembers).ToList();
-
-            intersectData.ForEach(entityToUpdate =>
+            lstExistMembers.ForEach(entityToUpdate =>
             {
                 var serverEntity = lstServerMembers.FirstOrDefault(en => en.Code == entityToUpdate.Code);
-                var postionMapping = lstPostionMappings.FirstOrDefault(pm => pm.PostionRefId == serverEntity.PositionRefId);
-                if (postionMapping != null)
+                if (serverEntity != null)
                 {
-                    entityToUpdate.PositionTypeId = postionMapping.PositionTypeId.Value;
-                }
-                else
-                {
-                    entityToUpdate.PositionTypeId = null;
-                    logger.Warn(serviceName, $"could not be mapped position with Id : {serverEntity.PositionRefId}");
-                }
+                    var postionMapping = lstPostionMappings.FirstOrDefault(pm => pm.PositionRefId == serverEntity.PositionRefId);
+                    if (postionMapping != null)
+                    {
+                        entityToUpdate.PositionTypeId = postionMapping.PositionTypeId.Value;
+                    }
+                    else
+                    {
+                        entityToUpdate.PositionTypeId = null;
+                        logger.Warn(serviceName, $"could not be mapped position with Id : {serverEntity.PositionRefId}");
+                    }
 
-                var department = lstDepartments.FirstOrDefault(pm => pm.RefId == serverEntity.DepartmentRefId);
-                if (department != null)
-                {
-                    entityToUpdate.DepartmentId = department.Id;
+                    var department = lstDepartments.FirstOrDefault(pm => pm.RefId == serverEntity.DepartmentRefId);
+                    if (department != null)
+                    {
+                        entityToUpdate.DepartmentId = department.Id;
+                    }
+                    else
+                    {
+                        logger.Warn(serviceName, $"could not be found department with Id :{serverEntity.DepartmentRefId}");
+                    }
+                    entityToUpdate.PositionRefId = serverEntity.PositionRefId;
+                    entityToUpdate.DepartmentRefId = serverEntity.DepartmentRefId;
+                    unitOfWork.MemberDataService.Update(entityToUpdate);
                 }
                 else
                 {
-                    logger.Warn(serviceName, $"could not be found department with Id :{serverEntity.DepartmentRefId}");
+                    unitOfWork.MemberDataService.Delete(entityToUpdate);
                 }
-                entityToUpdate.PositionRefId = serverEntity.PositionRefId;
-                entityToUpdate.DepartmentRefId = serverEntity.DepartmentRefId;
-                unitOfWork.MemberDataService.Update(entityToUpdate);
+                
             });
 
 
             await unitOfWork.CommitAsync();
-
-
 
             var lstNewMembers = new List<Member>();
             if (lstExistMembers.Count != 0)
@@ -105,4 +109,6 @@ namespace Neutrino.Data.Synchronization.ServiceJobs
         }
         #endregion
     }
+
+    
 }

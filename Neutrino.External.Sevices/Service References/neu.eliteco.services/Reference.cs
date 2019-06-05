@@ -854,7 +854,10 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         private int GoodsIdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private double TotalAmountField;
+        private System.DateTime SalesDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal TotalAmountField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private double TotalTedadField;
@@ -896,7 +899,20 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public double TotalAmount {
+        public System.DateTime SalesDate {
+            get {
+                return this.SalesDateField;
+            }
+            set {
+                if ((this.SalesDateField.Equals(value) != true)) {
+                    this.SalesDateField = value;
+                    this.RaisePropertyChanged("SalesDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal TotalAmount {
             get {
                 return this.TotalAmountField;
             }
@@ -947,10 +963,10 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         private int SellerIdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private double TotalAmountField;
+        private decimal TotalAmountField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private double TotalCountField;
+        private int TotalCountField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -989,7 +1005,7 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public double TotalAmount {
+        public decimal TotalAmount {
             get {
                 return this.TotalAmountField;
             }
@@ -1002,7 +1018,7 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public double TotalCount {
+        public int TotalCount {
             get {
                 return this.TotalCountField;
             }

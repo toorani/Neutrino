@@ -633,6 +633,10 @@
     <Compile Include="Migrations\201906041918509_addRelationElitePosition.Designer.cs">
       <DependentUpon>201906041918509_addRelationElitePosition.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906051949120_addSaleDate_branchSales.cs" />
+    <Compile Include="Migrations\201906051949120_addSaleDate_branchSales.Designer.cs">
+      <DependentUpon>201906051949120_addSaleDate_branchSales.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NeutrinoContext.cs" />
@@ -1065,6 +1069,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906041918509_addRelationElitePosition.resx">
       <DependentUpon>201906041918509_addRelationElitePosition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906051949120_addSaleDate_branchSales.resx">
+      <DependentUpon>201906051949120_addSaleDate_branchSales.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
