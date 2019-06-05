@@ -61,9 +61,16 @@ namespace Neutrino.Data.Synchronization
             //this service doesn't have any pre-required to get data
             await AddAcquireJobAsync<BranchJob>(10);
 
+            //this service doesn't have any pre-required to get data
+            await AddAcquireJobAsync<PositionJob>(10);
+
+            //this service doesn't have any pre-required to get data
+            await AddAcquireJobAsync<DepartmentJob>(10);
 
             // this service doesn't have any pre-required to get data
             await AddAcquireJobAsync<GoodsCategoryTypesJob>(10);
+
+
 
             //this service needs a companyId to get data
             await AddAcquireJobAsync<GoodsJob>(9);

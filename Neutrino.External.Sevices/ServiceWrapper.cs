@@ -129,11 +129,6 @@ namespace Neutrino.External.Sevices
             List<GoodsCategoryType> result = new List<GoodsCategoryType>();
             GoodsCatType[] serviceDataInfos = await eliteClient.GetGoodsCategoryTypeAsync(userName, password);
             result = mapper.Map<GoodsCatType[], List<GoodsCategoryType>>(serviceDataInfos);
-            //if (serviceDataInfos != null)
-            //{
-            //    //result = getEntities<GoodsCategoryType, GoodsCatType>(serviceDataInfos);
-
-            //}
             return result;
         }
         #endregion
@@ -183,13 +178,10 @@ namespace Neutrino.External.Sevices
         #endregion
 
         #region [ Member Method(s) ]
-        public async Task<Tuple<List<Member>, List<PostionMapping>>> LoadMembersAsync(DateTime? startDate, DateTime endDate
-            , List<Branch> lstBranches
-            , List<PostionMapping> lstPostionMappings)
+        public async Task<List<Member>> LoadMembersAsync(DateTime? startDate, DateTime endDate, List<Branch> lstBranches)
         {
             var externalService = ExternalServices.Members;
             List<Member> lstMembers = new List<Member>();
-            List<PostionMapping> lstnewPostionMapping = new List<PostionMapping>();
             MemberInfo[] serviceDataInfos;
 
             if (lstBranches.Count == 0)
@@ -202,41 +194,9 @@ namespace Neutrino.External.Sevices
                 try
                 {
                     serviceDataInfos = await eliteClient.GetMembersAsync(userName, password, startDate, endDate, item.RefId);
-
-                    foreach (var memberInfo in serviceDataInfos)
-                    {
-                        var member = new Member
-                        {
-                            BranchId = item.Id,
-                            BranchRefId = memberInfo.BranchId,
-                            Group = memberInfo.ccgoroh,
-                            LastName = memberInfo.LastName,
-                            Name = memberInfo.Name,
-                            NationalCode = memberInfo.NationalCode,
-                            RefId = memberInfo.MemberId,
-                            PositionRefId = memberInfo.ccpost
-                        };
-
-
-                        var postionMapping = lstPostionMappings.SingleOrDefault(pm => pm.BranchRefId == memberInfo.BranchId &&
-                        pm.PostionRefId == memberInfo.ccpost);
-                        if (postionMapping != null)
-                        {
-                            member.PositionTypeId = postionMapping.PositionTypeId.Value;
-                        }
-                        else
-                        {
-                            member.Deleted = true;
-                            lstnewPostionMapping.Add(new PostionMapping
-                            {
-                                BranchId = item.Id,
-                                BranchRefId = memberInfo.BranchId,
-                                Name = memberInfo.NamePost,
-                                PostionRefId = memberInfo.ccpost
-                            });
-                        }
-                        lstMembers.Add(member);
-                    }
+                    var convert = mapper.Map<MemberInfo[], List<Member>>(serviceDataInfos);
+                    convert.ForEach(x => x.BranchId = item.Id);
+                    lstMembers.AddRange(convert);
                 }
                 catch (Exception ex)
                 {
@@ -244,7 +204,40 @@ namespace Neutrino.External.Sevices
                 }
             }
 
-            return new Tuple<List<Member>, List<PostionMapping>>(lstMembers, lstnewPostionMapping);
+            return lstMembers;
+        }
+
+        public async Task<List<Department>> LoadDepartmentInfo()
+        {
+            var externalService = ExternalServices.Department;
+            var resultValue = new List<Department>();
+            try
+            {
+                var serviceDataInfos = await eliteClient.GetDepartmentInfoAsync(userName, password);
+                var mapper = getMapper();
+                resultValue = mapper.Map<DepartmentInfo[], List<Department>>(serviceDataInfos);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(externalService, ex, "An error happened at loading the department data.");
+            }
+            return resultValue;
+        }
+        public async Task<List<ElitePosition>> LoadPositionInfo()
+        {
+            var externalService = ExternalServices.Position;
+            var resultValue = new List<ElitePosition>();
+            try
+            {
+                var serviceDataInfos = await eliteClient.GetPositionInfoAsync(userName, password);
+                var mapper = getMapper();
+                resultValue = mapper.Map<PositionInfo[], List<ElitePosition>>(serviceDataInfos);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(externalService, ex, "An error happened at loading the position data.");
+            }
+            return resultValue;
         }
         #endregion
 

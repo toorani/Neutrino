@@ -126,6 +126,7 @@
     <Compile Include="MemberSharePromotion\MemberSharePromotionBR.cs" />
     <Compile Include="NeutrinoBusinessService.cs" />
     <Compile Include="OrgStructure\OrgStructureBS.cs" />
+    <Compile Include="PositionMapping\PositionMappingBS.cs" />
     <Compile Include="Promotion\PromotionBR.cs" />
     <Compile Include="Promotion\PromotionBS.cs" />
     <Compile Include="FulfillmentPromotionCondition\FulfillmentPromotionConditionBR.cs" />

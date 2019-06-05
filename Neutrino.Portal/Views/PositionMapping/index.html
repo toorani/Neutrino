@@ -1,0 +1,73 @@
+﻿<div ng-controller="positionMapping.indexController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="itemView-Body col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <form novalidate role="form" esp-validate-complete="submit()"
+                                      esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                                      class="form-horizontal ls_form" name="form">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">
+                                            پست سازمانی نوترینو
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select class="form-control validate[funcCall[ifSelectNotEmpty]]"
+                                                    ng-options="item.eId as item.description for item in positionTypes"
+                                                    ng-change="positionType_changed()"
+                                                    ng-model="viewModel.positionTypeId">
+                                                <option value="" selected>[ انتخاب کنید ]</option>
+                                            </select>
+                                        </div>
+                                        <label class="col-md-2 control-label">
+                                            پست سازمانی الیت
+                                        </label>
+                                        <div class="col-md-4">
+                                            <ui-select multiple ng-model="viewModel.selectedElitePoistions"
+                                                       reset-search-input="true">
+                                                <ui-select-match placeholder="پست سازمانی(ها) الیت را انتخاب کنید" allow-clear="true">
+                                                    <span ng-bind="$item.title"></span>
+                                                    <span ng-bind="$item.refId"></span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="item in viewModel.elitePoistions | propsFilter: {refId: $select.search, title: $select.search} ">
+                                                    <div ng-bind-html="item.title | highlight: $select.search" title="{{item.title}}"></div>
+                                                    <small>
+                                                        <span class="row ls_divider"></span>
+                                                        کد : <span ng-bind-html="item.refId | highlight: $select.search"></span>
+                                                    </small>
+                                                    <div class="row ls_divider"></div>
+                                                </ui-select-choices>
+                                                <ui-select-no-choice>
+                                                    موردی یافت نشد
+                                                </ui-select-no-choice>
+                                            </ui-select>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" name="Add"
+                                                class="btn btn-success">
+                                            <i class="fa fa-check"></i>
+                                            <span>ثبت</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

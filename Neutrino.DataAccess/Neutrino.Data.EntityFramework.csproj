@@ -617,6 +617,22 @@
     <Compile Include="Migrations\201905301814387_alter_MemebrPlenaty_adddesc.Designer.cs">
       <DependentUpon>201905301814387_alter_MemebrPlenaty_adddesc.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905311750414_addelitePosition_department.cs" />
+    <Compile Include="Migrations\201905311750414_addelitePosition_department.Designer.cs">
+      <DependentUpon>201905311750414_addelitePosition_department.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905312035044_nullablepostiontype_member.cs" />
+    <Compile Include="Migrations\201905312035044_nullablepostiontype_member.Designer.cs">
+      <DependentUpon>201905312035044_nullablepostiontype_member.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906041809325_alterPositionName.cs" />
+    <Compile Include="Migrations\201906041809325_alterPositionName.Designer.cs">
+      <DependentUpon>201906041809325_alterPositionName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906041918509_addRelationElitePosition.cs" />
+    <Compile Include="Migrations\201906041918509_addRelationElitePosition.Designer.cs">
+      <DependentUpon>201906041918509_addRelationElitePosition.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NeutrinoContext.cs" />
@@ -1037,6 +1053,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905301814387_alter_MemebrPlenaty_adddesc.resx">
       <DependentUpon>201905301814387_alter_MemebrPlenaty_adddesc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905311750414_addelitePosition_department.resx">
+      <DependentUpon>201905311750414_addelitePosition_department.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905312035044_nullablepostiontype_member.resx">
+      <DependentUpon>201905312035044_nullablepostiontype_member.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906041809325_alterPositionName.resx">
+      <DependentUpon>201906041809325_alterPositionName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906041918509_addRelationElitePosition.resx">
+      <DependentUpon>201906041918509_addRelationElitePosition.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -42,17 +42,18 @@ namespace Neutrino.Entities
         /// <summary>
         /// پست سازمانی
         /// </summary>
-        public virtual PositionTypeEnum PositionTypeId { get; set; }
+        public virtual PositionTypeEnum? PositionTypeId { get; set; }
         [ForeignKey("PositionTypeId")]
         public virtual PositionType PositionType { get; set; }
-        /// <summary>
-        /// اطلاعات سرور میباشد ccgoroh  معادل فیلد 
-        /// </summary>
-        public int? Group { get; set; }
+        
         /// <summary>
         /// شناسه پست در اطلاعات شرکت الیت
         /// </summary>
         public int PositionRefId { get; set; }
+
+        public int DepartmentRefId { get; set; }
+        public int DepartmentId { get; set; }
+
 
         public virtual ICollection<MemberSharePromotion> MemberSharePromotions { get; set; }
         public Member()

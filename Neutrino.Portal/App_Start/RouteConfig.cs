@@ -121,6 +121,11 @@ namespace Neutrino.Portal
                 , url: "fulfillmentPromotionCondition/{*.}"
                 , defaults: new { controller = "Home", action = "Index", returnUrl = UrlParameter.Optional });
 
+            routes.MapRoute(
+               name: "PositionMappingCatchAllRoute"
+               , url: "positionMapping/{*.}"
+               , defaults: new { controller = "Home", action = "Index", returnUrl = UrlParameter.Optional });
+
 
             routes.MapRoute(
                 name: "Default",

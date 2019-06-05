@@ -105,7 +105,9 @@ namespace Neutrino.InjectModules
             //MemberPenalty
             Bind<IMemberPenaltyBS>().To<MemberPenaltyBS>();
             Bind(typeof(AbstractValidator<List<MemberPenalty>>)).To(typeof(MemberPenaltyCollectionBR));
-            
+
+            //PositionMapping
+            Bind<IPositionMappingBS>().To<PositionMappingBS>();
 
             //Service data
 

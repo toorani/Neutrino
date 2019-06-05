@@ -78,6 +78,7 @@
     <Compile Include="MemberPenalty\IMemberPenaltyBS.cs" />
     <Compile Include="MemberSharePromotion\IMemberSharePromotionBS.cs" />
     <Compile Include="OrgStructure\IOrgStructureBS.cs" />
+    <Compile Include="PositionMapping\IPositionMappingBS.cs" />
     <Compile Include="Promotion\IPromotionBS.cs" />
     <Compile Include="CostCoefficient\ICostCoefficientBS.cs" />
     <Compile Include="FulfillmentPromotionCondition\IFulfillmentPromotionConditionBS.cs" />

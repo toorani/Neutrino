@@ -21,13 +21,13 @@ namespace Neutrino.Data.Synchronization.ServiceJobs
         #endregion
 
         #region [ Constructor(s) ]
-        public MembersJob() :base()
+        public MembersJob() : base()
         {
         }
         #endregion
 
         #region [ Override Method(s) ]
-       
+
         protected override async Task Execute()
         {
             DateTime? startDate = null;
@@ -37,23 +37,52 @@ namespace Neutrino.Data.Synchronization.ServiceJobs
             var lstBranches = await unitOfWork.BranchDataService.GetAsync(where: x => x.RefId != 0);
 
             //load exist postionmapping 
-            List<PostionMapping> lstPostionMappings = await unitOfWork.PostionMappingDataService.GetAllAsync();
+            List<PositionMapping> lstPostionMappings = await unitOfWork.PositionMappingDataService.GetAllAsync();
+
+            //load exist postionmapping 
+            List<Department> lstDepartments = await unitOfWork.DepartmentDataService.GetAllAsync();
 
             //call web service 
-            var tupleResultData = await ServiceWrapper.Instance.LoadMembersAsync(startDate, endDate, lstBranches,lstPostionMappings);
+            var lstServerMembers = await ServiceWrapper.Instance.LoadMembersAsync(startDate, endDate, lstBranches);
 
-            var lstServerMembers = tupleResultData.Item1;
-            var lstNewPostionMappings = tupleResultData.Item2;
+            
 
             //seperation the new data
             var lstExistMembers = await unitOfWork.MemberDataService.GetAllAsync();
 
-            lstServerMembers.ForEach(x => {
-                var entityToUpdate = lstExistMembers.FirstOrDefault(en => en.Code == x.Code);
-                if (entityToUpdate != null)
-                    entityToUpdate.PositionRefId = x.PositionRefId;
+            var intersectData = lstServerMembers.Intersect(lstExistMembers).ToList();
+
+            intersectData.ForEach(entityToUpdate =>
+            {
+                var serverEntity = lstServerMembers.FirstOrDefault(en => en.Code == entityToUpdate.Code);
+                var postionMapping = lstPostionMappings.FirstOrDefault(pm => pm.PostionRefId == serverEntity.PositionRefId);
+                if (postionMapping != null)
+                {
+                    entityToUpdate.PositionTypeId = postionMapping.PositionTypeId.Value;
+                }
+                else
+                {
+                    entityToUpdate.PositionTypeId = null;
+                    logger.Warn(serviceName, $"could not be mapped position with Id : {serverEntity.PositionRefId}");
+                }
+
+                var department = lstDepartments.FirstOrDefault(pm => pm.RefId == serverEntity.DepartmentRefId);
+                if (department != null)
+                {
+                    entityToUpdate.DepartmentId = department.Id;
+                }
+                else
+                {
+                    logger.Warn(serviceName, $"could not be found department with Id :{serverEntity.DepartmentRefId}");
+                }
+                entityToUpdate.PositionRefId = serverEntity.PositionRefId;
+                entityToUpdate.DepartmentRefId = serverEntity.DepartmentRefId;
                 unitOfWork.MemberDataService.Update(entityToUpdate);
             });
+
+
+            await unitOfWork.CommitAsync();
+
 
 
             var lstNewMembers = new List<Member>();
@@ -67,15 +96,10 @@ namespace Neutrino.Data.Synchronization.ServiceJobs
             }
 
             //insert batch data
-            var newDataInserted = lstServerMembers.Count;
-            //var newDataInserted = await unitOfWork.MemberDataService.InsertBulkAsync(lstNewMembers);
-            await unitOfWork.CommitAsync();
-
-            //insert postion mappings
-            //var newPostionMappingInserted = await unitOfWork.PostionMappingDataService.InsertBulkAsync(lstNewPostionMappings);
+            var newDataInserted = await unitOfWork.MemberDataService.InsertBulkAsync(lstNewMembers);
 
             LogInsertedData(lstNewMembers.Count, newDataInserted);
-            
+
             //insert/update data sync status
             await RecordDataSyncStatusAsync(newDataInserted, lstNewMembers.Count);
         }

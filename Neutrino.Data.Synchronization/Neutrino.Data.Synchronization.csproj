@@ -137,6 +137,8 @@
       <DependentUpon>DataSyncService.cs</DependentUpon>
     </Compile>
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="ServiceJobs\DepartmentJob.cs" />
+    <Compile Include="ServiceJobs\PositionJob.cs" />
     <Compile Include="ServiceJobs\Listener\GlobalJobListener.cs" />
     <Compile Include="NinjectModules.cs" />
     <Compile Include="Program.cs" />

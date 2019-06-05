@@ -13,9 +13,11 @@
         BranchReceipts,
         GoodsCat,
         GoodsCatType,
-        ArrearsInAccount,
+        Department,
+        Position,
         ReportSummery,
         None
+        
     }
 
     

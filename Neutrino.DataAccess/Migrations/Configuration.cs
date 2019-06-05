@@ -141,6 +141,15 @@
                        OrderId = 3,
                        Parent = basicInfoItem,
                        ParentId = basicInfoItem.Id
+                   },
+                   new AppMenu
+                   {
+                       Title = "نگاشت پست سازمانی",
+                       Icon = "fa fa-arrows-h",
+                       Url = "/positionmapping/index",
+                       OrderId = 4,
+                       Parent = basicInfoItem,
+                       ParentId = basicInfoItem.Id
                    }
                );
 

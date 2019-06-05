@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using Espresso.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace Neutrino.ServiceTests
 {
@@ -33,7 +34,7 @@ namespace Neutrino.ServiceTests
 
             var config = new MapperConfiguration(cfg =>
             {
-               cfg.CreateMap<Source, Destination>();
+                cfg.CreateMap<Source, Destination>();
             });
             var mapper = config.CreateMapper();
 
@@ -56,8 +57,38 @@ namespace Neutrino.ServiceTests
             var endDate = Utilities.ToDateTime(year, month, ToDateTimeOptions.EndMonth);
 
             //Assert
-            Assert.AreEqual(startDate, new DateTime(2018,9,23));
+            Assert.AreEqual(startDate, new DateTime(2018, 9, 23));
             Assert.AreEqual(endDate, new DateTime(2018, 10, 22));
+        }
+
+
+        struct MyStruct
+        {
+            public string Name;
+            public int Id;
+        }
+
+        [TestMethod]
+        public void IntersectTwoList()
+        {
+            //Arrange
+
+
+            var lst1 = new List<MyStruct>
+            {
+                new MyStruct { Name = "A", Id = 10 }
+                ,new MyStruct { Name = "B", Id = 11 }
+                , new MyStruct { Name = "C", Id = 12 }
+             };
+
+
+            var lst2 = new List<MyStruct>{new MyStruct { Name = "A", Id = 10 }
+            , new MyStruct { Name = "D", Id = 11 }
+            , new MyStruct { Name = "B", Id = 11 } };
+
+            var intersect = lst1.Intersect(lst2).ToList();
+            var recordA = intersect.FirstOrDefault(x => x.Id == 10);
+            recordA.Name = "Reza";
         }
 
     }

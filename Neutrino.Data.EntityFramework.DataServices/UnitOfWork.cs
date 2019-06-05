@@ -59,10 +59,12 @@ namespace Neutrino.Data.EntityFramework
         public IEntityBaseRepository<BranchGoalPromotion> BranchGoalPromotionDataService { get; private set; }
         public IEntityBaseRepository<PositionReceiptPromotion> PositionReceiptPromotionDataService { get; private set; }
         public IEntityBaseRepository<PositionType> PositionTypeDataService { get; private set; }
-        public IEntityBaseRepository<PostionMapping> PostionMappingDataService { get; private set; }
+        public IEntityBaseRepository<PositionMapping> PositionMappingDataService { get; private set; }
         public IEntityBaseRepository<MemberPromotion> MemberPomotionDataService { get; private set; }
         public IEntityBaseRepository<MemberSharePromotion> MemberSharePromotionDataService { get; private set; }
         public IEntityBaseRepository<MemberPenalty> MemberPenaltyDataService { get; private set; }
+        public IEntityBaseRepository<ElitePosition> ElitePositionDataService { get; private set; }
+        public IEntityBaseRepository<Department> DepartmentDataService { get; private set; }
 
         #endregion
 
@@ -108,10 +110,12 @@ namespace Neutrino.Data.EntityFramework
             , IEntityBaseRepository<BranchGoalPromotion> branchGoalPromotionDS
             , IEntityBaseRepository<PositionReceiptPromotion> positionReceiptPromotionDS
             , IEntityBaseRepository<PositionType> positionTypeDS
-            , IEntityBaseRepository<PostionMapping> postionMappingDS
+            , IEntityBaseRepository<PositionMapping> postionMappingDS
             , IEntityBaseRepository<MemberPromotion> memberPomotionDS
             , IEntityBaseRepository<MemberSharePromotion> memberSharePromotionDS
             , IEntityBaseRepository<MemberPenalty> memberPenaltyDS
+            , IEntityBaseRepository<ElitePosition> elitePostionDS
+            , IEntityBaseRepository<Department> departmentDS
            )
         {
             this.context = context;
@@ -155,10 +159,12 @@ namespace Neutrino.Data.EntityFramework
             BranchGoalPromotionDataService = branchGoalPromotionDS;
             PositionReceiptPromotionDataService = positionReceiptPromotionDS;
             PositionTypeDataService = positionTypeDS;
-            PostionMappingDataService = postionMappingDS;
+            PositionMappingDataService = postionMappingDS;
             MemberPomotionDataService = memberPomotionDS;
             MemberSharePromotionDataService = memberSharePromotionDS;
             MemberPenaltyDataService = memberPenaltyDS;
+            ElitePositionDataService = elitePostionDS;
+            DepartmentDataService = departmentDS;
         }
         #endregion
 

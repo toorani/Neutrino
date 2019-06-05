@@ -52,8 +52,10 @@ namespace Neutrino.External.Sevices
             CreateMap<MemberInfo, Member>()
                 .ForMember(x => x.RefId, opt => opt.MapFrom(x => x.MemberId))
                 .ForMember(x => x.BranchRefId, opt => opt.MapFrom(x => x.BranchId))
-                .ForMember(x => x.Group, opt => opt.MapFrom(x => x.ccgoroh))
-                .Ignore(x => x.BranchId);
+                .ForMember(x => x.PositionRefId, opt => opt.MapFrom(x => x.PositionId))
+                .ForMember(x => x.DepartmentRefId, opt => opt.MapFrom(x => x.DepartmentId))
+                .Ignore(x => x.BranchId)
+                .Ignore(x => x.DepartmentId);
 
 
             CreateMap<BranchSalesInfo, BranchSales>()
@@ -84,6 +86,14 @@ namespace Neutrino.External.Sevices
                 .ForMember(x => x.PrivateAmount, opt => opt.MapFrom(x => x.ReceiptAmountKho))
                 .ForMember(x => x.TotalAmount, opt => opt.MapFrom(x => x.ReceiptAmount))
                 .Ignore(x => x.BranchId);
+
+            CreateMap<DepartmentInfo, Department>()
+                .ForMember(x => x.RefId, opt => opt.MapFrom(x => x.Id))
+                .Ignore(x => x.Id);
+
+            CreateMap<PositionInfo, ElitePosition>()
+                .ForMember(x => x.RefId, opt => opt.MapFrom(x => x.Id))
+                .Ignore(x => x.Id);
 
         }
 
