@@ -11,6 +11,7 @@ using Neutrino.Interfaces;
 using Ninject;
 using Ninject.Extensions.Logging.NLog4;
 using Ninject.Modules;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,8 +38,10 @@ namespace Neutrino.PromotionPanel
 
     class Program
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         static void Main(string[] args)
         {
+
             var settings = new NinjectSettings
             {
                 LoadExtensions = false,
@@ -50,7 +53,7 @@ namespace Neutrino.PromotionPanel
             {
                 Console.WriteLine("Select calculation types:");
                 Console.WriteLine("'both : calculate Sales & Reciept','rec : just Reciept' and 'sal : just Sales'");
-                
+
                 var arg = Console.ReadLine();
                 PromotionCalculate(arg);
             }
@@ -66,6 +69,7 @@ namespace Neutrino.PromotionPanel
         {
             NeutrinoUnitOfWork unitOfWork = NinjectContainer.Resolve<NeutrinoUnitOfWork>();
             AbstractValidator<Promotion> validator = NinjectContainer.Resolve<AbstractValidator<Promotion>>();
+
             PromotionBS promotionBS = new PromotionBS(unitOfWork, validator);
 
             var promotion = await unitOfWork.PromotionDataService.FirstOrDefaultAsync(where: x => x.StatusId == Entities.PromotionStatusEnum.InProcessQueue);
@@ -102,8 +106,8 @@ namespace Neutrino.PromotionPanel
             {
                 Console.WriteLine("Please specify the arg,the arge can be 'both : calculate Sales & Reciept','rec : just Reciept' and 'sal : just Sales");
             }
-            
-           
+
+
         }
     }
 }

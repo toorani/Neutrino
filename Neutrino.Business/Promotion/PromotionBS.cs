@@ -21,7 +21,7 @@ namespace Neutrino.Business
     {
         #region [ Varibale(s) ]
         private readonly AbstractValidator<Promotion> validator;
-        
+
 
         /// <summary>
         /// اطلاعات فروش کلی مراکز
@@ -304,8 +304,6 @@ namespace Neutrino.Business
 
                 GoalStep goalStep = null;
 
-
-
                 //اهداف مرتبط به مرکز
                 {
                     //لیست اهداف مرتبط به مرکز
@@ -386,9 +384,17 @@ namespace Neutrino.Business
                             var quantityConditions = goal.QuantityConditions.Single();
                             //لیست فروش هر محصول در مرکز به همراه فیلد اینکه محصول به تعداد مورد نظر رسیده است یا خیر؟
                             var lst_branchConditions = (from gdsqc in quantityConditions.GoodsQuantityConditions
-                                                        join brsa in unitOfWork.BranchSalesDataService.GetQuery()
+                                                        join brsa in (from brsag in unitOfWork.BranchSalesDataService.GetQuery()
+                                                                      where brsag.SalesDate >= goal.StartDate && brsag.SalesDate <= goal.EndDate
+                                                                      group brsag by new { brsag.GoodsId, brsag.BranchId } into grp_goods
+                                                                      select new
+                                                                      {
+                                                                          grp_goods.Key.GoodsId,
+                                                                          grp_goods.Key.BranchId,
+                                                                          TotalAmount = grp_goods.Sum(x => x.TotalAmount),
+                                                                          TotalNumber = grp_goods.Sum(x => x.TotalNumber)
+                                                                      })
                                                         on gdsqc.GoodsId equals brsa.GoodsId
-                                                        where brsa.StartDate >= goal.StartDate && brsa.EndDate <= goal.EndDate
                                                         select new
                                                         {
                                                             brsa.BranchId,
@@ -427,7 +433,6 @@ namespace Neutrino.Business
                                 addBranchGoalPromotion(entity, goal, goalStep, branchSalesInfo);
                             });
 
-
                         });
                 }
 
@@ -442,19 +447,19 @@ namespace Neutrino.Business
                             //به دلیل اینکه ممکن است اهدافی تعریف شود که طول زمان آن بیشتر از یکماه باشد 
                             //باید به ازای هر هدف و تاریخ آن فروش محاسبه شود
                             var lst_MemebrSales = (from ggcg in unitOfWork.GoalGoodsCategoryGoodsDataService.GetQuery()
-                                                   join brsa in unitOfWork.InvoiceDataService.GetQuery()
-                                                   on ggcg.GoodsId equals brsa.GoodsId
+                                                   join invc in unitOfWork.InvoiceDataService.GetQuery()
+                                                   on ggcg.GoodsId equals invc.GoodsId
                                                    join member in unitOfWork.MemberDataService.GetQuery()
-                                                   on brsa.SellerId equals member.Id
-                                                   where brsa.StartDate >= goal.StartDate && brsa.EndDate <= goal.EndDate
+                                                   on invc.SellerId equals member.Id
+                                                   where invc.StartDate >= goal.StartDate && invc.EndDate <= goal.EndDate
                                                    && ggcg.GoalGoodsCategoryId == goal.GoalGoodsCategoryId
                                                    select new
                                                    {
-                                                       brsa.GoodsId,
-                                                       Quantity = brsa.TotalCount,
-                                                       Amount = brsa.TotalAmount,
+                                                       invc.GoodsId,
+                                                       Quantity = invc.TotalCount,
+                                                       Amount = invc.TotalAmount,
                                                        member.BranchId,
-                                                       MemberId = brsa.SellerId
+                                                       MemberId = invc.SellerId
                                                    }).ToList();
                             lst_MemebrSales.ForEach(memberSales =>
                             {
@@ -1116,7 +1121,7 @@ namespace Neutrino.Business
             var query = (from ggcg in unitOfWork.GoalGoodsCategoryGoodsDataService.GetQuery()
                          join brsa in unitOfWork.BranchSalesDataService.GetQuery()
                          on ggcg.GoodsId equals brsa.GoodsId
-                         where brsa.StartDate >= goal.StartDate && brsa.EndDate <= goal.EndDate
+                         where brsa.SalesDate >= goal.StartDate && brsa.SalesDate <= goal.EndDate
                          && ggcg.GoalGoodsCategoryId == goal.GoalGoodsCategoryId
                          group brsa by brsa.BranchId into grp
                          select new

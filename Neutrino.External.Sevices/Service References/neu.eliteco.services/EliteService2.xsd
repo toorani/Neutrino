@@ -138,6 +138,7 @@
   <xs:complexType name="InvoiceInfo">
     <xs:sequence>
       <xs:element minOccurs="0" name="GoodsId" type="xs:int" />
+      <xs:element minOccurs="0" name="InvoiceDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="SellerId" type="xs:int" />
       <xs:element minOccurs="0" name="TotalAmount" type="xs:decimal" />
       <xs:element minOccurs="0" name="TotalCount" type="xs:int" />

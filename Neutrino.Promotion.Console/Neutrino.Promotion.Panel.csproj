@@ -97,6 +97,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +113,10 @@
     <ProjectReference Include="..\Neutrino.Business\Neutrino.Business.csproj">
       <Project>{02298fdd-ee84-47b1-97e9-11cf68b03adc}</Project>
       <Name>Neutrino.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neutrino.Data.EntityFramework.DataServices\Neutrino.Data.EntityFramework.DataServices.csproj">
+      <Project>{265cf4b2-cab1-4505-9a47-c27d8302b1be}</Project>
+      <Name>Neutrino.Data.EntityFramework.DataServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\Neutrino.DataAccess\Neutrino.Data.EntityFramework.csproj">
       <Project>{f58dba9d-0b74-4ac6-b3c8-be32769d2d7f}</Project>

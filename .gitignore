@@ -19,7 +19,9 @@ FluentValidation.*
 jQuery.DataTables.WebApi.*
 Newtonsoft.Json.*
 Ninject*.*
-NLog.*
+Nlog.dll
+Nlog.pdb
+Nlog.xml
 System*.*
 Microsoft*.*
 

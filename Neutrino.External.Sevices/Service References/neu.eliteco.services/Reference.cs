@@ -960,6 +960,9 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
         private int GoodsIdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime InvoiceDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int SellerIdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -987,6 +990,19 @@ namespace Neutrino.External.Sevices.neu.eliteco.services {
                 if ((this.GoodsIdField.Equals(value) != true)) {
                     this.GoodsIdField = value;
                     this.RaisePropertyChanged("GoodsId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime InvoiceDate {
+            get {
+                return this.InvoiceDateField;
+            }
+            set {
+                if ((this.InvoiceDateField.Equals(value) != true)) {
+                    this.InvoiceDateField = value;
+                    this.RaisePropertyChanged("InvoiceDate");
                 }
             }
         }

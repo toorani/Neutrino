@@ -29,6 +29,10 @@ namespace Neutrino.Entities
         public int Month { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        /// <summary>
+        /// تاریخ فروش
+        /// </summary>
+        public DateTime InvoiceDate { get; set; }
     }
 
 }
