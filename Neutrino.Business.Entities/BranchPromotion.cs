@@ -26,6 +26,7 @@ namespace Neutrino.Entities
         public decimal? TotalSalesPromotion { get; set; }
         public decimal? PrivateReceiptPromotion { get; set; }
         public decimal? TotalReceiptPromotion { get; set; }
+
         public PromotionReviewStatusEnum PromotionReviewStatusId { get; set; }
         [ForeignKey("PromotionReviewStatusId")]
         public virtual PromotionReviewStatus PromotionReviewStatus { get; set; }

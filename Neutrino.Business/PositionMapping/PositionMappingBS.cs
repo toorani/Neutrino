@@ -42,7 +42,7 @@ namespace Neutrino.Business
             {
                 var positionTypeId = lstPositionMappings.FirstOrDefault().PositionTypeId;
                 var lst_ExistsData = await unitOfWork.PositionMappingDataService.GetAsync(x => x.PositionTypeId == positionTypeId);
-                var lst_newData = lstPositionMappings.Except(lst_ExistsData, x => x.PositionTypeId);
+                var lst_newData = lstPositionMappings.Except(lst_ExistsData, x => x.PositionRefId);
 
                 // add new orgsturctures 
                 foreach (var item in lst_newData)

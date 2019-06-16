@@ -114,7 +114,7 @@ namespace Neutrino.Portal
             return CreateSuccessedListResponse(result);
         }
 
-        [Route("getActiveBranchPromotion")]
+        [Route("getActiveBranchPromotionByBranchId")]
         public async Task<HttpResponseMessage> GetActiveBranchPromotion(int branchId)
         {
             IBusinessResultValue<BranchPromotion> result_bizloading = await businessService.LoadActiveBranchPromotionDetail(branchId);

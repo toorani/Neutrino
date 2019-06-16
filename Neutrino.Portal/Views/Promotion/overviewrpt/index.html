@@ -74,21 +74,21 @@
                                                 <td class="align-center">وصول خصوصی</td>
                                             </tr>
                                         </thead>
-                                        <tr ng-repeat="record in reportData | filter :{branch: filter_branchName}  ">
+                                        <tr ng-repeat="record in reportData | filter :{branchName: filter_branchName}  ">
                                             <td class="text-center">
                                                 {{$index + 1}}
                                             </td>
-                                            <td ng-class="{false:'text-center label-danger', true:'text-center label-success'}[record.totalAndAggregationReached >= 100 && record.totalReceiptReachedPercent >= 100 && record.privateReceiptReachedPercent >= 100]">
-                                                {{record.branch}}
+                                            <td ng-class="{false:'text-center label-danger', true:'text-center label-success'}[record.totalAndAggregationReached >= 100 && record.totalReceiptFulfilledPercent >= 100 && record.privateFulfilledPercent >= 100]">
+                                                {{record.branchName}}
                                             </td>
                                             <td ng-class="{false:'text-center label-danger', true:'text-center label-success'}[record.totalAndAggregationReached >= 100]">
                                                 % {{record.totalAndAggregationReached}}
                                             </td>
-                                            <td ng-class="{false:'text-center label-danger', true:'text-center label-success'}[record.totalReceiptReachedPercent >= 100]">
-                                                % {{record.totalReceiptReachedPercent}}
+                                            <td ng-class="{false:'text-center label-danger', true:'text-center label-success'}[record.totalReceiptFulfilledPercent >= 100]">
+                                                % {{record.totalReceiptFulfilledPercent}}
                                             </td>
-                                            <td ng-class="{false:'text-center label-danger', true:'text-center label-success'}[record.privateReceiptReachedPercent >= 100]">
-                                                % {{record.privateReceiptReachedPercent}}
+                                            <td ng-class="{false:'text-center label-danger', true:'text-center label-success'}[record.privateFulfilledPercent >= 100]">
+                                                % {{record.privateFulfilledPercent}}
                                             </td>
                                         </tr>
                                     </table>

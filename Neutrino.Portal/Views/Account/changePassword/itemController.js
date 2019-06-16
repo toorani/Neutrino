@@ -1,8 +1,8 @@
 ﻿console.log("account/changeassword/item")
 
 angular.module("neutrinoProject").register.controller('account.changeassword.itemController',
-    ['$scope', '$location', '$routeParams', 'ajaxService', 'alertService',
-        function ($scope, $location, $routeParams, ajaxService, alertService) {
+    ['$scope','ajaxService', 'alertService',
+        function ($scope, ajaxService, alertService) {
 
             "use strict";
             $scope.user = {

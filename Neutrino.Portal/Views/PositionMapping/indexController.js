@@ -45,14 +45,6 @@ angular.module("neutrinoProject").register.controller('positionMapping.indexCont
                         alertService.showError(response);
                     });
             }
-            var getElitePositions = function () {
-                ajaxService.ajaxCall({}, "api/positionTypeService/getElitePositions", 'get',
-                    function (response) {
-                        $scope.elitePoistions = response.data;
-                    },
-                    function (response) {
-                        alertService.showError(response);
-                    });
-            }
+            
 
         }]);

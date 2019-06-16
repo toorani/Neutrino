@@ -27,8 +27,6 @@ namespace Neutrino.Portal
 
         public static int GetBranchId(IPrincipal user)
         {
-            //TODO : eliminate this line 
-            return 2397;
             var claimPrincipal = user as ClaimsPrincipal;
             if (claimPrincipal.HasClaim(x => x.Type == ApplicationClaimTypes.BranchId))
             {

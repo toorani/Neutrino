@@ -30,14 +30,8 @@ namespace Neutrino.Portal.WebApiControllers
         [Route("getBranchMembers")]
         public async Task<HttpResponseMessage> GetBranchMembers()
         {
-            int branchId = 2397;
-            //TODO : apply access
-            //var claimPrincipal = User as ClaimsPrincipal;
-            //if (claimPrincipal.HasClaim(x=>x.Type == ApplicationClaimTypes.BranchId))
-            //{
-            //    branchId = Convert.ToInt32(claimPrincipal.FindFirst(x => x.Type == ApplicationClaimTypes.BranchId).Value);
-            //}
 
+            var branchId = IdentityConfig.GetBranchId(User);
             var result_loadData = await businessService.LoadListAsync(x=>x.BranchId == branchId);
             if (result_loadData.ReturnStatus == false)
             {

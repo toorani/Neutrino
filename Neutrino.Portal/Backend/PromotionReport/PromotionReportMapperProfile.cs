@@ -14,10 +14,9 @@ namespace Neutrino.Portal
     {
         public PromotionReportMapperProfile()
         {
-            //CreateMap<BranchPromotion, BranchPromotionViewModel>()
-            //    .ForMember(x => x.Branch, opt => opt.ResolveUsing(x => x.Branch.Name))
-            //    .ForMember(x => x.TotalAndAggregationReached, opt => opt.ResolveUsing(x => x.TotalSalesReachedPercent > x.AggregationReachedPercent ? x.TotalSalesReachedPercent : x.AggregationReachedPercent))
-            //    .ReverseMap();
+            CreateMap<ReportBranchPromotionOverview, BranchPromotionViewModel>()
+                .ForMember(x => x.TotalAndAggregationReached, opt => opt.ResolveUsing(x => x.TotalSalesFulfilledPercent > x.AggregationFulfilledPercent ? x.TotalSalesFulfilledPercent : x.AggregationFulfilledPercent))
+                .ReverseMap();
         }
     }
 }
