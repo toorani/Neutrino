@@ -1,8 +1,8 @@
 ﻿console.log("promotion.branchShare.manager.indexController")
 
 angular.module("neutrinoProject").register.controller('promotion.branchShare.manager.indexController',
-    ['$scope', 'alertService', 'ajaxService', 'modalService',
-        function ($scope, alertService, ajaxService, modalService) {
+    ['$scope', 'alertService', 'ajaxService', 'modalService', 'persianCalendar',
+        function ($scope, alertService, ajaxService, modalService, persianCalendar) {
 
             "use strict";
             $scope.branchPromotoinDetail = [];
@@ -11,16 +11,22 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
 
             $scope.viewModel = {
                 memberId: null,
-                managerPromotion: null,
                 fullName: null,
-                member: null
+                member: null,
+                branchSalesPromotion: 0,
+                sellerPromotion: 0,
+                receiptPromotion: 0
             }
+
+            
+            $scope.member_srch = '';
 
             $scope.initializeController = function () {
                 $scope.title = 'تقسیم پورسانت';
                 getBranchPromotionDetail();
-                getMemebrs();
-                getMemberSharePromotion();
+                
+                //getMemebrs();
+                //getMemberSharePromotion();
 
             }
 
@@ -51,6 +57,22 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                 });
                 return total;
             }
+            $scope.member_selected = function (memberSelected) {
+
+                ajaxService.ajaxCall({ memberId: memberSelected.id, month: $scope.month, year: $scope.year }, "api/memberSharePromotionService/getMemberSharePromotionForManager", 'get',
+                    function (response) {
+                        $scope.viewModel = response.data;
+                        $scope.viewModel.member = memberSelected;
+                    },
+                    function (response) {
+                        alertService.showError(response);
+                    });
+            }
+            $scope.memberFilter = function (record) {
+                return ($scope.member_srch == '' || String(record.member.code).indexOf($scope.member_srch) != -1
+                    || String(record.member.fullName).indexOf($scope.member_srch) != -1 || String(record.member.positionTitle).indexOf($scope.member_srch) != -1);
+            }
+
             $scope.getRecieptPromotions = function () {
                 return $scope.branchPromotoinDetail.filter((prom) => prom.positionPromotions != null);
             }
@@ -93,10 +115,17 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                         alertService.showError(response);
                     });
             }
+
             var getBranchPromotionDetail = function () {
                 ajaxService.ajaxCall({}, "api/promotionReportService/getBranchPromotionForStep1BranchManager", 'get',
                     function (response) {
                         $scope.branchPromotoinDetail = response.data;
+                        if ($scope.branchPromotoinDetail != null && $scope.branchPromotoinDetail.length != 0) {
+                            $scope.year = $scope.branchPromotoinDetail[0].year;
+                            $scope.month = $scope.branchPromotoinDetail[0].month;
+                            $scope.monthTitle = persianCalendar.getMonthNames()[$scope.month - 1].name;
+                            getMemberSharePromotionList();
+                        }
                     },
                     function (response) {
                         $scope.branchPromotoinDetail = [];
@@ -111,6 +140,16 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                     },
                     function (response) {
                         $scope.branchMemberPromotions = [];
+                        alertService.showError(response);
+                    });
+            }
+
+            var getMemberSharePromotionList = function () {
+                ajaxService.ajaxCall({ month: $scope.month, year: $scope.year }, "api/memberSharePromotionService/getMemberSharePromotionList4Manager", 'get',
+                    function (response) {
+                        $scope.memberSharePromotionList = response.data;
+                    },
+                    function (response) {
                         alertService.showError(response);
                     });
             }
@@ -132,5 +171,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                         alertService.showError(response);
                     });
             }
+
+           
 
         }]);

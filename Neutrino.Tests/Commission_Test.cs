@@ -76,7 +76,7 @@ namespace Neutrino.Portal.Tests
         public async Task PutInProcessQueue()
         {
             //Arrange
-            int month = 10;
+            int month = 12;
             int year = 1397;
 
 
@@ -92,7 +92,7 @@ namespace Neutrino.Portal.Tests
         public async Task CalculateSalesGoals()
         {
             //Arrange
-            int month = 10;
+            int month = 12;
             int year = 1397;
 
 
@@ -110,7 +110,7 @@ namespace Neutrino.Portal.Tests
         public async Task CalculateReceiptGoals()
         {
             //Arrange
-            int month = 10;
+            int month = 12;
             int year = 1397;
 
 
@@ -129,7 +129,7 @@ namespace Neutrino.Portal.Tests
         public async Task CalculatePromotion()
         {
             //Arrange
-            int month = 10;
+            int month = 12;
             int year = 1397;
 
             var promotionBS = _kernel.Get<IPromotionBS>();

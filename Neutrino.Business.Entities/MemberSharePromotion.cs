@@ -10,6 +10,7 @@ namespace Neutrino.Entities
         public int BranchPromotionId { get; set; }
         public virtual BranchPromotion BranchPromotion { get; set; }
         public int MemberId { get; set; }
+
         public decimal ManagerPromotion { get; set; }
         public decimal? CEOPromotion { get; set; }
         public decimal? FinalPromotion { get; set; }
@@ -17,10 +18,11 @@ namespace Neutrino.Entities
         public int BranchId { get; set; }
         public virtual Member Member { get; set; }
         public virtual ICollection<MemberPenalty> MemberPenalties { get; private set; }
-
+        public virtual ICollection<MemberSharePromotionDetail> Details { get; private set; }
         public MemberSharePromotion()
         {
             MemberPenalties = new HashSet<MemberPenalty>();
+            Details = new HashSet<MemberSharePromotionDetail>();
         }
 
     }

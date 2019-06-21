@@ -32,7 +32,7 @@ namespace Neutrino.Portal.WebApiControllers
         {
 
             var branchId = IdentityConfig.GetBranchId(User);
-            var result_loadData = await businessService.LoadListAsync(x=>x.BranchId == branchId);
+            var result_loadData = await businessService.LoadListAsync(x => x.BranchId == branchId, includes: x => x.PositionType);
             if (result_loadData.ReturnStatus == false)
             {
                 return CreateErrorResponse(result_loadData);

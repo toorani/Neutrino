@@ -90,6 +90,7 @@ namespace Neutrino.Data.EntityFramework
         public DbSet<PromotionReviewStatus> PromotionReviewStatus { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<ElitePosition> ElitePositions { get; set; }
+        public DbSet<SharePromotionType> SharePromotionTypes { get; set; }
         #endregion
 
         #region [ Override Method(s) ]
@@ -185,6 +186,7 @@ namespace Neutrino.Data.EntityFramework
             modelBuilder.Entity<ApprovePromotionType>().Ignore(x => x.Id);
             modelBuilder.Entity<QuantityConditionType>().Ignore(x => x.Id);
             modelBuilder.Entity<PromotionReviewStatus>().Ignore(x => x.Id);
+            modelBuilder.Entity<SharePromotionType>().Ignore(x => x.Id);
 
         }
         public override int SaveChanges()

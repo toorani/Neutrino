@@ -162,7 +162,7 @@ namespace Neutrino.Entities
         /// نگهبان
         /// </summary>
         [Description("نگهبان")]
-        Gguard,
+        Guard,
         /// <summary>
         /// سایر
         /// </summary>

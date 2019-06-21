@@ -14,7 +14,8 @@ namespace Neutrino.Portal
         public decimal TotalFinalPromotion { get; set; }
         public List<PositionPromotion> PositionPromotions { get; set; }
         public int PromotionReviewStatusId { get; set; }
-
+        public int Month { get; set; }
+        public int Year { get; set; }
         public BranchPromotionDetailViewModel() { PositionPromotions = new List<PositionPromotion>(); }
 
     }

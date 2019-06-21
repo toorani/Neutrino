@@ -58,6 +58,8 @@
     <Compile Include="ApprovePromotionType.cs" />
     <Compile Include="Department.cs" />
     <Compile Include="MemberPenalty.cs" />
+    <Compile Include="MemberSales_PromotionInfo.cs" />
+    <Compile Include="MemberSharePromotionDetail.cs" />
     <Compile Include="MemberSharePromotion.cs" />
     <Compile Include="PositionInfo.cs" />
     <Compile Include="PromotionReviewStatus.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="ReportBranchPromotionOverview.cs" />
     <Compile Include="ReportSallerGoal.cs" />
     <Compile Include="ReportBranchSalesGoal.cs" />
+    <Compile Include="SharePromotionType.cs" />
     <Compile Include="StockInventory.cs" />
     <Compile Include="CompanyType.cs" />
     <Compile Include="GoodsPromotion.cs" />

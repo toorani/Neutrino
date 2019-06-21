@@ -25,5 +25,6 @@ namespace Neutrino.Interfaces
         Task<IBusinessResultValue<BranchPromotion>> LoadActiveBranchPromotionDetail(int branchId);
         Task<IBusinessResultValue<List<BranchPromotion>>> LoadBranchPromotions(PromotionReviewStatusEnum promotionReviewStatusId);
         Task<IBusinessResultValue<BranchPromotion>> LoadBranchPromotion(int branchId, PromotionReviewStatusEnum statusId);
+        
     }
 }

@@ -40,6 +40,8 @@
             context.ApprovePromotionTypes.SeedEnumValues<ApprovePromotionType, ApprovePromotionTypeEnum>(e => new ApprovePromotionType(e));
             context.QuantityConditionTypes.SeedEnumValues<QuantityConditionType, QuantityConditionTypeEnum>(e => new QuantityConditionType(e));
             context.PromotionReviewStatus.SeedEnumValues<PromotionReviewStatus, PromotionReviewStatusEnum>(e => new PromotionReviewStatus(e));
+            context.SharePromotionTypes.SeedEnumValues<SharePromotionType, SharePromotionTypeEnum>(e => new SharePromotionType(e));
+
 
 
 

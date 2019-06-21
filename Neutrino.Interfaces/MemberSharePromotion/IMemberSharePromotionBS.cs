@@ -16,5 +16,7 @@ namespace Neutrino.Interfaces
         Task<IBusinessResult> ProceedMemberSharePromotionAsync(PromotionReviewStatusEnum currentStep, PromotionReviewStatusEnum nextStep, int branchId);
         Task<IBusinessResult> AddOrModfiyFinalPromotionAsync(List<MemberSharePromotion> entities);
         Task<IBusinessResultValue<PromotionReviewStatusEnum>> DeterminedPromotion(List<MemberSharePromotion> entities);
+        Task<IBusinessResultValue<MemberSharePromotion>> LoadMemberSharePromotionAsync(int memberId, int month, int year,SharePromotionTypeEnum sharePromotionTypeId);
+        Task<IBusinessResultValue<List<MemberSharePromotion>>> LoadMemberSharePromotionListAsync(int branchId, int month, int year, SharePromotionTypeEnum sharePromotionTypeId);
     }
 }

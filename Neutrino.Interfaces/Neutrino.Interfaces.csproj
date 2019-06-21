@@ -76,6 +76,7 @@
     <Compile Include="GoalGoodsCategory\IGoalGoodsCategoryDS.cs" />
     <Compile Include="GoalNonFulfillment\IGoalNonFulfillmentPercentBS.cs" />
     <Compile Include="MemberPenalty\IMemberPenaltyBS.cs" />
+    <Compile Include="MemberPromotion\IMemberPromotionBS.cs" />
     <Compile Include="MemberSharePromotion\IMemberSharePromotionBS.cs" />
     <Compile Include="OrgStructure\IOrgStructureBS.cs" />
     <Compile Include="PositionMapping\IPositionMappingBS.cs" />

@@ -9,7 +9,8 @@ namespace Neutrino.Portal.WebApiControllers
         public MemberMapperProfile()
         {
             CreateMap<Member, MemberViewModel>()
-                .ForMember(x => x.FullName, opt => opt.ResolveUsing(x => x.Name + " " + x.LastName));
+                .ForMember(x => x.FullName, opt => opt.ResolveUsing(x => x.Name + " " + x.LastName))
+                .ForMember(x => x.PositionTitle, opt => opt.ResolveUsing(x => x.PositionType?.Description));
         }
     }
 }

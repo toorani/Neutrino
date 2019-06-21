@@ -19,7 +19,8 @@ namespace Neutrino.Entities
         /// شناسه پرسنل
         /// </summary>
         public int MemberId { get; set; }
-        
+        public virtual Member Member { get; set; }
+
         public decimal Promotion { get; set; }
         public int Quantity { get; set; }
         public decimal Amount { get; set; }

@@ -50,7 +50,7 @@ namespace Neutrino.Portal.WebApiControllers
             var result = mapper.Map<Goal, GoalViewModel>(goalEntity.ResultValue);
             return CreateViewModelResponse(result, goalEntity);
         }
-        [Route("getDataGrid"), HttpPost, WebApiAuthorize]
+        [Route("getDataGrid"), HttpPost]
         public async Task<HttpResponseMessage> GetDataGrid(JQueryDataTablesModel dataTablesModel)
         {
             GoalTypeEnum? goalTypeId = GoalTypeEnum.Distributor;

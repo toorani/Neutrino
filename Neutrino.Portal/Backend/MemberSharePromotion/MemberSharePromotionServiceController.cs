@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Threading.Tasks;
-using System.Web.Http;
-using AutoMapper;
+﻿using AutoMapper;
 using Espresso.BusinessService.Interfaces;
 using Espresso.Core;
 using Espresso.Portal;
-using jQuery.DataTables.WebApi;
-using Neutrino.Business;
 using Neutrino.Entities;
 using Neutrino.Interfaces;
 using Neutrino.Portal.Models;
-using Neutrino.Portal.ProfileMapper;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace Neutrino.Portal
 {
@@ -55,7 +48,7 @@ namespace Neutrino.Portal
         public async Task<HttpResponseMessage> GetMemberSharePromotionAsync(int statusId)
         {
             int branchId = IdentityConfig.GetBranchId(User);
-            var result_bizloading = await businessService.LoadAsync(branchId,(PromotionReviewStatusEnum)statusId);
+            var result_bizloading = await businessService.LoadAsync(branchId, (PromotionReviewStatusEnum)statusId);
             if (result_bizloading.ReturnStatus == false)
                 return CreateErrorResponse(result_bizloading);
             var mapper = GetMapper();
@@ -83,7 +76,7 @@ namespace Neutrino.Portal
 
             IBusinessResult entities = await businessService.ProceedMemberSharePromotionAsync(PromotionReviewStatusEnum.WaitingForStep1BranchManagerReview
                 , PromotionReviewStatusEnum.ReleadedStep1ByBranchManager
-                ,branchId);
+                , branchId);
             if (entities.ReturnStatus == false)
             {
                 return CreateErrorResponse(entities);
@@ -103,7 +96,7 @@ namespace Neutrino.Portal
             {
                 return CreateErrorResponse(result_biz);
             }
-            
+
             return Request.CreateResponse(HttpStatusCode.OK, new { returnMessage = result_biz.ReturnMessage.ConcatAll() });
         }
         [Route("determinedPromotion"), HttpPost]
@@ -119,6 +112,35 @@ namespace Neutrino.Portal
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, new { returnValue = (int)result_biz.ResultValue, returnMessage = result_biz.ReturnMessage.ConcatAll() });
+        }
+
+        [Route("getMemberSharePromotionForManager")]
+        public async Task<HttpResponseMessage> GetMemberSharePromotionForManagerAsync(int memberId, int month, int year)
+        {
+            var result_biz = await businessService.LoadMemberSharePromotionAsync(memberId, month, year, SharePromotionTypeEnum.Manager);
+            if (result_biz.ReturnStatus == false)
+            {
+                return CreateErrorResponse(result_biz);
+            }
+            var mapper = GetMapper();
+            var result = mapper.Map<MemberSharePromotion, MemberSharePromotionManagerViewModel>(result_biz.ResultValue);
+
+            return Request.CreateResponse(HttpStatusCode.OK, result);
+        }
+
+        [Route("getMemberSharePromotionList4Manager"),HttpGet]
+        public async Task<HttpResponseMessage> GetMemberSharePromotionList4ManagerAsync(int month, int year)
+        {
+            var branchId = IdentityConfig.GetBranchId(User);
+            var result_biz = await businessService.LoadMemberSharePromotionListAsync(branchId, month, year, SharePromotionTypeEnum.Manager);
+            if (result_biz.ReturnStatus == false)
+            {
+                return CreateErrorResponse(result_biz);
+            }
+            var mapper = GetMapper();
+            var result = mapper.Map<List<MemberSharePromotion>, List<MemberSharePromotionManagerViewModel>>(result_biz.ResultValue);
+
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
         #endregion
 

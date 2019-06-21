@@ -17,7 +17,7 @@ namespace Neutrino.Business
     public class MemberSharePromotionBS : NeutrinoBusinessService, IMemberSharePromotionBS
     {
         private readonly AbstractValidator<MemberSharePromotion> validationRules;
-        private readonly AbstractValidator<List<MemberSharePromotion>>  lstValidationRules;
+        private readonly AbstractValidator<List<MemberSharePromotion>> lstValidationRules;
 
 
         public MemberSharePromotionBS(NeutrinoUnitOfWork unitOfWork
@@ -40,7 +40,8 @@ namespace Neutrino.Business
                     return result;
                 }
 
-                entities.ForEach(memshar => {
+                entities.ForEach(memshar =>
+                {
                     unitOfWork.MemberSharePromotionDataService.Update(memshar);
                 });
                 await unitOfWork.CommitAsync();
@@ -102,7 +103,8 @@ namespace Neutrino.Business
                     return result;
                 }
 
-                entities.ForEach(memshar => {
+                entities.ForEach(memshar =>
+                {
                     unitOfWork.MemberSharePromotionDataService.Update(memshar);
                 });
 
@@ -182,6 +184,102 @@ namespace Neutrino.Business
                 unitOfWork.MemberSharePromotionDataService.Delete(entity);
                 await unitOfWork.CommitAsync();
                 result.ReturnMessage.Add(MESSAGE_DELETE_ENTITY);
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
+        public async Task<IBusinessResultValue<MemberSharePromotion>> LoadMemberSharePromotionAsync(int memberId, int month, int year, SharePromotionTypeEnum sharePromotionTypeId)
+        {
+            var result = new BusinessResultValue<MemberSharePromotion>();
+            try
+            {
+                result.ResultValue = await unitOfWork.MemberSharePromotionDataService.FirstOrDefaultAsync(x => x.MemberId == memberId
+               && x.BranchPromotion.Month == month && x.BranchPromotion.Year == year
+               && x.Details.Any(y => y.SharePromotionTypeId == sharePromotionTypeId)
+               , includes: x => new { x.BranchPromotion, x.Details });
+
+                if (result.ResultValue == null && sharePromotionTypeId == SharePromotionTypeEnum.Manager)
+                {
+                    var sellerTotalPromtion = await (from mep in unitOfWork.MemberPromotionDataService.GetQuery()
+                                                     join brp in unitOfWork.BranchPromotionDataService.GetQuery()
+                                                     on mep.BranchPromotionId equals brp.Id
+                                                     where mep.MemberId == memberId && brp.Month == month && brp.Year == year && mep.Deleted == false
+                                                     group mep by mep.MemberId into grp_memp
+                                                     select grp_memp.Sum(x => x.Promotion)).FirstOrDefaultAsync();
+
+                    MemberSharePromotion memberSharePromotion = new MemberSharePromotion { MemberId = memberId };
+                    memberSharePromotion.Details.Add(new MemberSharePromotionDetail { SellerPromotion = sellerTotalPromtion });
+                    result.ResultValue = memberSharePromotion;
+                }
+                else
+                {
+                    result.ResultValue = new MemberSharePromotion { MemberId = memberId };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
+
+        public async Task<IBusinessResultValue<List<MemberSharePromotion>>> LoadMemberSharePromotionListAsync(int branchId, int month, int year, SharePromotionTypeEnum sharePromotionTypeId)
+        {
+            var result = new BusinessResultValue<List<MemberSharePromotion>>();
+            try
+            {
+                result.ResultValue = await unitOfWork.MemberSharePromotionDataService.GetAsync(x => x.BranchPromotion.BranchId == branchId
+               && x.BranchPromotion.Month == month && x.BranchPromotion.Year == year
+               && x.Details.Any(y => y.SharePromotionTypeId == sharePromotionTypeId)
+               , includes: x => new { x.BranchPromotion, x.Details, x.Member });
+
+                if (result.ResultValue.Count == 0 && sharePromotionTypeId == SharePromotionTypeEnum.Manager)
+                {
+                    var query = await (from me in unitOfWork.MemberDataService.GetQuery()
+                                       //join posm in unitOfWork.PositionMappingDataService.GetQuery()
+                                       //on me.PositionRefId equals posm.PositionRefId
+                                       join post in unitOfWork.PositionTypeDataService.GetQuery()
+                                       on me.PositionTypeId equals post.eId into left_join_position
+                                       from join_me_pos in left_join_position.DefaultIfEmpty()
+                                       join mep in (from mep in unitOfWork.MemberPromotionDataService.GetQuery()
+                                                    join brp in unitOfWork.BranchPromotionDataService.GetQuery()
+                                                    on mep.BranchPromotionId equals brp.Id
+                                                    where brp.BranchId == branchId && brp.Month == month && brp.Year == year && mep.Deleted == false
+                                                    group mep by mep.MemberId into grp_memp
+                                                    select new
+                                                    {
+                                                        sellerTotalPromtion = (decimal?)grp_memp.Sum(x => x.Promotion),
+                                                        MemberId = grp_memp.Key
+                                                    })
+                                       on me.Id equals mep.MemberId into left_join
+                                       from me_mep in left_join.DefaultIfEmpty()
+                                       where me.BranchId == branchId && me.Deleted == false
+                                       select new
+                                       {
+                                           MemberId = me.Id,
+                                           Member = me,
+                                           join_me_pos,
+                                           me_mep.sellerTotalPromtion,
+                                       }).ToListAsync();
+
+                    result.ResultValue = query.Select(x =>
+                    {
+                        MemberSharePromotion memberSharePromotion = new MemberSharePromotion
+                        {
+                            MemberId = x.MemberId,
+                            Member = x.Member
+                        };
+                        if (x.sellerTotalPromtion.HasValue)
+                            memberSharePromotion.Details.Add(new MemberSharePromotionDetail { MemberId = x.MemberId, SellerPromotion = x.sellerTotalPromtion.Value });
+                        return memberSharePromotion;
+                    }).ToList();
+
+
+                }
             }
             catch (Exception ex)
             {

@@ -60,7 +60,7 @@ namespace Neutrino.Data.EntityFramework
         public IEntityBaseRepository<PositionReceiptPromotion> PositionReceiptPromotionDataService { get; private set; }
         public IEntityBaseRepository<PositionType> PositionTypeDataService { get; private set; }
         public IEntityBaseRepository<PositionMapping> PositionMappingDataService { get; private set; }
-        public IEntityBaseRepository<MemberPromotion> MemberPomotionDataService { get; private set; }
+        public IEntityBaseRepository<MemberPromotion> MemberPromotionDataService { get; private set; }
         public IEntityBaseRepository<MemberSharePromotion> MemberSharePromotionDataService { get; private set; }
         public IEntityBaseRepository<MemberPenalty> MemberPenaltyDataService { get; private set; }
         public IEntityBaseRepository<ElitePosition> ElitePositionDataService { get; private set; }
@@ -160,7 +160,7 @@ namespace Neutrino.Data.EntityFramework
             PositionReceiptPromotionDataService = positionReceiptPromotionDS;
             PositionTypeDataService = positionTypeDS;
             PositionMappingDataService = postionMappingDS;
-            MemberPomotionDataService = memberPomotionDS;
+            MemberPromotionDataService = memberPomotionDS;
             MemberSharePromotionDataService = memberSharePromotionDS;
             MemberPenaltyDataService = memberPenaltyDS;
             ElitePositionDataService = elitePostionDS;

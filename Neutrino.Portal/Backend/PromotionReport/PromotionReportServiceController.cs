@@ -350,16 +350,20 @@ namespace Neutrino.Portal
                 new  BranchPromotionDetailViewModel(){
                     BranchId = branchId,
                     BranchName = entities.ResultValue.Branch.Name,
-                    GoalTypeTitle = "پورسانت فروش",
+                    GoalTypeTitle = "پورسانت فروش تامین کننده",
                     PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
                     TotalFinalPromotion = entities.ResultValue.TotalSalesPromotion.Value,
-                    PositionPromotions = null
+                    PositionPromotions = null,
+                    Month = entities.ResultValue.Month,
+                    Year =  entities.ResultValue.Year,
                 },
                 new  BranchPromotionDetailViewModel(){
                     BranchId = branchId,
                     PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
                     BranchName = entities.ResultValue.Branch.Name,
                     GoalTypeTitle = "پورسانت وصول کل",
+                    Month = entities.ResultValue.Month,
+                    Year =  entities.ResultValue.Year,
                     TotalFinalPromotion = entities.ResultValue.TotalReceiptPromotion.Value,
                     PositionPromotions =  (from brgpl in entities.ResultValue.BranchGoalPromotions
                                           where brgpl.Goal.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal
@@ -375,6 +379,8 @@ namespace Neutrino.Portal
                     BranchName = entities.ResultValue.Branch.Name,
                     PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
                     GoalTypeTitle = "پورسانت وصول خصوصی",
+                    Month = entities.ResultValue.Month,
+                    Year =  entities.ResultValue.Year,
                     TotalFinalPromotion = entities.ResultValue.PrivateReceiptPromotion.Value,
                     PositionPromotions =  (from brgpl in entities.ResultValue.BranchGoalPromotions
                                           where brgpl.Goal.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal
@@ -386,11 +392,11 @@ namespace Neutrino.Portal
                                           }).ToList()
                 }
             };
-          
+
 
             return CreateSuccessedListResponse(result);
         }
-        
+
         #endregion
 
         #region [ Private Method(s) ]

@@ -8,7 +8,7 @@ namespace Neutrino.Portal.Models
 {
     public class MemberViewModel : ViewModelBase
     {
-        public string NationalCode { get; set; }
+        public string PositionTitle { get; set; }
         /// <summary>
         /// نام
         /// </summary>
