@@ -1,19 +1,17 @@
-﻿using FluentValidation;
-using Neutrino.Interfaces;
-using Neutrino.Entities;
-using System.Threading.Tasks;
-using Espresso.BusinessService;
+﻿using Espresso.BusinessService;
 using Espresso.BusinessService.Interfaces;
-using System;
-using Neutrino.Data.EntityFramework;
-using Z.EntityFramework.Plus;
-using System.Linq;
-using System.Data.Entity;
-using Microsoft.AspNet.Identity;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using Espresso.Core;
+using FluentValidation;
+using Neutrino.Data.EntityFramework;
+using Neutrino.Entities;
+using Neutrino.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using Z.EntityFramework.Plus;
 
 namespace Neutrino.Business
 {
@@ -403,11 +401,6 @@ namespace Neutrino.Business
         {
             throw new NotImplementedException();
         }
-
-
-
-
-
         #endregion
 
     }

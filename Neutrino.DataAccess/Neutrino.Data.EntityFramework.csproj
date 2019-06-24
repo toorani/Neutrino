@@ -645,6 +645,10 @@
     <Compile Include="Migrations\201906211633004_addMemberShareDetail.Designer.cs">
       <DependentUpon>201906211633004_addMemberShareDetail.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906221432051_addQuantityGoalPromotion.cs" />
+    <Compile Include="Migrations\201906221432051_addQuantityGoalPromotion.Designer.cs">
+      <DependentUpon>201906221432051_addQuantityGoalPromotion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NeutrinoContext.cs" />
@@ -1086,6 +1090,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906211633004_addMemberShareDetail.resx">
       <DependentUpon>201906211633004_addMemberShareDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906221432051_addQuantityGoalPromotion.resx">
+      <DependentUpon>201906221432051_addQuantityGoalPromotion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

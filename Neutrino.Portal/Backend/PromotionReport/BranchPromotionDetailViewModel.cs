@@ -16,6 +16,8 @@ namespace Neutrino.Portal
         public int PromotionReviewStatusId { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
+        public int GoalTypeId { get; internal set; }
+
         public BranchPromotionDetailViewModel() { PositionPromotions = new List<PositionPromotion>(); }
 
     }

@@ -91,6 +91,7 @@ namespace Neutrino.Data.EntityFramework
         public DbSet<Department> Departments { get; set; }
         public DbSet<ElitePosition> ElitePositions { get; set; }
         public DbSet<SharePromotionType> SharePromotionTypes { get; set; }
+        public DbSet<QuantityGoalPromotion> QuantityGoalPromotions { get; set; }
         #endregion
 
         #region [ Override Method(s) ]

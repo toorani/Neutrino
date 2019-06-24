@@ -318,7 +318,7 @@ namespace Neutrino.Business
                         .ToList()
                         .ForEach(goal =>
                         {
-                            var quantityConditions = goal.QuantityConditions.Single();
+
 
                         });
 
@@ -433,37 +433,89 @@ namespace Neutrino.Business
                                                             brsa.GoodsId,
                                                             Amount = brsa.TotalAmount,
                                                             Quantity = brsa.TotalNumber,
-                                                            BranchQuantity = gdsqc.BranchQuantityConditions.SingleOrDefault(x => x.BranchId == brsa.BranchId)?.Quantity,
-                                                            IsGoodsFulfilled = (gdsqc.BranchQuantityConditions.SingleOrDefault(x => x.BranchId == brsa.BranchId)?.Quantity <= brsa.TotalNumber)
-                                                        }).ToList();
-                            //درصد دستیابی هر مرکز به هدف تعدادی
-                            var lst_branchFulfillInfo = (from br_cd in lst_branchConditions
-                                                         group br_cd by br_cd.BranchId into grp
-                                                         select new
-                                                         {
-                                                             BranchId = grp.Key,
-                                                             FulFillPercent = ((decimal)(grp.Count(x => x.IsGoodsFulfilled) / (decimal)quantityConditions.Quantity)) * 100M
-                                                         }).ToList();
+                                                            FulfillPercent = ((decimal)brsa.TotalNumber / (decimal)gdsqc.BranchQuantityConditions.SingleOrDefault(x => x.BranchId == brsa.BranchId).Quantity) * 100M,
+                                                            GoalQuantity = gdsqc.BranchQuantityConditions.SingleOrDefault(x => x.BranchId == brsa.BranchId).Quantity,
+                                                        });
 
 
-                            lst_branchFulfillInfo.ForEach(branchFulfillInfo =>
+                            var lst_branchIds = lst_branchConditions.Select(x => x.BranchId).Distinct();
+                            foreach (int branchId in lst_branchIds)
                             {
-                                goalStep = goal.GoalSteps.OrderByDescending(step => step.ComputingValue)
-                                .Where(step => step.ComputingValue <= branchFulfillInfo.FulFillPercent)
-                                .FirstOrDefault();
-                                //اطلاعات فروش مرکز 
+                                int count = 0;
+                                goalStep = null;
+
+                                foreach (var step in goal.GoalSteps.OrderByDescending(step => step.ComputingValue))
+                                {
+                                    count = lst_branchConditions.Count(x => x.FulfillPercent >= step.ComputingValue && x.BranchId == branchId);
+                                    if (count >= quantityConditions.Quantity)
+                                    {
+                                        goalStep = step;
+                                        break;
+                                    }
+                                }
+
                                 BranchSalesInfo branchSalesInfo = new BranchSalesInfo
                                 {
-                                    TotalSales = lst_branchConditions.Where(x => x.BranchId == branchFulfillInfo.BranchId).Sum(x => x.Amount),
-                                    TotalQuantity = lst_branchConditions.Where(x => x.BranchId == branchFulfillInfo.BranchId).Sum(x => x.Quantity),
-                                    BranchId = branchFulfillInfo.BranchId,
-                                    FulfillPercent = branchFulfillInfo.FulFillPercent,
-                                    SellerFulfillmentPercent = lst_fulfillmentPercents.SingleOrDefault(x => x.BranchId == branchFulfillInfo.BranchId)?.SellerFulfillmentPercent
-
+                                    //TotalSales = lst_branchConditions.GroupBy(x => new { x.BranchId, x.GoodsId }).Select(x => x.Sum(c => c.Amount)).FirstOrDefault(),
+                                    TotalSales = lst_branchConditions.Where(x => x.BranchId == branchId).Sum(x => x.Amount),
+                                    TotalQuantity = count,
+                                    BranchId = branchId,
+                                    FulfillPercent = goalStep != null ? goalStep.ComputingValue : 0M,
+                                    SellerFulfillmentPercent = lst_fulfillmentPercents.SingleOrDefault(x => x.BranchId == branchId)?.SellerFulfillmentPercent
                                 };
-
                                 addBranchGoalPromotion(entity, goal, goalStep, branchSalesInfo);
-                            });
+
+                                var branchPromotion = entity.BranchPromotions.Single(x => x.BranchId == branchId);
+
+                                branchPromotion.QuantityGoalPromotions = lst_branchConditions
+                                .Where(x => x.BranchId == branchId)
+                                .Select(x => new QuantityGoalPromotion
+                                {
+                                    BranchId = branchId,
+                                    BranchPromotionId = branchPromotion.Id,
+                                    FulfilledPercent = x.FulfillPercent,
+                                    GoodsId = x.GoodsId,
+                                    GoalQuantity = x.GoalQuantity,
+                                    TotalQuantity = x.Quantity,
+                                    GoalId = goal.Id,
+                                    TotalSales = x.Amount
+                                }).ToList();
+
+                            }
+
+
+
+
+
+
+                            //درصد دستیابی هر مرکز به هدف تعدادی
+                            //var lst_branchFulfillInfo = (from br_cd in lst_branchConditions
+                            //                             group br_cd by br_cd.BranchId into grp
+                            //                             select new
+                            //                             {
+                            //                                 BranchId = grp.Key,
+                            //                                 FulFillPercent = ((decimal)(grp.Count(x => x.IsGoodsFulfilled) / (decimal)quantityConditions.Quantity)) * 100M
+                            //                             }).ToList();
+
+
+                            //lst_branchFulfillInfo.ForEach(branchFulfillInfo =>
+                            //{
+                            //    goalStep = goal.GoalSteps.OrderByDescending(step => step.ComputingValue)
+                            //    .Where(step => step.ComputingValue <= branchFulfillInfo.FulFillPercent)
+                            //    .FirstOrDefault();
+                            //    //اطلاعات فروش مرکز 
+                            //    BranchSalesInfo branchSalesInfo = new BranchSalesInfo
+                            //    {
+                            //        TotalSales = lst_branchConditions.Where(x => x.BranchId == branchFulfillInfo.BranchId).Sum(x => x.Amount),
+                            //        TotalQuantity = lst_branchConditions.Where(x => x.BranchId == branchFulfillInfo.BranchId).Sum(x => x.Quantity),
+                            //        BranchId = branchFulfillInfo.BranchId,
+                            //        FulfillPercent = branchFulfillInfo.FulFillPercent,
+                            //        SellerFulfillmentPercent = lst_fulfillmentPercents.SingleOrDefault(x => x.BranchId == branchFulfillInfo.BranchId)?.SellerFulfillmentPercent
+
+                            //    };
+
+                            //    addBranchGoalPromotion(entity, goal, goalStep, branchSalesInfo);
+                            //});
 
                         });
                 }

@@ -29,20 +29,16 @@ namespace Neutrino.Portal
 
         #region [ Public Method(s) ]
         [Route("addOrModify"), HttpPost]
-        public async Task<HttpResponseMessage> AddOrModify(MemberSharePromotionViewModel postedViewModel)
+        public async Task<HttpResponseMessage> AddOrModify(List<MemberSharePromotionManagerViewModel> postedViewModel)
         {
-            int branchId = IdentityConfig.GetBranchId(User);
-
             var mapper = GetMapper();
-            var entityMapped = mapper.Map<MemberSharePromotionViewModel, MemberSharePromotion>(postedViewModel);
-            entityMapped.BranchId = branchId;
+            var entityMapped = mapper.Map<List<MemberSharePromotionManagerViewModel>, List<MemberSharePromotion>>(postedViewModel);
 
             var result_biz = await businessService.CreateOrUpdateAsync(entityMapped);
             if (result_biz.ReturnStatus == false)
                 return CreateErrorResponse(result_biz);
 
             return Request.CreateResponse(HttpStatusCode.OK, result_biz);
-
         }
         [Route("getMemberSharePromotion")]
         public async Task<HttpResponseMessage> GetMemberSharePromotionAsync(int statusId)

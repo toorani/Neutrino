@@ -19,14 +19,12 @@
                                             <ul>
                                                 <li>
                                                     <div class="ls-hex-bage premium-bage">
-                                                        <span class="ls-pricing">جمع پورسانت</span>
+                                                        <span class="ls-pricing">جمع پورسانت مرکز</span>
                                                     </div>
                                                     <div class="basic-price-simple">
-                                                        <h5 class="dir-ltr"><span></span>{{getTotal() | number}}</h5>
+                                                        <h5><p class="bold">{{monthTitle}}&nbsp;&nbsp;&nbsp;&nbsp;{{year}}&nbsp;</p></h5>
                                                         <div class="ls_divider"></div>
-                                                        <h5>
-                                                            <p class="bold">{{monthTitle}}&nbsp;&nbsp;&nbsp;&nbsp;{{year}}&nbsp;</p>
-                                                        </h5>
+                                                        <h5 class="dir-ltr"><span></span>{{getTotal() | number}}</h5>
                                                     </div>
                                                 </li>
                                                 <li ng-repeat="po in branchPromotoinDetail">
@@ -34,7 +32,12 @@
                                                         <h4>{{po.goalTypeTitle}}</h4>
                                                         <p class="dir-ltr">{{po.totalFinalPromotion | number}}</p>
                                                     </div>
-
+                                                </li>
+                                                <li>
+                                                    <div class="basic-bage">
+                                                        <h4>پورسانت عوامل فروش</h4>
+                                                        <p class="dir-ltr">{{totalSellerPromotion | number}}</p>
+                                                    </div>
                                                 </li>
                                             </ul>
 
@@ -70,235 +73,103 @@
                                 <div class="alert alert-warning" ng-if="branchPromotoinDetail[0].promotionReviewStatusId != 1">
                                     <strong>توجه!</strong> پورسانت تقسیم و ارسال شده است.
                                 </div>
-
-
-                                <div class="row">
-                                    <div class="table-responsive ls-table">
-                                        <table class="table table-bordered table-striped " cellspacing="0">
+                                <form novalidate role="form" esp-validate-complete="submit()"
+                                      esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                                      class="form-horizontal ls_form" name="form">
+                                    
+                                    <div class="row">
+                                        <table class="table table-striped" cellspacing="0">
                                             <thead class="bold">
                                                 <tr>
-                                                    <td rowspan="3" style="vertical-align:middle;width:40px" class="text-center">#</td>
-                                                    <td colspan="3" class="text-center">
+                                                    <th rowspan="3" style="vertical-align:middle;width:40px" class="text-center">#</th>
+                                                    <th colspan="3" class="text-center">
                                                         <input type="text" class="form-control" ng-model="member_srch" />
-                                                    </td>
+                                                    </th>
+                                                    <th class="align-center dir-ltr">{{getRemained().salesPromotionRemained | number}}</th>
+                                                    <th class="align-center dir-ltr">{{getRemained().receiptPromotionRemained | number}}</th>
+                                                    <th class="align-center dir-ltr">{{getRemained().sellerPromotionRemained | number}}</th>
+                                                    <th class="align-center dir-ltr">{{assigendPromotion | number}}</th>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="3" style="vertical-align:middle" class="align-center">اطلاعات پرسنل</td>
-                                                    <td colspan="3" class="align-center">پورسانت</td>
+                                                    <th colspan="3" style="vertical-align:middle" class="align-center">اطلاعات پرسنل</th>
+                                                    <th colspan="4" class="align-center">پورسانت</th>
                                                 </tr>
                                                 <tr>
-                                                    <td class="align-center">نام</td>
-                                                    <td class="align-center">کد</td>
-                                                    <td class="align-center">پست سازمانی</td>
-                                                    <td class="align-center">تامین کننده</td>
-                                                    <td class="align-center">وصول</td>
-                                                    <td class="align-center">عوامل فروش</td>
+                                                    <th class="align-center">نام</th>
+                                                    <th class="align-center">کد</th>
+                                                    <th class="align-center">پست سازمانی</th>
+                                                    <th class="align-center">تامین کننده</th>
+                                                    <th class="align-center">وصول</th>
+                                                    <th class="align-center">عوامل فروش</th>
+                                                    <th class="align-center">جمع</th>
                                                 </tr>
                                             </thead>
-                                            <tr ng-repeat="record in memberSharePromotionList | filter : memberFilter  ">
-                                                <td class="text-center">
-                                                    {{$index +1}}
-                                                </td>
-                                                <td class="text-center">
-                                                    {{record.member.fullName}}
-                                                </td>
-                                                <td class="text-center">
-                                                    {{record.member.code}}
-
-                                                </td>
-                                                <td class="text-center">
-                                                    {{record.member.positionTitle}}
-                                                </td>
-                                                <td class="align-center dir-ltr">
-                                                    <input type="text" class="form-control dir-ltr"
-                                                           ng-model="record.branchSalesPromotion"
-                                                           ng-trim=false
-                                                           awnum="price">
-                                                </td>
-                                                <td class="align-center dir-ltr">
-                                                    <input type="text" class="form-control dir-ltr"
-                                                           ng-model="record.receiptPromotion"
-                                                           ng-trim=false
-                                                           awnum="price">
-                                                </td>
-                                                <td class="align-center dir-ltr">
-                                                    <input type="text" class="form-control  dir-ltr"
-                                                           ng-model="record.sellerPromotion"
-                                                           ng-trim=false
-                                                           awnum="price">
-                                                </td>
-                                            </tr>
                                         </table>
-                                    </div>
-                                </div>
+                                        <div style="height:400px;overflow-x:auto">
+                                            <table class="table table-striped" cellspacing="0">
+                                                <tbody>
+                                                    <tr ng-repeat="record in memberSharePromotionList | filter : memberFilter  ">
+                                                        <td class="align-center" style="width:40px">
+                                                            {{$index +1}}
+                                                        </td>
+                                                        <td class="align-center">
+                                                            {{record.fullName}}
+                                                        </td>
+                                                        <td class="align-center">
+                                                            {{record.memberCode}}
 
-                                <div class="panel panel-dark" ng-show="branchPromotoinDetail[0].promotionReviewStatusId == 1">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">مشخص کردن پورسانت پرسنل</h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="panel-body">
-
-                                                    <form novalidate role="form" esp-validate-complete="submit()"
-                                                          esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true,autoHidePrompt:true}"
-                                                          class="form-horizontal ls_form" name="form">
-                                                        <div class="row">
-                                                            <div class="col-lg-8 col-sm-8 col-md-8">
-                                                                <div class="row">
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-4 control-label">
-                                                                            <i class="red fa fa-asterisk"></i>
-                                                                            نام پرسنل
-                                                                        </label>
-                                                                        <div class="col-md-8">
-                                                                            <ui-select ng-model="viewModel.member" class="validate[funcCall[ifUiSelectNotEmpty]]"
-                                                                                       reset-search-input="true"
-                                                                                       on-select="member_selected($item)">
-                                                                                <ui-select-match placeholder="پرسنل را انتخاب کنید" allow-clear="true">
-                                                                                    <span ng-bind="$select.selected.fullName"></span>
-                                                                                </ui-select-match>
-                                                                                <ui-select-choices repeat="item in branchMembers  | propsFilter: {code: $select.search, fullName: $select.search} ">
-                                                                                    <div ng-bind-html="item.fullName | highlight: $select.search" title="{{item.fullName}}"></div>
-                                                                                    <small>
-                                                                                        <span class="bold" ng-bind-html="item.positionTitle | highlight: $select.search" title="{{item.positionTitle}}"></span>
-                                                                                        <span class="row ls_divider"></span>
-                                                                                        کد : <span ng-bind-html="item.code | highlight: $select.search"></span>
-                                                                                    </small>
-                                                                                    <div class="row ls_divider"></div>
-                                                                                </ui-select-choices>
-                                                                                <ui-select-no-choice>
-                                                                                    موردی یافت نشد
-                                                                                </ui-select-no-choice>
-                                                                            </ui-select>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-4 control-label">
-                                                                            <i class="red fa fa-asterisk"></i>
-                                                                            پورسانت تامین کننده
-                                                                        </label>
-                                                                        <div class="col-md-8">
-                                                                            <input type="text" class="form-control validate[required] dir-ltr"
-                                                                                   ng-model="viewModel.branchSalesPromotion"
-                                                                                   ng-trim=false
-                                                                                   awnum="price">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row" ng-show="getTotal() >= assigendPromotion">
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-4 control-label">
-                                                                            <i class="red fa fa-asterisk"></i>
-                                                                            پورسانت عوامل فروش
-                                                                        </label>
-                                                                        <div class="col-md-8">
-                                                                            <input type="text" class="form-control validate[required] dir-ltr"
-                                                                                   ng-model="viewModel.sellerPromotion"
-                                                                                   ng-trim=false
-                                                                                   awnum="price">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row" ng-show="getTotal() >= assigendPromotion">
-                                                                    <div class="form-group">
-                                                                        <label class="col-md-4 control-label">
-                                                                            <i class="red fa fa-asterisk"></i>
-                                                                            پورسانت وصول کل
-                                                                        </label>
-                                                                        <div class="col-md-8">
-                                                                            <input type="text" class="form-control validate[required] dir-ltr"
-                                                                                   ng-model="viewModel.receiptPromotion"
-                                                                                   ng-trim=false
-                                                                                   awnum="price">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="submit" name="Add" class="btn btn-success" ng-show="getTotal() >= assigendPromotion">
-                                                                        <i class="fa fa-check"></i>
-                                                                        <span>ثبت</span>
-                                                                    </button>
-                                                                    <!---->
-                                                                    <button type="button" ng-show="getTotal() - assigendPromotion == 0"
-                                                                            ng-click="releaseManagerStep1()"
-                                                                            class="btn btn-danger">
-                                                                        <i class="fa fa-send-o"></i>
-                                                                        <span>تایید نهایی و ارسال اطلاعات</span>
-                                                                    </button>
-
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-4 col-sm-4 col-md-4">
-                                                                <div class="row">
-                                                                    <label class="col-md-6 control-label">
-                                                                        مقدار مشخص شده
-                                                                    </label>
-                                                                    <div class="col-md-6">
-                                                                        <h5 class="dir-ltr">{{assigendPromotion | number}} </h5>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <label class="col-md-6 control-label">
-                                                                        مقدار باقی مانده
-                                                                    </label>
-                                                                    <div class="col-md-6">
-                                                                        <h5 class="dir-ltr">{{getTotal() - assigendPromotion | number}} </h5>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="alert alert-warning">
-                                                                    <i class="fa fa-warning"></i>
-                                                                    لطفا پس از اتمام تعیین پورسانت پرسنل ،جهت ارسال اطلاعات از گزینه <strong>تایید نهایی و ارسال اطلاعات</strong> استفاده نماید.
-                                                                    توجه داشته باشید که بعد از زدن این گزینه امکان تغییر اطلاعات وجود ندارد
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                    <br />
-                                                    <div class="table-responsive ls-table" ng-if="branchMemberPromotions.length != 0">
-                                                        <table class="table table-bordered table-striped " cellspacing="0">
-                                                            <thead class="bold">
-                                                                <tr>
-                                                                    <td class="align-center">نام</td>
-                                                                    <td class="align-center">پورسانت</td>
-                                                                    <td class="align-center">درصد از کل</td>
-                                                                    <td class="align-center" width="70px"></td>
-                                                                </tr>
-                                                            </thead>
-                                                            <tr ng-repeat="record in branchMemberPromotions">
-                                                                <td class="text-center">
-                                                                    {{record.member.fullName}}
-                                                                </td>
-                                                                <td class="align-center dir-ltr">
-                                                                    {{record.managerPromotion | number}}
-                                                                </td>
-                                                                <td class="align-center dir-ltr">
-                                                                    {{(record.managerPromotion / getTotal())* 100 | number}}
-                                                                </td>
-                                                                <td class="text-center">
-                                                                    <button class="btn btn-xs btn-success"
-                                                                            ng-click="editMemberShare(record)">
-                                                                        <i class="fa fa-pencil-square-o"></i>
-                                                                    </button>
-                                                                    <button class="btn btn-xs btn-danger"
-                                                                            ng-click="deleteMemberShare(record)">
-                                                                        <i class="fa fa-minus"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                        </td>
+                                                        <td class="align-center">
+                                                            {{record.positionTitle}}
+                                                        </td>
+                                                        <td class="align-center dir-ltr">
+                                                            <input type="text" class="form-control dir-ltr"
+                                                                   ng-model="record.branchSalesPromotion"
+                                                                   ng-trim=false
+                                                                   awnum="price">
+                                                        </td>
+                                                        <td class="align-center dir-ltr">
+                                                            <input type="text" class="form-control dir-ltr"
+                                                                   ng-model="record.receiptPromotion"
+                                                                   ng-trim=false
+                                                                   awnum="price">
+                                                        </td>
+                                                        <td class="align-center dir-ltr">
+                                                            <input type="text" class="form-control  dir-ltr"
+                                                                   ng-model="record.sellerPromotion"
+                                                                   ng-trim=false
+                                                                   awnum="price">
+                                                        </td>
+                                                        <td class="align-center dir-ltr">
+                                                            {{getMemberTotalPromotion(record) | number}}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                </div>
 
 
+                                    <div class="modal-footer">
+                                        <button type="submit" name="Add" class="btn btn-success" ng-show="getRemained().salesPromotionRemained >= 0 && getRemained().sellerPromotionRemained >= 0 && getRemained().receiptPromotionRemained >= 0">
+                                            <i class="fa fa-check"></i>
+                                            <span>ثبت</span>
+                                        </button>
+                                        <button type="button" ng-show="getTotal() - assigendPromotion == 0"
+                                                ng-click="releaseManagerStep1()"
+                                                class="btn btn-danger">
+                                            <i class="fa fa-send-o"></i>
+                                            <span>تایید نهایی و ارسال اطلاعات</span>
+                                        </button>
+
+                                    </div>
+                                    <div class="alert alert-warning">
+                                        <i class="fa fa-warning"></i>
+                                        لطفا پس از اتمام تعیین پورسانت پرسنل ،جهت ارسال اطلاعات از گزینه <strong>تایید نهایی و ارسال اطلاعات</strong> استفاده نماید.
+                                        توجه داشته باشید که بعد از زدن این گزینه امکان تغییر اطلاعات وجود ندارد
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

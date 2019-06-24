@@ -350,6 +350,7 @@ namespace Neutrino.Portal
                 new  BranchPromotionDetailViewModel(){
                     BranchId = branchId,
                     BranchName = entities.ResultValue.Branch.Name,
+                    GoalTypeId = 1,
                     GoalTypeTitle = "پورسانت فروش تامین کننده",
                     PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
                     TotalFinalPromotion = entities.ResultValue.TotalSalesPromotion.Value,
@@ -359,6 +360,7 @@ namespace Neutrino.Portal
                 },
                 new  BranchPromotionDetailViewModel(){
                     BranchId = branchId,
+                    GoalTypeId = 2,
                     PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
                     BranchName = entities.ResultValue.Branch.Name,
                     GoalTypeTitle = "پورسانت وصول کل",
@@ -376,6 +378,7 @@ namespace Neutrino.Portal
                 },
                 new  BranchPromotionDetailViewModel(){
                     BranchId = branchId,
+                    GoalTypeId = 3,
                     BranchName = entities.ResultValue.Branch.Name,
                     PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
                     GoalTypeTitle = "پورسانت وصول خصوصی",

@@ -10,7 +10,7 @@ namespace Neutrino.Interfaces
 {
     public interface IMemberSharePromotionBS : IBusinessService
     {
-        Task<IBusinessResult> CreateOrUpdateAsync(MemberSharePromotion entity);
+        Task<IBusinessResult> CreateOrUpdateAsync(List<MemberSharePromotion> memberSharePromotions);
         Task<IBusinessResultValue<List<MemberSharePromotion>>> LoadAsync(int branchId, PromotionReviewStatusEnum promotionReviewStatusId);
         Task<IBusinessResult> RemoveAsync(int branchId, int memberId);
         Task<IBusinessResult> ProceedMemberSharePromotionAsync(PromotionReviewStatusEnum currentStep, PromotionReviewStatusEnum nextStep, int branchId);

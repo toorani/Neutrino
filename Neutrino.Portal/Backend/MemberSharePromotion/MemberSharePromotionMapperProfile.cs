@@ -35,7 +35,11 @@ namespace Neutrino.Portal
                 .ForMember(x => x.BranchSalesPromotion, opt => opt.ResolveUsing(x => x.Details.FirstOrDefault()?.BranchSalesPromotion))
                 .ForMember(x => x.ReceiptPromotion, opt => opt.ResolveUsing(x => x.Details.FirstOrDefault()?.ReceiptPromotion))
                 .ForMember(x => x.SellerPromotion, opt => opt.ResolveUsing(x => x.Details.FirstOrDefault()?.SellerPromotion))
+                .ForMember(x => x.FullName, opt => opt.ResolveUsing(x => x.Member.Name + " " + x.Member.LastName))
+                .ForMember(x => x.MemberCode, opt => opt.ResolveUsing(x => x.Member.Code))
+                .ForMember(x => x.PositionTitle, opt => opt.ResolveUsing(x => x.Member.PositionType?.Description))
               .ReverseMap()
+              .Ignore(x => x.Member)
               .ForMember(x => x.Details, opt => opt.ResolveUsing(x =>
               {
                   return new List<MemberSharePromotionDetail>()
@@ -45,7 +49,8 @@ namespace Neutrino.Portal
                          ReceiptPromotion =x.ReceiptPromotion,
                          BranchSalesPromotion = x.BranchSalesPromotion,
                          MemberId = x.MemberId,
-                         MemberSharePromotionId = x.Id
+                         MemberSharePromotionId = x.Id,
+                         SharePromotionTypeId = SharePromotionTypeEnum.Manager
                      }
                   };
               }));

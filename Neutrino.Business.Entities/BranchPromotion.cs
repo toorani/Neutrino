@@ -34,12 +34,14 @@ namespace Neutrino.Entities
         public virtual ICollection<MemberPromotion> MemberPromotions { get; private set; }
         public virtual ICollection<MemberSharePromotion> MemberSharePromotions { get; private set; }
         public virtual ICollection<MemberPenalty> MemberPenalties { get; private set; }
+        public virtual ICollection<QuantityGoalPromotion> QuantityGoalPromotions { get; set; }
         #region [ Constructor(s) ]
         public BranchPromotion()
         {
             BranchGoalPromotions = new HashSet<BranchGoalPromotion>();
             MemberPromotions = new HashSet<MemberPromotion>();
             MemberSharePromotions = new HashSet<MemberSharePromotion>();
+            QuantityGoalPromotions = new HashSet<QuantityGoalPromotion>();
             MemberPenalties = new HashSet<MemberPenalty>();
         }
         #endregion

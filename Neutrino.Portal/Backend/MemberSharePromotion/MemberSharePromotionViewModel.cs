@@ -19,8 +19,9 @@ namespace Neutrino.Portal.Models
     {
         public int BranchPromotionId { get; set; }
         public int MemberId { get; set; }
-        public decimal ManagerPromotion { get; set; }
-        public MemberViewModel Member { get; set; }
+        public decimal ManagerPromotion { get { return BranchSalesPromotion + SellerPromotion + ReceiptPromotion; } }
+        public decimal? CEOPromotion { get { return BranchSalesPromotion + SellerPromotion + ReceiptPromotion; } }
+        public decimal? FinalPromotion { get { return BranchSalesPromotion + SellerPromotion + ReceiptPromotion; } }
         /// <summary>
         /// سهم از پورسانت فروش مرکز
         /// </summary>
@@ -33,6 +34,9 @@ namespace Neutrino.Portal.Models
         /// سهم از وصول
         /// </summary>
         public decimal ReceiptPromotion { get; set; }
+        public string FullName { get; set; }
+        public int MemberCode { get; set; }
+        public string PositionTitle { get; set; }
 
     }
 
