@@ -294,30 +294,52 @@ namespace Neutrino.Business
                 var branchPromotionId = entities.First().BranchPromotionId;
                 var lst_existEntities = await unitOfWork.MemberSharePromotionDataService
                     .GetQuery()
-                    .IncludeFilter(x => x.Details.Where(c => c.Deleted == false))
-                    .AsNoTracking()
+                    .Include(x => x.Details)
                     .Where(x => x.BranchPromotionId == branchPromotionId && x.Deleted == false)
+                    .AsNoTracking()
                     .ToListAsync();
 
                 var lst_newEntities = entities.Except(lst_existEntities, x => x.MemberId);
                 foreach (var item in lst_newEntities.Where(x => x.ManagerPromotion != 0))
                     unitOfWork.MemberSharePromotionDataService.Insert(item);
 
-                var lst_intersectEntities = entities.Intersect(lst_existEntities, new CompareMemberSharePromotion());
 
-                foreach (var item in entities.Where(x => x.ManagerPromotion == 0 && x.Id != 0))
-                    unitOfWork.MemberSharePromotionDataService.Delete(item, false);
+                var lst_intersectEntities = entities.Intersect(lst_existEntities, x => x.MemberId);
 
-                foreach (var item in entities.Where(x => x.ManagerPromotion != 0 && x.Id != 0))
+                foreach (var item in lst_intersectEntities.Where(x => x.ManagerPromotion == 0))
                 {
-                    unitOfWork.MemberSharePromotionDataService.Update(item);
+                    var exist_item = lst_existEntities.Single(x => x.MemberId == item.MemberId);
+                    var arr_details = new MemberSharePromotionDetail[exist_item.Details.Count];
+                    exist_item.Details.CopyTo(arr_details,0);
+                    foreach (var detail in arr_details)
+                        unitOfWork.MemberSharePromotionDetailDataService.Delete(detail, false);
+
+                    unitOfWork.MemberSharePromotionDataService.Delete(exist_item, false);
+
+                }
+
+                foreach (var item in lst_intersectEntities.Where(x => x.ManagerPromotion != 0))
+                {
+                    var exist_item = lst_existEntities.Single(x => x.MemberId == item.MemberId);
+
+                    exist_item.CEOPromotion = item.CEOPromotion;
+                    exist_item.FinalPromotion = item.FinalPromotion;
+                    exist_item.ManagerPromotion = item.ManagerPromotion;
+
                     foreach (var detail in item.Details)
                     {
-                        if (detail.Id != 0)
-                            unitOfWork.MemberSharePromotionDetailDataService.Update(detail);
-                        else
-                            unitOfWork.MemberSharePromotionDetailDataService.Insert(detail);
+                        var exist_item_detail = exist_item.Details.FirstOrDefault(x => x.MemberId == detail.MemberId
+                        && x.Deleted == false && x.SharePromotionTypeId == SharePromotionTypeEnum.Manager);
+
+                        if (exist_item_detail != null)
+                        {
+                            exist_item_detail.ReceiptPromotion = detail.ReceiptPromotion;
+                            exist_item_detail.SellerPromotion = detail.SellerPromotion;
+                            exist_item_detail.BranchSalesPromotion = detail.BranchSalesPromotion;
+                            unitOfWork.MemberSharePromotionDetailDataService.Update(exist_item_detail);
+                        }
                     }
+                    unitOfWork.MemberSharePromotionDataService.Update(exist_item);
                 }
 
 
@@ -335,16 +357,15 @@ namespace Neutrino.Business
         }
     }
 
-    internal class CompareMemberSharePromotion : IEqualityComparer<MemberSharePromotion>
+    internal static class Extentions
     {
-        public bool Equals(MemberSharePromotion x, MemberSharePromotion y)
+        public static IEnumerable<T> Intersect<T, TKey>(this IEnumerable<T> items, IEnumerable<T> other,
+                                                                            Func<T, TKey> getKey)
         {
-            return x.MemberId == y.MemberId;
-        }
-
-        public int GetHashCode(MemberSharePromotion obj)
-        {
-            return obj.GetHashCode();
+            return from item in items
+                   join otherItem in other
+                   on getKey(item) equals getKey(otherItem)
+                   select item;
         }
     }
 }

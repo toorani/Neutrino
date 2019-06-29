@@ -272,7 +272,9 @@ namespace Neutrino.Portal
         {
             DateTime? startDateTime = Utilities.ToDateTime(startDate);
             DateTime? endDateTime = Utilities.ToDateTime(endDate);
-            var entity = await promotionBS.LoadReportBranchPromotionDetail(startDateTime.Value, endDateTime.Value);
+            GoalGoodsCategoryTypeEnum[] goalGoodsCategoryTypeIds = new GoalGoodsCategoryTypeEnum[] {GoalGoodsCategoryTypeEnum.Group
+                ,GoalGoodsCategoryTypeEnum.Single  };
+            var entity = await promotionBS.LoadReportBranchPromotionDetail(startDateTime.Value, endDateTime.Value, goalGoodsCategoryTypeIds);
             if (entity.ReturnStatus == false)
             {
                 return CreateErrorResponse(entity);

@@ -960,12 +960,12 @@ namespace Neutrino.Business
             }
             return result;
         }
-        public async Task<IBusinessResultValue<List<ReportBranchPromotionDetail>>> LoadReportBranchPromotionDetail(DateTime startDate, DateTime endDate)
+        public async Task<IBusinessResultValue<List<ReportBranchPromotionDetail>>> LoadReportBranchPromotionDetail(DateTime startDate, DateTime endDate, params GoalGoodsCategoryTypeEnum[] goalGoodsCategoryTypeIds)
         {
             var result = new BusinessResultValue<List<ReportBranchPromotionDetail>>();
             try
             {
-
+                int len = goalGoodsCategoryTypeIds.Length;
 
                 var query = await (from gl in unitOfWork.GoalDataService.GetQuery()
                                    join brglp in unitOfWork.BranchGoalPromotionDataService.GetQuery()
@@ -979,7 +979,7 @@ namespace Neutrino.Business
                                    join ffp in unitOfWork.FulfillmentPercentDataService.GetQuery()
                                    on new { brglp.BranchId, brp.Month, brp.Year } equals new { ffp.BranchId, ffp.Month, ffp.Year }
                                    where gl.StartDate >= startDate && gl.EndDate <= endDate
-                                   && gl.GoalGoodsCategoryTypeId != GoalGoodsCategoryTypeEnum.AggregationGoal && gl.GoalGoodsCategoryTypeId != GoalGoodsCategoryTypeEnum.TotalSalesGoal
+                                   && (len == 0 || goalGoodsCategoryTypeIds.Contains(gl.GoalGoodsCategoryTypeId))
                                    && gl.Deleted == false && gl.IsUsed == true
                                    select new
                                    {

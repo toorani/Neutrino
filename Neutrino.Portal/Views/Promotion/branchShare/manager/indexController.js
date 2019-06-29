@@ -18,6 +18,24 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                 receiptPromotion: 0
             }
 
+            $scope.totalValues = {
+                totalPromotion() { return this.totalReceiptPromotion + this.totalSellerPromotion + this.totalSalesPromotion },
+                totalReceiptPromotion: 0,
+                totalSellerPromotion: 0,
+                totalSalesPromotion: 0,
+                clearValues() {
+                    this.totalReceiptPromotion = 0;
+                    this.totalSellerPromotion = 0;
+                    this.totalSalesPromotion = 0;
+                }
+            };
+
+            $scope.branchPromotionValues = {
+                totalReceiptPromotion: 0,
+                totalSalesPromotion: 0,
+                totalSellerPromotion: 0,
+                totalBranchPromotion() { return this.totalReceiptPromotion + this.totalSalesPromotion + this.totalSellerPromotion }
+            }
 
             $scope.member_srch = '';
 
@@ -35,6 +53,15 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                             $scope.month = $scope.branchPromotoinDetail[0].month;
                             $scope.monthTitle = persianCalendar.getMonthNames()[$scope.month - 1].name;
 
+                            let findRecord = $scope.branchPromotoinDetail.filter(x => x.goalTypeId == 1); //sales
+                            if (findRecord.length == 1)
+                                $scope.branchPromotionValues.totalSalesPromotion = findRecord[0].totalFinalPromotion;
+
+                            findRecord = $scope.branchPromotoinDetail.filter(x => x.goalTypeId == 2 || x.goalTypeId == 3); //receipt
+                            if (findRecord.length == 2)
+                                $scope.branchPromotionValues.totalReceiptPromotion = findRecord[0].totalFinalPromotion + findRecord[1].totalFinalPromotion;
+
+
                             getMemberSharePromotionList();
                         }
 
@@ -50,10 +77,13 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                     function (response) {
                         $scope.memberSharePromotionList = response.data;
 
-                        $scope.totalSellerPromotion = 0;
-                        $scope.memberSharePromotionList.forEach(x => {
-                            $scope.totalSellerPromotion += x.sellerPromotion;
+                        $scope.memberSharePromotionList.forEach((prom) => {
+                            $scope.totalValues.totalReceiptPromotion += prom.receiptPromotion;
+                            $scope.totalValues.totalSalesPromotion += prom.branchSalesPromotion;
+                            $scope.totalValues.totalSellerPromotion += prom.sellerPromotion;
                         });
+
+                        $scope.branchPromotionValues.totalSellerPromotion = $scope.totalValues.totalSellerPromotion;
                     },
                     function (response) {
                         alertService.showError(response);
@@ -63,22 +93,13 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
             $scope.submit = function () {
                 ajaxService.ajaxPost($scope.memberSharePromotionList, '/api/memberSharePromotionService/addOrModify',
                     function (response) {
-                        let filterResults = $scope.branchMemberPromotions.filter((mp) => mp.memberId == $scope.viewModel.memberId);
-                        if (filterResults.length != 0) {
-                            filterResults[0].promotion = $scope.viewModel.promotion;
-                        }
-                        else {
-                            $scope.branchMemberPromotions.push($scope.viewModel)
-                        }
-                        $scope.viewModel = {};
                         alertService.showSuccess(response.data.returnMessage);
-                        calculateAssigendPromotion();
-
                     },
                     function (response) {
                         alertService.showError(response);
                     });
             }
+
             $scope.releaseManagerStep1 = function () {
                 ajaxService.ajaxPost({}, '/api/memberSharePromotionService/releaseManagerStep1',
                     function (response) {
@@ -89,14 +110,18 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                     });
             }
 
+            $scope.setTotalValues = function () {
+                $scope.totalValues.clearValues();
 
-            $scope.getTotal = function () {
-                var total = 0;
-                $scope.branchPromotoinDetail.forEach((prom) => {
-                    total += prom.totalFinalPromotion;
+                $scope.memberSharePromotionList.forEach((prom) => {
+                    $scope.totalValues.totalReceiptPromotion += prom.receiptPromotion;
+                    $scope.totalValues.totalSalesPromotion += prom.branchSalesPromotion;
+                    $scope.totalValues.totalSellerPromotion += prom.sellerPromotion;
                 });
-                return total;
             }
+
+
+
             $scope.memberFilter = function (record) {
                 return ($scope.member_srch == '' || String(record.memberCode).indexOf($scope.member_srch) != -1
                     || String(record.fullName).indexOf($scope.member_srch) != -1 || String(record.positionTitle).indexOf($scope.member_srch) != -1);
@@ -105,7 +130,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
             $scope.getRecieptPromotions = function () {
                 return $scope.branchPromotoinDetail.filter((prom) => prom.positionPromotions != null);
             }
-           
+
             $scope.getRemained = function () {
                 let branchSalesPromotion = $scope.branchPromotoinDetail.filter(x => x.goalTypeId == 1)[0];
                 let result = {
@@ -126,7 +151,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                             result.receiptPromotionRemained -= x.receiptPromotion;
                         });
                     }
-                    
+
                 }
 
                 return result;
@@ -139,13 +164,6 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                     $scope.assigendPromotion += mp.managerPromotion;
                 });
                 return record.managerPromotion;
-            }
-
-            var calculateAssigendPromotion = function () {
-                $scope.assigendPromotion = 0;
-                $scope.branchMemberPromotions.forEach((mp) => {
-                    $scope.assigendPromotion += mp.managerPromotion;
-                });
             }
 
         }]);

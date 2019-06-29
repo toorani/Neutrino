@@ -24,7 +24,7 @@
                                                     <div class="basic-price-simple">
                                                         <h5><p class="bold">{{monthTitle}}&nbsp;&nbsp;&nbsp;&nbsp;{{year}}&nbsp;</p></h5>
                                                         <div class="ls_divider"></div>
-                                                        <h5 class="dir-ltr"><span></span>{{getTotal() | number}}</h5>
+                                                        <h5 class="dir-ltr"><span></span>{{branchPromotionValues.totalBranchPromotion() | number}}</h5>
                                                     </div>
                                                 </li>
                                                 <li ng-repeat="po in branchPromotoinDetail">
@@ -36,7 +36,7 @@
                                                 <li>
                                                     <div class="basic-bage">
                                                         <h4>پورسانت عوامل فروش</h4>
-                                                        <p class="dir-ltr">{{totalSellerPromotion | number}}</p>
+                                                        <p class="dir-ltr">{{branchPromotionValues.totalSellerPromotion | number}}</p>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -83,13 +83,14 @@
                                             <thead class="bold">
                                                 <tr>
                                                     <th rowspan="3" style="vertical-align:middle;width:40px" class="text-center">#</th>
-                                                    <th colspan="3" class="text-center">
+                                                    <th colspan="2" class="text-center">
                                                         <input type="text" class="form-control" ng-model="member_srch" />
                                                     </th>
-                                                    <th class="align-center dir-ltr">{{getRemained().salesPromotionRemained | number}}</th>
-                                                    <th class="align-center dir-ltr">{{getRemained().receiptPromotionRemained | number}}</th>
-                                                    <th class="align-center dir-ltr">{{getRemained().sellerPromotionRemained | number}}</th>
-                                                    <th class="align-center dir-ltr">{{assigendPromotion | number}}</th>
+                                                    <th class="text-center">باقی مانده</th>
+                                                    <th class="align-center dir-ltr">{{branchPromotionValues.totalSalesPromotion - totalValues.totalSalesPromotion | number}}</th>
+                                                    <th class="align-center dir-ltr">{{branchPromotionValues.totalReceiptPromotion - totalValues.totalReceiptPromotion | number}}</th>
+                                                    <th class="align-center dir-ltr">{{branchPromotionValues.totalSellerPromotion - totalValues.totalSellerPromotion | number}}</th>
+                                                    <th class="align-center dir-ltr">{{branchPromotionValues.totalBranchPromotion() - totalValues.totalPromotion() | number}}</th>
                                                 </tr>
                                                 <tr>
                                                     <th colspan="3" style="vertical-align:middle" class="align-center">اطلاعات پرسنل</th>
@@ -106,6 +107,7 @@
                                                 </tr>
                                             </thead>
                                         </table>
+
                                         <div style="height:400px;overflow-x:auto">
                                             <table class="table table-striped" cellspacing="0">
                                                 <tbody>
@@ -127,17 +129,20 @@
                                                             <input type="text" class="form-control dir-ltr"
                                                                    ng-model="record.branchSalesPromotion"
                                                                    ng-trim=false
+                                                                   ng-change="setTotalValues()"
                                                                    awnum="price">
                                                         </td>
                                                         <td class="align-center dir-ltr">
                                                             <input type="text" class="form-control dir-ltr"
                                                                    ng-model="record.receiptPromotion"
+                                                                   ng-change="setTotalValues()"
                                                                    ng-trim=false
                                                                    awnum="price">
                                                         </td>
                                                         <td class="align-center dir-ltr">
                                                             <input type="text" class="form-control  dir-ltr"
                                                                    ng-model="record.sellerPromotion"
+                                                                   ng-change="setTotalValues()"
                                                                    ng-trim=false
                                                                    awnum="price">
                                                         </td>
@@ -148,15 +153,28 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <table class="table table-striped" cellspacing="0">
+                                            <tfoot class="bold">
+                                                <tr>
+                                                    <th colspan="3" class="text-center">جمع کل</th>
+                                                    <th class="align-center dir-ltr">{{totalValues.totalSalesPromotion | number}}</th>
+                                                    <th class="align-center dir-ltr">{{totalValues.totalReceiptPromotion | number}}</th>
+                                                    <th class="align-center dir-ltr">{{totalValues.totalSellerPromotion | number}}</th>
+                                                    <th class="align-center dir-ltr">{{totalValues.totalPromotion() | number}}</th>
+                                                </tr>
+                                                
+                                            </tfoot>
+                                        </table>
                                     </div>
 
 
                                     <div class="modal-footer">
-                                        <button type="submit" name="Add" class="btn btn-success" ng-show="getRemained().salesPromotionRemained >= 0 && getRemained().sellerPromotionRemained >= 0 && getRemained().receiptPromotionRemained >= 0">
+                                        <button type="submit" name="Add" class="btn btn-success" 
+                                                >
                                             <i class="fa fa-check"></i>
                                             <span>ثبت</span>
                                         </button>
-                                        <button type="button" ng-show="getTotal() - assigendPromotion == 0"
+                                        <button type="button" ng-show="branchPromotionValues.totalBranchPromotion() - totalValues.totalPromotion() == 0"
                                                 ng-click="releaseManagerStep1()"
                                                 class="btn btn-danger">
                                             <i class="fa fa-send-o"></i>
