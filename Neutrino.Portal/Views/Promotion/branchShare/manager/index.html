@@ -27,16 +27,23 @@
                                                         <h5 class="dir-ltr"><span></span>{{branchPromotionValues.totalBranchPromotion() | number}}</h5>
                                                     </div>
                                                 </li>
-                                                <li ng-repeat="po in branchPromotoinDetail">
+                                                <li>
                                                     <div class="basic-bage">
-                                                        <h4>{{po.goalTypeTitle}}</h4>
-                                                        <p class="dir-ltr">{{po.totalFinalPromotion | number}}</p>
+                                                        <h4>پورسانت فروش تامین کننده</h4>
+                                                        <p class="dir-ltr">{{branchPromotionValues.totalSalesPromotion | number}}</p>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="basic-bage">
-                                                        <h4>پورسانت عوامل فروش</h4>
-                                                        <p class="dir-ltr">{{branchPromotionValues.totalSellerPromotion | number}}</p>
+                                                        <h4>پورسانت وصول</h4>
+                                                        <p class="dir-ltr">{{branchPromotionValues.totalReceiptPromotion | number}}</p>
+                                                    </div>
+                                                </li>
+                                                
+                                                <li>
+                                                    <div class="basic-bage">
+                                                        <h4>پورسانت ترمیمی</h4>
+                                                        <p class="dir-ltr">{{branchPromotionValues.totalCompensatoryPromotion | number}}</p>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -89,7 +96,7 @@
                                                     <th class="text-center">باقی مانده</th>
                                                     <th class="align-center dir-ltr">{{branchPromotionValues.totalSalesPromotion - totalValues.totalSalesPromotion | number}}</th>
                                                     <th class="align-center dir-ltr">{{branchPromotionValues.totalReceiptPromotion - totalValues.totalReceiptPromotion | number}}</th>
-                                                    <th class="align-center dir-ltr">{{branchPromotionValues.totalSellerPromotion - totalValues.totalSellerPromotion | number}}</th>
+                                                    <th class="align-center dir-ltr">{{branchPromotionValues.totalCompensatoryPromotion - totalValues.totalSellerPromotion | number}}</th>
                                                     <th class="align-center dir-ltr">{{branchPromotionValues.totalBranchPromotion() - totalValues.totalPromotion() | number}}</th>
                                                 </tr>
                                                 <tr>
@@ -102,7 +109,7 @@
                                                     <th class="align-center">پست سازمانی</th>
                                                     <th class="align-center">تامین کننده</th>
                                                     <th class="align-center">وصول</th>
-                                                    <th class="align-center">عوامل فروش</th>
+                                                    <th class="align-center">ترمیمی</th>
                                                     <th class="align-center">جمع</th>
                                                 </tr>
                                             </thead>
@@ -141,7 +148,7 @@
                                                         </td>
                                                         <td class="align-center dir-ltr">
                                                             <input type="text" class="form-control  dir-ltr"
-                                                                   ng-model="record.sellerPromotion"
+                                                                   ng-model="record.compensatoryPromotion"
                                                                    ng-change="setTotalValues()"
                                                                    ng-trim=false
                                                                    awnum="price">
@@ -159,7 +166,7 @@
                                                     <th colspan="3" class="text-center">جمع کل</th>
                                                     <th class="align-center dir-ltr">{{totalValues.totalSalesPromotion | number}}</th>
                                                     <th class="align-center dir-ltr">{{totalValues.totalReceiptPromotion | number}}</th>
-                                                    <th class="align-center dir-ltr">{{totalValues.totalSellerPromotion | number}}</th>
+                                                    <th class="align-center dir-ltr">{{totalValues.totalCompensatoryPromotion | number}}</th>
                                                     <th class="align-center dir-ltr">{{totalValues.totalPromotion() | number}}</th>
                                                 </tr>
                                                 

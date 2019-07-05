@@ -649,6 +649,14 @@
     <Compile Include="Migrations\201906221432051_addQuantityGoalPromotion.Designer.cs">
       <DependentUpon>201906221432051_addQuantityGoalPromotion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201907051139478_compensatoryPromotion.cs" />
+    <Compile Include="Migrations\201907051139478_compensatoryPromotion.Designer.cs">
+      <DependentUpon>201907051139478_compensatoryPromotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201907051708438_membershare_compensatoryPromotion.cs" />
+    <Compile Include="Migrations\201907051708438_membershare_compensatoryPromotion.Designer.cs">
+      <DependentUpon>201907051708438_membershare_compensatoryPromotion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NeutrinoContext.cs" />
@@ -1093,6 +1101,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906221432051_addQuantityGoalPromotion.resx">
       <DependentUpon>201906221432051_addQuantityGoalPromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907051139478_compensatoryPromotion.resx">
+      <DependentUpon>201907051139478_compensatoryPromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907051708438_membershare_compensatoryPromotion.resx">
+      <DependentUpon>201907051708438_membershare_compensatoryPromotion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

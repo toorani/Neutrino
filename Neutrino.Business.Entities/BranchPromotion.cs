@@ -26,6 +26,10 @@ namespace Neutrino.Entities
         public decimal? TotalSalesPromotion { get; set; }
         public decimal? PrivateReceiptPromotion { get; set; }
         public decimal? TotalReceiptPromotion { get; set; }
+        /// <summary>
+        /// پورسانت ترمیمی
+        /// </summary>
+        public decimal CompensatoryPromotion { get; set; }
 
         public PromotionReviewStatusEnum PromotionReviewStatusId { get; set; }
         [ForeignKey("PromotionReviewStatusId")]

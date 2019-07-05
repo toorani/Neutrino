@@ -16,9 +16,9 @@ namespace Neutrino.Entities
         /// </summary>
         public decimal BranchSalesPromotion { get; set; }
         /// <summary>
-        /// سهم از اهداف عوامل فروش
+        /// سهم از پورسانت ترمیمی
         /// </summary>
-        public decimal SellerPromotion { get; set; }
+        public decimal CompensatoryPromotion { get; set; }
         /// <summary>
         /// سهم از وصول
         /// </summary>

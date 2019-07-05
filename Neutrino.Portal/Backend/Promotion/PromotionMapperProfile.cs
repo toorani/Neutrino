@@ -23,7 +23,7 @@ namespace Neutrino.Portal
 
                     return $"{monthTitle} - {year} ";
                 }))
-                .ForMember(x => x.Status, opt => opt.ResolveUsing(x => x.StatusId.GetEnumDescription()))
+                .ForMember(x => x.Status, opt => opt.ResolveUsing(x => x.Status.Description))
 
                 .ReverseMap()
                 .Ignore(x => x.Status);

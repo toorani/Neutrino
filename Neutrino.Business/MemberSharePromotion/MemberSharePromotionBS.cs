@@ -175,7 +175,7 @@ namespace Neutrino.Business
                                                      select grp_memp.Sum(x => x.Promotion)).FirstOrDefaultAsync();
 
                     MemberSharePromotion memberSharePromotion = new MemberSharePromotion { MemberId = memberId };
-                    memberSharePromotion.Details.Add(new MemberSharePromotionDetail { SellerPromotion = sellerTotalPromtion });
+                    memberSharePromotion.Details.Add(new MemberSharePromotionDetail { CompensatoryPromotion = sellerTotalPromtion });
                     result.ResultValue = memberSharePromotion;
                 }
                 else
@@ -196,10 +196,6 @@ namespace Neutrino.Business
             var result = new BusinessResultValue<List<MemberSharePromotion>>();
             try
             {
-                // result.ResultValue = await unitOfWork.MemberSharePromotionDataService.GetAsync(x => x.BranchPromotion.BranchId == branchId
-                //&& x.BranchPromotion.Month == month && x.BranchPromotion.Year == year
-                //&& x.Details.Any(y => y.SharePromotionTypeId == sharePromotionTypeId)
-                //, includes: x => new { x.BranchPromotion, x.Details, x.Member });
 
                 var branchPromotion = await unitOfWork.BranchPromotionDataService.FirstOrDefaultAsync(x => x.Month == month && x.Year == year && x.BranchId == branchId);
                 int branchPromotionId = branchPromotion.Id;
@@ -210,18 +206,6 @@ namespace Neutrino.Business
                                    join post in unitOfWork.PositionTypeDataService.GetQuery()
                                    on me.PositionTypeId equals post.eId into left_join_position
                                    from join_me_pos in left_join_position.DefaultIfEmpty()
-                                   join mep in (from mep in unitOfWork.MemberPromotionDataService.GetQuery()
-                                                join brp in unitOfWork.BranchPromotionDataService.GetQuery()
-                                                on mep.BranchPromotionId equals brp.Id
-                                                where brp.BranchId == branchId && brp.Month == month && brp.Year == year && mep.Deleted == false
-                                                group mep by mep.MemberId into grp_memp
-                                                select new
-                                                {
-                                                    sellerTotalPromtion = (decimal?)grp_memp.Sum(x => x.Promotion),
-                                                    MemberId = grp_memp.Key,
-                                                })
-                                   on me.Id equals mep.MemberId into left_join
-                                   from me_mep in left_join.DefaultIfEmpty()
                                    join msp in unitOfWork.MemberSharePromotionDataService.GetQuery()
                                    on me.Id equals msp.MemberId into left_join_memShare
                                    from join_memShare in left_join_memShare
@@ -241,8 +225,7 @@ namespace Neutrino.Business
                                        Member = me,
                                        join_me_pos,
                                        join_memShare,
-                                       join_meShDeatil,
-                                       me_mep.sellerTotalPromtion
+                                       join_meShDeatil
                                    }).ToListAsync();
 
                 result.ResultValue = query.Select(x =>
@@ -257,17 +240,11 @@ namespace Neutrino.Business
                         Member = x.Member,
                         BranchPromotionId = branchPromotionId
                     };
-                    if (x.sellerTotalPromtion.HasValue)
-                        memberSharePromotion.Details.Add(new MemberSharePromotionDetail { MemberId = x.MemberId, SellerPromotion = x.sellerTotalPromtion.Value, SharePromotionTypeId = sharePromotionTypeId });
+                    //if (x.sellerTotalPromtion.HasValue)
+                    //    memberSharePromotion.Details.Add(new MemberSharePromotionDetail { MemberId = x.MemberId, CompensatoryPromotion = x.sellerTotalPromtion.Value, SharePromotionTypeId = sharePromotionTypeId });
                     return memberSharePromotion;
                 }).ToList();
 
-                if (result.ResultValue.Count == 0 && sharePromotionTypeId == SharePromotionTypeEnum.Manager)
-                {
-
-
-
-                }
             }
             catch (Exception ex)
             {
@@ -334,7 +311,7 @@ namespace Neutrino.Business
                         if (exist_item_detail != null)
                         {
                             exist_item_detail.ReceiptPromotion = detail.ReceiptPromotion;
-                            exist_item_detail.SellerPromotion = detail.SellerPromotion;
+                            exist_item_detail.CompensatoryPromotion = detail.CompensatoryPromotion;
                             exist_item_detail.BranchSalesPromotion = detail.BranchSalesPromotion;
                             unitOfWork.MemberSharePromotionDetailDataService.Update(exist_item_detail);
                         }

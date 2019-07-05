@@ -17,7 +17,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.ceo
             }
 
             var getBranchPromotionDetail = function () {
-                ajaxService.ajaxCall({ branchId: branchId }, "api/promotionService/getActiveBranchPromotionByBranchId", 'get',
+                ajaxService.ajaxCall({ branchId: branchId }, "api/branchPromotionService/getBranchPromotionReleasedStep1ByBranchManager", 'get',
                     function (response) {
                         $scope.branchPromotoinDetail = response.data;
 

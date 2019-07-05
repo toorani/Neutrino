@@ -10,14 +10,31 @@ namespace Neutrino.Entities
 {
     public enum PromotionReviewStatusEnum
     {
+        /// <summary>
+        /// در انتظار بررسی مرحله اول رییس مرکز
+        /// </summary>
         [Description("در انتظار بررسی مرحله اول رییس مرکز")]
         WaitingForStep1BranchManagerReview = 1,
+        /// <summary>
+        /// تایید مرحله اول رییس مرکز
+        /// </summary>
         [Description("تایید مرحله اول رییس مرکز")]
-        ReleadedStep1ByBranchManager = 2,
+        ReleasedStep1ByBranchManager = 2,
+        /// <summary>
+        /// تایید مدیر
+        /// </summary>
         [Description("تایید مدیر")]
         ReleasedByCEO = 4,
+        /// <summary>
+        /// تایید نهایی 
+        /// </summary>
         [Description("تایید نهایی ")]
         DeterminedPromotion = 6,
+        /// <summary>
+        /// در صف پورسانت ترمیمی
+        /// </summary>
+        [Description("در صف پورسانت ترمیمی")]
+        WaitingForCompensatory = 7
     }
 
     public class PromotionReviewStatus : EnumEntity<PromotionReviewStatusEnum>

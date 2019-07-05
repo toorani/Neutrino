@@ -38,7 +38,7 @@ namespace Neutrino.Business
                                    join mempln in unitOfWork.MemberPenaltyDataService.GetQuery()
                                    on memshar.Id equals mempln.MemberSharePromotionId into leftjoin_share_penalty
                                    from share_penalty in leftjoin_share_penalty.Where(x => x.Deleted == false).DefaultIfEmpty()
-                                   where brp.BranchId == branchId && brp.PromotionReviewStatusId == PromotionReviewStatusEnum.ReleadedStep1ByBranchManager
+                                   where brp.BranchId == branchId && brp.PromotionReviewStatusId == PromotionReviewStatusEnum.ReleasedStep1ByBranchManager
                                    select new
                                    {
                                        memshar,

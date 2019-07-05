@@ -56,118 +56,53 @@ namespace Neutrino.Entities
         /// <summary>
         /// مدیر فروش منطقه یک
         /// </summary>
-        [Description("مدیر فروش منطقه یک")]
-        SalesManager_ZoneOne,
+        [Description("مدیر فروش مناطق")]
+        SalesManager = 1009,
         /// <summary>
         /// پرسنل فروش منطقه یک
         /// </summary>
-        [Description("پرسنل فروش منطقه یک")]
-        SalesEmployee_ZoneOne,
-        /// <summary>
-        /// مدیر فروش منطقه دو
-        /// </summary>
-        [Description("مدیر فروش منطقه دو")]
-        SalesManager_ZoneTwo,
-        /// <summary>
-        /// پرسنل فروش منطقه دو
-        /// </summary>
-        [Description("پرسنل فروش منطقه دو")]
-        SalesEmployee_ZoneTwo,
+        [Description("پرسنل فروش مناطق")]
+        SalesEmployee = 1010,
         /// <summary>
         /// فروشنده
         /// </summary>
         [Description("فروشنده")]
-        Seller ,
+        Seller = 1013,
         /// <summary>
         /// سرپرست فروش
         /// </summary>
         [Description("سرپرست فروش")]
-        SalesSupervisor,
-        /// <summary>
-        /// اپراتور فروش 
-        /// </summary>
-        [Description("اپراتور فروش")]
-        SalesOperator,
-        /// <summary>
-        /// حسابدار
-        /// </summary>
-        [Description("حسابدار")]
-        Accountant,
-        /// <summary>
-        /// سرپرست حسابداری
-        /// </summary>
-        [Description("سرپرست حسابداری")]
-        AccountantSupervisor,
-        /// <summary>
-        /// رئیس مرکز
-        /// </summary>
-        [Description("رئیس مرکز")]
-        BranchManager,
+        SalesSupervisor = 1014,
         /// <summary>
         /// کارمند حسابداری
         /// </summary>
         [Description("کارمند حسابداری")]
-        AccountantEmployee,
+        AccountantEmployee = 1016,
         /// <summary>
-        /// مسئول عملیات
+        /// سرپرست حسابداری
         /// </summary>
-        [Description("مسئول عملیات")]
-        OperationResponsible,
+        [Description("سرپرست حسابداری")]
+        AccountantSupervisor = 1017,
         /// <summary>
-        /// کارمند اداری
+        /// رئیس مرکز
         /// </summary>
-        [Description("کارمند اداری")]
-        Officer,
+        [Description("رئیس مرکز")]
+        BranchManager = 1018,
         /// <summary>
-        /// سرپرست انبار 
+        /// مدیر  عملیات
         /// </summary>
-        [Description("سرپرست انبار")]
-        StoreSupervisor,
+        [Description("مدیر عملیات")]
+        OperationManager = 1020,
         /// <summary>
-        /// انباردار
+        /// پرسنل عملیات
         /// </summary>
-        [Description("انباردار")]
-        Storekeeper,
-        /// <summary>
-        /// کمک انباردار 
-        /// </summary>
-        [Description("کمک انباردار")]
-        StorekeeperAssistance,
-        /// <summary>
-        /// کارگر انبار 
-        /// </summary>
-        [Description("کارگر انبار")]
-        Storeworker,
-        /// <summary>
-        /// اپراتور انبار 
-        /// </summary>
-        [Description("اپراتور انبار")]
-        StoreOperator,
+        [Description("پرسنل عملیات")]
+        OperationEmployee = 1021,
         /// <summary>
         /// راننده 
         /// </summary>
-        [Description("راننده")]
-        Driver,
-        /// <summary>
-        /// موزع 
-        /// </summary>
-        [Description("موزع")]
-        Carrier,
-        /// <summary>
-        /// کارگر خدمات
-        /// </summary>
-        [Description("کارگر خدمات")]
-        Servant,
-        /// <summary>
-        /// نگهبان
-        /// </summary>
-        [Description("نگهبان")]
-        Guard,
-        /// <summary>
-        /// سایر
-        /// </summary>
-        [Description("سایر")]
-        Other
+        [Description("راننده/موزع")]
+        DriverAndCarrier = 1027
 
     }
 

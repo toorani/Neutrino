@@ -28,38 +28,7 @@ function ($scope, $location, $compile, $interval, alertService, ajaxService, dat
             , mappingData: 'displayDate'
 
         });
-        dataTableColumns.add({
-            title: 'وضعیت'
-            , mappingData: 'status'
-            //, fnRenderCallBack: function (data, type, commission) {
-            //    $interval(function () {
-            //        if (commission.statusId == 3) // inserted
-            //        {
-            //            ajaxService.ajaxCall({ id: commission.id }, '/api/commissionService/getDataItem', 'get',
-            //                function (response) {
-            //                    $scope.tableAPI.rows().eq(0).filter(function (rowIdx) {
-            //                        if ($scope.tableAPI.data()[rowIdx].id === commission.id)
-            //                        {
-            //                            var cell = $scope.tableAPI.rows(rowIdx).cells("td:eq(1)");
-            //                            $scope.tableAPI.data()[rowIdx].status = response.data.status;
-            //                            cell.data(response.data.status).draw(false);
-            //                        }
-            //                    });
-            //                    commission.statusId = response.data.statusId;
-            //                    commission.status = response.data.status;
-            //                    //return response.data.status;
-            //                },
-            //                function (response) {
-            //                });
-            //        }
-            //        else {
-            //            $interval.cancel(promise);
-            //        }
-            //    }, 10000)
-            //    return commission.status;
-            //}
-
-        });
+        dataTableColumns.add({title: 'وضعیت', mappingData: 'status'});
         dataTableColumns.add({
             isKey: true, fnRenderCallBack: function (data, type, promotion) {
 
@@ -69,62 +38,23 @@ function ($scope, $location, $compile, $interval, alertService, ajaxService, dat
                     ctrl += ' disabled ';
                 }
 
-                ctrl += " ng-click='confirmFulfillment(" + jsCommission + ")' aria-expanded='false'>"
-                         + "<i class='fa fa-magic'></i><span> ثبت نهایی شرط تحقق پورسانت</span>"
+                ctrl += " ng-click='compensantory(" + jsCommission + ")' aria-expanded='false'>"
+                         + "<i class='fa fa-magic'></i><span> پورسانت ترمیمی</span>"
                          + "  </button>";
                 return $compile(ctrl)($scope);
-
             }
         });
 
         $scope.dataColumns = dataTableColumns.getItems();
         $scope.serverUrl = '/api/promotionService/getDataGrid';
 
-
-
         var perDate = new persianDate();
         $scope.viewModel.year = perDate.year();
         $scope.viewModel.month = perDate.month();
     }
-
-    //$scope.dataTableRowCallback = function (rowDetail) {
-    //    var promise;
-    //    var tableAPI = rowDetail.ngGrid.dataTable().api();
-    //    $interval(function () {
-    //        var cell = tableAPI.rows(rowDetail.index).cells("td:eq(1)");
-    //        //var cell = tableAPI.cell(tableAPI..find("td:eq(2)"));
-    //        //cell.data(totalQunatiy).draw();
-    //        if (rowDetail.data.statusId == 3) // inserted
-    //        {
-    //            ajaxService.ajaxCall({ id: rowDetail.data.id }, '/api/commissionService/getDataItem', 'get',
-    //                function (response) {
-    //                    var cell = tableAPI.rows(rowDetail.index).cells("td:eq(1)");
-    //                    rowDetail.data.statusId = response.data.statusId;
-    //                    rowDetail.data.status = response.data.status;
-    //                    cell.data(response.data.status).draw();
-    //                    //
-    //                },
-    //                function (response) {
-    //                });
-    //        }
-    //        else {
-    //            $interval.cancel(promise);
-    //        }
-    //    }, 10000)
-    //}
-    //$scope.dataTableDrawCallback = function () {
-    //    $scope.tableAPI = $scope.ngGrid.dataTable().api();
-    //}
-
-    $scope.confirmFulfillment = function (promotion) {
-        ajaxService.ajaxPost(promotion, '/api/promotionService/startCalculation',
-                function (response) {
-                    alertService.showSuccess(response.data.actionResult.returnMessage);
-                    $scope.ngGrid.fnReload();
-                },
-               function (response) {
-                   alertService.showError(response);
-               });
+    
+    $scope.compensantory = function (promotion) {
+        $location.url('promotion/compensantory/item/' + promotion.id);
     }
     $scope.newEntity = function () {
 

@@ -342,6 +342,9 @@
     <Compile Include="Attributes\ExcptionHandelFilterAttribute.cs" />
     <Compile Include="Attributes\ControllerAuthorizeAttribute.cs" />
     <Compile Include="Backend\AppAction\ApplicationActionMapperProfile.cs" />
+    <Compile Include="Backend\BranchPromotion\BranchPromotionMapperProfile.cs" />
+    <Compile Include="Backend\BranchPromotion\BranchPromotionServiceController.cs" />
+    <Compile Include="Backend\BranchPromotion\BranchPromotionViewModel.cs" />
     <Compile Include="Backend\BranchReceiptGoalPercent\BranchReceiptGoalPercentMapperProfile.cs" />
     <Compile Include="Backend\BranchReceiptGoalPercent\BranchReceiptGoalPercentViewModel.cs" />
     <Compile Include="Backend\BranchReceiptGoalPercent\BranchReceiptGoalPercentServiceController.cs" />
@@ -361,8 +364,7 @@
     <Compile Include="Backend\PromotionReport\ReportBranchReceiptGoalViewModel.cs" />
     <Compile Include="Backend\PromotionReport\ReportBranchSalesGoalViewModel.cs" />
     <Compile Include="Backend\PromotionReport\PromotionReportMapperProfile.cs" />
-    <Compile Include="Backend\PromotionReport\BranchPromotionViewModel.cs" />
-    <Compile Include="Backend\PromotionReport\BranchPromotionDetailViewModel.cs" />
+    <Compile Include="Backend\BranchPromotion\BranchPromotionDetailViewModel.cs" />
     <Compile Include="Backend\PromotionReport\ReportSallerGoalViewModel.cs" />
     <Compile Include="Backend\MemberSharePromotion\MemberSharePromotionViewModel.cs" />
     <Compile Include="Backend\Promotion\PromotionMapperProfile.cs" />
@@ -813,6 +815,8 @@
     <Content Include="Views\Promotion\branchShare\manager\indexController.js" />
     <Content Include="Views\Promotion\branchShare\reviewFinalStep\index.html" />
     <Content Include="Views\Promotion\branchShare\reviewFinalStep\indexController.js" />
+    <Content Include="Views\Promotion\compensantory\item.html" />
+    <Content Include="Views\Promotion\compensantory\itemController.js" />
     <Content Include="Views\Promotion\overviewrpt\index.html" />
     <Content Include="Views\Promotion\index.html" />
     <Content Include="Views\Promotion\overviewrpt\indexController.js" />

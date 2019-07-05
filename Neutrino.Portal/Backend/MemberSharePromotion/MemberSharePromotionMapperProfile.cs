@@ -34,7 +34,7 @@ namespace Neutrino.Portal
             CreateMap<MemberSharePromotion, MemberSharePromotionManagerViewModel>()
                 .ForMember(x => x.BranchSalesPromotion, opt => opt.ResolveUsing(x => x.Details.FirstOrDefault()?.BranchSalesPromotion))
                 .ForMember(x => x.ReceiptPromotion, opt => opt.ResolveUsing(x => x.Details.FirstOrDefault()?.ReceiptPromotion))
-                .ForMember(x => x.SellerPromotion, opt => opt.ResolveUsing(x => x.Details.FirstOrDefault()?.SellerPromotion))
+                .ForMember(x => x.CompensatoryPromotion, opt => opt.ResolveUsing(x => x.Details.FirstOrDefault()?.CompensatoryPromotion))
                 .ForMember(x => x.FullName, opt => opt.ResolveUsing(x => x.Member.Name + " " + x.Member.LastName))
                 .ForMember(x => x.MemberCode, opt => opt.ResolveUsing(x => x.Member.Code))
                 .ForMember(x => x.PositionTitle, opt => opt.ResolveUsing(x => x.Member.PositionType?.Description))
@@ -45,7 +45,7 @@ namespace Neutrino.Portal
                   return new List<MemberSharePromotionDetail>()
                   {
                      new MemberSharePromotionDetail(){
-                         SellerPromotion = x.SellerPromotion,
+                         CompensatoryPromotion = x.CompensatoryPromotion,
                          ReceiptPromotion =x.ReceiptPromotion,
                          BranchSalesPromotion = x.BranchSalesPromotion,
                          MemberId = x.MemberId,

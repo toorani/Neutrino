@@ -38,8 +38,8 @@ namespace Neutrino.Portal
         public virtual async Task<HttpResponseMessage> GetDataGrid(JQueryDataTablesModel dataTablesModel)
         {
             var entities = await businessService.EntityListByPagingLoader
-                    .LoadAsync(
-                    pageNumber: dataTablesModel.iDisplayStart
+                    .LoadAsync(includes: c => c.Status
+                    , pageNumber: dataTablesModel.iDisplayStart
                     , pageSize: dataTablesModel.iDisplayLength
                     , orderBy: ord => ord.OrderByDescending(x => x.StartDate));
 
@@ -101,11 +101,11 @@ namespace Neutrino.Portal
 
             return CreateViewModelResponse(postedViewModel, entityCreated);
         }
-       
+
         [Route("getBranchPromotionsForCEOReview")]
         public async Task<HttpResponseMessage> GetBranchPromotionsForCEOReviewAsync()
         {
-            IBusinessResultValue<List<BranchPromotion>> result_bizloading = await businessService.LoadBranchPromotions(PromotionReviewStatusEnum.ReleadedStep1ByBranchManager);
+            IBusinessResultValue<List<BranchPromotion>> result_bizloading = await businessService.LoadBranchPromotions(PromotionReviewStatusEnum.ReleasedStep1ByBranchManager);
             if (result_bizloading.ReturnStatus == false)
                 return CreateErrorResponse(result_bizloading);
             var mapper = GetMapper();
@@ -114,30 +114,9 @@ namespace Neutrino.Portal
             return CreateSuccessedListResponse(result);
         }
 
-        [Route("getActiveBranchPromotionByBranchId")]
-        public async Task<HttpResponseMessage> GetActiveBranchPromotion(int branchId)
-        {
-            IBusinessResultValue<BranchPromotion> result_bizloading = await businessService.LoadActiveBranchPromotionDetail(branchId);
-            if (result_bizloading.ReturnStatus == false)
-                return CreateErrorResponse(result_bizloading);
-            var mapper = GetMapper();
+       
 
-            var result = mapper.Map<BranchPromotion, BranchPromotionViewModel>(result_bizloading.ResultValue);
-            return CreateViewModelResponse(result,result_bizloading);
-        }
-
-        [Route("getActiveBranchPromotion")]
-        public async Task<HttpResponseMessage> GetActiveBranchPromotion()
-        {
-            int branchId = IdentityConfig.GetBranchId(User);
-            IBusinessResultValue<BranchPromotion> result_bizloading = await businessService.LoadActiveBranchPromotionDetail(branchId);
-            if (result_bizloading.ReturnStatus == false)
-                return CreateErrorResponse(result_bizloading);
-            var mapper = GetMapper();
-
-            var result = mapper.Map<BranchPromotion, BranchPromotionViewModel>(result_bizloading.ResultValue);
-            return CreateViewModelResponse(result, result_bizloading);
-        }
+       
 
         #endregion
 

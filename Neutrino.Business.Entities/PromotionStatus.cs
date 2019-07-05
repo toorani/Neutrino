@@ -10,18 +10,26 @@ namespace Neutrino.Entities
 {
     public enum PromotionStatusEnum
     {
-        [Description("ثبت اولیه")]
-        Initialized = 1,
-        [Description("در حال محاسبه")]
-        InProcessing = 2,
-        [Description("محاسبه شده")]
-        Done = 3,
+        /// <summary>
+        /// در انتظار تایید ضریب تحقق
+        /// </summary>
+        [Description("در انتظار تایید ضریب تحقق")]
+        WaitingForGoalFulfillment = 1,
+        /// <summary>
+        /// در صف بررسی
+        /// </summary>
         [Description("در صف بررسی")]
-        InProcessQueue = 4,
-        [Description("در انتظار تایید شرط تحقق")]
-        WaitingForGoalFulfillment = 5,
-        [Description("اتمام محاسبه کلیه اهداف")]
-        GoalCalculated = 6
+        InProcessQueue = 2,
+        /// <summary>
+        /// در حال محاسبه
+        /// </summary>
+        [Description("در حال محاسبه")]
+        InProcessing = 3,
+        /// <summary>
+        /// اتمام محاسبات
+        /// </summary>
+        [Description("اتمام محاسبات")]
+        Done = 4
     }
 
     public class PromotionStatus : EnumEntity<PromotionStatusEnum>

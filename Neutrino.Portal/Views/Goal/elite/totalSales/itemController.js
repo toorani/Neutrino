@@ -1,8 +1,8 @@
 ﻿console.log("Goal/elite / totalSales / itemController")
 
 angular.module("neutrinoProject").register.controller('totalSales.itemController',
-['$scope', '$location', '$filter', '$timeout', '$routeParams', 'ajaxService', 'modalService', 'alertService', '$uibModal', 'persianCalendar',
-function ($scope, $location, $filter, $timeout, $routeParams, ajaxService, modalService, alertService, $uibModal, persianCalendar) {
+['$scope', '$location', '$routeParams', 'ajaxService', 'modalService', 'alertService', '$uibModal', 'persianCalendar',
+function ($scope, $location, $routeParams, ajaxService, modalService, alertService, $uibModal, persianCalendar) {
 
     "use strict";
     $scope.goal = {

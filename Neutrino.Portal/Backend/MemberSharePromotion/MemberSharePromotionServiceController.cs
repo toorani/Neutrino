@@ -71,7 +71,7 @@ namespace Neutrino.Portal
             int branchId = IdentityConfig.GetBranchId(User);
 
             IBusinessResult entities = await businessService.ProceedMemberSharePromotionAsync(PromotionReviewStatusEnum.WaitingForStep1BranchManagerReview
-                , PromotionReviewStatusEnum.ReleadedStep1ByBranchManager
+                , PromotionReviewStatusEnum.ReleasedStep1ByBranchManager
                 , branchId);
             if (entities.ReturnStatus == false)
             {

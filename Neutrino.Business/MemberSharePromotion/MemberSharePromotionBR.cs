@@ -46,7 +46,7 @@ namespace Neutrino.Business
             switch (branchPromotion.PromotionReviewStatusId)
             {
                 case PromotionReviewStatusEnum.WaitingForStep1BranchManagerReview:
-                case PromotionReviewStatusEnum.ReleadedStep1ByBranchManager:
+                case PromotionReviewStatusEnum.ReleasedStep1ByBranchManager:
                     totalAssigned = branchPromotion.MemberSharePromotions.Sum(x => (decimal?)x.ManagerPromotion) ?? 0 + entity.ManagerPromotion;
                     break;
                 case PromotionReviewStatusEnum.ReleasedByCEO:
@@ -106,7 +106,7 @@ namespace Neutrino.Business
 
             var sellerTotalPromotion_input = (from memp in entities
                                               from mempde in memp.Details
-                                              select mempde.SellerPromotion).Sum();
+                                              select mempde.CompensatoryPromotion).Sum();
 
 
             var sellerTotalPromotion = unitOfWork.MemberPromotionDataService.GetQuery()

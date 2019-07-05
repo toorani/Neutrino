@@ -304,7 +304,10 @@ namespace Neutrino.Portal
         {
             DateTime? startDateTime = Utilities.ToDateTime(startDate);
             DateTime? endDateTime = Utilities.ToDateTime(endDate);
-            var entity = await promotionBS.LoadReportBranchPromotionDetail(startDateTime.Value, endDateTime.Value);
+            GoalGoodsCategoryTypeEnum[] goalGoodsCategoryTypeIds = new GoalGoodsCategoryTypeEnum[] {GoalGoodsCategoryTypeEnum.Group
+                ,GoalGoodsCategoryTypeEnum.Single  };
+
+            var entity = await promotionBS.LoadReportBranchPromotionDetail(startDateTime.Value, endDateTime.Value, goalGoodsCategoryTypeIds);
             if (entity.ReturnStatus == false)
             {
                 return CreateErrorResponse(entity);
@@ -337,70 +340,7 @@ namespace Neutrino.Portal
             return result;
         }
 
-        [Route("getBranchPromotionForStep1BranchManager")]
-        public async Task<HttpResponseMessage> GetBranchPromotionDetailForStep1BranchManager()
-        {
-            int branchId = IdentityConfig.GetBranchId(User);
-            var entities = await promotionBS.LoadActiveBranchPromotionDetail(branchId);
-            if (entities.ReturnStatus == false)
-            {
-                return CreateErrorResponse(entities);
-            }
-
-            var result = new List<BranchPromotionDetailViewModel>()
-            {
-                new  BranchPromotionDetailViewModel(){
-                    BranchId = branchId,
-                    BranchName = entities.ResultValue.Branch.Name,
-                    GoalTypeId = 1,
-                    GoalTypeTitle = "پورسانت فروش تامین کننده",
-                    PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
-                    TotalFinalPromotion = entities.ResultValue.TotalSalesPromotion.Value,
-                    PositionPromotions = null,
-                    Month = entities.ResultValue.Month,
-                    Year =  entities.ResultValue.Year,
-                },
-                new  BranchPromotionDetailViewModel(){
-                    BranchId = branchId,
-                    GoalTypeId = 2,
-                    PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
-                    BranchName = entities.ResultValue.Branch.Name,
-                    GoalTypeTitle = "پورسانت وصول کل",
-                    Month = entities.ResultValue.Month,
-                    Year =  entities.ResultValue.Year,
-                    TotalFinalPromotion = entities.ResultValue.TotalReceiptPromotion.Value,
-                    PositionPromotions =  (from brgpl in entities.ResultValue.BranchGoalPromotions
-                                          where brgpl.Goal.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal
-                                          from posi in brgpl.PositionReceiptPromotions
-                                          select new PositionPromotion
-                                          {
-                                              PositionTitle = posi.PositionType.Description,
-                                              Promotion= posi.Promotion
-                                          }).ToList()
-                },
-                new  BranchPromotionDetailViewModel(){
-                    BranchId = branchId,
-                    GoalTypeId = 3,
-                    BranchName = entities.ResultValue.Branch.Name,
-                    PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
-                    GoalTypeTitle = "پورسانت وصول خصوصی",
-                    Month = entities.ResultValue.Month,
-                    Year =  entities.ResultValue.Year,
-                    TotalFinalPromotion = entities.ResultValue.PrivateReceiptPromotion.Value,
-                    PositionPromotions =  (from brgpl in entities.ResultValue.BranchGoalPromotions
-                                          where brgpl.Goal.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal
-                                          from posi in brgpl.PositionReceiptPromotions
-                                          select new PositionPromotion
-                                          {
-                                              PositionTitle = posi.PositionType.Description,
-                                              Promotion= posi.Promotion
-                                          }).ToList()
-                }
-            };
-
-
-            return CreateSuccessedListResponse(result);
-        }
+       
 
         #endregion
 

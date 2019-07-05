@@ -1,0 +1,102 @@
+﻿<div ng-controller="promotion.compensantory.itemController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+    <div class="itemView-Body col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <form novalidate role="form" esp-validate-complete="submit()"
+                                      esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true
+                                  ,autoHidePrompt:true}"
+                                      class="form-horizontal ls_form" name="form">
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <td width="55px"></td>
+                                                    <td class="align-center"><input type="text" ng-model="filter_branchName" class="form-control" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#</td>
+                                                    <td class="align-center ">نام مرکز</td>
+                                                    <td class="align-center ">پورسانت فروش تامین کنندگان</td>
+                                                    <td class="align-center ">پورسانت وصول</td>
+                                                    <td class="align-center ">پورسانت ترمیمی</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody ng-repeat="record in branchPromotions | filter :{branchName: filter_branchName}  ">
+                                                <tr>
+                                                    <td>
+                                                        {{$index + 1}}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{record.branchName}}
+                                                    </td>
+                                                    <td class="align-center dir-ltr">
+                                                        {{record.totalSalesPromotion | number}}
+                                                    </td>
+                                                    <td class="align-center dir-ltr">
+                                                        {{record.privateReceiptPromotion + record.totalReceiptPromotion | number}}
+                                                    </td>
+                                                    <td class="align-center dir-ltr">
+                                                        <input type="text" class="form-control dir-ltr"
+                                                               ng-model="record.compensatoryPromotion"
+                                                               ng-trim=false
+                                                               awnum="price">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <div ng-show="branchPromotions.length == 0">
+                                            <table class="table" cellspacing="0">
+                                                <caption>
+                                                    <h2>اطلاعاتی وجود ندارد</h2>
+                                                </caption>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit"
+                                                name="Add"
+                                                ng-show="branchPromotionStatusId == 7"
+                                                class="btn btn-success">
+                                            <i class="fa fa-check"></i>
+                                            <span>ثبت</span>
+                                        </button>
+                                        <button type="button"
+                                                ng-show="branchPromotionStatusId == 7"
+                                                ng-click="confirmPromotion()"
+                                                class="btn btn-danger">
+                                            <i class="fa fa-send-o"></i>
+                                            <span>تایید نهایی و ارسال اطلاعات</span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" ng-click="cancel()">
+                                            <i class="fa fa-mail-forward"></i>
+                                            <span>بازگشت</span>
+                                        </button>
+
+                                    </div>
+                                    <div class="alert alert-warning">
+                                        <i class="fa fa-warning"></i>
+                                        لطفا پس از اتمام تعیین پورسانت پرسنل ،جهت ارسال اطلاعات از گزینه <strong>تایید نهایی و ارسال اطلاعات</strong> استفاده نماید.
+                                        توجه داشته باشید که بعد از زدن این گزینه امکان تغییر اطلاعات وجود ندارد
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -137,7 +137,7 @@ namespace Neutrino.Portal.WebApiControllers
                 postedViewModel.ActionResult.ReturnMessage.AddRange(result.Errors);
                 return CreateErrorResponse(postedViewModel.ActionResult);
             }
-            var resetPasswordEmailBody = File.ReadAllText(HostingEnvironment.MapPath("/views/account/resetpassword/restpasswordTemplate.html"));
+            var resetPasswordEmailBody = File.ReadAllText(HostingEnvironment.MapPath("/views/account/resetpassword/resetpasswordTemplate.html"));
             resetPasswordEmailBody = resetPasswordEmailBody.Replace("$DateTime$", Utilities.ToPersianDateTime(DateTime.Now))
                 .Replace("$UserName$", postedViewModel.UserName)
                 .Replace("$password$", postedViewModel.Password);

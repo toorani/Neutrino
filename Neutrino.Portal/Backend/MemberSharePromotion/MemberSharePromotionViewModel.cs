@@ -19,17 +19,17 @@ namespace Neutrino.Portal.Models
     {
         public int BranchPromotionId { get; set; }
         public int MemberId { get; set; }
-        public decimal ManagerPromotion { get { return BranchSalesPromotion + SellerPromotion + ReceiptPromotion; } }
-        public decimal? CEOPromotion { get { return BranchSalesPromotion + SellerPromotion + ReceiptPromotion; } }
-        public decimal? FinalPromotion { get { return BranchSalesPromotion + SellerPromotion + ReceiptPromotion; } }
+        public decimal ManagerPromotion { get { return BranchSalesPromotion + CompensatoryPromotion + ReceiptPromotion; } }
+        public decimal? CEOPromotion { get { return BranchSalesPromotion + CompensatoryPromotion + ReceiptPromotion; } }
+        public decimal? FinalPromotion { get { return BranchSalesPromotion + CompensatoryPromotion + ReceiptPromotion; } }
         /// <summary>
         /// سهم از پورسانت فروش مرکز
         /// </summary>
         public decimal BranchSalesPromotion { get; set; }
         /// <summary>
-        /// سهم از اهداف عوامل فروش
+        /// سهم از ترمیمی
         /// </summary>
-        public decimal SellerPromotion { get; set; }
+        public decimal CompensatoryPromotion { get; set; }
         /// <summary>
         /// سهم از وصول
         /// </summary>
@@ -52,7 +52,7 @@ namespace Neutrino.Portal.Models
         /// <summary>
         /// سهم از اهداف عوامل فروش
         /// </summary>
-        public decimal SellerPromotion { get; set; }
+        public decimal CompensatoryPromotion { get; set; }
         /// <summary>
         /// سهم از وصول
         /// </summary>

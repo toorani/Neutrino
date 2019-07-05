@@ -69,6 +69,7 @@
     <Compile Include="ApplicationAction\IApplicationActionBS.cs" />
     <Compile Include="AppMenu\IAppMenuBS.cs" />
     <Compile Include="BranchGoal\IBranchGoalBS.cs" />
+    <Compile Include="BranchPromotion\IBranchPromotionBS.cs" />
     <Compile Include="BranchReceiptGoalPercent\IBranchReceiptGoalPercentDS.cs" />
     <Compile Include="BranchReceiptGoalPercent\IBranchReceiptGoalPercentBS.cs" />
     <Compile Include="BranchReceipt\IBranchReceiptBS.cs" />
