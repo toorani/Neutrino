@@ -7,6 +7,7 @@ using Espresso.Portal;
 using Neutrino.Entities;
 using Neutrino.Interfaces;
 using Neutrino.Portal.Tools;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -89,7 +90,14 @@ namespace Neutrino.Portal
                 {
                     if (result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Amount || result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Quantities)
                     {
-                        return await LoadReport_Amount_Quantities_Goal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+                        var result_report = await promotionBS.LoadReport_Amount_Quantities_Goal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+
+                        if (result_report.ReturnStatus == false)
+                        {
+                            return CreateErrorResponse(result_report);
+                        }
+                        var lst_response = LoadReport_Amount_Quantities_Goal(result_report.ResultValue);
+                        return CreateSuccessedListResponse(lst_response);
                     }
                     else if (result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Percentage)
                     {
@@ -106,75 +114,121 @@ namespace Neutrino.Portal
                 }
                 else if (result_goal.ResultValue.ApprovePromotionTypeId == ApprovePromotionTypeEnum.Seller)
                 {
-                    return await LoadReport_Seller_Goal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+                    var result_report = await promotionBS.LoadReport_Seller_Goal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+                    if (result_report.ReturnStatus == false)
+                    {
+                        return CreateErrorResponse(result_report);
+                    }
 
+                    var lst_response = LoadReport_Seller_Goal(result_report.ResultValue);
+                    return CreateSuccessedListResponse(lst_response);
                 }
-
-
 
             }
             return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
 
         [Route("exportExcelSaleGoals"), HttpGet]
-        public HttpResponseMessage ExportExcelSaleGoals(string startDate, string endDate, int goalGoodsCategoryId)
+        public async Task<HttpResponseMessage> ExportExcelSaleGoals(string startDate, string endDate, int goalGoodsCategoryId)
         {
             DateTime? startDateTime = Utilities.ToDateTime(startDate);
             DateTime? endDateTime = Utilities.ToDateTime(endDate);
             if (startDateTime.HasValue && endDateTime.HasValue)
             {
-                //var entity = await promotionBS.LoadReportBranchSalesGoal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
-                //if (entity.ReturnStatus == false)
-                //{
-                //    return CreateErrorResponse(entity);
-                //}
-                //if (entity.ResultValue.Count != 0)
-                //{
-                //    var goalGoodsCategoryName = entity.ResultValue.First().GoalGoodsCategoryName;
-                //    var lst_responses = entity.ResultValue.GroupBy(x => new { x.BranchName })
-                //        .Select(x => new ReportSales_Amount_Qualntity_ViewModel
-                //        {
-                //            BranchName = x.Key.BranchName,
-                //            TotalSales = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalSales,
-                //            TotalQuantity = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).TotalQuantity,
-                //            FinalPromotion = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).FinalPromotion,
-                //            PromotionWithOutFulfillmentPercent = x.FirstOrDefault(y => y.BranchName == x.Key.BranchName).PromotionWithOutFulfillmentPercent,
-                //            PromotionGoalSteps = x.Select(y => new PromotionGoalStep
-                //            {
-                //                AmountSpecified = y.AmountSpecified,
-                //                FulfilledPercent = Math.Round(y.FulfilledPercent, MidpointRounding.AwayFromZero),
-                //                GoalAmount = y.GoalAmount,
-                //            }).ToList()
-                //        }).ToList();
+                var result_goal = await goalBS.EntityLoader.LoadAsync(where: x => x.GoalGoodsCategoryId == goalGoodsCategoryId
+                 && x.StartDate >= startDateTime.Value && x.EndDate <= endDateTime.Value, includes: x => x.GoalGoodsCategory);
+                if (result_goal.ReturnStatus == false)
+                {
+                    return CreateErrorResponse(result_goal);
+                }
 
-                //    string caption = $" گزارش عملکرد اهداف فروش محدوده تاریخ {startDate} - {endDate} هدف {goalGoodsCategoryName}";
-                //    var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/branchsalesrpt/excelTemplate.html");
-                //    var result = ExportToExcel.GetExcelFile<ReportSales_Amount_Qualntity_ViewModel>(lst_responses
-                //        , outputFileName: "branchSalegoals"
-                //        , excelTemplatePath: excelTemplate
-                //        , caption: caption
-                //        , generatorHeader: (List<ReportSales_Amount_Qualntity_ViewModel> data, string template) =>
-                //        {
-                //            if (data.Count == 0)
-                //                return string.Empty;
-                //            var loop = string.Empty;
-                //            for (int i = 1; i <= data[0].PromotionGoalSteps.Count; i++)
-                //            {
-                //                loop += template.Replace("$index", i.ToString());
-                //            }
+                string caption = $" گزارش عملکرد اهداف فروش محدوده تاریخ {startDate} - {endDate} هدف {result_goal.ResultValue.GoalGoodsCategory.Name}";
 
-                //            return loop;
+                if (result_goal.ResultValue.ApprovePromotionTypeId == ApprovePromotionTypeEnum.Branch)
+                {
+                    if (result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Amount || result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Quantities)
+                    {
+                        var result_report = await promotionBS.LoadReport_Amount_Quantities_Goal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+
+                        if (result_report.ReturnStatus == false)
+                        {
+                            return CreateErrorResponse(result_report);
+                        }
+                        var lst_response = LoadReport_Amount_Quantities_Goal(result_report.ResultValue);
+                    }
+                    else if (result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Percentage)
+                    {
+                        var result_report = await promotionBS.LoadReport_Percent_Goal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+
+                        if (result_report.ReturnStatus == false)
+                        {
+                            return CreateErrorResponse(result_report);
+                        }
+
+
+                    }
+                }
+                else if (result_goal.ResultValue.ApprovePromotionTypeId == ApprovePromotionTypeEnum.Seller)
+                {
+                    var result_report = await promotionBS.LoadReport_Seller_Goal(startDateTime.Value, endDateTime.Value, goalGoodsCategoryId);
+                    if (result_report.ReturnStatus == false)
+                    {
+                        return CreateErrorResponse(result_report);
+                    }
+
+                    var lst_response = LoadReport_Seller_Goal(result_report.ResultValue);
+
+                    string downloadUrl = $"/excel/Seller_Goal{DateTime.Now.Ticks}.xlsx";
+                    var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/branchsalesrpt/excelSellerTemplate.html");
+                    using (var package = new ExcelPackage())
+                    {
+                        ExportToExcel.CreateExcelFile<ReportSellerGoalViewModel>(lst_response, downloadUrl, excelTemplate, package,
+                            caption: caption
+                            , generatorHeader: (List<ReportSellerGoalViewModel> data, string template) =>
+                            {
+                                if (data.Count == 0)
+                                    return string.Empty;
+                                var loop = string.Empty;
+                                for (int i = 1; i <= data[0].PromotionGoalSteps.Count; i++)
+                                {
+                                    loop += template.Replace("$index", i.ToString());
+                                }
+
+                                return loop;
+                            }
+                            , getLoopObjects: (ReportSellerGoalViewModel record) => record.PromotionGoalSteps);
+
+
+                    }
+
+
+                    return Request.CreateResponse(HttpStatusCode.OK, downloadUrl);
+                }
+
+
+
+
+                //
+                //var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/branchsalesrpt/excelTemplate.html");
+                //var result = ExportToExcel.GetExcelFile<ReportSales_Amount_Qualntity_ViewModel>(lst_responses
+                //    , outputFileName: "branchSalegoals"
+                //    , excelTemplatePath: excelTemplate
+                //    , caption: caption
+                //    , generatorHeader: (List<ReportSales_Amount_Qualntity_ViewModel> data, string template) =>
+                //    {
+                //        if (data.Count == 0)
+                //            return string.Empty;
+                //        var loop = string.Empty;
+                //        for (int i = 1; i <= data[0].PromotionGoalSteps.Count; i++)
+                //        {
+                //            loop += template.Replace("$index", i.ToString());
                 //        }
-                //        , getLoopObjects: (ReportSales_Amount_Qualntity_ViewModel record) => record.PromotionGoalSteps
-                //        );
-                //    return result;
 
-                //}
-                //else
-                //    Request.CreateResponse(HttpStatusCode.NotFound);
-
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-
+                //        return loop;
+                //    }
+                //    , getLoopObjects: (ReportSales_Amount_Qualntity_ViewModel record) => record.PromotionGoalSteps
+                //    );
+                //return result;
             }
             return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
@@ -339,22 +393,12 @@ namespace Neutrino.Portal
                 );
             return result;
         }
-
-       
-
         #endregion
 
         #region [ Private Method(s) ]
-        private async Task<HttpResponseMessage> LoadReport_Amount_Quantities_Goal(DateTime startDateTime, DateTime endDateTime, int goalGoodsCategoryId)
+        private List<ReportSales_Amount_Qualntity_ViewModel> LoadReport_Amount_Quantities_Goal(List<ReportBranchSalesGoal> lstReportBranches)
         {
-            var result_report = await promotionBS.LoadReport_Amount_Quantities_Goal(startDateTime, endDateTime, goalGoodsCategoryId);
-
-            if (result_report.ReturnStatus == false)
-            {
-                return CreateErrorResponse(result_report);
-            }
-
-            var lst_responses = result_report.ResultValue
+            var lst_responses = lstReportBranches
                 .GroupBy(x => new { x.BranchName })
                 .Select(x => new ReportSales_Amount_Qualntity_ViewModel
                 {
@@ -372,18 +416,11 @@ namespace Neutrino.Portal
                         GoalAmount = y.GoalAmount,
                     }).ToList()
                 }).ToList();
-            return CreateSuccessedListResponse(lst_responses);
+            return lst_responses;
         }
-        private async Task<HttpResponseMessage> LoadReport_Seller_Goal(DateTime startDateTime, DateTime endDateTime, int goalGoodsCategoryId)
+        private List<ReportSellerGoalViewModel> LoadReport_Seller_Goal(List<ReportSellerGoal> lstReportSellerGoals)
         {
-            var result_report = await promotionBS.LoadReport_Seller_Goal(startDateTime, endDateTime, goalGoodsCategoryId);
-            if (result_report.ReturnStatus == false)
-            {
-                return CreateErrorResponse(result_report);
-            }
-
-
-            var lst_responses = result_report.ResultValue
+            var lst_responses = lstReportSellerGoals
                 .GroupBy(x => new { x.SellerName })
                 .Select(x => new ReportSellerGoalViewModel
                 {
@@ -400,7 +437,7 @@ namespace Neutrino.Portal
                         FulfilledPercent = y.FulfilledPercent
                     }).ToList()
                 }).ToList();
-            return CreateSuccessedListResponse(lst_responses);
+            return lst_responses;
         }
         private IMapper GetMapper()
         {

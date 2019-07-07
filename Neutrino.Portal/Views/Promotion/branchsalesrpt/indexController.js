@@ -47,11 +47,24 @@ angular.module("neutrinoProject").register.controller('promotion.branchsalesrpt.
             }
             $scope.exportReport = function () {
 
-                var url = '/api/promotionReportService/exportExcelSaleGoals?startDate=' + $scope.viewModel.startDate
-                    + '&endDate=' + $scope.viewModel.endDate
-                    + '&goalGoodsCategoryId=' + $scope.viewModel.goalGoodsCategoryId;
+                //var url = '/api/promotionReportService/exportExcelSaleGoals?startDate=' + $scope.viewModel.startDate
+                //    + '&endDate=' + $scope.viewModel.endDate
+                //    + '&goalGoodsCategoryId=' + $scope.viewModel.goalGoodsCategoryId;
 
-                exportExcel.loadfile(url);
+                //exportExcel.loadfile(url);
+
+
+                ajaxService.ajaxCall({ startDate: $scope.viewModel.startDate, endDate: $scope.viewModel.endDate, goalGoodsCategoryId: $scope.viewModel.goalGoodsCategoryId }
+                    , "api/promotionReportService/exportExcelSaleGoals", 'get',
+                    function (response) {
+                        exportExcel.loadfile(response.data);
+                    },
+                    function (response) {
+                        alertService.showError(response);
+                    });
+
+
+
             }
 
             $scope.getGoalGoodsCategories = function () {

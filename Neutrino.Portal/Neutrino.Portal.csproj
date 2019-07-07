@@ -61,6 +61,9 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.2, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.2\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="Espresso.BusinessService, Version=2018.10.16.562, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\build\Espresso.BusinessService.dll</HintPath>
@@ -195,6 +198,7 @@
       <HintPath>..\packages\NLog.Web.4.5.1\lib\net35\NLog.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="Seq.Client.NLog, Version=2.3.24.0, Culture=neutral, PublicKeyToken=88fe373b29b321c0, processorArchitecture=MSIL">
       <HintPath>..\packages\Seq.Client.NLog.2.3.24\lib\net40\Seq.Client.NLog.dll</HintPath>
       <Private>True</Private>
@@ -226,6 +230,7 @@
     </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
@@ -804,6 +809,7 @@
     <Content Include="Views\Promotion\branchsalesoverviewrpt\excelTemplate.html" />
     <Content Include="Views\Promotion\branchsalesoverviewrpt\index.html" />
     <Content Include="Views\Promotion\branchsalesoverviewrpt\indexController.js" />
+    <Content Include="Views\Promotion\branchsalesrpt\excelSellerTemplate.html" />
     <Content Include="Views\Promotion\branchsalesrpt\index.html" />
     <Content Include="Views\Promotion\branchsalesrpt\indexController.js" />
     <Content Include="Views\Promotion\branchsalesrpt\excelTemplate.html" />

@@ -503,13 +503,14 @@ namespace Neutrino.Business
                                                    on invc.SellerId equals member.Id
                                                    where invc.InvoiceDate >= goal.StartDate && invc.InvoiceDate <= goal.EndDate
                                                    && ggcg.GoalGoodsCategoryId == goal.GoalGoodsCategoryId
+                                                   group new { invc, member } by new { invc.GoodsId, invc.SellerId, member.BranchId } into grp_expr
                                                    select new
                                                    {
-                                                       invc.GoodsId,
-                                                       Quantity = invc.TotalCount,
-                                                       Amount = invc.TotalAmount,
-                                                       member.BranchId,
-                                                       MemberId = invc.SellerId
+                                                       grp_expr.Key.GoodsId,
+                                                       grp_expr.Key.BranchId,
+                                                       MemberId = grp_expr.Key.SellerId,
+                                                       Quantity = grp_expr.Sum(x => x.invc.TotalCount),
+                                                       Amount = grp_expr.Sum(x => x.invc.TotalAmount)
                                                    }).ToList();
                             lst_MemebrSales.ForEach(memberSales =>
                             {
@@ -606,7 +607,7 @@ namespace Neutrino.Business
                 });
 
                 await unitOfWork.CommitAsync();
-                
+
                 result.ReturnStatus = true;
                 result.ReturnMessage.Add("محاسبه پورسانت اهداف فروش با موفقیت پایان یافت");
             }
@@ -966,7 +967,7 @@ namespace Neutrino.Business
                                        BranchName = br.Name,
                                    }).ToListAsync();
 
-                result.ResultValue = query.Select(x => new ReportSellerGoal
+                result.ResultValue = query.Distinct().Select(x => new ReportSellerGoal
                 {
                     SellerName = x.SellerName,
                     TotalSales = x.Amount,
@@ -1099,7 +1100,6 @@ namespace Neutrino.Business
             }
             return result;
         }
-       
         public async Task<IBusinessResultValue<List<BranchPromotion>>> LoadBranchPromotions(PromotionReviewStatusEnum promotionReviewStatusId)
         {
             var result = new BusinessResultValue<List<BranchPromotion>>();
