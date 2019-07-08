@@ -302,7 +302,7 @@ namespace Neutrino.Portal.Tools
                     range.Merge = true;
                     range.AutoFitColumns();
                 }
-                
+
 
                 var tbodyElement = tableNode.Element("tbody");
                 if (tbodyElement != null)
@@ -363,9 +363,18 @@ namespace Neutrino.Portal.Tools
                         counter = 1;
                         foreach (var cell in rows)
                         {
+                            var format = "";
                             if (cell.Attributes.Contains("format"))
-                                workSheet.Cells[rowCounter, counter].Style.Numberformat.Format = cell.Attributes["format"].Value;
-                            workSheet.Cells[rowCounter, counter].Value = cell.InnerHtml;
+                            {
+                                format = cell.Attributes["format"].Value;
+                                workSheet.Cells[rowCounter, counter].Style.Numberformat.Format = format;
+                                if (format.Contains("#"))
+                                    workSheet.Cells[rowCounter, counter].Value = Convert.ToDecimal(cell.InnerHtml.Trim());
+                                else
+                                    workSheet.Cells[rowCounter, counter].Value = cell.InnerHtml.Trim();
+                            }
+                            else
+                                workSheet.Cells[rowCounter, counter].Value = cell.InnerHtml.Trim();
 
                             counter++;
                         }
@@ -379,6 +388,7 @@ namespace Neutrino.Portal.Tools
 
                     workSheet.Cells[rowCounter, counter].Style.Font.Size = 12;
                 }
+
                 FileInfo file = new FileInfo(HostingEnvironment.MapPath(outputFileName));
                 package.SaveAs(file);
             }

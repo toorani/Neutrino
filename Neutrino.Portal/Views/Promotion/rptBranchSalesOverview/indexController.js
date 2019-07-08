@@ -38,11 +38,14 @@ angular.module("neutrinoProject").register.controller('promotion.branchsalesover
                 }
             }
             $scope.exportReport = function () {
-
-                var url = '/api/promotionReportService/exportExcelBranchPromotionDetail?startDate=' + $scope.viewModel.startDate
-                    + '&endDate=' + $scope.viewModel.endDate;
-
-                exportExcel.loadfile(url);
+                ajaxService.ajaxCall($scope.viewModel, '/api/promotionReportService/exportExcelBranchPromotionDetail', 'get',
+                    function (response) {
+                        exportExcel.loadfile(response.data);
+                    },
+                    function (response) {
+                        alertService.showError(response);
+                    });
+                
             }
 
         }]);

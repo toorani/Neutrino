@@ -65,8 +65,14 @@ namespace Neutrino.Portal
             var mapper = GetMapper();
             var dataModelView = mapper.Map<List<BranchPromotionViewModel>>(entity.ResultValue);
             string caption = $"عملکرد نهایی سال {year} ماه {month} ";
-            var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/overviewrpt/excelTemplate.html");
-            return ExportToExcel.GetExcelFile(dataModelView, "OverView", excelTemplate, caption);
+            var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/rptoverview/excelTemplate.html");
+            string downloadUrl = $"/excel/over_view{DateTime.Now.Ticks}.xlsx";
+            using (var package = new ExcelPackage())
+            {
+                ExportToExcel.CreateExcelFile(dataModelView, downloadUrl, excelTemplate, package, caption);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, downloadUrl);
+
         }
 
         [Route("getBranchSaleGoals")]
@@ -155,6 +161,29 @@ namespace Neutrino.Portal
                             return CreateErrorResponse(result_report);
                         }
                         var lst_response = LoadReport_Amount_Quantities_Goal(result_report.ResultValue);
+
+                        string downloadUrl = $"/excel/branch_amountgoal{DateTime.Now.Ticks}.xlsx";
+                        var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/rptbranchsales/excelBranchAmountTemplate.html");
+                        using (var package = new ExcelPackage())
+                        {
+                            ExportToExcel.CreateExcelFile<ReportSales_Amount_Qualntity_ViewModel>(lst_response, downloadUrl, excelTemplate, package,
+                                caption: caption
+                                , generatorHeader: (List<ReportSales_Amount_Qualntity_ViewModel> data, string template) =>
+                                {
+                                    if (data.Count == 0)
+                                        return string.Empty;
+                                    var loop = string.Empty;
+                                    for (int i = 1; i <= data[0].PromotionGoalSteps.Count; i++)
+                                    {
+                                        loop += template.Replace("$index", i.ToString());
+                                    }
+
+                                    return loop;
+                                }
+                                , getLoopObjects: (ReportSales_Amount_Qualntity_ViewModel record) => record.PromotionGoalSteps);
+                        }
+
+                        return Request.CreateResponse(HttpStatusCode.OK, downloadUrl);
                     }
                     else if (result_goal.ResultValue.ComputingTypeId == ComputingTypeEnum.Percentage)
                     {
@@ -165,7 +194,16 @@ namespace Neutrino.Portal
                             return CreateErrorResponse(result_report);
                         }
 
+                        string downloadUrl = $"/excel/branch_quantitygoal{DateTime.Now.Ticks}.xlsx";
+                        var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/rptbranchsales/excelBranchQuantityTemplate.html");
+                        using (var package = new ExcelPackage())
+                        {
+                            ExportToExcel.CreateExcelFile<ReportBranchSalesGoal>(result_report.ResultValue, downloadUrl, excelTemplate, package,
+                                caption: caption);
+                        }
 
+
+                        return Request.CreateResponse(HttpStatusCode.OK, downloadUrl);
                     }
                 }
                 else if (result_goal.ResultValue.ApprovePromotionTypeId == ApprovePromotionTypeEnum.Seller)
@@ -179,7 +217,7 @@ namespace Neutrino.Portal
                     var lst_response = LoadReport_Seller_Goal(result_report.ResultValue);
 
                     string downloadUrl = $"/excel/Seller_Goal{DateTime.Now.Ticks}.xlsx";
-                    var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/branchsalesrpt/excelSellerTemplate.html");
+                    var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/rptbranchsales/excelSellerTemplate.html");
                     using (var package = new ExcelPackage())
                     {
                         ExportToExcel.CreateExcelFile<ReportSellerGoalViewModel>(lst_response, downloadUrl, excelTemplate, package,
@@ -204,31 +242,6 @@ namespace Neutrino.Portal
 
                     return Request.CreateResponse(HttpStatusCode.OK, downloadUrl);
                 }
-
-
-
-
-                //
-                //var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/branchsalesrpt/excelTemplate.html");
-                //var result = ExportToExcel.GetExcelFile<ReportSales_Amount_Qualntity_ViewModel>(lst_responses
-                //    , outputFileName: "branchSalegoals"
-                //    , excelTemplatePath: excelTemplate
-                //    , caption: caption
-                //    , generatorHeader: (List<ReportSales_Amount_Qualntity_ViewModel> data, string template) =>
-                //    {
-                //        if (data.Count == 0)
-                //            return string.Empty;
-                //        var loop = string.Empty;
-                //        for (int i = 1; i <= data[0].PromotionGoalSteps.Count; i++)
-                //        {
-                //            loop += template.Replace("$index", i.ToString());
-                //        }
-
-                //        return loop;
-                //    }
-                //    , getLoopObjects: (ReportSales_Amount_Qualntity_ViewModel record) => record.PromotionGoalSteps
-                //    );
-                //return result;
             }
             return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
@@ -312,7 +325,7 @@ namespace Neutrino.Portal
                }).ToList();
 
             string caption = $" گزارش عملکرد {lst_responses.First().GoalGoodsCategoryName} سال {year} - ماه {month} ";
-            var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/branchreceiptrpt/excelTemplate.html");
+            var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/rptbranchreceipt/excelTemplate.html");
             var result = ExportToExcel.GetExcelFile<ReportBranchReceiptGoalViewModel>(lst_responses
                 , outputFileName: "branchReceiptgoals"
                 , excelTemplatePath: excelTemplate
@@ -383,15 +396,23 @@ namespace Neutrino.Portal
                         PromotionWithOutFulfillmentPercent = y.PromotionWithOutFulfillmentPercent
                     }).ToList()
                 }).ToList();
+
+            string downloadUrl = $"/excel/branch_sales_overview{DateTime.Now.Ticks}.xlsx";
             string caption = $" گزارش پورسانت مراکز از فروش {startDate} - {endDate} ";
-            var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/branchsalesoverviewrpt/excelTemplate.html");
-            var result = ExportToExcel.GetExcelFile<ReportBranchPromotionDetailViewModel>(dataResult
-                , outputFileName: "branchpromotion"
+            var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/rptbranchsalesoverview/excelTemplate.html");
+            using (var package = new ExcelPackage())
+            {
+                ExportToExcel.CreateExcelFile<ReportBranchPromotionDetailViewModel>(dataResult
+                , outputFileName: downloadUrl
                 , excelTemplatePath: excelTemplate
                 , caption: caption
+                , package: package
                 , getLoopObjects: (ReportBranchPromotionDetailViewModel record) => record.GoalPromotions
                 );
-            return result;
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, downloadUrl);
+            
         }
         #endregion
 

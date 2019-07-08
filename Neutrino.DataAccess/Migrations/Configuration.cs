@@ -169,7 +169,7 @@
                     {
                         Title = "عملکرد نهایی",
                         Icon = "fa fa-file-text-o",
-                        Url = "/promotion/overviewrpt/index",
+                        Url = "/promotion/rptOverview/index",
                         OrderId = 1,
                         Parent = reportItem,
                         ParentId = reportItem.Id
@@ -178,7 +178,7 @@
                     {
                         Title = "عملکرداهداف فروش مراکز ",
                         Icon = "fa fa-file-text-o",
-                        Url = "/promotion/branchsalesrpt/index",
+                        Url = "/promotion/rptBranchSales/index",
                         OrderId = 2,
                         Parent = reportItem,
                         ParentId = reportItem.Id
@@ -187,7 +187,7 @@
                     {
                         Title = "پورسانت مراکز از اهداف فروش",
                         Icon = "fa fa-file-text-o",
-                        Url = "/promotion/branchsalesoverviewrpt/index",
+                        Url = "/promotion/rptBranchSalesOverview/index",
                         OrderId = 3,
                         Parent = reportItem,
                         ParentId = reportItem.Id
@@ -196,7 +196,7 @@
                     {
                         Title = "عملکرداهداف وصول",
                         Icon = "fa fa-file-text-o",
-                        Url = "/promotion/branchreceiptrpt/index",
+                        Url = "/promotion/rptBranchReceipt/index",
                         OrderId = 4,
                         Parent = reportItem,
                         ParentId = reportItem.Id
