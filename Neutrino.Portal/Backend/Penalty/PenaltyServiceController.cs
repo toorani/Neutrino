@@ -42,7 +42,7 @@ namespace Neutrino.Portal.WebApiControllers
                 return CreateErrorResponse(result_biz);
             }
             var mapper = GetMapper();
-            var viewModelMapped = mapper.Map<List<MemberPenalty>, List<PenaltyViewModel>>(result_biz.ResultValue);
+            var viewModelMapped = mapper.Map<List<MemberPenaltyDTO>, List<PenaltyViewModel>>(result_biz.ResultValue);
             return CreateSuccessedListResponse(viewModelMapped);
         }
 

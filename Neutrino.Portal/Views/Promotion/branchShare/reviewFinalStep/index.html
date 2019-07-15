@@ -10,12 +10,12 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="panel panel-dark">
+                    <div class="panel panel-dark" ng-show="branchPromotoinDetail.promotionReviewStatusId == 4">
                         <div class="panel-heading">
                             <h3 class="panel-title">اطلاعات پورسانت مرکز {{branchPromotoinDetail.branchName}} </h3>
                         </div>
                         <div class="panel-body">
-                            <div class="row">
+                            <div class="row" >
                                 <div class="col-md-12">
                                     <div class="row">
                                         <label class="col-md-1 control-label">
@@ -50,79 +50,85 @@
                     <form novalidate role="form" esp-validate-complete="submit()"
                           esp-validate-options="{promptPosition:'bottomLeft',autoPositionUpdate: true
                                   ,autoHidePrompt:true}"
-                          class="form-horizontal ls_form" name="form">
-                        <div class="table-responsive ls-table" style="overflow-y: auto;"
-                             ng-show="branchPromotoinDetail.promotionReviewStatusId == 4 && branchMemberPromotions.length != 0">
-                            <table class="table table-bordered table-striped " cellspacing="0">
-                                <thead class="bold">
-                                    <tr>
-                                        <td class="align-center" rowspan="2" width="60px">#</td>
-                                        <td class="align-center" style="vertical-align:middle" rowspan="2"> نام کامل</td>
-                                        <td style="vertical-align:middle" class="align-center">پورسانت تایید شده رییس مرکز</td>
-                                        <td style="vertical-align:middle" class="align-center">پورسانت پس از کسورات و مطالبات</td>
-                                        <td style="vertical-align:middle" class="align-center" rowspan="2">پورسانت نهایی</td>
+                          class="form-horizontal ls_form" name="form" ng-show="branchPromotoinDetail.promotionReviewStatusId == 4">
+                        <div>
+                            <div class="table-responsive ls-table" style="overflow-y: auto;"
+                                 ng-show="branchPromotoinDetail.promotionReviewStatusId == 4 && branchMemberPromotions.length != 0">
+                                <table class="table table-bordered table-striped " cellspacing="0">
+                                    <thead class="bold">
+                                        <tr>
+                                            <td class="align-center" rowspan="2" width="60px">#</td>
+                                            <td class="align-center" style="vertical-align:middle" rowspan="2"> نام کامل</td>
+                                            <td style="vertical-align:middle" class="align-center">پورسانت تایید شده رییس مرکز</td>
+                                            <td style="vertical-align:middle" class="align-center">پورسانت پس از کسورات و مطالبات</td>
+                                            <td style="vertical-align:middle" class="align-center" rowspan="2">پورسانت نهایی</td>
+                                        </tr>
+                                    </thead>
+                                    <tr ng-repeat="record in memberPoromotions">
+                                        <td class="text-center" style="vertical-align:middle">
+                                            {{$index + 1}}
+                                        </td>
+                                        <td class="text-center" style="vertical-align:middle">
+                                            {{record.member.fullName}}
+                                        </td>
+                                        <td class="align-center dir-ltr">
+                                            {{record.managerPromotion | number}}
+                                        </td>
+                                        <td class="align-center dir-ltr">
+                                            {{record.ceoPromotion | number}}
+                                        </td>
+                                        <td class="align-center">
+                                            <input type="text" class="form-control dir-ltr"
+                                                   ng-model="record.finalPromotion"
+                                                   ng-trim=false
+                                                   awnum="price">
+                                        </td>
+
                                     </tr>
-                                </thead>
-                                <tr ng-repeat="record in memberPoromotions">
-                                    <td class="text-center" style="vertical-align:middle">
-                                        {{$index + 1}}
-                                    </td>
-                                    <td class="text-center" style="vertical-align:middle">
-                                        {{record.member.fullName}}
-                                    </td>
-                                    <td class="align-center dir-ltr">
-                                        {{record.managerPromotion | number}}
-                                    </td>
-                                    <td class="align-center dir-ltr">
-                                        {{record.ceoPromotion | number}}
-                                    </td>
-                                    <td class="align-center">
-                                        <input type="text" class="form-control dir-ltr"
-                                               ng-model="record.finalPromotion"
-                                               ng-trim=false
-                                               awnum="price">
-                                    </td>
+                                    <tr ng-show="memberPoromotions.length != 0">
+                                        <td class="text-center" colspan="2" style="vertical-align:middle">
+                                            جمع پورسانت
+                                        </td>
+                                        <td class="align-center dir-ltr bold" colspan="2">
+                                            {{branchPromotoinDetail.totalPromotion | number}}
+                                        </td>
+                                        <td class="align-center dir-ltr bold">
+                                            {{getTotalFinalPromotion() | number}}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="alert alert-warning" ng-show="branchPromotoinDetail.promotionReviewStatusId == 4">
+                                <i class="fa fa-warning"></i>
+                                لطفا پس از اتمام تعیین پورسانت پرسنل ،جهت تایید نهایی از گزینه <strong>تایید نهایی و ارسال اطلاعات</strong> استفاده نماید.
+                                توجه داشته باشید که بعد از زدن این گزینه امکان تغییر اطلاعات وجود ندارد
+                            </div>
 
-                                </tr>
-                                <tr ng-show="memberPoromotions.length != 0">
-                                    <td class="text-center" colspan="2" style="vertical-align:middle">
-                                        جمع پورسانت
-                                    </td>
-                                    <td class="align-center dir-ltr bold" colspan="2">
-                                        {{branchPromotoinDetail.totalPromotion | number}}
-                                    </td>
-                                    <td class="align-center dir-ltr bold">
-                                        {{getTotalFinalPromotion() | number}}
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="alert alert-warning" ng-show="branchPromotoinDetail.promotionReviewStatusId == 4">
-                            <i class="fa fa-warning"></i>
-                            لطفا پس از اتمام تعیین پورسانت پرسنل ،جهت تایید نهایی از گزینه <strong>تایید نهایی و ارسال اطلاعات</strong> استفاده نماید.
-                            توجه داشته باشید که بعد از زدن این گزینه امکان تغییر اطلاعات وجود ندارد
-                        </div>
-                        <div class="alert alert-warning" ng-if="branchPromotoinDetail.promotionReviewStatusId != 4">
-                            <strong>توجه!</strong> پورسانت پرسنل نهایی شد.
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit"
-                                    ng-show="branchPromotoinDetail.promotionReviewStatusId == 4"
-                                    name="Add"
-                                    class="btn btn-success">
-                                <i class="fa fa-check"></i>
-                                <span>ثبت</span>
-                            </button>
-                            <button type="button"
-                                    ng-show="branchPromotoinDetail.promotionReviewStatusId == 4"
-                                    ng-click="determinedPromotion()"
-                                    class="btn btn-danger">
-                                <i class="fa fa-send-o"></i>
-                                <span>تایید نهایی و ارسال اطلاعات</span>
-                            </button>
+                            <div class="modal-footer">
+                                <button type="submit"
+                                        ng-show="branchPromotoinDetail.promotionReviewStatusId == 4"
+                                        name="Add"
+                                        class="btn btn-success">
+                                    <i class="fa fa-check"></i>
+                                    <span>ثبت</span>
+                                </button>
+                                <button type="button"
+                                        ng-show="branchPromotoinDetail.promotionReviewStatusId == 4"
+                                        ng-click="determinedPromotion()"
+                                        class="btn btn-danger">
+                                    <i class="fa fa-send-o"></i>
+                                    <span>تایید نهایی و ارسال اطلاعات</span>
+                                </button>
 
+                            </div>
                         </div>
                     </form>
+                    <div class="alert alert-warning" ng-if="branchPromotoinDetail.promotionReviewStatusId == 6">
+                        <strong>توجه!</strong> پورسانت پرسنل نهایی شد.
+                    </div>
+                    <div class="alert alert-warning" ng-if="branchPromotoinDetail.promotionReviewStatusId != 4">
+                        <strong> اطلاعاتی جهت تایید وجود ندارد!</strong>
+                    </div>
                 </div>
             </div>
         </div>

@@ -58,7 +58,7 @@ namespace Neutrino.Portal
             {
                 return CreateErrorResponse(result_biz);
             }
-            return Request.CreateResponse(HttpStatusCode.OK,result_biz);
+            return Request.CreateResponse(HttpStatusCode.OK, result_biz);
         }
         [Route("confirmCompensatory"), HttpPost]
         public async Task<HttpResponseMessage> ConfirmCompensatoryAsync(List<BranchPromotion> lstBranchPromotions)
@@ -83,40 +83,44 @@ namespace Neutrino.Portal
                 return CreateErrorResponse(entities);
             }
 
-            var result = new List<BranchPromotionDetailViewModel>()
+            var result = new List<BranchPromotionDetailViewModel>();
+
+            if (entities.ResultValue != null)
             {
+                result = new List<BranchPromotionDetailViewModel>()
+                {
                 new  BranchPromotionDetailViewModel(){
                     BranchId = branchId,
-                    BranchName = entities.ResultValue.Branch.Name,
+                    BranchName = entities.ResultValue?.Branch.Name,
                     GoalTypeId = 1,
                     GoalTypeTitle = "پورسانت فروش تامین کننده",
-                    PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
-                    TotalFinalPromotion = entities.ResultValue.TotalSalesPromotion.Value,
+                    PromotionReviewStatusId = (int)entities.ResultValue?.PromotionReviewStatusId,
+                    TotalFinalPromotion = entities.ResultValue?.TotalSalesPromotion ?? 0,
                     PositionPromotions = null,
-                    Month = entities.ResultValue.Month,
-                    Year =  entities.ResultValue.Year,
+                    Month = entities.ResultValue?.Month ?? 0,
+                    Year =  entities.ResultValue?.Year ?? 0,
                 },
                 new  BranchPromotionDetailViewModel(){
                     BranchId = branchId,
-                    BranchName = entities.ResultValue.Branch.Name,
+                    BranchName = entities.ResultValue?.Branch.Name,
                     GoalTypeId = 4,
                     GoalTypeTitle = "پورسانت ترمیمی",
-                    PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
-                    TotalFinalPromotion = entities.ResultValue.CompensatoryPromotion,
+                    PromotionReviewStatusId = (int)entities.ResultValue?.PromotionReviewStatusId,
+                    TotalFinalPromotion = entities.ResultValue?.CompensatoryPromotion ?? 0,
                     PositionPromotions = null,
-                    Month = entities.ResultValue.Month,
-                    Year =  entities.ResultValue.Year,
+                    Month = entities.ResultValue?.Month ?? 0,
+                    Year =  entities.ResultValue?.Year ?? 0,
                 },
                 new  BranchPromotionDetailViewModel(){
                     BranchId = branchId,
                     GoalTypeId = 2,
-                    PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
-                    BranchName = entities.ResultValue.Branch.Name,
+                    PromotionReviewStatusId = (int)entities.ResultValue?.PromotionReviewStatusId,
+                    BranchName = entities.ResultValue?.Branch.Name,
                     GoalTypeTitle = "پورسانت وصول کل",
-                    Month = entities.ResultValue.Month,
-                    Year =  entities.ResultValue.Year,
-                    TotalFinalPromotion = entities.ResultValue.TotalReceiptPromotion.Value,
-                    PositionPromotions =  (from brgpl in entities.ResultValue.BranchGoalPromotions
+                    Month = entities.ResultValue?.Month ?? 0,
+                    Year =  entities.ResultValue?.Year ?? 0,
+                    TotalFinalPromotion = entities.ResultValue?.TotalReceiptPromotion ?? 0,
+                    PositionPromotions =  (from brgpl in entities.ResultValue?.BranchGoalPromotions
                                           where brgpl.Goal.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptTotalGoal
                                           from posi in brgpl.PositionReceiptPromotions
                                           select new PositionPromotion
@@ -128,13 +132,13 @@ namespace Neutrino.Portal
                 new  BranchPromotionDetailViewModel(){
                     BranchId = branchId,
                     GoalTypeId = 3,
-                    BranchName = entities.ResultValue.Branch.Name,
-                    PromotionReviewStatusId = (int)entities.ResultValue.PromotionReviewStatusId,
+                    BranchName = entities.ResultValue?.Branch.Name,
+                    PromotionReviewStatusId = (int)entities.ResultValue?.PromotionReviewStatusId,
                     GoalTypeTitle = "پورسانت وصول خصوصی",
-                    Month = entities.ResultValue.Month,
-                    Year =  entities.ResultValue.Year,
-                    TotalFinalPromotion = entities.ResultValue.PrivateReceiptPromotion.Value,
-                    PositionPromotions =  (from brgpl in entities.ResultValue.BranchGoalPromotions
+                    Month = entities.ResultValue?.Month ?? 0,
+                    Year =  entities.ResultValue?.Year ?? 0,
+                    TotalFinalPromotion = entities.ResultValue?.PrivateReceiptPromotion ?? 0,
+                    PositionPromotions =  (from brgpl in entities.ResultValue?.BranchGoalPromotions
                                           where brgpl.Goal.GoalGoodsCategoryTypeId == GoalGoodsCategoryTypeEnum.ReceiptPrivateGoal
                                           from posi in brgpl.PositionReceiptPromotions
                                           select new PositionPromotion
@@ -144,19 +148,24 @@ namespace Neutrino.Portal
                                           }).ToList()
                 }
             };
-
+            }
 
             return CreateSuccessedListResponse(result);
         }
-        [Route("getBranchPromotionReleasedStep1ByBranchManager")]
-        public async Task<HttpResponseMessage> GetActiveBranchPromotion(int branchId)
+        [Route("getBranchPromotionReleasedStep1")]
+        public async Task<HttpResponseMessage> GetBranchPromotionReleasedStep1(int branchId)
         {
             var result_bizloading = await businessService.LoadBranchPromotionAsync(branchId, PromotionReviewStatusEnum.ReleasedStep1ByBranchManager);
             if (result_bizloading.ReturnStatus == false)
                 return CreateErrorResponse(result_bizloading);
-            var mapper = GetMapper();
-
-            var result = mapper.Map<BranchPromotion, BranchPromotionViewModel>(result_bizloading.ResultValue);
+            var result = new BranchPromotionViewModel();
+            result.PromotionReviewStatusId = 0;
+            if (result_bizloading.ResultValue == null)
+            {
+                var mapper = GetMapper();
+                result = mapper.Map<BranchPromotion, BranchPromotionViewModel>(result_bizloading.ResultValue);
+            }
+            
             return CreateViewModelResponse(result, result_bizloading);
         }
 
@@ -168,8 +177,11 @@ namespace Neutrino.Portal
             if (result_bizloading.ReturnStatus == false)
                 return CreateErrorResponse(result_bizloading);
             var mapper = GetMapper();
-
-            var result = mapper.Map<BranchPromotion, BranchPromotionViewModel>(result_bizloading.ResultValue);
+            var result = new BranchPromotionViewModel();
+            if (result_bizloading.ResultValue != null)
+                result = mapper.Map<BranchPromotion, BranchPromotionViewModel>(result_bizloading.ResultValue);
+            else
+                result.PromotionReviewStatusId = 0;
             return CreateViewModelResponse(result, result_bizloading);
         }
 

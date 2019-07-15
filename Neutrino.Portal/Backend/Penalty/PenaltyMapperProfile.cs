@@ -8,14 +8,12 @@ namespace Neutrino.Portal.ProfileMapper
     {
         public PenaltyMapperProfile()
         {
+            CreateMap<PenaltyViewModel, MemberPenaltyDTO>()
+                .ForMember(x => x.CEOPromotion, opt => opt.ResolveUsing(record => record.ManagerPromotion - record.Deduction + record.Credit))
+                .ReverseMap();
             CreateMap<PenaltyViewModel, MemberPenalty>()
                 .ForMember(x => x.CEOPromotion, opt => opt.ResolveUsing(record => record.ManagerPromotion - record.Deduction + record.Credit))
-                .ReverseMap()
-                .ForMember(x => x.MemberName, opt => opt.ResolveUsing(x => x.Member.Name + " " + x.Member.LastName))
-                .ForMember(x => x.ManagerPromotion, opt => opt.ResolveUsing(x => x.MemberSharePromotion.ManagerPromotion));
-
-
-
+                .ReverseMap();
         }
     }
 }

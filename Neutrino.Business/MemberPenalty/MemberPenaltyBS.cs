@@ -26,45 +26,63 @@ namespace Neutrino.Business
 
 
 
-        public async Task<IBusinessResultValue<List<MemberPenalty>>> LoadPenaltiesForPromotionAsync(int branchId)
+        public async Task<IBusinessResultValue<List<MemberPenaltyDTO>>> LoadPenaltiesForPromotionAsync(int branchId)
         {
-            var result = new BusinessResultValue<List<MemberPenalty>>();
+            var result = new BusinessResultValue<List<MemberPenaltyDTO>>();
             try
             {
-                var query = await (from brp in unitOfWork.BranchPromotionDataService.GetQuery()
-                                   join memshar in unitOfWork.MemberSharePromotionDataService.GetQuery().Include(x => x.Member)
-                                   on brp.Id equals memshar.BranchPromotionId
-                                   where memshar.Deleted == false
-                                   join mempln in unitOfWork.MemberPenaltyDataService.GetQuery()
-                                   on memshar.Id equals mempln.MemberSharePromotionId into leftjoin_share_penalty
-                                   from share_penalty in leftjoin_share_penalty.Where(x => x.Deleted == false).DefaultIfEmpty()
-                                   where brp.BranchId == branchId && brp.PromotionReviewStatusId == PromotionReviewStatusEnum.ReleasedStep1ByBranchManager
-                                   select new
-                                   {
-                                       memshar,
-                                       memshar.Member,
-                                       brp,
-                                       penalty = share_penalty ?? null
-                                   }).ToListAsync();
+                var branchPromotion = await unitOfWork.BranchPromotionDataService.FirstOrDefaultAsync(x => x.BranchId == branchId && x.PromotionReviewStatusId == PromotionReviewStatusEnum.ReleasedStep1ByBranchManager);
 
 
-
-
-                result.ResultValue = query.Select(x => new MemberPenalty
+                if (branchPromotion != null)
                 {
-                    Member = x.memshar.Member,
-                    MemberId = x.memshar.MemberId,
-                    BranchPromotion = x.brp,
-                    BranchPromotionId = x.brp.Id,
-                    Deduction = x.penalty?.Deduction ?? 0,
-                    MemberSharePromotion = x.memshar,
-                    MemberSharePromotionId = x.memshar.Id,
-                    Penalty = x.penalty?.Penalty ?? 0,
-                    Credit = x.penalty?.Credit ?? 0,
-                    RemainingPenalty = x.penalty?.RemainingPenalty ?? 0,
-                    Description = x.penalty?.Description ?? "",
-                    Id = x.penalty?.Id ?? 0
-                }).ToList();
+                    var lst_memberPenalties = await unitOfWork.MemberPenaltyDataService.GetAsync(x => x.BranchPromotionId == branchPromotion.Id
+                    && x.BranchPromotion.PromotionReviewStatusId == PromotionReviewStatusEnum.DeterminedPromotion
+                    && x.BranchPromotion.Month < branchPromotion.Month && x.BranchPromotion.Year < branchPromotion.Year
+                    , includes: x => x.BranchPromotion
+                    , orderBy: x => x.OrderByDescending(z => z.BranchPromotion.Year).OrderByDescending(z => z.BranchPromotion.Month));
+
+                    var query = await (from memshar in unitOfWork.MemberSharePromotionDataService.GetQuery().Include(x => x.Member)
+                                       join mempln in unitOfWork.MemberPenaltyDataService.GetQuery()
+                                       on memshar.Id equals mempln.MemberSharePromotionId into leftjoin_share_penalty
+                                       from share_penalty in leftjoin_share_penalty.Where(x => x.Deleted == false).DefaultIfEmpty()
+                                       where memshar.BranchPromotionId == branchPromotion.Id
+                                       select new
+                                       {
+                                           memshar,
+                                           memshar.Member,
+                                           penalty = share_penalty ?? null
+                                       }).ToListAsync();
+
+
+
+
+                    result.ResultValue = query.Select(x =>
+                    {
+                        //آخرین رکورد جریمه پرسنل
+                        var lastMemberPenalty = lst_memberPenalties.FirstOrDefault(c => c.MemberId == x.Member.Id);
+
+                        return new MemberPenaltyDTO
+                        {
+                            MemberName = x.Member.Name + " " + x.Member.LastName,
+                            MemberId = x.memshar.MemberId,
+                            ManagerPromotion = x.memshar.ManagerPromotion,
+                            BranchPromotionId = branchPromotion.Id,
+                            Deduction = x.penalty?.Deduction ?? 0,
+                            MemberSharePromotionId = x.memshar.Id,
+                            Penalty = x.penalty?.Penalty ?? 0,
+                            Credit = x.penalty?.Credit ?? 0,
+                            RemainingPenalty = lastMemberPenalty != null ? lastMemberPenalty.RemainingPenalty + lastMemberPenalty.Penalty : x.penalty?.RemainingPenalty ?? 0,
+                            Description = x.penalty?.Description ?? "",
+                            Id = x.penalty?.Id ?? 0,
+                            HasPerviousData = lastMemberPenalty != null,
+                            Saved = x.penalty?.Saved ?? 0
+                        };
+                    }).ToList();
+                }
+
+
+
 
             }
             catch (Exception ex)
@@ -116,19 +134,10 @@ namespace Neutrino.Business
                 var branchPromotionId = entities.FirstOrDefault().BranchPromotionId;
 
                 var branchPromotion = await unitOfWork.BranchPromotionDataService.GetQuery()
-                    .IncludeFilter(x=>x.MemberSharePromotions.Where(c=>c.Deleted == false))
-                   .SingleOrDefaultAsync(x => x.Id == branchPromotionId );
+                    .IncludeFilter(x => x.MemberSharePromotions.Where(c => c.Deleted == false))
+                   .SingleOrDefaultAsync(x => x.Id == branchPromotionId);
                 if (branchPromotion != null)
                 {
-                    var assigendValue = entities.Sum(x => x.CEOPromotion);
-                    if (assigendValue != branchPromotion.PrivateReceiptPromotion.Value + branchPromotion.TotalReceiptPromotion.Value + branchPromotion.TotalSalesPromotion.Value)
-                    {
-                        result.ReturnStatus = false;
-                        result.ReturnMessage.Add("مبلغ پورسانت مرکز به طور کامل بین پرسنل تقسیم نشده است");
-                        return result;
-                    }
-
-                    
                     foreach (var item in branchPromotion.MemberSharePromotions)
                     {
                         var penalty = entities.SingleOrDefault(x => x.MemberId == item.MemberId);

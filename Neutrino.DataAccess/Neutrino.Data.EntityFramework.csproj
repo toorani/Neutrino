@@ -657,6 +657,10 @@
     <Compile Include="Migrations\201907051708438_membershare_compensatoryPromotion.Designer.cs">
       <DependentUpon>201907051708438_membershare_compensatoryPromotion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201907151716350_addSaveToPenalty.cs" />
+    <Compile Include="Migrations\201907151716350_addSaveToPenalty.Designer.cs">
+      <DependentUpon>201907151716350_addSaveToPenalty.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NeutrinoContext.cs" />
@@ -1107,6 +1111,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907051708438_membershare_compensatoryPromotion.resx">
       <DependentUpon>201907051708438_membershare_compensatoryPromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907151716350_addSaveToPenalty.resx">
+      <DependentUpon>201907151716350_addSaveToPenalty.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

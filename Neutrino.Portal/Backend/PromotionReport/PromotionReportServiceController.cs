@@ -324,15 +324,21 @@ namespace Neutrino.Portal
                    }).ToList()
                }).ToList();
 
+            string downloadUrl = $"/excel/branch_receipt{DateTime.Now.Ticks}.xlsx";
             string caption = $" گزارش عملکرد {lst_responses.First().GoalGoodsCategoryName} سال {year} - ماه {month} ";
             var excelTemplate = HostingEnvironment.MapPath("/Views/Promotion/rptbranchreceipt/excelTemplate.html");
-            var result = ExportToExcel.GetExcelFile<ReportBranchReceiptGoalViewModel>(lst_responses
-                , outputFileName: "branchReceiptgoals"
+
+            using (var package = new ExcelPackage())
+            {
+                ExportToExcel.CreateExcelFile<ReportBranchReceiptGoalViewModel>(lst_responses
+                , outputFileName: downloadUrl
                 , excelTemplatePath: excelTemplate
                 , caption: caption
+                , package: package
                 , getLoopObjects: (ReportBranchReceiptGoalViewModel record) => record.PositionPromotions
                 );
-            return result;
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, downloadUrl);
         }
         [Route("getBranchPromotionDetail"), HttpGet]
         public async Task<HttpResponseMessage> GetBranchPromotionDetail(string startDate, string endDate)
@@ -412,7 +418,7 @@ namespace Neutrino.Portal
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, downloadUrl);
-            
+
         }
         #endregion
 

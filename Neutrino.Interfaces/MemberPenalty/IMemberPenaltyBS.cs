@@ -11,7 +11,7 @@ namespace Neutrino.Interfaces
 {
     public interface IMemberPenaltyBS : IBusinessService
     {
-        Task<IBusinessResultValue<List<MemberPenalty>>> LoadPenaltiesForPromotionAsync(int branchId);
+        Task<IBusinessResultValue<List<MemberPenaltyDTO>>> LoadPenaltiesForPromotionAsync(int branchId);
         Task<IBusinessResultValue<List<MemberPenalty>>> CreateOrModifyAsync(List<MemberPenalty> entities);
         Task<IBusinessResultValue<PromotionReviewStatusEnum>> ReleaseCEOPromotion(List<MemberPenalty> entities);
     }

@@ -101,29 +101,45 @@ namespace Neutrino.Business
             }
             return result;
         }
-        public async Task<IBusinessResult> ProceedMemberSharePromotionAsync(PromotionReviewStatusEnum currentStep, PromotionReviewStatusEnum nextStep, int branchId)
+        public async Task<IBusinessResultValue<PromotionReviewStatusEnum>> ProceedMemberSharePromotionAsync(PromotionReviewStatusEnum currentStep, PromotionReviewStatusEnum nextStep, int branchId)
         {
-            var result = new BusinessResult();
+            var result = new BusinessResultValue<PromotionReviewStatusEnum>();
             try
             {
                 var entity = await unitOfWork.BranchPromotionDataService.GetQuery()
                     .IncludeFilter(x => x.MemberSharePromotions.Where(y => y.Deleted == false))
+                    .IncludeFilter(x => x.MemberSharePromotions.Select(y => y.Details.Where(c => c.Deleted == false)))
                     .FirstOrDefaultAsync(x => x.BranchId == branchId && x.PromotionReviewStatusId == currentStep);
                 if (entity != null)
                 {
-                    var assigendValue = entity.MemberSharePromotions.Sum(x => (decimal?)x.ManagerPromotion) ?? 0;
-                    if (assigendValue != entity.PrivateReceiptPromotion.Value + entity.TotalReceiptPromotion.Value + entity.TotalSalesPromotion.Value)
+                    var salesAssigned = entity.MemberSharePromotions.Sum(x => x.Details.Sum(c => (decimal?)c.BranchSalesPromotion)) ?? 0;
+                    var receiptAssigned = entity.MemberSharePromotions.Sum(x => x.Details.Sum(c => (decimal?)c.ReceiptPromotion)) ?? 0;
+                    var compensatoryAssigned = entity.MemberSharePromotions.Sum(x => x.Details.Sum(c => (decimal?)c.CompensatoryPromotion)) ?? 0;
+
+                    if (salesAssigned > entity.TotalSalesPromotion)
                     {
+                        result.ReturnMessage.Add("جمع مبلغ پورسانت تامین کننده پرسنل از پورسانت فروش تامین کنندگان مرکز بیشتر میباشد");
                         result.ReturnStatus = false;
-                        result.ReturnMessage.Add("مبلغ پورسانت مرکز به طور کامل بین پرسنل تقسیم نشده است");
-                        return result;
+                    }
+                    if (receiptAssigned > entity.PrivateReceiptPromotion + entity.TotalReceiptPromotion)
+                    {
+                        result.ReturnMessage.Add("جمع مبلغ پورسانت وصول پرسنل از پورسانت وصول مرکز بیشتر میباشد");
+                        result.ReturnStatus = false;
+                    }
+                    if (compensatoryAssigned > entity.CompensatoryPromotion)
+                    {
+                        result.ReturnMessage.Add("جمع مبلغ پورسانت ترمیمی پرسنل از پورسانت ترمیمی مرکز بیشتر میباشد");
+                        result.ReturnStatus = false;
                     }
 
-                    entity.PromotionReviewStatusId = nextStep;
-
-                    unitOfWork.BranchPromotionDataService.Update(entity);
-                    await unitOfWork.CommitAsync();
-                    result.ReturnMessage.Add("اطلاعات تایید و ارسال شد");
+                    if (result.ReturnStatus)
+                    {
+                        entity.PromotionReviewStatusId = nextStep;
+                        result.ResultValue = nextStep;
+                        unitOfWork.BranchPromotionDataService.Update(entity);
+                        await unitOfWork.CommitAsync();
+                        result.ReturnMessage.Add("اطلاعات تایید و ارسال شد");
+                    }
                 }
                 else
                 {
@@ -287,7 +303,7 @@ namespace Neutrino.Business
                 {
                     var exist_item = lst_existEntities.Single(x => x.MemberId == item.MemberId);
                     var arr_details = new MemberSharePromotionDetail[exist_item.Details.Count];
-                    exist_item.Details.CopyTo(arr_details,0);
+                    exist_item.Details.CopyTo(arr_details, 0);
                     foreach (var detail in arr_details)
                         unitOfWork.MemberSharePromotionDetailDataService.Delete(detail, false);
 

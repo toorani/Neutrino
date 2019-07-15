@@ -51,11 +51,14 @@ namespace Neutrino.Portal.Models
         /// مطالبات
         /// </summary>
         public decimal Credit { get; set; }
+        /// <summary>
+        /// مبلغ ذخیره
+        /// </summary>
+        public decimal Saved { get; set; }
         public string Description { get; set; }
         public int BranchPromotionId { get; set; }
-
         public int MemberSharePromotionId { get; set; }
-
+        public bool HasPerviousData { get; set; }
         public PenaltyViewModel() 
         {
             

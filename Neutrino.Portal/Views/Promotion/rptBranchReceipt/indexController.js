@@ -42,9 +42,13 @@ angular.module("neutrinoProject").register.controller('promotion.branchreceiptrp
             }
 
             $scope.exportReport = function () {
-
-                var url = '/api/promotionReportService/exportExcelBranchReceiptGoals?year=' + $scope.viewModel.year + '&month=' + $scope.viewModel.month + '&goalGoodsCategoryTypeId=' + $scope.viewModel.goalGoodsCategoryTypeId;
-                exportExcel.loadfile(url);
+                ajaxService.ajaxCall($scope.viewModel, '/api/promotionReportService/exportExcelBranchReceiptGoals', 'get',
+                    function (response) {
+                        exportExcel.loadfile(response.data);
+                    },
+                    function (response) {
+                        alertService.showError(response);
+                    });
             }
 
         }]);

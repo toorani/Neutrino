@@ -368,7 +368,7 @@ namespace Neutrino.Portal.Tools
                             {
                                 format = cell.Attributes["format"].Value;
                                 workSheet.Cells[rowCounter, counter].Style.Numberformat.Format = format;
-                                if (format.Contains("#"))
+                                if (format.Contains("#") || format.Contains("%"))
                                     workSheet.Cells[rowCounter, counter].Value = Convert.ToDecimal(cell.InnerHtml.Trim());
                                 else
                                     workSheet.Cells[rowCounter, counter].Value = cell.InnerHtml.Trim();

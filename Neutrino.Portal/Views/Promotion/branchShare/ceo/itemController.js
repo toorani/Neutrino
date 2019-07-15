@@ -17,7 +17,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.ceo
             }
 
             var getBranchPromotionDetail = function () {
-                ajaxService.ajaxCall({ branchId: branchId }, "api/branchPromotionService/getBranchPromotionReleasedStep1ByBranchManager", 'get',
+                ajaxService.ajaxCall({ branchId: branchId }, "api/branchPromotionService/getBranchPromotionReleasedStep1", 'get',
                     function (response) {
                         $scope.branchPromotoinDetail = response.data;
 
@@ -46,6 +46,17 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.ceo
                 return totalCEOPormotion;
                 
             }
+
+            $scope.getTotalManagerPromotion = function () {
+                let totalManagerPormotion = 0;
+                $scope.memberPenalties.forEach(record => {
+                    totalManagerPormotion += record.managerPromotion;
+                });
+                return totalManagerPormotion;
+            }
+
+         
+
             $scope.releaseCEO = function () {
                 ajaxService.ajaxPost($scope.memberPenalties, '/api/penaltyService/releaseCEOPromotion',
                     function (response) {

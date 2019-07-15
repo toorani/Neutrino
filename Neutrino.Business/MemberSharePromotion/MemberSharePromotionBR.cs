@@ -68,7 +68,7 @@ namespace Neutrino.Business
 
     public class MemberSharePromotionCollectionBR : NeutrinoValidator<List<MemberSharePromotion>>
     {
-        StringBuilder @string = new StringBuilder();
+        private StringBuilder @string = new StringBuilder();
         int branchPromotionId = 0;
         BranchPromotion branchPromotion = null;
         #region [ Constructor(s) ]

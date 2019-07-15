@@ -1,8 +1,8 @@
 ﻿console.log("promotion.branchShare.reviewFinalStep.indexController")
 
 angular.module("neutrinoProject").register.controller('promotion.branchShare.reviewFinalStep.indexController',
-    ['$scope', '$location', 'ajaxService', 'alertService',
-        function ($scope, $location, ajaxService, alertService) {
+    ['$scope', 'ajaxService', 'alertService',
+        function ($scope, ajaxService, alertService) {
 
             "use strict";
 
@@ -12,12 +12,13 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.rev
                 getBranchPromotionDetail();
                 getData();
             }
-            
+           
 
             var getBranchPromotionDetail = function () {
                 ajaxService.ajaxCall({}, "api/branchPromotionService/getBranchPromotionReleasedByCEO", 'get',
                     function (response) {
                         $scope.branchPromotoinDetail = response.data;
+                        
 
                     },
                     function (response) {

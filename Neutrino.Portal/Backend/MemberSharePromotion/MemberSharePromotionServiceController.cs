@@ -48,8 +48,9 @@ namespace Neutrino.Portal
             if (result_bizloading.ReturnStatus == false)
                 return CreateErrorResponse(result_bizloading);
             var mapper = GetMapper();
-
-            var result = mapper.Map<List<MemberSharePromotion>, List<MemberSharePromotionViewModel>>(result_bizloading.ResultValue);
+            var result = new List<MemberSharePromotionViewModel>();
+            if (result_bizloading.ResultValue != null)
+                result = mapper.Map<List<MemberSharePromotion>, List<MemberSharePromotionViewModel>>(result_bizloading.ResultValue);
             return CreateSuccessedListResponse(result);
         }
         [Route("delete"), HttpPost]
@@ -124,7 +125,7 @@ namespace Neutrino.Portal
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
-        [Route("getMemberSharePromotionList4Manager"),HttpGet]
+        [Route("getMemberSharePromotionList4Manager"), HttpGet]
         public async Task<HttpResponseMessage> GetMemberSharePromotionList4ManagerAsync(int month, int year)
         {
             var branchId = IdentityConfig.GetBranchId(User);

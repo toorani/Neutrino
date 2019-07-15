@@ -41,7 +41,7 @@ namespace Neutrino.Business
         }
 
         public async Task<IBusinessResultValue<BranchPromotion>> LoadBranchPromotionAsync(int branchId, PromotionReviewStatusEnum promotionReviewStatusId)
-        { 
+        {
             var result = new BusinessResultValue<BranchPromotion>();
             try
             {
@@ -54,6 +54,7 @@ namespace Neutrino.Business
                     .Where(x => x.BranchId == branchId && x.PromotionReviewStatusId == promotionReviewStatusId)
                     .FirstOrDefaultAsync();
 
+               
             }
             catch (Exception ex)
             {

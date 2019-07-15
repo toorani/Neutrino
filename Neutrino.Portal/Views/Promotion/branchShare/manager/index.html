@@ -13,7 +13,7 @@
                     <div class="col-md-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <div class="row ls-pricing-table-wrap">
+                                <div class="row ls-pricing-table-wrap" ng-show="promotionReviewStatusId==1">
                                     <div class="col-sm-4 col-md-4">
                                         <div class="basic free-wrap">
                                             <ul>
@@ -39,7 +39,7 @@
                                                         <p class="dir-ltr">{{branchPromotionValues.totalReceiptPromotion | number}}</p>
                                                     </div>
                                                 </li>
-                                                
+
                                                 <li>
                                                     <div class="basic-bage">
                                                         <h4>پورسانت ترمیمی</h4>
@@ -77,15 +77,15 @@
                                 </div>
                                 <div class="ls_divider"></div>
                                 <br />
-                                <div class="alert alert-warning" ng-if="branchPromotoinDetail[0].promotionReviewStatusId != 1">
+                                <div class="alert alert-warning" ng-if="promotionReviewStatusId == 0">
                                     <strong>توجه!</strong> پورسانت تقسیم و ارسال شده است.
                                 </div>
                                 <form novalidate role="form" esp-validate-complete="submit()"
                                       esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
                                   ,autoHidePrompt:true}"
                                       class="form-horizontal ls_form" name="form">
-                                    
-                                    <div class="row">
+
+                                    <div class="row" ng-show="promotionReviewStatusId==1">
                                         <table class="table table-striped" cellspacing="0">
                                             <thead class="bold">
                                                 <tr>
@@ -96,7 +96,7 @@
                                                     <th class="text-center">باقی مانده</th>
                                                     <th class="align-center dir-ltr">{{branchPromotionValues.totalSalesPromotion - totalValues.totalSalesPromotion | number}}</th>
                                                     <th class="align-center dir-ltr">{{branchPromotionValues.totalReceiptPromotion - totalValues.totalReceiptPromotion | number}}</th>
-                                                    <th class="align-center dir-ltr">{{branchPromotionValues.totalCompensatoryPromotion - totalValues.totalSellerPromotion | number}}</th>
+                                                    <th class="align-center dir-ltr">{{branchPromotionValues.totalCompensatoryPromotion - totalValues.totalCompensatoryPromotion | number}}</th>
                                                     <th class="align-center dir-ltr">{{branchPromotionValues.totalBranchPromotion() - totalValues.totalPromotion() | number}}</th>
                                                 </tr>
                                                 <tr>
@@ -169,27 +169,25 @@
                                                     <th class="align-center dir-ltr">{{totalValues.totalCompensatoryPromotion | number}}</th>
                                                     <th class="align-center dir-ltr">{{totalValues.totalPromotion() | number}}</th>
                                                 </tr>
-                                                
+
                                             </tfoot>
                                         </table>
                                     </div>
 
 
-                                    <div class="modal-footer">
-                                        <button type="submit" name="Add" class="btn btn-success" 
-                                                >
+                                    <div class="modal-footer" ng-show="promotionReviewStatusId==1">
+                                        <button type="submit" name="Add" class="btn btn-success">
                                             <i class="fa fa-check"></i>
                                             <span>ثبت</span>
                                         </button>
-                                        <button type="button" ng-show="branchPromotionValues.totalBranchPromotion() - totalValues.totalPromotion() == 0"
-                                                ng-click="releaseManagerStep1()"
+                                        <button type="button" ng-click="releaseManagerStep1()"
                                                 class="btn btn-danger">
                                             <i class="fa fa-send-o"></i>
                                             <span>تایید نهایی و ارسال اطلاعات</span>
                                         </button>
 
                                     </div>
-                                    <div class="alert alert-warning">
+                                    <div class="alert alert-warning" ng-show="promotionReviewStatusId==1">
                                         <i class="fa fa-warning"></i>
                                         لطفا پس از اتمام تعیین پورسانت پرسنل ،جهت ارسال اطلاعات از گزینه <strong>تایید نهایی و ارسال اطلاعات</strong> استفاده نماید.
                                         توجه داشته باشید که بعد از زدن این گزینه امکان تغییر اطلاعات وجود ندارد
