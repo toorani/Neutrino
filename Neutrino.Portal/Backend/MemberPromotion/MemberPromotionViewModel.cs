@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Neutrino.Portal.Models
 {
-    public class MemberSharePromotionViewModel : ViewModelBase
+    public class MemberPromotionViewModel : ViewModelBase
     {
         public int BranchPromotionId { get; set; }
         public int MemberId { get; set; }
@@ -11,11 +11,11 @@ namespace Neutrino.Portal.Models
         public decimal? CEOPromotion { get; set; }
         public decimal? FinalPromotion { get; set; }
         public MemberViewModel Member { get; set; }
-        public List<MemberSharePromotionDetailViewModel> Details { get; set; }
+        public List<MemberPromotionDetailViewModel> Details { get; set; }
 
     }
 
-    public class MemberSharePromotionManagerViewModel : ViewModelBase
+    public class MemberPromotionManagerViewModel : ViewModelBase
     {
         public int BranchPromotionId { get; set; }
         public int MemberId { get; set; }
@@ -41,14 +41,14 @@ namespace Neutrino.Portal.Models
     }
 
 
-    public class MemberSharePromotionDetailViewModel : ViewModelBase
+    public class MemberPromotionDetailViewModel : ViewModelBase
     {
         public int SharePromotionTypeId { get; set; }
         public int MemberId { get; set; }
         /// <summary>
         /// سهم از پورسانت فروش مرکز
         /// </summary>
-        public decimal BranchSalesPromotion { get; set; }
+        public decimal SupplierPromotion { get; set; }
         /// <summary>
         /// سهم از اهداف عوامل فروش
         /// </summary>

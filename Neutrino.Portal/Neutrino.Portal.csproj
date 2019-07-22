@@ -356,8 +356,8 @@
     <Compile Include="Backend\GoalNonFulfillment\GoalNonFulfillmentMapperProfile.cs" />
     <Compile Include="Backend\GoalNonFulfillment\GoalNonFulfillmentServiceController.cs" />
     <Compile Include="Backend\GoalNonFulfillment\GoalNonFulfillmentViewModel.cs" />
-    <Compile Include="Backend\MemberSharePromotion\MemberSharePromotionServiceController.cs" />
-    <Compile Include="Backend\MemberSharePromotion\MemberSharePromotionMapperProfile.cs" />
+    <Compile Include="Backend\MemberPromotion\MemberPromotionServiceController.cs" />
+    <Compile Include="Backend\MemberPromotion\MemberPromotionMapperProfile.cs" />
     <Compile Include="Backend\Member\MemberMapperProfile.cs" />
     <Compile Include="Backend\Member\MemberViewModel.cs" />
     <Compile Include="Backend\Member\MemberServiceController.cs" />
@@ -371,7 +371,7 @@
     <Compile Include="Backend\PromotionReport\PromotionReportMapperProfile.cs" />
     <Compile Include="Backend\BranchPromotion\BranchPromotionDetailViewModel.cs" />
     <Compile Include="Backend\PromotionReport\ReportSallerGoalViewModel.cs" />
-    <Compile Include="Backend\MemberSharePromotion\MemberSharePromotionViewModel.cs" />
+    <Compile Include="Backend\MemberPromotion\MemberPromotionViewModel.cs" />
     <Compile Include="Backend\Promotion\PromotionMapperProfile.cs" />
     <Compile Include="Backend\PromotionReport\PromotionReportServiceController.cs" />
     <Compile Include="Backend\Promotion\PromotionServiceController.cs" />
@@ -803,6 +803,9 @@
     <Content Include="Views\Penalty\indexController.js" />
     <Content Include="Views\PositionMapping\index.html" />
     <Content Include="Views\PositionMapping\indexController.js" />
+    <Content Include="Views\Promotion\rptBranchOperation\excelTemplate.html" />
+    <Content Include="Views\Promotion\rptBranchOperation\index.html" />
+    <Content Include="Views\Promotion\rptBranchOperation\indexController.js" />
     <Content Include="Views\Promotion\rptBranchReceipt\excelTemplate.html" />
     <Content Include="Views\Promotion\rptBranchReceipt\index.html" />
     <Content Include="Views\Promotion\rptBranchReceipt\indexController.js" />

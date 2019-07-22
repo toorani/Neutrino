@@ -16,8 +16,8 @@ namespace Neutrino.Entities
         /// </summary>
         public int MemberId { get; set; }
         public virtual Member Member { get; set; }
-        public int MemberSharePromotionId { get; set; }
-        public virtual MemberSharePromotion MemberSharePromotion { get; set; }
+        public int MemberPromotionId { get; set; }
+        public virtual MemberPromotion MemberPromotion { get; set; }
         public int BranchPromotionId { get; set; }
         public virtual BranchPromotion BranchPromotion { get; set; }
         /// <summary>
@@ -52,7 +52,7 @@ namespace Neutrino.Entities
         public string MemberName { get; set; }
 
         public int MemberId { get; set; }
-        public int MemberSharePromotionId { get; set; }
+        public int MemberPromotionId { get; set; }
         public int BranchPromotionId { get; set; }
         /// <summary>
         /// باقی مانده جریمه

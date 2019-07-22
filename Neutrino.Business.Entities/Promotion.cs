@@ -21,8 +21,9 @@ namespace Neutrino.Entities
         public virtual ICollection<BranchPromotion> BranchPromotions { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
-        public bool IsSalesCalculated { get; set; }
+        public bool IsSupplierCalculated { get; set; }
         public bool IsReceiptCalculated { get; set; }
+        public bool IsBranchSalesCalculated { get; set; }
         #endregion
 
         #region [ Constructor(s) ]

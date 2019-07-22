@@ -160,7 +160,7 @@ namespace Neutrino.Portal
                 return CreateErrorResponse(result_bizloading);
             var result = new BranchPromotionViewModel();
             result.PromotionReviewStatusId = 0;
-            if (result_bizloading.ResultValue == null)
+            if (result_bizloading.ResultValue != null)
             {
                 var mapper = GetMapper();
                 result = mapper.Map<BranchPromotion, BranchPromotionViewModel>(result_bizloading.ResultValue);

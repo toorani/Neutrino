@@ -44,7 +44,7 @@ namespace Neutrino.Business
                 .NotNull()
                 .WithMessage("اطلاعات پرسنل وجود ندارد");
 
-            RuleFor(x => x.MemberSharePromotionId)
+            RuleFor(x => x.MemberPromotionId)
                 .NotNull()
                 .WithMessage("اطلاعات پورسانت تایید شده مدیر مرکز وجود ندارد");
 

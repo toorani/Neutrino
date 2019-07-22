@@ -13,15 +13,15 @@ using System.Web.Http;
 
 namespace Neutrino.Portal
 {
-    [RoutePrefix("api/memberSharePromotionService")]
-    public class MemberSharePromotionServiceController : ApiControllerBase
+    [RoutePrefix("api/memberPromotionService")]
+    public class MemberPromotionServiceController : ApiControllerBase
     {
         #region [ Varibale(s) ]
-        private readonly IMemberSharePromotionBS businessService;
+        private readonly IMemberPromotionBS businessService;
         #endregion
 
         #region [ Constructor(s) ]
-        public MemberSharePromotionServiceController(IMemberSharePromotionBS businessService)
+        public MemberPromotionServiceController(IMemberPromotionBS businessService)
         {
             this.businessService = businessService;
         }
@@ -29,10 +29,10 @@ namespace Neutrino.Portal
 
         #region [ Public Method(s) ]
         [Route("addOrModify"), HttpPost]
-        public async Task<HttpResponseMessage> AddOrModify(List<MemberSharePromotionManagerViewModel> postedViewModel)
+        public async Task<HttpResponseMessage> AddOrModify(List<MemberPromotionManagerViewModel> postedViewModel)
         {
             var mapper = GetMapper();
-            var entityMapped = mapper.Map<List<MemberSharePromotionManagerViewModel>, List<MemberSharePromotion>>(postedViewModel);
+            var entityMapped = mapper.Map<List<MemberPromotionManagerViewModel>, List<MemberPromotion>>(postedViewModel);
 
             var result_biz = await businessService.CreateOrUpdateAsync(entityMapped);
             if (result_biz.ReturnStatus == false)
@@ -40,21 +40,21 @@ namespace Neutrino.Portal
 
             return Request.CreateResponse(HttpStatusCode.OK, result_biz);
         }
-        [Route("getMemberSharePromotion")]
-        public async Task<HttpResponseMessage> GetMemberSharePromotionAsync(int statusId)
+        [Route("getMemberPromotion")]
+        public async Task<HttpResponseMessage> GetMemberPromotionAsync(int statusId)
         {
             int branchId = IdentityConfig.GetBranchId(User);
             var result_bizloading = await businessService.LoadAsync(branchId, (PromotionReviewStatusEnum)statusId);
             if (result_bizloading.ReturnStatus == false)
                 return CreateErrorResponse(result_bizloading);
             var mapper = GetMapper();
-            var result = new List<MemberSharePromotionViewModel>();
+            var result = new List<MemberPromotionViewModel>();
             if (result_bizloading.ResultValue != null)
-                result = mapper.Map<List<MemberSharePromotion>, List<MemberSharePromotionViewModel>>(result_bizloading.ResultValue);
+                result = mapper.Map<List<MemberPromotion>, List<MemberPromotionViewModel>>(result_bizloading.ResultValue);
             return CreateSuccessedListResponse(result);
         }
         [Route("delete"), HttpPost]
-        public async Task<HttpResponseMessage> Delete(MemberSharePromotionViewModel postedViewModel)
+        public async Task<HttpResponseMessage> Delete(MemberPromotionViewModel postedViewModel)
         {
             int branchId = IdentityConfig.GetBranchId(User);
 
@@ -71,7 +71,7 @@ namespace Neutrino.Portal
         {
             int branchId = IdentityConfig.GetBranchId(User);
 
-            IBusinessResult entities = await businessService.ProceedMemberSharePromotionAsync(PromotionReviewStatusEnum.WaitingForStep1BranchManagerReview
+            IBusinessResult entities = await businessService.ProceedMemberPromotionAsync(PromotionReviewStatusEnum.WaitingForStep1BranchManagerReview
                 , PromotionReviewStatusEnum.ReleasedStep1ByBranchManager
                 , branchId);
             if (entities.ReturnStatus == false)
@@ -83,10 +83,10 @@ namespace Neutrino.Portal
         }
 
         [Route("addOrModfiyFinalPromotion"), HttpPost]
-        public async Task<HttpResponseMessage> AddOrModfiyFinalPromotion(List<MemberSharePromotionViewModel> promotionViewModels)
+        public async Task<HttpResponseMessage> AddOrModfiyFinalPromotion(List<MemberPromotionViewModel> promotionViewModels)
         {
             var mapper = GetMapper();
-            var entities = mapper.Map<List<MemberSharePromotionViewModel>, List<MemberSharePromotion>>(promotionViewModels);
+            var entities = mapper.Map<List<MemberPromotionViewModel>, List<MemberPromotion>>(promotionViewModels);
 
             var result_biz = await businessService.AddOrModfiyFinalPromotionAsync(entities);
             if (result_biz.ReturnStatus == false)
@@ -97,10 +97,10 @@ namespace Neutrino.Portal
             return Request.CreateResponse(HttpStatusCode.OK, new { returnMessage = result_biz.ReturnMessage.ConcatAll() });
         }
         [Route("determinedPromotion"), HttpPost]
-        public async Task<HttpResponseMessage> DeterminedPromotion(List<MemberSharePromotionViewModel> postedViewModels)
+        public async Task<HttpResponseMessage> DeterminedPromotion(List<MemberPromotionViewModel> postedViewModels)
         {
             var mapper = GetMapper();
-            var entities = mapper.Map<List<MemberSharePromotionViewModel>, List<MemberSharePromotion>>(postedViewModels);
+            var entities = mapper.Map<List<MemberPromotionViewModel>, List<MemberPromotion>>(postedViewModels);
 
             var result_biz = await businessService.DeterminedPromotion(entities);
             if (result_biz.ReturnStatus == false)
@@ -111,31 +111,31 @@ namespace Neutrino.Portal
             return Request.CreateResponse(HttpStatusCode.OK, new { returnValue = (int)result_biz.ResultValue, returnMessage = result_biz.ReturnMessage.ConcatAll() });
         }
 
-        [Route("getMemberSharePromotionForManager")]
-        public async Task<HttpResponseMessage> GetMemberSharePromotionForManagerAsync(int memberId, int month, int year)
+        [Route("getMemberPromotionForManager")]
+        public async Task<HttpResponseMessage> GetMemberPromotionForManagerAsync(int memberId, int month, int year)
         {
-            var result_biz = await businessService.LoadMemberSharePromotionAsync(memberId, month, year, SharePromotionTypeEnum.Manager);
+            var result_biz = await businessService.LoadMemberPromotionAsync(memberId, month, year, StepPromotionTypeEnum.Manager);
             if (result_biz.ReturnStatus == false)
             {
                 return CreateErrorResponse(result_biz);
             }
             var mapper = GetMapper();
-            var result = mapper.Map<MemberSharePromotion, MemberSharePromotionManagerViewModel>(result_biz.ResultValue);
+            var result = mapper.Map<MemberPromotion, MemberPromotionManagerViewModel>(result_biz.ResultValue);
 
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
-        [Route("getMemberSharePromotionList4Manager"), HttpGet]
-        public async Task<HttpResponseMessage> GetMemberSharePromotionList4ManagerAsync(int month, int year)
+        [Route("getMemberPromotionList4Manager"), HttpGet]
+        public async Task<HttpResponseMessage> GetMemberPromotionList4ManagerAsync(int month, int year)
         {
             var branchId = IdentityConfig.GetBranchId(User);
-            var result_biz = await businessService.LoadMemberSharePromotionListAsync(branchId, month, year, SharePromotionTypeEnum.Manager);
+            var result_biz = await businessService.LoadMemberPromotionListAsync(branchId, month, year, StepPromotionTypeEnum.Manager);
             if (result_biz.ReturnStatus == false)
             {
                 return CreateErrorResponse(result_biz);
             }
             var mapper = GetMapper();
-            var result = mapper.Map<List<MemberSharePromotion>, List<MemberSharePromotionManagerViewModel>>(result_biz.ResultValue);
+            var result = mapper.Map<List<MemberPromotion>, List<MemberPromotionManagerViewModel>>(result_biz.ResultValue);
 
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
@@ -146,7 +146,7 @@ namespace Neutrino.Portal
         {
             var config = new MapperConfiguration(cfg =>
                 {
-                    cfg.AddProfile(new MemberSharePromotionMapperProfile());
+                    cfg.AddProfile(new MemberPromotionMapperProfile());
 
                 });
             return config.CreateMapper();

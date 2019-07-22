@@ -40,7 +40,7 @@
             context.ApprovePromotionTypes.SeedEnumValues<ApprovePromotionType, ApprovePromotionTypeEnum>(e => new ApprovePromotionType(e));
             context.QuantityConditionTypes.SeedEnumValues<QuantityConditionType, QuantityConditionTypeEnum>(e => new QuantityConditionType(e));
             context.PromotionReviewStatus.SeedEnumValues<PromotionReviewStatus, PromotionReviewStatusEnum>(e => new PromotionReviewStatus(e));
-            context.SharePromotionTypes.SeedEnumValues<SharePromotionType, SharePromotionTypeEnum>(e => new SharePromotionType(e));
+            context.SharePromotionTypes.SeedEnumValues<StepPromotionType, StepPromotionTypeEnum>(e => new StepPromotionType(e));
 
 
 
@@ -281,15 +281,6 @@
                         OrderId = 2,
                         Url = "/fulfillmentPercent/item",
                         Icon = "fa fa-money",
-                        Parent = promosionlItem,
-                        ParentId = promosionlItem.Id
-                    },
-                    new AppMenu
-                    {
-                        Title = "پرداخت و کسورات",
-                        Icon = "fa fa-percent",
-                        Url = "/penalty/index",
-                        OrderId = 3,
                         Parent = promosionlItem,
                         ParentId = promosionlItem.Id
                     },

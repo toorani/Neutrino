@@ -9,12 +9,12 @@ using System.Linq;
 
 namespace Neutrino.Portal
 {
-    public class MemberSharePromotionMapperProfile : Profile
+    public class MemberPromotionMapperProfile : Profile
     {
 
-        public MemberSharePromotionMapperProfile()
+        public MemberPromotionMapperProfile()
         {
-            CreateMap<MemberSharePromotionViewModel, MemberSharePromotion>()
+            CreateMap<MemberPromotionViewModel, MemberPromotion>()
                 .Ignore(x => x.Member)
                 .ReverseMap()
                 .ForMember(x => x.CEOPromotion, opt => opt.ResolveUsing(x => x.CEOPromotion ?? x.ManagerPromotion))
@@ -29,10 +29,10 @@ namespace Neutrino.Portal
                 .ForMember(x => x.FullName, opt => opt.ResolveUsing(x => x.Name + " " + x.LastName))
                 .ForMember(x => x.PositionTitle, opt => opt.ResolveUsing(x => x.PositionType?.Description));
 
-            CreateMap<MemberSharePromotionDetail, MemberSharePromotionDetailViewModel>()
+            CreateMap<MemberPromotionDetail, MemberPromotionDetailViewModel>()
                 .ReverseMap();
-            CreateMap<MemberSharePromotion, MemberSharePromotionManagerViewModel>()
-                .ForMember(x => x.BranchSalesPromotion, opt => opt.ResolveUsing(x => x.Details.FirstOrDefault()?.BranchSalesPromotion))
+            CreateMap<MemberPromotion, MemberPromotionManagerViewModel>()
+                .ForMember(x => x.BranchSalesPromotion, opt => opt.ResolveUsing(x => x.Details.FirstOrDefault()?.SupplierPromotion))
                 .ForMember(x => x.ReceiptPromotion, opt => opt.ResolveUsing(x => x.Details.FirstOrDefault()?.ReceiptPromotion))
                 .ForMember(x => x.CompensatoryPromotion, opt => opt.ResolveUsing(x => x.Details.FirstOrDefault()?.CompensatoryPromotion))
                 .ForMember(x => x.FullName, opt => opt.ResolveUsing(x => x.Member.Name + " " + x.Member.LastName))
@@ -42,15 +42,15 @@ namespace Neutrino.Portal
               .Ignore(x => x.Member)
               .ForMember(x => x.Details, opt => opt.ResolveUsing(x =>
               {
-                  return new List<MemberSharePromotionDetail>()
+                  return new List<MemberPromotionDetail>()
                   {
-                     new MemberSharePromotionDetail(){
+                     new MemberPromotionDetail(){
                          CompensatoryPromotion = x.CompensatoryPromotion,
                          ReceiptPromotion =x.ReceiptPromotion,
-                         BranchSalesPromotion = x.BranchSalesPromotion,
+                         SupplierPromotion = x.BranchSalesPromotion,
                          MemberId = x.MemberId,
-                         MemberSharePromotionId = x.Id,
-                         SharePromotionTypeId = SharePromotionTypeEnum.Manager
+                         MemberPromotionId = x.Id,
+                         StepPromotionTypeId = StepPromotionTypeEnum.Manager
                      }
                   };
               }));

@@ -224,7 +224,7 @@ namespace Neutrino.Business
             var result = new BusinessResult();
             try
             {
-                var result_sales = await CalculateSalesGoalsAsync(entity);
+                var result_sales = await CalculateSupplierGoalsAsync(entity);
                 var result_receipt = await CalculateReceiptGoalsAsync(entity);
 
                 result.ReturnStatus = result_receipt.ReturnStatus & result_sales.ReturnStatus;
@@ -244,19 +244,19 @@ namespace Neutrino.Business
             return result;
         }
         /// <summary>
-        /// محاسبه پورسانت اهداف ریالی و تعدادی
+        /// محاسبه پورسانت اهداف تامین کننده
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<IBusinessResult> CalculateSalesGoalsAsync(Promotion entity)
+        public async Task<IBusinessResult> CalculateSupplierGoalsAsync(Promotion entity)
         {
             var result = new BusinessResult();
             try
             {
-                if (entity.IsSalesCalculated || entity.StatusId != PromotionStatusEnum.InProcessQueue)
+                if (entity.IsSupplierCalculated || entity.StatusId != PromotionStatusEnum.InProcessQueue)
                 {
                     result.ReturnStatus = false;
-                    result.ReturnMessage.Add("با توجه به وضعیت پورسانت امکان محاسبه پورسانت اهداف فروش وجود ندارد");
+                    result.ReturnMessage.Add("با توجه به وضعیت پورسانت امکان محاسبه پورسانت تامین کننده وجود ندارد");
                     return result;
                 }
 
@@ -467,7 +467,7 @@ namespace Neutrino.Business
 
                                 var branchPromotion = entity.BranchPromotions.Single(x => x.BranchId == branchId);
 
-                                branchPromotion.QuantityGoalPromotions = lst_branchConditions
+                                branchPromotion.QuantityGoalPromotions.Concat(lst_branchConditions
                                 .Where(x => x.BranchId == branchId)
                                 .Select(x => new QuantityGoalPromotion
                                 {
@@ -479,7 +479,7 @@ namespace Neutrino.Business
                                     TotalQuantity = x.Quantity,
                                     GoalId = goal.Id,
                                     TotalSales = x.Amount
-                                }).ToList();
+                                }));
 
                             }
 
@@ -558,8 +558,8 @@ namespace Neutrino.Business
                                     }
 
                                     entity.BranchPromotions.Single(x => x.BranchId == memberSales.BranchId)
-                                    .MemberPromotions
-                                    .Add(new MemberPromotion
+                                    .SellerPromotions
+                                    .Add(new SellerPromotion
                                     {
                                         GoalId = goal.Id,
                                         Promotion = promotion,
@@ -571,8 +571,8 @@ namespace Neutrino.Business
                                 else
                                 {
                                     entity.BranchPromotions.Single(x => x.BranchId == memberSales.BranchId)
-                                    .MemberPromotions
-                                    .Add(new MemberPromotion
+                                    .SellerPromotions
+                                    .Add(new SellerPromotion
                                     {
                                         GoalId = goal.Id,
                                         Promotion = 0,
@@ -586,7 +586,7 @@ namespace Neutrino.Business
                         });
                 }
 
-                entity.IsSalesCalculated = true;
+                entity.IsSupplierCalculated = true;
 
 
                 //محاسبه جمع پورسانت فروش هر مرکز
@@ -701,8 +701,6 @@ namespace Neutrino.Business
                     //
                     branchPromotion.TotalReceiptPromotion = promotion;
 
-                    //fulfilledPercent = 0;
-                    //promotion = getReceiptPromotion(braReceipt, receiptPrivateGoal, ref fulfilledPercent);
 
                     //محاسبه پورسانت هدف وصول خصوصی
                     promotion = getReceiptPromotion(braReceipt, receiptPrivateGoal);
@@ -731,6 +729,86 @@ namespace Neutrino.Business
 
                 result.ReturnStatus = true;
                 result.ReturnMessage.Add("محاسبه پورسانت اهداف وصول با موفقیت پایان یافت");
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+            return result;
+        }
+        /// <summary>
+        /// محاسبه پورسانت فروش کل مراکز
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task<IBusinessResult> CalculateBranchSalesAsync(Promotion entity)
+        {
+            var result = new BusinessResult();
+            try
+            {
+                if (entity.StatusId != PromotionStatusEnum.InProcessQueue || entity.IsBranchSalesCalculated)
+                {
+                    result.ReturnStatus = false;
+                    result.ReturnMessage.Add("با توجه به وضعیت پورسانت امکان محاسبه پورسانت فروش مرکز وجود ندارد");
+                    return result;
+                }
+
+                entity = await unitOfWork.PromotionDataService.GetQuery()
+                    .IncludeFilter(x => x.BranchPromotions.Where(c => c.Deleted == false))
+                    .FirstOrDefaultAsync(x => x.Id == entity.Id);
+
+                var lst_totalBranchSales = await (from brsal in unitOfWork.BranchSalesDataService.GetQuery()
+                                                  where brsal.SalesDate >= entity.StartDate && brsal.SalesDate <= entity.EndDate
+                                                  && brsal.Deleted == false
+                                                  group brsal by brsal.BranchId into grp_expr
+                                                  select new
+                                                  {
+                                                      BranchId = grp_expr.Key,
+                                                      TotalSales = grp_expr.Sum(x => x.TotalAmount)
+                                                  }).ToListAsync();
+
+
+
+
+                //لیست سهم پست های سازمانی مراکز
+                var lst_orgStructureShare = await unitOfWork.OrgStructureShareDataService.GetAsync(x => x.SalesPercent != null, includes: x => new { x.OrgStructure });
+
+
+
+                decimal promotion = 0;
+                BranchPromotion branchPromotion = new BranchPromotion();
+                List<OrgStructureShare> lst_orgStructureShare_branch = new List<OrgStructureShare>();
+                lst_totalBranchSales.ForEach(braSales =>
+                {
+                    branchPromotion = entity.BranchPromotions.Single(x => x.BranchId == braSales.BranchId);
+
+                    //لیست سهم پست های سازمانی برای مرکز
+                    lst_orgStructureShare_branch = lst_orgStructureShare.Where(x => x.BranchId == braSales.BranchId).ToList();
+                    var operation_employeePercent = lst_orgStructureShare_branch.FirstOrDefault(x => x.OrgStructure.PositionTypeId == PositionTypeEnum.OperationEmployee);
+                    branchPromotion.Budget = braSales.TotalSales * operation_employeePercent?.SalesPercent.Value ?? 0;
+
+
+                    var lst_operationEmployee = unitOfWork.MemberDataService.Get(mem => mem.IsActive && !mem.Deleted
+                                                       && (Member.OPERATION_EMPLOYEE_POSITION.Contains(mem.PositionTypeId.Value)
+                                                       || mem.PositionTypeId == PositionTypeEnum.OperationManager)
+                                                       && mem.BranchId == braSales.BranchId).ToList();
+
+
+                    promotion = branchPromotion.Budget / lst_operationEmployee.Count;
+                    branchPromotion.OperationPromotions.Concat(
+                    lst_operationEmployee.Select(x => new OperationPromotion
+                    {
+                        MemberId = x.Id,
+                        Promotion = promotion
+                    }));
+
+                });
+                entity.IsBranchSalesCalculated = true;
+                await unitOfWork.CommitAsync();
+
+
+                result.ReturnStatus = true;
+                result.ReturnMessage.Add("محاسبه پورسانت فروش مراکز با موفقیت پایان یافت");
             }
             catch (Exception ex)
             {
@@ -947,7 +1025,7 @@ namespace Neutrino.Business
                 var query = await (from gl in unitOfWork.GoalDataService.GetQuery()
                                    join glst in unitOfWork.GoalStepDataService.GetQuery()
                                    on gl.Id equals glst.GoalId
-                                   join mrp in unitOfWork.MemberPromotionDataService.GetQuery()
+                                   join mrp in unitOfWork.SellerPromotionDataService.GetQuery()
                                    on gl.Id equals mrp.GoalId
                                    join mr in unitOfWork.MemberDataService.GetQuery()
                                    on mrp.MemberId equals mr.Id
@@ -1135,7 +1213,7 @@ namespace Neutrino.Business
             try
             {
                 // پورسانت عوامل فروش
-                var query_mpromotion = from mep in unitOfWork.MemberPromotionDataService.GetQuery()
+                var query_mpromotion = from mep in unitOfWork.SellerPromotionDataService.GetQuery()
                                        join brp in unitOfWork.BranchPromotionDataService.GetQuery()
                                        on mep.BranchPromotionId equals brp.Id
                                        where mep.MemberId == memberId && brp.Month == month && brp.Year == year && mep.Deleted == false

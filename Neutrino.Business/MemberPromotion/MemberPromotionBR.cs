@@ -10,10 +10,10 @@ using Z.EntityFramework.Plus;
 
 namespace Neutrino.Business
 {
-    public class MemberSharePromotionBR : NeutrinoValidator<MemberSharePromotion>
+    public class MemberPromotionBR : NeutrinoValidator<MemberPromotion>
     {
         #region [ Constructor(s) ]
-        public MemberSharePromotionBR(NeutrinoUnitOfWork unitOfWork)
+        public MemberPromotionBR(NeutrinoUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
 
@@ -35,10 +35,10 @@ namespace Neutrino.Business
                 .Must(x => !isDuplicate(x))
                 .WithMessage("اطلاعات وارد شده تکراری میباشد");
         }
-        private bool checkTotalAssigned(MemberSharePromotion entity)
+        private bool checkTotalAssigned(MemberPromotion entity)
         {
             var branchPromotion = unitOfWork.BranchPromotionDataService.GetQuery()
-                .IncludeFilter(x => x.MemberSharePromotions.Where(y => y.Deleted == false && y.Id != entity.Id))
+                .IncludeFilter(x => x.MemberPromotions.Where(y => y.Deleted == false && y.Id != entity.Id))
                 .AsNoTracking()
                 .Single(x => x.Id == entity.BranchPromotionId);
             bool result = false;
@@ -47,18 +47,18 @@ namespace Neutrino.Business
             {
                 case PromotionReviewStatusEnum.WaitingForStep1BranchManagerReview:
                 case PromotionReviewStatusEnum.ReleasedStep1ByBranchManager:
-                    totalAssigned = branchPromotion.MemberSharePromotions.Sum(x => (decimal?)x.ManagerPromotion) ?? 0 + entity.ManagerPromotion;
+                    totalAssigned = branchPromotion.MemberPromotions.Sum(x => (decimal?)x.ManagerPromotion) ?? 0 + entity.ManagerPromotion;
                     break;
                 case PromotionReviewStatusEnum.ReleasedByCEO:
-                    totalAssigned = branchPromotion.MemberSharePromotions.Sum(x => x.FinalPromotion) ?? 0 + entity.FinalPromotion.Value;
+                    totalAssigned = branchPromotion.MemberPromotions.Sum(x => x.FinalPromotion) ?? 0 + entity.FinalPromotion.Value;
                     break;
             }
             result = totalAssigned < (branchPromotion.PrivateReceiptPromotion + branchPromotion.TotalReceiptPromotion + branchPromotion.TotalSalesPromotion);
             return result;
         }
-        private bool isDuplicate(MemberSharePromotion entity)
+        private bool isDuplicate(MemberPromotion entity)
         {
-            return unitOfWork.MemberSharePromotionDataService.GetQuery()
+            return unitOfWork.MemberPromotionDataService.GetQuery()
                 .AsNoTracking()
                 .Any(x => x.BranchPromotionId == entity.BranchPromotionId && x.MemberId == entity.MemberId
                 && x.Id != entity.Id && x.Deleted == false);
@@ -66,13 +66,13 @@ namespace Neutrino.Business
         #endregion
     }
 
-    public class MemberSharePromotionCollectionBR : NeutrinoValidator<List<MemberSharePromotion>>
+    public class MemberPromotionCollectionBR : NeutrinoValidator<List<MemberPromotion>>
     {
         private StringBuilder @string = new StringBuilder();
         int branchPromotionId = 0;
         BranchPromotion branchPromotion = null;
         #region [ Constructor(s) ]
-        public MemberSharePromotionCollectionBR(NeutrinoUnitOfWork unitOfWork)
+        public MemberPromotionCollectionBR(NeutrinoUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
 
@@ -94,7 +94,7 @@ namespace Neutrino.Business
                .WithMessage("مجموع پورسانت عوامل فروش نمیتواند از جمع پورسانت عوامل بیشتر باشد");
         }
 
-        private bool checkTotalSellerPromotion(List<MemberSharePromotion> entities)
+        private bool checkTotalSellerPromotion(List<MemberPromotion> entities)
         {
             if (branchPromotion == null)
             {
@@ -109,14 +109,14 @@ namespace Neutrino.Business
                                               select mempde.CompensatoryPromotion).Sum();
 
 
-            var sellerTotalPromotion = unitOfWork.MemberPromotionDataService.GetQuery()
+            var sellerTotalPromotion = unitOfWork.SellerPromotionDataService.GetQuery()
                 .AsNoTracking()
                 .Where(x => x.Deleted == false && x.BranchPromotionId == branchPromotionId)
                 .Sum(x => x.Promotion);
             return sellerTotalPromotion >= sellerTotalPromotion_input;
         }
 
-        private bool checkTotalReceiptPromotion(List<MemberSharePromotion> entities)
+        private bool checkTotalReceiptPromotion(List<MemberPromotion> entities)
         {
             if (branchPromotion == null)
             {
@@ -132,7 +132,7 @@ namespace Neutrino.Business
             return branchPromotion.TotalReceiptPromotion + branchPromotion.PrivateReceiptPromotion >= receiptTotalPromotion;
         }
 
-        private bool checkTotalSalesPromotion(List<MemberSharePromotion> entities)
+        private bool checkTotalSalesPromotion(List<MemberPromotion> entities)
         {
             branchPromotionId = entities.First().BranchPromotionId;
             branchPromotion = unitOfWork.BranchPromotionDataService.GetQuery()
@@ -141,7 +141,7 @@ namespace Neutrino.Business
 
             var branchSalesTotalPromotion = (from memp in entities
                                              from mempde in memp.Details
-                                             select mempde.BranchSalesPromotion).Sum();
+                                             select mempde.SupplierPromotion).Sum();
             return branchPromotion.TotalSalesPromotion >= branchSalesTotalPromotion;
         }
 

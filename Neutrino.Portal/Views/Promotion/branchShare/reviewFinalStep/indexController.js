@@ -27,7 +27,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.rev
             }
 
             var getData = function () {
-                ajaxService.ajaxCall({ statusId: 4 }, "api/memberSharePromotionService/getMemberSharePromotion", 'get',
+                ajaxService.ajaxCall({ statusId: 4 }, "api/memberPromotionService/getMemberPromotion", 'get',
                     function (response) {
                         $scope.memberPoromotions = response.data;
                     },
@@ -46,7 +46,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.rev
                 
             }
             $scope.submit = function () {
-                ajaxService.ajaxPost($scope.memberPoromotions, "api/memberSharePromotionService/addOrModfiyFinalPromotion",
+                ajaxService.ajaxPost($scope.memberPoromotions, "api/memberPromotionService/addOrModfiyFinalPromotion",
                     function (response) {
                         alertService.showSuccess(response.data.returnMessage);
                     },
@@ -57,7 +57,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.rev
 
             }
             $scope.determinedPromotion = function () {
-                ajaxService.ajaxPost($scope.memberPoromotions, '/api/memberSharePromotionService/determinedPromotion',
+                ajaxService.ajaxPost($scope.memberPoromotions, '/api/memberPromotionService/determinedPromotion',
                     function (response) {
                         alertService.showSuccess(response.data.returnMessage);
                         $scope.branchPromotoinDetail.promotionReviewStatusId = response.data.returnValue;

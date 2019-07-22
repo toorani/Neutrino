@@ -28,7 +28,7 @@ namespace Neutrino.Portal
                 .ReverseMap()
                 .Ignore(x => x.Status);
 
-            CreateMap<MemberSharePromotionViewModel, MemberSharePromotion>()
+            CreateMap<MemberPromotionViewModel, MemberPromotion>()
                 .Ignore(x => x.Member)
                 .ReverseMap()
                 .ForMember(x => x.CEOPromotion, opt => opt.ResolveUsing(x => x.CEOPromotion ?? x.ManagerPromotion))

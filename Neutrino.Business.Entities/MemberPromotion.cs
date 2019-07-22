@@ -1,29 +1,28 @@
 ﻿using Espresso.Entites;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Neutrino.Entities
 {
-    /// <summary>
-    /// اطلاعات پورسانت فروشنده
-    /// </summary>
     public class MemberPromotion : EntityBase
     {
-        //شناسه پورسانت مرکز
         public int BranchPromotionId { get; set; }
         public virtual BranchPromotion BranchPromotion { get; set; }
-        /// <summary>
-        /// شناسه مرکز
-        /// </summary>
-        public int GoalId { get; set; }
-        /// <summary>
-        /// شناسه پرسنل
-        /// </summary>
         public int MemberId { get; set; }
+        public decimal ManagerPromotion { get; set; }
+        public decimal? CEOPromotion { get; set; }
+        public decimal? FinalPromotion { get; set; }
+        [NotMapped]
+        public int BranchId { get; set; }
         public virtual Member Member { get; set; }
+        public virtual ICollection<MemberPenalty> MemberPenalties { get; private set; }
+        public virtual ICollection<MemberPromotionDetail> Details { get; private set; }
+        public MemberPromotion()
+        {
+            MemberPenalties = new HashSet<MemberPenalty>();
+            Details = new HashSet<MemberPromotionDetail>();
+        }
 
-        public decimal Promotion { get; set; }
-        public int Quantity { get; set; }
-        public decimal Amount { get; set; }
-        public virtual Goal Goal { get; set; }
     }
 }

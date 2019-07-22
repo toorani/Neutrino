@@ -5,16 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Neutrino.Entities
 {
-    public class MemberSharePromotionDetail : EntityBase
+    public class MemberPromotionDetail : EntityBase
     {
-        public int MemberSharePromotionId { get; set; }
-        public virtual MemberSharePromotion MemberSharePromotion { get; set; }
-        public SharePromotionTypeEnum SharePromotionTypeId { get; set; }
+        public int MemberPromotionId { get; set; }
+        public virtual MemberPromotion MemberPromotion { get; set; }
+        public StepPromotionTypeEnum StepPromotionTypeId { get; set; }
         public int MemberId { get; set; }
         /// <summary>
-        /// سهم از پورسانت فروش مرکز
+        /// سهم از پورسانت تامین کننده
         /// </summary>
-        public decimal BranchSalesPromotion { get; set; }
+        public decimal SupplierPromotion { get; set; }
         /// <summary>
         /// سهم از پورسانت ترمیمی
         /// </summary>
@@ -23,9 +23,13 @@ namespace Neutrino.Entities
         /// سهم از وصول
         /// </summary>
         public decimal ReceiptPromotion { get; set; }
-        
+        /// <summary>
+        /// سهم پورسانت از فروش مرکز
+        /// </summary>
+        public decimal BranchSalesPromotion { get; set; }
 
-        public MemberSharePromotionDetail()
+
+        public MemberPromotionDetail()
         {
             
         }

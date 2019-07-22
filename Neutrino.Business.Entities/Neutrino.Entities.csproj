@@ -60,13 +60,14 @@
     <Compile Include="Department.cs" />
     <Compile Include="MemberPenalty.cs" />
     <Compile Include="MemberSales_PromotionInfo.cs" />
-    <Compile Include="MemberSharePromotionDetail.cs" />
-    <Compile Include="MemberSharePromotion.cs" />
+    <Compile Include="MemberPromotionDetail.cs" />
+    <Compile Include="MemberPromotion.cs" />
     <Compile Include="PositionInfo.cs" />
     <Compile Include="PromotionReviewStatus.cs" />
     <Compile Include="CustomerGoal.cs" />
     <Compile Include="PostionMapping.cs" />
-    <Compile Include="MemberPromotion.cs" />
+    <Compile Include="OperationPromotion.cs" />
+    <Compile Include="SellerPromotion.cs" />
     <Compile Include="PositionReceiptPromotion.cs" />
     <Compile Include="BranchGoalPromotion.cs" />
     <Compile Include="BranchQuntityGoal.cs" />
@@ -89,7 +90,7 @@
     <Compile Include="ReportBranchPromotionOverview.cs" />
     <Compile Include="ReportSallerGoal.cs" />
     <Compile Include="ReportBranchSalesGoal.cs" />
-    <Compile Include="SharePromotionType.cs" />
+    <Compile Include="StepPromotionType.cs" />
     <Compile Include="StockInventory.cs" />
     <Compile Include="CompanyType.cs" />
     <Compile Include="GoodsPromotion.cs" />

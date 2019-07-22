@@ -35,18 +35,23 @@ namespace Neutrino.Entities
         [ForeignKey("PromotionReviewStatusId")]
         public virtual PromotionReviewStatus PromotionReviewStatus { get; set; }
         public virtual ICollection<BranchGoalPromotion> BranchGoalPromotions { get; private set; }
+        public virtual ICollection<SellerPromotion> SellerPromotions { get; private set; }
         public virtual ICollection<MemberPromotion> MemberPromotions { get; private set; }
-        public virtual ICollection<MemberSharePromotion> MemberSharePromotions { get; private set; }
         public virtual ICollection<MemberPenalty> MemberPenalties { get; private set; }
-        public virtual ICollection<QuantityGoalPromotion> QuantityGoalPromotions { get; set; }
+        public virtual ICollection<QuantityGoalPromotion> QuantityGoalPromotions { get; private set; }
+        public virtual ICollection<OperationPromotion> OperationPromotions { get; private set; }
+
+        public decimal Budget { get; set; }
+        
         #region [ Constructor(s) ]
         public BranchPromotion()
         {
             BranchGoalPromotions = new HashSet<BranchGoalPromotion>();
+            SellerPromotions = new HashSet<SellerPromotion>();
             MemberPromotions = new HashSet<MemberPromotion>();
-            MemberSharePromotions = new HashSet<MemberSharePromotion>();
             QuantityGoalPromotions = new HashSet<QuantityGoalPromotion>();
             MemberPenalties = new HashSet<MemberPenalty>();
+            OperationPromotions = new HashSet<OperationPromotion>();
         }
         #endregion
     }

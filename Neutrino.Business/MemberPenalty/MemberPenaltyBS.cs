@@ -42,9 +42,9 @@ namespace Neutrino.Business
                     , includes: x => x.BranchPromotion
                     , orderBy: x => x.OrderByDescending(z => z.BranchPromotion.Year).OrderByDescending(z => z.BranchPromotion.Month));
 
-                    var query = await (from memshar in unitOfWork.MemberSharePromotionDataService.GetQuery().Include(x => x.Member)
+                    var query = await (from memshar in unitOfWork.MemberPromotionDataService.GetQuery().Include(x => x.Member)
                                        join mempln in unitOfWork.MemberPenaltyDataService.GetQuery()
-                                       on memshar.Id equals mempln.MemberSharePromotionId into leftjoin_share_penalty
+                                       on memshar.Id equals mempln.MemberPromotionId into leftjoin_share_penalty
                                        from share_penalty in leftjoin_share_penalty.Where(x => x.Deleted == false).DefaultIfEmpty()
                                        where memshar.BranchPromotionId == branchPromotion.Id
                                        select new
@@ -69,7 +69,7 @@ namespace Neutrino.Business
                             ManagerPromotion = x.memshar.ManagerPromotion,
                             BranchPromotionId = branchPromotion.Id,
                             Deduction = x.penalty?.Deduction ?? 0,
-                            MemberSharePromotionId = x.memshar.Id,
+                            MemberPromotionId = x.memshar.Id,
                             Penalty = x.penalty?.Penalty ?? 0,
                             Credit = x.penalty?.Credit ?? 0,
                             RemainingPenalty = lastMemberPenalty != null ? lastMemberPenalty.RemainingPenalty + lastMemberPenalty.Penalty : x.penalty?.RemainingPenalty ?? 0,
@@ -134,11 +134,11 @@ namespace Neutrino.Business
                 var branchPromotionId = entities.FirstOrDefault().BranchPromotionId;
 
                 var branchPromotion = await unitOfWork.BranchPromotionDataService.GetQuery()
-                    .IncludeFilter(x => x.MemberSharePromotions.Where(c => c.Deleted == false))
+                    .IncludeFilter(x => x.MemberPromotions.Where(c => c.Deleted == false))
                    .SingleOrDefaultAsync(x => x.Id == branchPromotionId);
                 if (branchPromotion != null)
                 {
-                    foreach (var item in branchPromotion.MemberSharePromotions)
+                    foreach (var item in branchPromotion.MemberPromotions)
                     {
                         var penalty = entities.SingleOrDefault(x => x.MemberId == item.MemberId);
                         item.CEOPromotion = penalty?.CEOPromotion;

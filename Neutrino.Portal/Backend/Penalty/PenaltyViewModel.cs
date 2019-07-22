@@ -57,7 +57,7 @@ namespace Neutrino.Portal.Models
         public decimal Saved { get; set; }
         public string Description { get; set; }
         public int BranchPromotionId { get; set; }
-        public int MemberSharePromotionId { get; set; }
+        public int MemberPromotionId { get; set; }
         public bool HasPerviousData { get; set; }
         public PenaltyViewModel() 
         {

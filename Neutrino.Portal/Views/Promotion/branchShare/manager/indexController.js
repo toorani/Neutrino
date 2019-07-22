@@ -62,7 +62,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                             $scope.month = $scope.branchPromotoinDetail[0].month;
                             $scope.monthTitle = persianCalendar.getMonthNames()[$scope.month - 1].name;
 
-                            let findRecord = $scope.branchPromotoinDetail.filter(x => x.goalTypeId == 1); //sales
+                            let findRecord = $scope.branchPromotoinDetail.filter(x => x.goalTypeId == 1); //supplier
                             if (findRecord.length == 1)
                                 $scope.branchPromotionValues.totalSalesPromotion = findRecord[0].totalFinalPromotion;
 
@@ -74,7 +74,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                             if (findRecord.length == 1)
                                 $scope.branchPromotionValues.totalCompensatoryPromotion = findRecord[0].totalFinalPromotion;
 
-                            getMemberSharePromotionList();
+                            getMemberPromotionList();
                         }
                         else {
                             $scope.promotionReviewStatusId = 0;
@@ -87,12 +87,12 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                     });
             }
 
-            var getMemberSharePromotionList = function () {
-                ajaxService.ajaxCall({ month: $scope.month, year: $scope.year }, "api/memberSharePromotionService/getMemberSharePromotionList4Manager", 'get',
+            var getMemberPromotionList = function () {
+                ajaxService.ajaxCall({ month: $scope.month, year: $scope.year }, "api/memberPromotionService/getMemberPromotionList4Manager", 'get',
                     function (response) {
-                        $scope.memberSharePromotionList = response.data;
+                        $scope.memberPromotionList = response.data;
 
-                        $scope.memberSharePromotionList.forEach((prom) => {
+                        $scope.memberPromotionList.forEach((prom) => {
                             $scope.totalValues.totalReceiptPromotion += prom.receiptPromotion;
                             $scope.totalValues.totalSalesPromotion += prom.branchSalesPromotion;
                             $scope.totalValues.totalCompensatoryPromotion += prom.compensatoryPromotion;
@@ -104,7 +104,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
             }
 
             $scope.submit = function () {
-                ajaxService.ajaxPost($scope.memberSharePromotionList, '/api/memberSharePromotionService/addOrModify',
+                ajaxService.ajaxPost($scope.memberPromotionList, '/api/memberPromotionService/addOrModify',
                     function (response) {
                         alertService.showSuccess(response.data.returnMessage);
                     },
@@ -115,7 +115,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
 
             $scope.releaseManagerStep1 = function () {
                 
-                ajaxService.ajaxPost({}, '/api/memberSharePromotionService/releaseManagerStep1',
+                ajaxService.ajaxPost({}, '/api/memberPromotionService/releaseManagerStep1',
                     function (response) {
                         alertService.showSuccess(response.data.returnMessage);
                         $scope.promotionReviewStatusId = response.data.resultValue;
@@ -128,7 +128,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
             $scope.setTotalValues = function () {
                 $scope.totalValues.clearValues();
 
-                $scope.memberSharePromotionList.forEach((prom) => {
+                $scope.memberPromotionList.forEach((prom) => {
                     $scope.totalValues.totalReceiptPromotion += prom.receiptPromotion;
                     $scope.totalValues.totalSalesPromotion += prom.branchSalesPromotion;
                     $scope.totalValues.totalCompensatoryPromotion += prom.compensatoryPromotion;
@@ -147,7 +147,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
             $scope.getMemberTotalPromotion = function (record) {
                 record.managerPromotion = record.compensatoryPromotion + record.branchSalesPromotion + record.receiptPromotion;
                 $scope.assigendPromotion = 0;
-                $scope.memberSharePromotionList.forEach((mp) => {
+                $scope.memberPromotionList.forEach((mp) => {
                     $scope.assigendPromotion += mp.managerPromotion;
                 });
                 return record.managerPromotion;

@@ -121,7 +121,7 @@ namespace Neutrino.Portal.Tests
 
 
 
-            var result = await promotionBS.CalculateSalesGoalsAsync(result_load_entity.ResultValue);
+            var result = await promotionBS.CalculateSupplierGoalsAsync(result_load_entity.ResultValue);
 
             Assert.IsTrue(result.ReturnStatus, result.ReturnMessage.ConcatAll());
         }
@@ -161,7 +161,7 @@ namespace Neutrino.Portal.Tests
 
             Assert.IsTrue(result.ReturnStatus, result.ReturnMessage.ConcatAll());
             Assert.IsTrue(loaderResult.ResultValue.IsReceiptCalculated);
-            Assert.IsTrue(loaderResult.ResultValue.IsSalesCalculated);
+            Assert.IsTrue(loaderResult.ResultValue.IsSupplierCalculated);
             Assert.AreEqual(loaderResult.ResultValue.StatusId, PromotionStatusEnum.Done);
         }
 

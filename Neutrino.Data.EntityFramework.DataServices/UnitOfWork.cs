@@ -60,12 +60,12 @@ namespace Neutrino.Data.EntityFramework
         public IEntityBaseRepository<PositionReceiptPromotion> PositionReceiptPromotionDataService { get; private set; }
         public IEntityBaseRepository<PositionType> PositionTypeDataService { get; private set; }
         public IEntityBaseRepository<PositionMapping> PositionMappingDataService { get; private set; }
+        public IEntityBaseRepository<SellerPromotion> SellerPromotionDataService { get; private set; }
         public IEntityBaseRepository<MemberPromotion> MemberPromotionDataService { get; private set; }
-        public IEntityBaseRepository<MemberSharePromotion> MemberSharePromotionDataService { get; private set; }
         public IEntityBaseRepository<MemberPenalty> MemberPenaltyDataService { get; private set; }
         public IEntityBaseRepository<ElitePosition> ElitePositionDataService { get; private set; }
         public IEntityBaseRepository<Department> DepartmentDataService { get; private set; }
-        public IEntityBaseRepository<MemberSharePromotionDetail> MemberSharePromotionDetailDataService { get; private set; }
+        public IEntityBaseRepository<MemberPromotionDetail> MemberPromotionDetailDataService { get; private set; }
 
         #endregion
 
@@ -112,12 +112,12 @@ namespace Neutrino.Data.EntityFramework
             , IEntityBaseRepository<PositionReceiptPromotion> positionReceiptPromotionDS
             , IEntityBaseRepository<PositionType> positionTypeDS
             , IEntityBaseRepository<PositionMapping> postionMappingDS
-            , IEntityBaseRepository<MemberPromotion> memberPomotionDS
-            , IEntityBaseRepository<MemberSharePromotion> memberSharePromotionDS
+            , IEntityBaseRepository<SellerPromotion> sellerPromotionDS
+            , IEntityBaseRepository<MemberPromotion> memberPromotionDS
             , IEntityBaseRepository<MemberPenalty> memberPenaltyDS
             , IEntityBaseRepository<ElitePosition> elitePostionDS
             , IEntityBaseRepository<Department> departmentDS
-            , IEntityBaseRepository<MemberSharePromotionDetail> memberSharePromotionDetailDS
+            , IEntityBaseRepository<MemberPromotionDetail> memberPromotionDetailDS
            )
         {
             this.context = context;
@@ -162,12 +162,12 @@ namespace Neutrino.Data.EntityFramework
             PositionReceiptPromotionDataService = positionReceiptPromotionDS;
             PositionTypeDataService = positionTypeDS;
             PositionMappingDataService = postionMappingDS;
-            MemberPromotionDataService = memberPomotionDS;
-            MemberSharePromotionDataService = memberSharePromotionDS;
+            SellerPromotionDataService = sellerPromotionDS;
+            MemberPromotionDataService = memberPromotionDS;
             MemberPenaltyDataService = memberPenaltyDS;
             ElitePositionDataService = elitePostionDS;
             DepartmentDataService = departmentDS;
-            MemberSharePromotionDetailDataService = memberSharePromotionDetailDS;
+            MemberPromotionDetailDataService = memberPromotionDetailDS;
         }
         #endregion
 

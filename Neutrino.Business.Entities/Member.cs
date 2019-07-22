@@ -8,8 +8,10 @@ namespace Neutrino.Entities
     /// <summary>
     /// اطلاعات اعضا شرکت
     /// </summary>
-    public class Member:EntityBase
+    public class Member : EntityBase
     {
+        public static PositionTypeEnum[] OPERATION_EMPLOYEE_POSITION = new PositionTypeEnum[] { PositionTypeEnum.OperationEmployee, PositionTypeEnum.DriverAndCarrier };
+
         /// <summary>
         /// کد ملی کارمند
         /// </summary>
@@ -51,14 +53,11 @@ namespace Neutrino.Entities
         public int PositionRefId { get; set; }
         public int DepartmentRefId { get; set; }
         public int DepartmentId { get; set; }
+        public bool IsActive { get; set; } = true;
 
-
-        public virtual ICollection<MemberSharePromotion> MemberSharePromotions { get; set; }
-        public Member()
-        {
-            MemberSharePromotions = new HashSet<MemberSharePromotion>();
-        }
+        public virtual ICollection<MemberPromotion> MemberPromotions { get; set; }
+        public Member() => MemberPromotions = new HashSet<MemberPromotion>();
     }
-    
+
 }
 

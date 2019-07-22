@@ -29,7 +29,7 @@
                                                 </li>
                                                 <li>
                                                     <div class="basic-bage">
-                                                        <h4>پورسانت فروش تامین کننده</h4>
+                                                        <h4>پورسانت تامین کننده</h4>
                                                         <p class="dir-ltr">{{branchPromotionValues.totalSalesPromotion | number}}</p>
                                                     </div>
                                                 </li>
@@ -77,8 +77,11 @@
                                 </div>
                                 <div class="ls_divider"></div>
                                 <br />
+                                <div class="alert alert-warning" ng-if="promotionReviewStatusId > 1">
+                                    <strong> پورسانت تقسیم و ارسال شده است.</strong>
+                                </div>
                                 <div class="alert alert-warning" ng-if="promotionReviewStatusId == 0">
-                                    <strong>توجه!</strong> پورسانت تقسیم و ارسال شده است.
+                                    <strong> اطلاعاتی وجود ندارد!</strong>
                                 </div>
                                 <form novalidate role="form" esp-validate-complete="submit()"
                                       esp-validate-options="{promptPosition:'bottomRight',autoPositionUpdate: true
@@ -118,7 +121,7 @@
                                         <div style="height:400px;overflow-x:auto">
                                             <table class="table table-striped" cellspacing="0">
                                                 <tbody>
-                                                    <tr ng-repeat="record in memberSharePromotionList | filter : memberFilter  ">
+                                                    <tr ng-repeat="record in memberPromotionList | filter : memberFilter  ">
                                                         <td class="align-center" style="width:40px">
                                                             {{$index +1}}
                                                         </td>
@@ -134,7 +137,7 @@
                                                         </td>
                                                         <td class="align-center dir-ltr">
                                                             <input type="text" class="form-control dir-ltr"
-                                                                   ng-model="record.branchSalesPromotion"
+                                                                   ng-model="record.supplierPromotion"
                                                                    ng-trim=false
                                                                    ng-change="setTotalValues()"
                                                                    awnum="price">

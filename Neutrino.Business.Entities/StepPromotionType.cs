@@ -3,23 +3,25 @@ using System.ComponentModel;
 
 namespace Neutrino.Entities
 {
-    public enum SharePromotionTypeEnum :int
+    public enum StepPromotionTypeEnum :int
     {
+        
         [Description("مدیر مرکز")]
         Manager = 1,
         [Description("مدیر عامل")]
         CEO = 2,
         [Description("نهایی")]
         Final = 3,
+        
 
     }
 
-    public class SharePromotionType : EnumEntity<SharePromotionTypeEnum>
+    public class StepPromotionType : EnumEntity<StepPromotionTypeEnum>
     {
-        public SharePromotionType(SharePromotionTypeEnum enumType) : base(enumType)
+        public StepPromotionType(StepPromotionTypeEnum enumType) : base(enumType)
         {
         }
 
-        public SharePromotionType() : base() { } // should excplicitly define for EF!
+        public StepPromotionType() : base() { } // should excplicitly define for EF!
     }
 }

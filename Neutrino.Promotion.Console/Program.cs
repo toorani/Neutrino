@@ -81,7 +81,7 @@ namespace Neutrino.PromotionPanel
                     if (arg.ToLower() == "sal")
                     {
                         Console.WriteLine("Start Sales goales calualation.");
-                        result = await promotionBS.CalculateSalesGoalsAsync(promotion);
+                        result = await promotionBS.CalculateSupplierGoalsAsync(promotion);
                         Console.WriteLine("Finish Sales goales calualation.");
                     }
                     else if (arg.ToLower() == "rec")
