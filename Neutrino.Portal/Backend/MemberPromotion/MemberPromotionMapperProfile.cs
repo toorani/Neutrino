@@ -22,7 +22,7 @@ namespace Neutrino.Portal
 
             CreateMap<BranchPromotion, BranchPromotionViewModel>()
                 .ForMember(x => x.BranchName, opt => opt.ResolveUsing(x => x.Branch.Name))
-                .ForMember(x => x.TotalPromotion, opt => opt.ResolveUsing(x => x.PrivateReceiptPromotion.Value + x.TotalReceiptPromotion.Value + x.TotalSalesPromotion))
+                .ForMember(x => x.TotalPromotion, opt => opt.ResolveUsing(x => x.PrivateReceiptPromotion.Value + x.TotalReceiptPromotion.Value + x.SupplierPromotion))
                 .ReverseMap();
 
             CreateMap<Member, MemberViewModel>()

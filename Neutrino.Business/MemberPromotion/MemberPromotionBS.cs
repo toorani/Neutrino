@@ -116,7 +116,7 @@ namespace Neutrino.Business
                     var receiptAssigned = entity.MemberPromotions.Sum(x => x.Details.Sum(c => (decimal?)c.ReceiptPromotion)) ?? 0;
                     var compensatoryAssigned = entity.MemberPromotions.Sum(x => x.Details.Sum(c => (decimal?)c.CompensatoryPromotion)) ?? 0;
 
-                    if (salesAssigned > entity.TotalSalesPromotion)
+                    if (salesAssigned > entity.SupplierPromotion)
                     {
                         result.ReturnMessage.Add("جمع مبلغ پورسانت تامین کننده پرسنل از پورسانت فروش تامین کنندگان مرکز بیشتر میباشد");
                         result.ReturnStatus = false;
@@ -216,39 +216,36 @@ namespace Neutrino.Business
                 var branchPromotion = await unitOfWork.BranchPromotionDataService.FirstOrDefaultAsync(x => x.Month == month && x.Year == year && x.BranchId == branchId);
                 int branchPromotionId = branchPromotion.Id;
 
-                
+
 
                 var query = await (from me in unitOfWork.MemberDataService.GetQuery()
+                                   join mep in unitOfWork.MemberPromotionDataService.GetQuery()
+                                   on me.Id equals mep.MemberId into left_join_me_mep
+                                   from join_me_mep in left_join_me_mep
+                                   .Where(x => x.Deleted == false && x.BranchPromotionId == branchPromotionId).DefaultIfEmpty()
+                                   join mepde in unitOfWork.MemberPromotionDetailDataService.GetQuery()
+                                   on join_me_mep.Id equals mepde.MemberPromotionId into left_join_mep_mepde
+                                   from join_mep_mepde in left_join_mep_mepde
+                                   .Where(c => c.Deleted == false && c.ReviewPromotionStepId == ReviewPromotionStepEnum.Initial).DefaultIfEmpty()
                                    join post in unitOfWork.PositionTypeDataService.GetQuery()
                                    on me.PositionTypeId equals post.eId into left_join_position
                                    from join_me_pos in left_join_position.DefaultIfEmpty()
-                                   join msp in unitOfWork.MemberPromotionDataService.GetQuery()
-                                   on me.Id equals msp.MemberId into left_join_memShare
-                                   from join_memShare in left_join_memShare
-                                   .Where(x => x.Deleted == false && x.BranchPromotionId == branchPromotionId)
-                                   .DefaultIfEmpty()
-                                   join mshde in unitOfWork.MemberPromotionDetailDataService.GetQuery()
-                                   on join_memShare.Id equals mshde.MemberPromotionId into left_join_memberSh_detail
-                                   from join_meShDeatil in left_join_memberSh_detail
-                                   .Where(x => x.ReviewPromotionStepId == ReviewPromotionStepEnum.Initial)
-                                   .DefaultIfEmpty()
-
-
                                    where me.BranchId == branchId && me.Deleted == false
                                    select new
                                    {
                                        MemberId = me.Id,
                                        Member = me,
                                        join_me_pos,
-                                       join_memShare,
-                                       join_meShDeatil
+                                       join_me_mep,
+                                       join_mep_mepde
+
                                    }).ToListAsync();
 
                 result.ResultValue = query.Select(x =>
                 {
-                    if (x.join_memShare != null)
+                    if (x.join_me_mep != null)
                     {
-                        return x.join_memShare;
+                        return x.join_me_mep;
                     }
                     MemberPromotion memberSharePromotion = new MemberPromotion
                     {

@@ -19,14 +19,16 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
             }
 
             $scope.totalValues = {
-                totalPromotion() { return this.totalReceiptPromotion + this.totalCompensatoryPromotion + this.totalSalesPromotion },
+                totalPromotion() { return this.totalReceiptPromotion + this.totalCompensatoryPromotion + this.totalSalesPromotion + this.totalSupplierPromotion },
                 totalReceiptPromotion: 0,
                 totalCompensatoryPromotion: 0,
                 totalSalesPromotion: 0,
+                totalSupplierPromotion :0,
                 clearValues() {
                     this.totalReceiptPromotion = 0;
                     this.totalCompensatoryPromotion = 0;
                     this.totalSalesPromotion = 0;
+                    this.totalSupplierPromotion= 0;
                 }
             };
 
@@ -34,9 +36,10 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                 totalReceiptPromotion: 0,
                 totalSalesPromotion: 0,
                 totalCompensatoryPromotion: 0,
-                totalBranchPromotion() { return this.totalReceiptPromotion + this.totalSalesPromotion + this.totalCompensatoryPromotion },
-                remindedSalesPromotion() {
-                    return branchPromotionValues.totalSalesPromotion - totalValues.totalSalesPromotion;
+                totalSupplierPromotion: 0,
+                totalBranchPromotion() { return this.totalReceiptPromotion + this.totalSalesPromotion + this.totalCompensatoryPromotion + this.totalSupplierPromotion },
+                remindedSupplierPromotion() {
+                    return branchPromotionValues.totalSupplierPromotion - totalValues.totalSupplierPromotion;
                 },
                 remindedReceiptPromotion() {
                     return branchPromotionValues.totalReceiptPromotion - totalValues.totalReceiptPromotion;
@@ -64,7 +67,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
 
                             let findRecord = $scope.branchPromotoinDetail.filter(x => x.goalTypeId == 1); //supplier
                             if (findRecord.length == 1)
-                                $scope.branchPromotionValues.totalSalesPromotion = findRecord[0].totalFinalPromotion;
+                                $scope.branchPromotionValues.totalSupplierPromotion = findRecord[0].totalFinalPromotion;
 
                             findRecord = $scope.branchPromotoinDetail.filter(x => x.goalTypeId == 2 || x.goalTypeId == 3); //receipt
                             if (findRecord.length == 2)
@@ -73,6 +76,10 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                             findRecord = $scope.branchPromotoinDetail.filter(x => x.goalTypeId == 4); //compensatory
                             if (findRecord.length == 1)
                                 $scope.branchPromotionValues.totalCompensatoryPromotion = findRecord[0].totalFinalPromotion;
+
+                            findRecord = $scope.branchPromotoinDetail.filter(x => x.goalTypeId == 5); //sales
+                            if (findRecord.length == 1)
+                                $scope.branchPromotionValues.totalSalesPromotion = findRecord[0].totalFinalPromotion;
 
                             getMemberPromotionList();
                         }
@@ -96,6 +103,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                             $scope.totalValues.totalReceiptPromotion += prom.receiptPromotion;
                             $scope.totalValues.totalSalesPromotion += prom.branchSalesPromotion;
                             $scope.totalValues.totalCompensatoryPromotion += prom.compensatoryPromotion;
+                            $scope.totalValues.totalSupplierPromotion += prom.supplierPromotion;
                         });
                     },
                     function (response) {
@@ -130,14 +138,16 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
 
                 $scope.memberPromotionList.forEach((prom) => {
                     $scope.totalValues.totalReceiptPromotion += prom.receiptPromotion;
-                    $scope.totalValues.totalSalesPromotion += prom.branchSalesPromotion;
+                    $scope.totalValues.totalSupplierPromotion += prom.supplierPromotion;
                     $scope.totalValues.totalCompensatoryPromotion += prom.compensatoryPromotion;
+                    $scope.totalValues.totalSalesPromotion += prom.branchSalesPromotion;
                 });
             }
 
             $scope.memberFilter = function (record) {
                 return ($scope.member_srch == '' || String(record.memberCode).indexOf($scope.member_srch) != -1
-                    || String(record.fullName).indexOf($scope.member_srch) != -1 || String(record.positionTitle).indexOf($scope.member_srch) != -1);
+                    || String(record.fullName).indexOf($scope.member_srch) != -1 || String(record.positionTitle).indexOf($scope.member_srch) != -1
+                    || String(record.positionTitle).indexOf($scope.member_srch) != -1);
             }
 
             $scope.getRecieptPromotions = function () {
@@ -145,7 +155,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
             }
 
             $scope.getMemberTotalPromotion = function (record) {
-                record.managerPromotion = record.compensatoryPromotion + record.branchSalesPromotion + record.receiptPromotion;
+                record.managerPromotion = record.compensatoryPromotion + record.branchSalesPromotion + record.receiptPromotion + record.supplierPromotion;
                 $scope.assigendPromotion = 0;
                 $scope.memberPromotionList.forEach((mp) => {
                     $scope.assigendPromotion += mp.managerPromotion;

@@ -606,18 +606,20 @@ namespace Neutrino.Business
                 (from brp in entity.BranchPromotions
                  from brglp in brp.BranchGoalPromotions
                  join gl in lst_goals
-                 on brglp.Id equals gl.Id
+                 on brglp.GoalId equals gl.Id
                  group brglp by brglp.BranchId into grp_branch
                  select new
                  {
                      BranchId = grp_branch.Key,
                      TotalBranchPromotion = grp_branch.Sum(x => x.FinalPromotion)
-                 }).ToList()
-                .ForEach(total =>
-                {
-                    var branchPromotions = entity.BranchPromotions.FirstOrDefault(x => x.BranchId == total.BranchId);
-                    branchPromotions.TotalSalesPromotion = total.TotalBranchPromotion;
-                });
+                 })
+                 .ToList()
+                 .ForEach(total =>
+                 {
+                     var branchPromotions = entity.BranchPromotions.FirstOrDefault(x => x.BranchId == total.BranchId);
+                     branchPromotions.SupplierPromotion = total.TotalBranchPromotion;
+                 });
+
 
                 await unitOfWork.CommitAsync();
 
@@ -835,7 +837,7 @@ namespace Neutrino.Business
                         promotion = branchPromotion.Budget / lst_operationEmployee.Count;
                     else
                         promotion = 0;
-
+                    branchPromotion.TotalSalesPromotion = 0;
                     lst_operationEmployee.Select(x => new OperationPromotion
                     {
                         MemberId = x.Id,
@@ -843,10 +845,15 @@ namespace Neutrino.Business
                     }).ToList()
                     .ForEach(x =>
                     {
+                        branchPromotion.TotalSalesPromotion += promotion;
                         branchPromotion.OperationPromotions.Add(x);
                         addMemberPromotion(x.MemberId, x.Promotion, PromotionType.BranchTotalSales, branchPromotion);
                     });
+
                 });
+
+
+
                 entity.IsBranchSalesCalculated = true;
                 await unitOfWork.CommitAsync();
 
@@ -887,7 +894,7 @@ namespace Neutrino.Business
                 var branchPromotions = await unitOfWork.BranchPromotionDataService.GetAsync(x => x.Month == entity.Month && x.Year == entity.Year);
                 branchPromotions.ForEach(brp =>
                 {
-                    brp.TotalSalesPromotion = query.Where(x => x.BranchId == brp.BranchId).Sum(x => x.TotalPromotion);
+                    brp.SupplierPromotion = query.Where(x => x.BranchId == brp.BranchId).Sum(x => x.TotalPromotion);
                     unitOfWork.BranchPromotionDataService.Update(brp);
                 });
 

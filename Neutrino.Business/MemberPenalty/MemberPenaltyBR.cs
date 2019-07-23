@@ -31,7 +31,7 @@ namespace Neutrino.Business
             var branchPromotion = unitOfWork.BranchPromotionDataService.GetQuery()
                 .AsNoTracking()
                 .Single(x=>x.Id == branchPromotionId);
-            var totalBranchPromotion = branchPromotion.TotalReceiptPromotion + branchPromotion.TotalSalesPromotion + branchPromotion.PrivateReceiptPromotion;
+            var totalBranchPromotion = branchPromotion.TotalReceiptPromotion + branchPromotion.SupplierPromotion + branchPromotion.PrivateReceiptPromotion;
             return memberPenalties.Sum(x => x.CEOPromotion) <= totalBranchPromotion;
         }
     }

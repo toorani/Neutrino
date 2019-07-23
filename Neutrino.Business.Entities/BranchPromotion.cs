@@ -23,13 +23,20 @@ namespace Neutrino.Entities
         /// سال محاسبه شده
         /// </summary>
         public int Year { get; set; }
-        public decimal? TotalSalesPromotion { get; set; }
+        /// <summary>
+        /// پورسانت تامین کننده
+        /// </summary>
+        public decimal? SupplierPromotion { get; set; }
         public decimal? PrivateReceiptPromotion { get; set; }
         public decimal? TotalReceiptPromotion { get; set; }
         /// <summary>
         /// پورسانت ترمیمی
         /// </summary>
         public decimal CompensatoryPromotion { get; set; }
+        /// <summary>
+        /// پورسانت فروش
+        /// </summary>
+        public decimal TotalSalesPromotion { get; set; }
 
         public PromotionReviewStatusEnum PromotionReviewStatusId { get; set; }
         [ForeignKey("PromotionReviewStatusId")]

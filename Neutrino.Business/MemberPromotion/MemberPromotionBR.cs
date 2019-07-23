@@ -51,7 +51,7 @@ namespace Neutrino.Business
                     totalAssigned = branchPromotion.MemberPromotions.Sum(x => (decimal?)x.Promotion) ?? 0 + entity.Promotion;
                     break;
             }
-            result = totalAssigned < (branchPromotion.PrivateReceiptPromotion + branchPromotion.TotalReceiptPromotion + branchPromotion.TotalSalesPromotion);
+            result = totalAssigned < (branchPromotion.PrivateReceiptPromotion + branchPromotion.TotalReceiptPromotion + branchPromotion.SupplierPromotion);
             return result;
         }
         private bool isDuplicate(MemberPromotion entity)
@@ -140,7 +140,7 @@ namespace Neutrino.Business
             var branchSalesTotalPromotion = (from memp in entities
                                              from mempde in memp.Details
                                              select mempde.SupplierPromotion).Sum();
-            return branchPromotion.TotalSalesPromotion >= branchSalesTotalPromotion;
+            return branchPromotion.SupplierPromotion >= branchSalesTotalPromotion;
         }
 
         
