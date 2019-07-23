@@ -30,9 +30,9 @@ namespace Neutrino.Portal
 
             CreateMap<MemberPromotionViewModel, MemberPromotion>()
                 .Ignore(x => x.Member)
-                .ReverseMap()
-                .ForMember(x => x.CEOPromotion, opt => opt.ResolveUsing(x => x.CEOPromotion ?? x.ManagerPromotion))
-                .ForMember(x => x.FinalPromotion, opt => opt.ResolveUsing(x => x.FinalPromotion ?? x.CEOPromotion));
+                .ReverseMap();
+                //.ForMember(x => x.CEOPromotion, opt => opt.ResolveUsing(x => x.CEOPromotion ?? x.ManagerPromotion))
+                //.ForMember(x => x.FinalPromotion, opt => opt.ResolveUsing(x => x.FinalPromotion ?? x.CEOPromotion));
 
             CreateMap<BranchPromotion, BranchPromotionViewModel>()
                 .ForMember(x => x.BranchName, opt => opt.ResolveUsing(x => x.Branch.Name))

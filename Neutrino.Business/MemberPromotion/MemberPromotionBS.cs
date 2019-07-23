@@ -171,17 +171,17 @@ namespace Neutrino.Business
             }
             return result;
         }
-        public async Task<IBusinessResultValue<MemberPromotion>> LoadMemberPromotionAsync(int memberId, int month, int year, StepPromotionTypeEnum stepPromotionTypeId)
+        public async Task<IBusinessResultValue<MemberPromotion>> LoadMemberPromotionAsync(int memberId, int month, int year, ReviewPromotionStepEnum stepPromotionTypeId)
         {
             var result = new BusinessResultValue<MemberPromotion>();
             try
             {
                 result.ResultValue = await unitOfWork.MemberPromotionDataService.FirstOrDefaultAsync(x => x.MemberId == memberId
                && x.BranchPromotion.Month == month && x.BranchPromotion.Year == year
-               && x.Details.Any(y => y.StepPromotionTypeId == stepPromotionTypeId)
+               && x.Details.Any(y => y.ReviewPromotionStepId == stepPromotionTypeId)
                , includes: x => new { x.BranchPromotion, x.Details });
 
-                if (result.ResultValue == null && stepPromotionTypeId == StepPromotionTypeEnum.Manager)
+                if (result.ResultValue == null && stepPromotionTypeId == ReviewPromotionStepEnum.Manager)
                 {
                     var sellerTotalPromtion = await (from mep in unitOfWork.SellerPromotionDataService.GetQuery()
                                                      join brp in unitOfWork.BranchPromotionDataService.GetQuery()
@@ -207,7 +207,7 @@ namespace Neutrino.Business
             return result;
         }
 
-        public async Task<IBusinessResultValue<List<MemberPromotion>>> LoadMemberPromotionListAsync(int branchId, int month, int year, StepPromotionTypeEnum stepPromotionTypeId)
+        public async Task<IBusinessResultValue<List<MemberPromotion>>> LoadMemberPromotionListAsync(int branchId, int month, int year, ReviewPromotionStepEnum stepPromotionTypeId)
         {
             var result = new BusinessResultValue<List<MemberPromotion>>();
             try
@@ -216,7 +216,7 @@ namespace Neutrino.Business
                 var branchPromotion = await unitOfWork.BranchPromotionDataService.FirstOrDefaultAsync(x => x.Month == month && x.Year == year && x.BranchId == branchId);
                 int branchPromotionId = branchPromotion.Id;
 
-
+                
 
                 var query = await (from me in unitOfWork.MemberDataService.GetQuery()
                                    join post in unitOfWork.PositionTypeDataService.GetQuery()
@@ -230,7 +230,7 @@ namespace Neutrino.Business
                                    join mshde in unitOfWork.MemberPromotionDetailDataService.GetQuery()
                                    on join_memShare.Id equals mshde.MemberPromotionId into left_join_memberSh_detail
                                    from join_meShDeatil in left_join_memberSh_detail
-                                   .Where(x => x.StepPromotionTypeId == StepPromotionTypeEnum.Manager)
+                                   .Where(x => x.ReviewPromotionStepId == ReviewPromotionStepEnum.Initial)
                                    .DefaultIfEmpty()
 
 
@@ -293,13 +293,13 @@ namespace Neutrino.Business
                     .ToListAsync();
 
                 var lst_newEntities = entities.Except(lst_existEntities, x => x.MemberId);
-                foreach (var item in lst_newEntities.Where(x => x.ManagerPromotion != 0))
+                foreach (var item in lst_newEntities.Where(x => x.Promotion != 0))
                     unitOfWork.MemberPromotionDataService.Insert(item);
 
 
                 var lst_intersectEntities = entities.Intersect(lst_existEntities, x => x.MemberId);
 
-                foreach (var item in lst_intersectEntities.Where(x => x.ManagerPromotion == 0))
+                foreach (var item in lst_intersectEntities.Where(x => x.Promotion == 0))
                 {
                     var exist_item = lst_existEntities.Single(x => x.MemberId == item.MemberId);
                     var arr_details = new MemberPromotionDetail[exist_item.Details.Count];
@@ -311,18 +311,18 @@ namespace Neutrino.Business
 
                 }
 
-                foreach (var item in lst_intersectEntities.Where(x => x.ManagerPromotion != 0))
+                foreach (var item in lst_intersectEntities.Where(x => x.Promotion != 0))
                 {
                     var exist_item = lst_existEntities.Single(x => x.MemberId == item.MemberId);
 
-                    exist_item.CEOPromotion = item.CEOPromotion;
-                    exist_item.FinalPromotion = item.FinalPromotion;
-                    exist_item.ManagerPromotion = item.ManagerPromotion;
+                    //exist_item.CEOPromotion = item.CEOPromotion;
+                    //exist_item.FinalPromotion = item.FinalPromotion;
+                    //exist_item.ManagerPromotion = item.ManagerPromotion;
 
                     foreach (var detail in item.Details)
                     {
                         var exist_item_detail = exist_item.Details.FirstOrDefault(x => x.MemberId == detail.MemberId
-                        && x.Deleted == false && x.StepPromotionTypeId == StepPromotionTypeEnum.Manager);
+                        && x.Deleted == false && x.ReviewPromotionStepId == ReviewPromotionStepEnum.Manager);
 
                         if (exist_item_detail != null)
                         {

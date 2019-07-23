@@ -66,7 +66,7 @@ namespace Neutrino.Business
                         {
                             MemberName = x.Member.Name + " " + x.Member.LastName,
                             MemberId = x.memshar.MemberId,
-                            ManagerPromotion = x.memshar.ManagerPromotion,
+                            ManagerPromotion = x.memshar.Promotion,
                             BranchPromotionId = branchPromotion.Id,
                             Deduction = x.penalty?.Deduction ?? 0,
                             MemberPromotionId = x.memshar.Id,
@@ -141,7 +141,7 @@ namespace Neutrino.Business
                     foreach (var item in branchPromotion.MemberPromotions)
                     {
                         var penalty = entities.SingleOrDefault(x => x.MemberId == item.MemberId);
-                        item.CEOPromotion = penalty?.CEOPromotion;
+                        item.Promotion = penalty?.CEOPromotion ?? 0;
                     }
                     branchPromotion.PromotionReviewStatusId = PromotionReviewStatusEnum.ReleasedByCEO;
 

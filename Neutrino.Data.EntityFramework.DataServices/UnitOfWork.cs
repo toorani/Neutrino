@@ -66,7 +66,7 @@ namespace Neutrino.Data.EntityFramework
         public IEntityBaseRepository<ElitePosition> ElitePositionDataService { get; private set; }
         public IEntityBaseRepository<Department> DepartmentDataService { get; private set; }
         public IEntityBaseRepository<MemberPromotionDetail> MemberPromotionDetailDataService { get; private set; }
-
+        public IEntityBaseRepository<OperationPromotion> OperationPromotionDataService { get; set; }
         #endregion
 
         #region [ Constructor(s) ]
@@ -118,6 +118,7 @@ namespace Neutrino.Data.EntityFramework
             , IEntityBaseRepository<ElitePosition> elitePostionDS
             , IEntityBaseRepository<Department> departmentDS
             , IEntityBaseRepository<MemberPromotionDetail> memberPromotionDetailDS
+            , IEntityBaseRepository<OperationPromotion> operationPromotionDS
            )
         {
             this.context = context;
@@ -168,6 +169,7 @@ namespace Neutrino.Data.EntityFramework
             ElitePositionDataService = elitePostionDS;
             DepartmentDataService = departmentDS;
             MemberPromotionDetailDataService = memberPromotionDetailDS;
+            OperationPromotionDataService = operationPromotionDS;
         }
         #endregion
 

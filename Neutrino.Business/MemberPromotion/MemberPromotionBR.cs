@@ -25,9 +25,7 @@ namespace Neutrino.Business
                 .NotEmpty()
                 .WithMessage(".اطلاعات مربوط به پرسنل مشخص نشده است");
 
-            RuleFor(x => x)
-                .Must(x => x.CEOPromotion.HasValue || x.FinalPromotion.HasValue || x.ManagerPromotion != 0)
-                .WithMessage(".فیلد پورسانت مشخص نشده است");
+            
             RuleFor(x => x)
                 .Must(x => checkTotalAssigned(x))
                 .WithMessage(".مقدار مشخص شده برای پرسنل نباید از جمع پورسانت مرکز بیشتر باشد");
@@ -47,10 +45,10 @@ namespace Neutrino.Business
             {
                 case PromotionReviewStatusEnum.WaitingForStep1BranchManagerReview:
                 case PromotionReviewStatusEnum.ReleasedStep1ByBranchManager:
-                    totalAssigned = branchPromotion.MemberPromotions.Sum(x => (decimal?)x.ManagerPromotion) ?? 0 + entity.ManagerPromotion;
+                    totalAssigned = branchPromotion.MemberPromotions.Sum(x => (decimal?)x.Promotion) ?? 0 + entity.Promotion;
                     break;
                 case PromotionReviewStatusEnum.ReleasedByCEO:
-                    totalAssigned = branchPromotion.MemberPromotions.Sum(x => x.FinalPromotion) ?? 0 + entity.FinalPromotion.Value;
+                    totalAssigned = branchPromotion.MemberPromotions.Sum(x => (decimal?)x.Promotion) ?? 0 + entity.Promotion;
                     break;
             }
             result = totalAssigned < (branchPromotion.PrivateReceiptPromotion + branchPromotion.TotalReceiptPromotion + branchPromotion.TotalSalesPromotion);

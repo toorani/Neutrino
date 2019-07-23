@@ -90,7 +90,7 @@
     <Compile Include="ReportBranchPromotionOverview.cs" />
     <Compile Include="ReportSallerGoal.cs" />
     <Compile Include="ReportBranchSalesGoal.cs" />
-    <Compile Include="StepPromotionType.cs" />
+    <Compile Include="ReviewPromotionStep.cs" />
     <Compile Include="StockInventory.cs" />
     <Compile Include="CompanyType.cs" />
     <Compile Include="GoodsPromotion.cs" />

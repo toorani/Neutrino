@@ -661,6 +661,14 @@
     <Compile Include="Migrations\201907151716350_addSaveToPenalty.Designer.cs">
       <DependentUpon>201907151716350_addSaveToPenalty.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201907221709541_rename_memberShare_memberpromotion.cs" />
+    <Compile Include="Migrations\201907221709541_rename_memberShare_memberpromotion.Designer.cs">
+      <DependentUpon>201907221709541_rename_memberShare_memberpromotion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201907231800237_update_memberPromotion.cs" />
+    <Compile Include="Migrations\201907231800237_update_memberPromotion.Designer.cs">
+      <DependentUpon>201907231800237_update_memberPromotion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NeutrinoContext.cs" />
@@ -1114,6 +1122,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907151716350_addSaveToPenalty.resx">
       <DependentUpon>201907151716350_addSaveToPenalty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907221709541_rename_memberShare_memberpromotion.resx">
+      <DependentUpon>201907221709541_rename_memberShare_memberpromotion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907231800237_update_memberPromotion.resx">
+      <DependentUpon>201907231800237_update_memberPromotion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

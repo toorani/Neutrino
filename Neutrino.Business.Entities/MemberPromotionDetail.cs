@@ -9,7 +9,7 @@ namespace Neutrino.Entities
     {
         public int MemberPromotionId { get; set; }
         public virtual MemberPromotion MemberPromotion { get; set; }
-        public StepPromotionTypeEnum StepPromotionTypeId { get; set; }
+        public ReviewPromotionStepEnum ReviewPromotionStepId { get; set; }
         public int MemberId { get; set; }
         /// <summary>
         /// سهم از پورسانت تامین کننده

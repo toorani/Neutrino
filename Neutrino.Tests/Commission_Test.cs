@@ -144,6 +144,27 @@ namespace Neutrino.Portal.Tests
 
             Assert.IsTrue(result.ReturnStatus, result.ReturnMessage.ConcatAll());
         }
+
+        [TestMethod]
+        public async Task CalculateBranchSales_Test()
+        {
+            //Arrange
+            int month = 12;
+            int year = 1397;
+
+
+            //promotion business
+            var promotionBS = _kernel.Get<IPromotionBS>();
+            var result_load_entity = await promotionBS.EntityLoader.LoadAsync(x => x.Month == month && x.Year == year);
+            if (result_load_entity.ReturnStatus == false)
+            {
+                Assert.Fail(result_load_entity.ReturnMessage.ConcatAll());
+            }
+            var result = await promotionBS.CalculateBranchSalesAsync(result_load_entity.ResultValue);
+
+            Assert.IsTrue(result.ReturnStatus, result.ReturnMessage.ConcatAll());
+        }
+
         [TestMethod]
         public async Task CalculatePromotion()
         {
@@ -162,6 +183,7 @@ namespace Neutrino.Portal.Tests
             Assert.IsTrue(result.ReturnStatus, result.ReturnMessage.ConcatAll());
             Assert.IsTrue(loaderResult.ResultValue.IsReceiptCalculated);
             Assert.IsTrue(loaderResult.ResultValue.IsSupplierCalculated);
+            Assert.IsTrue(loaderResult.ResultValue.IsBranchSalesCalculated);
             Assert.AreEqual(loaderResult.ResultValue.StatusId, PromotionStatusEnum.Done);
         }
 

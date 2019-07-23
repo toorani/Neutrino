@@ -224,10 +224,11 @@ namespace Neutrino.Business
             var result = new BusinessResult();
             try
             {
-                var result_sales = await CalculateSupplierGoalsAsync(entity);
+                var result_supplier = await CalculateSupplierGoalsAsync(entity);
                 var result_receipt = await CalculateReceiptGoalsAsync(entity);
+                var result_branchSales = await CalculateBranchSalesAsync(entity);
 
-                result.ReturnStatus = result_receipt.ReturnStatus & result_sales.ReturnStatus;
+                result.ReturnStatus = result_receipt.ReturnStatus & result_supplier.ReturnStatus & result_branchSales.ReturnStatus;
                 if (result.ReturnStatus)
                 {
                     entity = await unitOfWork.PromotionDataService.FirstOrDefaultAsync(x => x.Id == entity.Id);
@@ -235,7 +236,8 @@ namespace Neutrino.Business
                     await unitOfWork.CommitAsync();
                 }
                 result.ReturnMessage.AddRange(result_receipt.ReturnMessage);
-                result.ReturnMessage.AddRange(result_sales.ReturnMessage);
+                result.ReturnMessage.AddRange(result_supplier.ReturnMessage);
+                result.ReturnMessage.AddRange(result_branchSales.ReturnMessage);
             }
             catch (Exception ex)
             {
@@ -260,8 +262,11 @@ namespace Neutrino.Business
                     return result;
                 }
 
-                entity = await unitOfWork.PromotionDataService.FirstOrDefaultAsync(x => x.Id == entity.Id, includes: x => new { x.BranchPromotions });
-
+                entity = await unitOfWork.PromotionDataService.GetQuery()
+                               .IncludeFilter(x => x.BranchPromotions.Where(c => c.Deleted == false))
+                               .IncludeFilter(x => x.BranchPromotions.Select(c => c.MemberPromotions.Where(b => b.Deleted == false)))
+                               .IncludeFilter(x => x.BranchPromotions.Select(c => c.MemberPromotions.Select(f => f.Details.Where(b => b.Deleted == false))))
+                               .FirstOrDefaultAsync(x => x.Id == entity.Id);
 
 
                 //به دلیل اینکه ممکن است اهدافی تعریف شود که طول زمان آن بیشتر از یکماه باشد 
@@ -467,7 +472,7 @@ namespace Neutrino.Business
 
                                 var branchPromotion = entity.BranchPromotions.Single(x => x.BranchId == branchId);
 
-                                branchPromotion.QuantityGoalPromotions.Concat(lst_branchConditions
+                                lst_branchConditions
                                 .Where(x => x.BranchId == branchId)
                                 .Select(x => new QuantityGoalPromotion
                                 {
@@ -479,7 +484,9 @@ namespace Neutrino.Business
                                     TotalQuantity = x.Quantity,
                                     GoalId = goal.Id,
                                     TotalSales = x.Amount
-                                }));
+                                })
+                                .ToList()
+                                .ForEach(branchPromotion.QuantityGoalPromotions.Add);
 
                             }
 
@@ -530,6 +537,8 @@ namespace Neutrino.Business
                                 }
 
                                 decimal promotion = 0;
+                                var branchPromotion = entity.BranchPromotions.Single(x => x.BranchId == memberSales.BranchId);
+
                                 // هدف فروش زده است؟
                                 if (goalStep != null)
                                 {
@@ -557,9 +566,8 @@ namespace Neutrino.Business
                                         }
                                     }
 
-                                    entity.BranchPromotions.Single(x => x.BranchId == memberSales.BranchId)
-                                    .SellerPromotions
-                                    .Add(new SellerPromotion
+
+                                    branchPromotion.SellerPromotions.Add(new SellerPromotion
                                     {
                                         GoalId = goal.Id,
                                         Promotion = promotion,
@@ -567,12 +575,14 @@ namespace Neutrino.Business
                                         Amount = memberSales.Amount,
                                         MemberId = memberSales.MemberId
                                     });
+
+
+                                    //اضافه کردن پورسانت فروشنده
+                                    addMemberPromotion(memberId: memberSales.MemberId, promotion: promotion, promotionType: PromotionType.Supplier, branchPromotion: branchPromotion);
                                 }
                                 else
                                 {
-                                    entity.BranchPromotions.Single(x => x.BranchId == memberSales.BranchId)
-                                    .SellerPromotions
-                                    .Add(new SellerPromotion
+                                    branchPromotion.SellerPromotions.Add(new SellerPromotion
                                     {
                                         GoalId = goal.Id,
                                         Promotion = 0,
@@ -580,6 +590,9 @@ namespace Neutrino.Business
                                         Amount = memberSales.Amount,
                                         MemberId = memberSales.MemberId
                                     });
+
+                                    //اضافه کردن پورسانت فروشنده
+                                    addMemberPromotion(memberId: memberSales.MemberId, promotion: 0, promotionType: PromotionType.Supplier, branchPromotion: branchPromotion);
                                 }
 
                             });
@@ -637,6 +650,8 @@ namespace Neutrino.Business
                 entity = await unitOfWork.PromotionDataService.GetQuery()
                     .IncludeFilter(x => x.BranchPromotions.Where(c => c.Deleted == false))
                     .IncludeFilter(x => x.BranchPromotions.Select(z => z.BranchGoalPromotions.Where(c => c.Deleted == false)))
+                    .IncludeFilter(x => x.BranchPromotions.Select(c => c.MemberPromotions.Where(b => b.Deleted == false)))
+                    .IncludeFilter(x => x.BranchPromotions.Select(c => c.MemberPromotions.Select(f => f.Details.Where(b => b.Deleted == false))))
                     .FirstOrDefaultAsync(x => x.Id == entity.Id);
 
                 //دریافت اطلاعات اهداف وصول خصوصی / کلی
@@ -722,6 +737,27 @@ namespace Neutrino.Business
 
                     branchPromotion.PrivateReceiptPromotion = promotion;
 
+
+                    //پورسانت اشخاص
+                    var branchMembers = unitOfWork.MemberDataService.Get(x => x.BranchId == braReceipt.BranchId);
+
+                    foreach (var item in receiptPrivateGoalPromotion.PositionReceiptPromotions)
+                    {
+                        if (branchMembers.Count(x => x.PositionTypeId == item.PositionTypeId) == 1)
+                        {
+                            var member = branchMembers.Single(x => x.PositionTypeId == item.PositionTypeId);
+                            addMemberPromotion(member.Id, item.Promotion, PromotionType.Receipt, branchPromotion);
+                        }
+                    }
+                    foreach (var item in receiptTotalGoalPromotion.PositionReceiptPromotions)
+                    {
+                        if (branchMembers.Count(x => x.PositionTypeId == item.PositionTypeId) == 1)
+                        {
+                            var member = branchMembers.Single(x => x.PositionTypeId == item.PositionTypeId);
+                            addMemberPromotion(member.Id, item.Promotion, PromotionType.Receipt, branchPromotion);
+                        }
+                    }
+
                 });
                 entity.IsReceiptCalculated = true;
                 await unitOfWork.CommitAsync();
@@ -755,6 +791,8 @@ namespace Neutrino.Business
 
                 entity = await unitOfWork.PromotionDataService.GetQuery()
                     .IncludeFilter(x => x.BranchPromotions.Where(c => c.Deleted == false))
+                    .IncludeFilter(x => x.BranchPromotions.Select(c => c.MemberPromotions.Where(b => b.Deleted == false)))
+                    .IncludeFilter(x => x.BranchPromotions.Select(c => c.MemberPromotions.Select(f => f.Details.Where(b => b.Deleted == false))))
                     .FirstOrDefaultAsync(x => x.Id == entity.Id);
 
                 var lst_totalBranchSales = await (from brsal in unitOfWork.BranchSalesDataService.GetQuery()
@@ -793,15 +831,21 @@ namespace Neutrino.Business
                                                        || mem.PositionTypeId == PositionTypeEnum.OperationManager)
                                                        && mem.BranchId == braSales.BranchId).ToList();
 
+                    if (branchPromotion.Budget != 0 && lst_operationEmployee.Count != 0)
+                        promotion = branchPromotion.Budget / lst_operationEmployee.Count;
+                    else
+                        promotion = 0;
 
-                    promotion = branchPromotion.Budget / lst_operationEmployee.Count;
-                    branchPromotion.OperationPromotions.Concat(
                     lst_operationEmployee.Select(x => new OperationPromotion
                     {
                         MemberId = x.Id,
                         Promotion = promotion
-                    }));
-
+                    }).ToList()
+                    .ForEach(x =>
+                    {
+                        branchPromotion.OperationPromotions.Add(x);
+                        addMemberPromotion(x.MemberId, x.Promotion, PromotionType.BranchTotalSales, branchPromotion);
+                    });
                 });
                 entity.IsBranchSalesCalculated = true;
                 await unitOfWork.CommitAsync();
@@ -855,7 +899,6 @@ namespace Neutrino.Business
             }
             return result;
         }
-
         public async Task<IBusinessResultValue<List<ReportBranchPromotionOverview>>> LoadReportOverView(int year, int month)
         {
             var result = new BusinessResultValue<List<ReportBranchPromotionOverview>>();
@@ -1544,7 +1587,54 @@ namespace Neutrino.Business
             //fulfilledPerecnt = (amount / receiptTotal_branchGoal.Amount.Value) * 100;
             return promotion;
         }
+        enum PromotionType
+        {
+            Supplier,
+            Receipt,
+            BranchTotalSales
+        }
+        private void addMemberPromotion(int memberId, decimal promotion, PromotionType promotionType, BranchPromotion branchPromotion)
+        {
+            var memberPromotion = branchPromotion.MemberPromotions.SingleOrDefault(x => x.MemberId == memberId);
 
+            if (memberPromotion != null)
+            {
+                memberPromotion.Promotion += promotion;
+                var detailPromotion = memberPromotion.Details.FirstOrDefault();
+                switch (promotionType)
+                {
+                    case PromotionType.Supplier:
+                        detailPromotion.SupplierPromotion += promotion;
+                        break;
+                    case PromotionType.Receipt:
+                        detailPromotion.ReceiptPromotion += promotion;
+                        break;
+                    case PromotionType.BranchTotalSales:
+                        detailPromotion.BranchSalesPromotion += promotion;
+                        break;
+                }
+
+            }
+            else
+            {
+                memberPromotion = new MemberPromotion
+                {
+                    MemberId = memberId,
+                    Promotion = promotion
+                };
+
+                memberPromotion.Details.Add(new MemberPromotionDetail
+                {
+                    BranchSalesPromotion = promotionType == PromotionType.BranchTotalSales ? promotion : 0,
+                    ReceiptPromotion = promotionType == PromotionType.Receipt ? promotion : 0,
+                    SupplierPromotion = promotionType == PromotionType.Supplier ? promotion : 0,
+                    CompensatoryPromotion = 0,
+                    MemberId = memberId,
+                    ReviewPromotionStepId = ReviewPromotionStepEnum.Initial,
+                });
+                branchPromotion.MemberPromotions.Add(memberPromotion);
+            }
+        }
         #endregion
     }
 }
