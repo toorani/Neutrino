@@ -825,7 +825,7 @@ namespace Neutrino.Business
                     //لیست سهم پست های سازمانی برای مرکز
                     lst_orgStructureShare_branch = lst_orgStructureShare.Where(x => x.BranchId == braSales.BranchId).ToList();
                     var operation_employeePercent = lst_orgStructureShare_branch.FirstOrDefault(x => x.OrgStructure.PositionTypeId == PositionTypeEnum.OperationEmployee);
-                    branchPromotion.Budget = braSales.TotalSales * operation_employeePercent?.SalesPercent.Value ?? 0;
+                    branchPromotion.Budget = braSales.TotalSales * operation_employeePercent?.SalesPercent.Value * 0.01M ?? 0;
 
 
                     var lst_operationEmployee = unitOfWork.MemberDataService.Get(mem => mem.IsActive && !mem.Deleted
@@ -1543,7 +1543,7 @@ namespace Neutrino.Business
                         //به ازای فروش این مبلغ
                         promotion = goalStepItem.Amount.Value * (branchSalesInfo.TotalSales / goalStepItem.EachValue.Value);
                     }
-                    else if (goalStepItem.ComputingTypeId.Value == ComputingTypeEnum.Quantities)
+                    else if (goalStepItem.ComputingTypeId.Value == ComputingTypeEnum. Quantities)
                     {
                         //به ازای فروش این تعداد
                         promotion = goalStepItem.Amount.Value * (branchSalesInfo.TotalQuantity / goalStepItem.EachValue.Value);

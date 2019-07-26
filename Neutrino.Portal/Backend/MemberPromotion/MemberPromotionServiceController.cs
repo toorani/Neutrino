@@ -129,7 +129,7 @@ namespace Neutrino.Portal
         public async Task<HttpResponseMessage> GetMemberPromotionList4ManagerAsync(int month, int year)
         {
             var branchId = IdentityConfig.GetBranchId(User);
-            var result_biz = await businessService.LoadMemberPromotionListAsync(branchId, month, year, ReviewPromotionStepEnum.Manager);
+            var result_biz = await businessService.LoadMemberPromotionListAsync(branchId, month, year, new[] { ReviewPromotionStepEnum.Initial, ReviewPromotionStepEnum.Manager });
             if (result_biz.ReturnStatus == false)
             {
                 return CreateErrorResponse(result_biz);

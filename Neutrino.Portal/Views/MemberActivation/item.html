@@ -1,0 +1,97 @@
+﻿<div ng-controller="memberActivation.itemController" ng-init="initializeController()" class="fragment {{transitionState}}">
+    <div class="row">
+        <div class="col-md-12">
+            <!--Top header start-->
+            <h3 class="ls-top-header breadcrumb">{{title}}</h3>
+            <!--Top header end -->
+        </div>
+    </div>
+
+    <div class="itemView-Body col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <label class="col-md-3 control-label">
+                        <i class="red fa fa-asterisk"></i>
+                        نام مرکز
+                    </label>
+                    <div class="col-md-4">
+                        <ui-select ng-model="viewModel.branchSelected"
+                                   ng-change="onchange_branch()"
+                                   class="validate[funcCall[ifUiSelectNotEmpty]]">
+                            <ui-select-match placeholder="نام مرکز را انتخاب کنید" allow-clear="true">
+                                <span ng-bind="$select.selected.name"></span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="item in (branches | filter: $select.search) track by item.id">
+                                <span ng-bind="item.name"></span>
+                            </ui-select-choices>
+                            <ui-select-no-choice>
+                                موردی یافت نشد
+                            </ui-select-no-choice>
+                        </ui-select>
+
+                    </div>
+                </div>
+                <br />
+               
+                <div class="table-responsive ls-table" ng-show="members != 0">
+                    
+                    <table class="table table-striped " cellspacing="0">
+                        <thead class="bold">
+                            <tr>
+                                <td style="width:40px"></td>
+                                <td class="text-center">
+                                    <input type="text" class="form-control" ng-model="memberSearch" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:40px" class="text-center">#</td>
+                                <td class="align-center">نام پرسنل</td>
+                                <td class="align-center">کد</td>
+                                <td class="align-center">وضعیت</td>
+                                <td class="align-center">پست سازمانی</td>
+                                <td class="align-center">فعال/فیرفعال</td>
+                            </tr>
+                        </thead>
+                        <tr ng-repeat="record in members | filter : memberFilter">
+                            <td class="align-center" style="width:40px">
+                                {{$index +1}}
+                            </td>
+                            <td class="align-center">
+                                {{record.fullName}}
+                            </td>
+                            <td class="align-center">
+                                {{record.code}}
+                            </td>
+                            <td class="align-center">
+                                <span ng-show="record.isActive">
+                                    فعال
+                                </span>
+                                <span ng-show="!record.isActive">
+                                    غیر فعال
+                                </span>
+                            </td>
+                            <td class="align-center">
+                                {{record.positionTitle}}
+                            </td>
+                            <td class="align-center">
+                                <button type='button' style="width:120px"
+                                        ng-click="toggleActivation(record)"
+                                        ng-class="{true:'btn btn-danger',false:'btn btn-primary'}[record.isActive]">
+                                    <span ng-show="record.isActive">
+                                        <i class='fa fa-magic'></i><span> غیرفعال</span>
+                                    </span>
+                                    <span ng-show="!record.isActive">
+                                        <i class='fa fa-magic'></i><span> فعال</span>
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -20,6 +20,8 @@ angular.module("neutrinoProject").register.controller('promotion.compensantory.i
                 ajaxService.ajaxCall({ promotionId: promotionId }, '/api/branchPromotionService/getDataList', 'get',
                     function (response) {
                         $scope.branchPromotions = response.data;
+                        $scope.branchPromotionStatusId = $scope.branchPromotions[0].promotionReviewStatusId;
+                            
                     },
                     function (response) {
                         alertService.showError(response);

@@ -55,8 +55,6 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.ceo
                 return totalManagerPormotion;
             }
 
-         
-
             $scope.releaseCEO = function () {
                 ajaxService.ajaxPost($scope.memberPenalties, '/api/penaltyService/releaseCEOPromotion',
                     function (response) {
@@ -86,7 +84,5 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.ceo
             $scope.cancel = function () {
                 $location.url('promotion/branchShare/ceo/index');
             }
-
-
 
         }]);

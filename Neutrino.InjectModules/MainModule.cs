@@ -113,6 +113,9 @@ namespace Neutrino.InjectModules
             //PositionMapping
             Bind<IPositionMappingBS>().To<PositionMappingBS>();
 
+            //Member
+            Bind<IMemberBS>().To<MemberBS>();
+
             //Service data
 
             //BranchReceipt

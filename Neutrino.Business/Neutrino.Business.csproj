@@ -123,6 +123,7 @@
     <Compile Include="GoalNonFulfillment\GoalNonFulfillmentPercentBS.cs" />
     <Compile Include="MemberPenalty\MemberPenaltyBS.cs" />
     <Compile Include="MemberPenalty\MemberPenaltyBR.cs" />
+    <Compile Include="Member\MemberBS.cs" />
     <Compile Include="SellerPromotionBS\SellerPromotionBS.cs" />
     <Compile Include="MemberPromotion\MemberPromotionBS.cs" />
     <Compile Include="MemberPromotion\MemberPromotionBR.cs" />

@@ -101,6 +101,22 @@ namespace Neutrino.Business
 
             return result;
         }
+
+        public async Task<IBusinessResultValue<List<BranchPromotion>>> LoadCompensatoryListAsync(int promotionId)
+        {
+            var result = new BusinessResultValue<List<BranchPromotion>>();
+            try
+            {
+                result.ResultValue = await unitOfWork.BranchPromotionDataService.GetAsync(c => c.PromotionId == promotionId && c.PromotionReviewStatusId == PromotionReviewStatusEnum.WaitingForCompensatory, includes: c => c.Branch);
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex, result, "");
+            }
+
+            return result;
+        }
+
         #endregion
     }
 }

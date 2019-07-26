@@ -135,12 +135,14 @@ namespace Neutrino.Business
 
                 var branchPromotion = await unitOfWork.BranchPromotionDataService.GetQuery()
                     .IncludeFilter(x => x.MemberPromotions.Where(c => c.Deleted == false))
+                    .IncludeFilter(x => x.MemberPromotions.Select(c => c.Details.Where(cf => cf.Deleted == false)))
                    .SingleOrDefaultAsync(x => x.Id == branchPromotionId);
                 if (branchPromotion != null)
                 {
                     foreach (var item in branchPromotion.MemberPromotions)
                     {
                         var penalty = entities.SingleOrDefault(x => x.MemberId == item.MemberId);
+
                         item.Promotion = penalty?.CEOPromotion ?? 0;
                     }
                     branchPromotion.PromotionReviewStatusId = PromotionReviewStatusEnum.ReleasedByCEO;

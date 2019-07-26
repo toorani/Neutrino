@@ -93,7 +93,7 @@ namespace Neutrino.Business
                 result.ResultValue = await unitOfWork.MemberPromotionDataService.GetAsync(x =>
                 x.BranchPromotion.BranchId == branchId &&
                 x.BranchPromotion.PromotionReviewStatusId == promotionReviewStatusId
-                , includes: x => new { x.BranchPromotion, x.Member });
+                , includes: x => new { x.BranchPromotion, x.Member, x.Details });
             }
             catch (Exception ex)
             {
@@ -131,6 +131,7 @@ namespace Neutrino.Business
                         result.ReturnMessage.Add("جمع مبلغ پورسانت ترمیمی پرسنل از پورسانت ترمیمی مرکز بیشتر میباشد");
                         result.ReturnStatus = false;
                     }
+
 
                     if (result.ReturnStatus)
                     {
@@ -207,7 +208,7 @@ namespace Neutrino.Business
             return result;
         }
 
-        public async Task<IBusinessResultValue<List<MemberPromotion>>> LoadMemberPromotionListAsync(int branchId, int month, int year, ReviewPromotionStepEnum stepPromotionTypeId)
+        public async Task<IBusinessResultValue<List<MemberPromotion>>> LoadMemberPromotionListAsync(int branchId, int month, int year, params ReviewPromotionStepEnum[] sharePromotionTypeId)
         {
             var result = new BusinessResultValue<List<MemberPromotion>>();
             try
@@ -216,7 +217,8 @@ namespace Neutrino.Business
                 var branchPromotion = await unitOfWork.BranchPromotionDataService.FirstOrDefaultAsync(x => x.Month == month && x.Year == year && x.BranchId == branchId);
                 int branchPromotionId = branchPromotion.Id;
 
-
+                if (sharePromotionTypeId.Length == 0)
+                    sharePromotionTypeId = new[] { ReviewPromotionStepEnum.Initial };
 
                 var query = await (from me in unitOfWork.MemberDataService.GetQuery()
                                    join mep in unitOfWork.MemberPromotionDataService.GetQuery()
@@ -226,7 +228,7 @@ namespace Neutrino.Business
                                    join mepde in unitOfWork.MemberPromotionDetailDataService.GetQuery()
                                    on join_me_mep.Id equals mepde.MemberPromotionId into left_join_mep_mepde
                                    from join_mep_mepde in left_join_mep_mepde
-                                   .Where(c => c.Deleted == false && c.ReviewPromotionStepId == ReviewPromotionStepEnum.Initial).DefaultIfEmpty()
+                                   .Where(c => c.Deleted == false && sharePromotionTypeId.Contains(c.ReviewPromotionStepId)).DefaultIfEmpty()
                                    join post in unitOfWork.PositionTypeDataService.GetQuery()
                                    on me.PositionTypeId equals post.eId into left_join_position
                                    from join_me_pos in left_join_position.DefaultIfEmpty()
@@ -290,42 +292,39 @@ namespace Neutrino.Business
                     .ToListAsync();
 
                 var lst_newEntities = entities.Except(lst_existEntities, x => x.MemberId);
-                foreach (var item in lst_newEntities.Where(x => x.Promotion != 0))
+                foreach (var item in lst_newEntities)
                     unitOfWork.MemberPromotionDataService.Insert(item);
 
 
                 var lst_intersectEntities = entities.Intersect(lst_existEntities, x => x.MemberId);
 
-                foreach (var item in lst_intersectEntities.Where(x => x.Promotion == 0))
+                //foreach (var item in lst_intersectEntities.Where(x => x.Promotion == 0))
+                //{
+                //    var exist_item = lst_existEntities.Single(x => x.MemberId == item.MemberId);
+                //    var arr_details = new MemberPromotionDetail[exist_item.Details.Count];
+                //    exist_item.Details.CopyTo(arr_details, 0);
+                //    foreach (var detail in arr_details)
+                //        unitOfWork.MemberPromotionDetailDataService.Delete(detail, false);
+                //    unitOfWork.MemberPromotionDataService.Delete(exist_item, false);
+                //}
+
+                foreach (var item in lst_intersectEntities)
                 {
                     var exist_item = lst_existEntities.Single(x => x.MemberId == item.MemberId);
-                    var arr_details = new MemberPromotionDetail[exist_item.Details.Count];
-                    exist_item.Details.CopyTo(arr_details, 0);
-                    foreach (var detail in arr_details)
-                        unitOfWork.MemberPromotionDetailDataService.Delete(detail, false);
-
-                    unitOfWork.MemberPromotionDataService.Delete(exist_item, false);
-
-                }
-
-                foreach (var item in lst_intersectEntities.Where(x => x.Promotion != 0))
-                {
-                    var exist_item = lst_existEntities.Single(x => x.MemberId == item.MemberId);
-
-                    //exist_item.CEOPromotion = item.CEOPromotion;
-                    //exist_item.FinalPromotion = item.FinalPromotion;
-                    //exist_item.ManagerPromotion = item.ManagerPromotion;
 
                     foreach (var detail in item.Details)
                     {
                         var exist_item_detail = exist_item.Details.FirstOrDefault(x => x.MemberId == detail.MemberId
-                        && x.Deleted == false && x.ReviewPromotionStepId == ReviewPromotionStepEnum.Manager);
+                        && x.Deleted == false && x.ReviewPromotionStepId == ReviewPromotionStepEnum.Initial ||
+                        x.ReviewPromotionStepId == ReviewPromotionStepEnum.Manager);
 
                         if (exist_item_detail != null)
                         {
                             exist_item_detail.ReceiptPromotion = detail.ReceiptPromotion;
                             exist_item_detail.CompensatoryPromotion = detail.CompensatoryPromotion;
                             exist_item_detail.SupplierPromotion = detail.SupplierPromotion;
+                            exist_item_detail.BranchSalesPromotion = detail.BranchSalesPromotion;
+                            exist_item_detail.ReviewPromotionStepId = ReviewPromotionStepEnum.Manager;
                             unitOfWork.MemberPromotionDetailDataService.Update(exist_item_detail);
                         }
                     }

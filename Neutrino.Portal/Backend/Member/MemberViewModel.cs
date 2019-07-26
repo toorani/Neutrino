@@ -8,6 +8,7 @@ namespace Neutrino.Portal.Models
 {
     public class MemberViewModel : ViewModelBase
     {
+
         public string PositionTitle { get; set; }
         /// <summary>
         /// نام
@@ -21,5 +22,7 @@ namespace Neutrino.Portal.Models
         /// شناسه مرکز فروش
         /// </summary>
         public int BranchId { get; set; }
+        public bool IsActive { get; set; }
+
     }
 }

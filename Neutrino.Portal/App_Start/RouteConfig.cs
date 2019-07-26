@@ -126,6 +126,11 @@ namespace Neutrino.Portal
                , url: "positionMapping/{*.}"
                , defaults: new { controller = "Home", action = "Index", returnUrl = UrlParameter.Optional });
 
+            routes.MapRoute(
+             name: "MemberActivationCatchAllRoute"
+             , url: "memberActivation/{*.}"
+             , defaults: new { controller = "Home", action = "Index", returnUrl = UrlParameter.Optional });
+
 
             routes.MapRoute(
                 name: "Default",

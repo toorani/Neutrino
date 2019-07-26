@@ -16,13 +16,14 @@ namespace Neutrino.Portal
         {
             CreateMap<MemberPromotionViewModel, MemberPromotion>()
                 .Ignore(x => x.Member)
-                .ReverseMap();
-                //.ForMember(x => x.CEOPromotion, opt => opt.ResolveUsing(x => x.CEOPromotion ?? x.ManagerPromotion))
-                //.ForMember(x => x.FinalPromotion, opt => opt.ResolveUsing(x => x.FinalPromotion ?? x.CEOPromotion));
+                .ReverseMap()
+                .ForMember(x => x.ManagerPromotion, opt => opt.ResolveUsing(x => getTotalPromotion(x, ReviewPromotionStepEnum.Manager)))
+                .ForMember(x => x.CEOPromotion, opt => opt.ResolveUsing(x => getTotalPromotion(x, ReviewPromotionStepEnum.CEO)))
+                .ForMember(x => x.FinalPromotion, opt => opt.ResolveUsing(x => getTotalPromotion(x, ReviewPromotionStepEnum.Final)));
 
             CreateMap<BranchPromotion, BranchPromotionViewModel>()
                 .ForMember(x => x.BranchName, opt => opt.ResolveUsing(x => x.Branch.Name))
-                .ForMember(x => x.TotalPromotion, opt => opt.ResolveUsing(x => x.PrivateReceiptPromotion.Value + x.TotalReceiptPromotion.Value + x.SupplierPromotion))
+                .ForMember(x => x.TotalPromotion, opt => opt.ResolveUsing(x => x.PrivateReceiptPromotion.Value + x.TotalReceiptPromotion.Value + x.SupplierPromotion + x.TotalSalesPromotion))
                 .ReverseMap();
 
             CreateMap<Member, MemberViewModel>()
@@ -58,6 +59,11 @@ namespace Neutrino.Portal
               }));
 
 
+        }
+
+        private decimal getTotalPromotion(MemberPromotion memberPromotion, ReviewPromotionStepEnum reviewPromotionStepId)
+        {
+            return memberPromotion.Details.Where(c => c.ReviewPromotionStepId == reviewPromotionStepId).Sum(c => c.BranchSalesPromotion + c.CompensatoryPromotion + c.ReceiptPromotion + c.SupplierPromotion);
         }
     }
 }

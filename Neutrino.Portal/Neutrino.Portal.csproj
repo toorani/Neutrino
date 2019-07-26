@@ -799,6 +799,8 @@
     <Content Include="Views\Goal\elite\aggregation\indexController.js" />
     <Content Include="Views\Goal\elite\aggregation\item.html" />
     <Content Include="Views\Goal\elite\aggregation\itemController.js" />
+    <Content Include="Views\MemberActivation\item.html" />
+    <Content Include="Views\MemberActivation\itemController.js" />
     <Content Include="Views\Penalty\index.html" />
     <Content Include="Views\Penalty\indexController.js" />
     <Content Include="Views\PositionMapping\index.html" />

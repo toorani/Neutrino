@@ -11,16 +11,10 @@ function ($scope, $location, $compile, $interval, alertService, ajaxService, dat
     }
 
 
-    //$scope.$on('$destroy', function () {
-    //    $scope.stop();
-    //});
-
     $scope.years = persianCalendar.getYears();
     $scope.months = persianCalendar.getMonthNames();
 
     $scope.initializeController = function () {
-        var promise;
-
         $scope.title = 'مدیریت محاسبه پورسانت';
         dataTableColumns.initialize();
         dataTableColumns.add({

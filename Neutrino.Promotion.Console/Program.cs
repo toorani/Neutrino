@@ -52,7 +52,7 @@ namespace Neutrino.PromotionPanel
             try
             {
                 Console.WriteLine("Select calculation types:");
-                Console.WriteLine("'both : calculate Sales & Reciept','rec : just Reciept' and 'sal : just Sales'");
+                Console.WriteLine("'all : calculate Supplier, Sales & Reciept','rec : just Reciept','sup : just Supplier','sal: just Sales' ");
 
                 var arg = Console.ReadLine();
                 PromotionCalculate(arg);
@@ -78,11 +78,11 @@ namespace Neutrino.PromotionPanel
             {
                 if (promotion != null)
                 {
-                    if (arg.ToLower() == "sal")
+                    if (arg.ToLower() == "sup")
                     {
-                        Console.WriteLine("Start Sales goales calualation.");
+                        Console.WriteLine("Start Supplier goales calualation.");
                         result = await promotionBS.CalculateSupplierGoalsAsync(promotion);
-                        Console.WriteLine("Finish Sales goales calualation.");
+                        Console.WriteLine("Finish Supplier goales calualation.");
                     }
                     else if (arg.ToLower() == "rec")
                     {
@@ -90,11 +90,17 @@ namespace Neutrino.PromotionPanel
                         result = await promotionBS.CalculateReceiptGoalsAsync(promotion);
                         Console.WriteLine("Finish Receipt goales calualation ");
                     }
-                    else if (arg.ToLower() == "both")
+                    else if (arg.ToLower() == "all")
                     {
                         Console.WriteLine("Start all goales calualation.");
                         result = await promotionBS.CalculateGoalsAsync(promotion);
                         Console.WriteLine("Finish all goales calualation.");
+                    }
+                    else if (arg.ToLower() == "sal")
+                    {
+                        Console.WriteLine("Start branch sales calualation.");
+                        result = await promotionBS.CalculateBranchSalesAsync(promotion);
+                        Console.WriteLine("Finish branch sales calualation.");
                     }
                 }
                 else

@@ -181,7 +181,7 @@ namespace Neutrino.Portal
         }
 
         [Route("getBranchPromotionReleasedByCEO")]
-        public async Task<HttpResponseMessage> GetActiveBranchPromotion()
+        public async Task<HttpResponseMessage> GetBranchPromotionReleasedByCEO()
         {
             int branchId = IdentityConfig.GetBranchId(User);
             IBusinessResultValue<BranchPromotion> result_bizloading = await businessService.LoadBranchPromotionAsync(branchId, PromotionReviewStatusEnum.ReleasedByCEO);

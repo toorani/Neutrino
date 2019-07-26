@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using Espresso.BusinessService.Interfaces;
+using Espresso.Core;
 using Espresso.Portal;
 using Neutrino.Entities;
+using Neutrino.Interfaces;
 using Neutrino.Portal.Models;
 using Neutrino.Portal.ProfileMapper;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -16,11 +19,11 @@ namespace Neutrino.Portal.WebApiControllers
     public class MemberServiceController : ApiControllerBase
     {
         #region [ Varibale(s) ]
-        private readonly IEntityListLoader<Member> businessService;
+        private readonly IMemberBS businessService;
         #endregion
 
         #region [ Constructor(s) ]
-        public MemberServiceController(IEntityListLoader<Member> memberLoader)
+        public MemberServiceController(IMemberBS memberLoader)
         {
             businessService = memberLoader;
         }
@@ -30,16 +33,32 @@ namespace Neutrino.Portal.WebApiControllers
         [Route("getBranchMembers")]
         public async Task<HttpResponseMessage> GetBranchMembers()
         {
-
             var branchId = IdentityConfig.GetBranchId(User);
-            var result_loadData = await businessService.LoadListAsync(x => x.BranchId == branchId, includes: x => x.PositionType);
+            return await GetMembers(branchId);
+        }
+
+        [Route("getMembersByBranchId")]
+        public async Task<HttpResponseMessage> GetMembers(int branchId)
+        {
+            var result_loadData = await businessService.LoadMembersAsync(branchId, null);
             if (result_loadData.ReturnStatus == false)
             {
                 return CreateErrorResponse(result_loadData);
             }
             var mapper = GetMapper();
             var result = mapper.Map<List<Member>, List<MemberViewModel>>(result_loadData.ResultValue);
-            return CreateSuccessedListResponse(result);
+            return CreateSuccessedListResponse(result.OrderBy(x => x.FullName).ToList());
+        }
+
+        [Route("toggleActivation"), HttpPost]
+        public async Task<HttpResponseMessage> ToggleActivation(Member entity)
+        {
+            IBusinessResult result = await businessService.ToggleActivationAsync(entity.Id);
+            if (result.ReturnStatus == false)
+            {
+                return CreateErrorResponse(result);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
         #endregion
 

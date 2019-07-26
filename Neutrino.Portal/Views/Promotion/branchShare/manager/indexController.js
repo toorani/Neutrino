@@ -23,12 +23,12 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                 totalReceiptPromotion: 0,
                 totalCompensatoryPromotion: 0,
                 totalSalesPromotion: 0,
-                totalSupplierPromotion :0,
+                totalSupplierPromotion: 0,
                 clearValues() {
                     this.totalReceiptPromotion = 0;
                     this.totalCompensatoryPromotion = 0;
                     this.totalSalesPromotion = 0;
-                    this.totalSupplierPromotion= 0;
+                    this.totalSupplierPromotion = 0;
                 }
             };
 
@@ -98,12 +98,14 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
                 ajaxService.ajaxCall({ month: $scope.month, year: $scope.year }, "api/memberPromotionService/getMemberPromotionList4Manager", 'get',
                     function (response) {
                         $scope.memberPromotionList = response.data;
-
+                        $scope.operationEmployeeCount = 0;
                         $scope.memberPromotionList.forEach((prom) => {
                             $scope.totalValues.totalReceiptPromotion += prom.receiptPromotion;
-                            $scope.totalValues.totalSalesPromotion += prom.branchSalesPromotion;
                             $scope.totalValues.totalCompensatoryPromotion += prom.compensatoryPromotion;
                             $scope.totalValues.totalSupplierPromotion += prom.supplierPromotion;
+                            $scope.totalValues.totalSalesPromotion += prom.branchSalesPromotion;
+                            if (prom.branchSalesPromotion != 0)
+                                $scope.operationEmployeeCount++;
                         });
                     },
                     function (response) {
@@ -122,7 +124,7 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
             }
 
             $scope.releaseManagerStep1 = function () {
-                
+
                 ajaxService.ajaxPost({}, '/api/memberPromotionService/releaseManagerStep1',
                     function (response) {
                         alertService.showSuccess(response.data.returnMessage);
@@ -155,12 +157,12 @@ angular.module("neutrinoProject").register.controller('promotion.branchShare.man
             }
 
             $scope.getMemberTotalPromotion = function (record) {
-                record.managerPromotion = record.compensatoryPromotion + record.branchSalesPromotion + record.receiptPromotion + record.supplierPromotion;
+                record.promotion = record.compensatoryPromotion + record.branchSalesPromotion + record.receiptPromotion + record.supplierPromotion;
                 $scope.assigendPromotion = 0;
                 $scope.memberPromotionList.forEach((mp) => {
                     $scope.assigendPromotion += mp.managerPromotion;
                 });
-                return record.managerPromotion;
+                return record.promotion;
             }
 
         }]);

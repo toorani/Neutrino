@@ -11,7 +11,7 @@ namespace Neutrino.Interfaces
         Task<IBusinessResultValue<PromotionReviewStatusEnum>> ConfirmCompensatoryAsync(List<BranchPromotion> lstEntities);
         Task<IBusinessResultValue<List<BranchPromotion>>> LoadListAsync(int promotionId);
         Task<IBusinessResultValue<BranchPromotion>> LoadBranchPromotionAsync(int branchId, PromotionReviewStatusEnum promotionReviewStatusId);
-
+        Task<IBusinessResultValue<List<BranchPromotion>>> LoadCompensatoryListAsync(int promotionId);
 
     }
 }

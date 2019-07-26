@@ -146,6 +146,15 @@
                    },
                    new AppMenu
                    {
+                       Title = "فعال/غیرفعال پرسنل",
+                       Icon = "fa fa-male",
+                       Url = "/memberActivation/item",
+                       OrderId = 4,
+                       Parent = basicInfoItem,
+                       ParentId = basicInfoItem.Id
+                   },
+                   new AppMenu
+                   {
                        Title = "نگاشت پست سازمانی",
                        Icon = "fa fa-arrows-h",
                        Url = "/positionmapping/index",
